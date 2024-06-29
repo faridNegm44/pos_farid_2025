@@ -1,0 +1,32 @@
+<div class="charts">
+					<div class="row">
+						{{-- 1 --}}
+						<div class="col-lg-6 chart">
+							<h5 class="text-center">مصاريف شهر يناير</h5>
+							<canvas id="lineChart" height="200"></canvas>
+						</div>
+						
+						{{-- 2 --}}
+						<div class="col-lg-6 chart">
+							<h5 class="text-center">مسحوبات عميل ومورد شهر يناير</h5>
+							<canvas id="stackedBarChart" height="200"></canvas>
+						</div>
+						
+						{{-- 3 --}}
+						<div class="col-lg-6 chart">
+							<h5 class="text-center">مبيعات ومشتريات شهر يناير</h5>
+							<canvas id="pieChart" height="200"></canvas>
+						</div>
+	
+						{{-- 4 --}}
+						<div class="col-lg-6 chart">
+							<h5 class="text-center">مسحوبات عميل ومورد شهر يناير</h5>
+							<canvas id="doughnutChart" height="200"></canvas>
+						</div>
+	
+						{{-- 5 --}}
+						<div class="col-lg-6 chart">
+	
+						</div>
+					</div>
+				</div>
