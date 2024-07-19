@@ -7,22 +7,27 @@ use App\Models\Back\Product;
 use App\Models\Back\Units;
 use App\Models\Back\Company;
 use App\Models\Back\ProductCategoy;
+use App\Models\Back\Store;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+use App\Helpers\GetFinancialYearHelper;
 
 class ProductController extends Controller
 {
     public function index()
-    {                               
+    {              
         $pageNameAr = 'الأصناف';
         $pageNameEn = 'products';
 
+        $stores = Store::all();
         $units = Units::all();
         $companys = Company::all();
         $productCategoys = ProductCategoy::all();
-        return view('back.products.index' , compact('pageNameAr' , 'pageNameEn', 'units', 'companys', 'productCategoys'));
+        $lastId = $this->getNextId('products');
+
+        return view('back.products.index' , compact('pageNameAr' , 'pageNameEn', 'stores', 'units', 'companys', 'productCategoys', 'lastId'));
     }
 
     public function store(Request $request)
@@ -30,27 +35,70 @@ class ProductController extends Controller
         if (request()->ajax()){
             
             $this->validate($request , [
-                'name' => 'required|string|unique:financial_years,name',
-                'start' => 'required|date',
-                'end' => 'required|date',
-                'notes' => 'nullable|string|max:255',
+                'shortCode' => 'nullable|unique:products,shortCode',
+                
+                'natCode' => 'nullable|unique:products,natCode',
+                
+                'nameAr' => 'required|string|unique:products,nameAr|max:255',
+
+                'nameEn' => 'nullable|string|unique:products,nameEn',
+
+                'stockAlert' => 'min:0|numeric',
+                
+                'sellPrice' => 'required|min:0|numeric',
+                'avgPrice' => 'required|min:0|numeric',
+                'purchasePrice' => 'required|min:0|numeric',
+                'discountPercentage' => 'nullable|min:0|numeric',
+                'tax' => 'nullable|min:0|numeric',
+                'quantity' => 'nullable|min:0|numeric',
+                'firstPeriodCount' => 'nullable|min:0|numeric',
+
+                'smallUnit' => 'required|integer',
+                'smallUnitPrice' => 'required|min:0|numeric',
+
+                'offerDiscountPercentage' => 'nullable|min:0|numeric',
+                'offerStart' => 'nullable|date|before:offerEnd',
+                'offerEnd' => 'nullable|date|after:offerStart',
+
+                'image' => 'mimes:jpeg,png,jpg,gif|max:1500',
+                'desc' => 'nullable|string|max:255',
             ],[
                 'required' => 'حقل :attribute إلزامي.',
                 'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
                 'unique' => 'حقل :attribute مستخدم من قبل.',
+                'min' => 'حقل :attribute أقل قيمة له هي 0 حرف.',
                 'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
                 'date' => 'حقل :attribute يجب ان يكون من نوع تاريخ.',
+                'mimes' => 'حقل :attribute الصيغ (jpeg, png, jpg, gif) المخصصة لها هي.',
+                'before' => 'حقل :attribute يجب ان يسبق تاريخ نهاية العرض.',
+                'after' => 'حقل :attribute يجب ان ياتي بعد تاريخ بداية العرض.',
 
             ],[
-                'name' => 'إسم السنة المالية',                
-                'start' => 'تاريخ بداية السنة المالية',                
-                'end' => 'تاريخ نهاية السنة المالية',                
-                'notes' => 'الملاحظات',                
+                'shortCode' => 'الكود المختصر',                
+                'natCode' => 'الكود الدولي', 
+                'nameAr' => 'إسم الصنف بالعربية',                
+                'nameEn' => 'إسم الصنف بالإنجليزية',                
+                'stockAlert' => 'إسم الصنف بالإنجليزية',                
+                
+                'sellPrice' => 'سعر البيع',                
+                'avgPrice' => 'متوسط سعر البيع',                
+                'purchasePrice' => 'سعر الشراء',                
+                'discountPercentage' => 'خصم نسبة',                
+                'tax' => 'الضريبة',                
+                'quantity' => 'الكمية',                
+                'firstPeriodCount' => 'رصيد أول مدة',                
+                'smallUnit' => 'الوحدة الصغري',                
+                'smallUnitPrice' => 'سعر الوحدة الصغري',                
+                'offerDiscountPercentage' => 'خصم نسبة العرض الترويجي',                
+                'offerStart' => 'تاريخ بداية العرض الترويجي',                
+                'offerEnd' => 'تاريخ نهاية العرض الترويجي',                
+                'desc' => 'وصف الصنف',                
+                'desc' => 'صورة الصنف',                
             ]);
 
             Product::create($request->all());
-
-
 
         } // end check request()->ajax()
     }

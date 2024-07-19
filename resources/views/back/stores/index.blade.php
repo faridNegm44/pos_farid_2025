@@ -7,27 +7,32 @@
 
 @section('header')
 
-    <style>
-        @media (min-width: 1200px) {
-            .modal-xl {
-                max-width: 95%;
-            }
-        }
-        hr{
-            border-top: 2px solid #4d5276;
-            margin: 32px 0px 24px;
-        }
-    </style>
+
 
 @endsection
 
-@section('footer')  
+@section('footer') 
     <script>
-        flatpickr(".datePicker", {
-            yearSelectorType: 'dropdown',
-            enableTime: false,
-            dateFormat: "Y-m-d",
+        $(document).ready(function(){
+            // $('.datetimepicker').datetimepicker({ dropdownParent: $('.modal') });
+
+
+            // jQuery.datetimepicker.setLocale('en');
+            // jQuery('.datetimepicker').datetimepicker({
+            //     dropdownParent: $('.modal'),
+            //     timepicker:false,
+            //     format:'d-m-Y',
+            //     // theme:'dark'
+            // });
+
+
+
+            $(document).on('click', '.modal-body .datetimepicker', function() {
+                $(this).datetimepicker('show');
+            });
+
         });
+
     </script>
 
     <script>       
@@ -64,12 +69,6 @@
         });
         
         $(document).ready(function () {
-            // selectize
-            $('.selectize').selectize({
-                hideSelected: true
-            });
-
-            // DataTable
             $('#example1').DataTable({
                 processing: true,
                 serverSide: true,
@@ -78,8 +77,6 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
-                    {data: 'start', name: 'start'},
-                    {data: 'end', name: 'end'},
                     {data: 'notes', name: 'notes'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false},
@@ -92,9 +89,9 @@
     </script>
 
     {{-- add, edit, delete => script --}}
-    @include('back.products.add')
-    @include('back.products.edit')
-    @include('back.products.delete')
+    @include('back.stores.add')
+    @include('back.stores.edit')
+    @include('back.stores.delete')
 @endsection
 
 
@@ -119,18 +116,8 @@
         </div>
         <!-- breadcrumb -->
 
-        @include('back.products.form')
+        @include('back.stores.form')
 
-
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <div class="row row-sm">
             <div class="col-xl-12">
@@ -141,11 +128,9 @@
                                 <thead>
                                     <tr>
                                         <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0" >الإسم</th>
-                                        <th class="border-bottom-0">بدايةالسنة</th>
-                                        <th class="border-bottom-0">نهاية السنة</th>
-                                        <th class="border-bottom-0" style="width: 30%;">ملاحظات</th>
-                                        <th class="border-bottom-0" >الحالة</th>
+                                        <th class="border-bottom-0" >إسم المخزن</th>
+                                        <th class="border-bottom-0">ملاحظات</th>
+                                        <th class="border-bottom-0">الحالة</th>
                                         <th class="border-bottom-0">التحكم</th>
                                     </tr>
                                 </thead>                                
