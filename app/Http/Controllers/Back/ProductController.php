@@ -7,12 +7,14 @@ use App\Models\Back\Product;
 use App\Models\Back\Units;
 use App\Models\Back\Company;
 use App\Models\Back\ProductCategoy;
+use App\Models\Back\StoreDets;
 use App\Models\Back\Store;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\GetFinancialYearHelper;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -46,10 +48,13 @@ class ProductController extends Controller
                 'stockAlert' => 'min:0|numeric',
                 
                 'sellPrice' => 'required|min:0|numeric',
-                'avgPrice' => 'required|min:0|numeric',
+
                 'purchasePrice' => 'required|min:0|numeric',
+
                 'discountPercentage' => 'nullable|min:0|numeric',
+
                 'tax' => 'nullable|min:0|numeric',
+                
                 'quantity' => 'nullable|min:0|numeric',
                 'firstPeriodCount' => 'nullable|min:0|numeric',
 
@@ -80,7 +85,7 @@ class ProductController extends Controller
                 'natCode' => 'الكود الدولي', 
                 'nameAr' => 'إسم الصنف بالعربية',                
                 'nameEn' => 'إسم الصنف بالإنجليزية',                
-                'stockAlert' => 'إسم الصنف بالإنجليزية',                
+                'stockAlert' => 'الحد الأدني للطلب',                
                 
                 'sellPrice' => 'سعر البيع',                
                 'avgPrice' => 'متوسط سعر البيع',                
@@ -95,11 +100,79 @@ class ProductController extends Controller
                 'offerStart' => 'تاريخ بداية العرض الترويجي',                
                 'offerEnd' => 'تاريخ نهاية العرض الترويجي',                
                 'desc' => 'وصف الصنف',                
-                'desc' => 'صورة الصنف',                
             ]);
 
-            Product::create($request->all());
 
+            // start db transaction to store 
+            DB::transaction(function(){
+                if(request('image') == ""){
+                    $name = "df_image.png";
+                }else{
+                    $file = request('image');
+                    $name = time() . '.' .$file->getClientOriginalExtension();
+                    $path = public_path('back/images/products');
+                    $file->move($path , $name);
+                }
+
+
+                // $this->ifFoundedRequestFile('image', 'back/images/products');
+
+
+
+                $getProductId = Product::create([
+                    'shortCode' => request('shortCode'),
+                    'natCode' => request('natCode'),
+                    'nameAr' => request('nameAr'),
+                    'nameEn' => request('nameEn'),
+                    'store' => request('store'),
+                    'company' => request('company'),
+                    'category' => request('category'),
+
+                    'stockAlert' => $this->ifNullToZero('stockAlert'),
+                    'divisible' => $this->ifNullToZero('divisible'),
+                    'sellPrice' => $this->ifNullToZero('sellPrice'),
+                    'purchasePrice' => $this->ifNullToZero('purchasePrice'),
+                    'discountPercentage' => $this->ifNullToZero('discountPercentage'),
+                    'tax' => $this->ifNullToZero('tax'),
+
+                    'firstPeriodCount' => $this->ifNullToZero('firstPeriodCount'),
+                    'bigUnit' => $this->ifNullToZero('bigUnit'),
+                    'smallUnit' => request('smallUnit'),
+                    'smallUnitPrice' => request('smallUnitPrice'),
+                    'smallUnitNumbers' => request('smallUnitNumbers'),
+                    'status' => request('status'),
+
+                    'image' => $name,
+                    'desc' => request('desc'),
+                    
+                    'offerDiscountStatus' => $this->ifNullToZero('offerDiscountStatus'),
+                    'offerDiscountPercentage' => $this->ifNullToZero('offerDiscountPercentage'),
+                    'offerStart' => request('offerStart') === null ? date('Y-m-d') : request('offerStart'),
+                    'offerEnd' => request('offerEnd') === null ? date('Y-m-d', strtotime(date('Y-m-d'). ' + 1 days')) : request('offerEnd'),
+                ]);
+                    
+                StoreDets::insert([
+                    'type' => 'رصيد اول المدة',
+                    'year_id' => $this->currentFinancialYear(),
+                    'bill_head_id' => 0,
+                    'bill_body_id' => 0,
+                    'product_id' => $getProductId->id,
+                    'product_num_unit' => 0,
+                    'quantity' => 0,
+                    'quantity_all' => $this->ifNullToZero('firstPeriodCount'),
+                    'product_sellPrice' => $this->ifNullToZero('sellPrice'),
+                    'product_purchasePrice' => $this->ifNullToZero('purchasePrice'),
+                    'product_avg' => 0,
+                    'product_cost' => 0,
+                    'date' => request('date') === null ? date('Y-m-d') : request('date'),
+                    'created_at' => now()
+                ]);                
+            });
+            // end db transaction to store 
+
+            $lastId = $this->getNextId('products');            
+            return response()->json(['lastId' => $lastId]);
+            
         } // end check request()->ajax()
     }
 

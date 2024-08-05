@@ -29,24 +29,16 @@
                     alertify.set('notifier','delay', 3);
                     alertify.error("هناك شيئ ما خطأ");
                 },
-                success: function(res){
+                success: function(res){                    
+                    $('#example1').DataTable().ajax.reload( null, false );
+                    $(".modal form bold[class=text-danger]").css('display', 'none');
+            
+                    $(".dataInput").val('');        
+                    $("#last_code").val(res.lastId);
 
-                    if(res.foundedActiveFinYear){
-                        alertify.set('notifier','position', 'top-center');
-                        alertify.set('notifier','delay', 5);
-                        alertify.warning("تحذير: هناك سنة مالية لم تقفل بعد");
-                    }else{
-                        
-                        $('#example1').DataTable().ajax.reload( null, false );
-                        $(".modal form bold[class=text-danger]").css('display', 'none');
-                
-                        $(".dataInput").val('');
-                        $(".modal").modal('hide');
-
-                        alertify.set('notifier','position', 'top-center');
-                        alertify.set('notifier','delay', 3);
-                        alertify.success("تمت الإضافة بنجاح");
-                    }
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 3);
+                    alertify.success("تمت الإضافة بنجاح");
 
                     document.querySelector('.modal #save').disabled = false;
                     document.querySelector('.spinner_request').style.display = 'none';
