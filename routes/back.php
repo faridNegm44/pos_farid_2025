@@ -138,12 +138,24 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     Route::group(['prefix' => 'products'] , function (){
         Route::get('/' , 'ProductController@index');
         Route::post('/store' , 'ProductController@store');
-        Route::post('/store' , 'ProductController@store');
         Route::get('/edit/{id}' , 'ProductController@edit');
         Route::post('/update/{id}' , 'ProductController@update');
         Route::get('/destroy/{id}' , 'ProductController@destroy');
         
         Route::get('datatable' , 'ProductController@datatable');
+    });
+
+    // pos Routes
+    Route::group(['prefix' => 'pos'] , function (){
+        Route::get('/' , 'PosController@index');
+        Route::get('/create' , 'PosController@create');
+        Route::post('/store' , 'PosController@store');
+        Route::post('/store' , 'PosController@store');
+        Route::get('/edit/{id}' , 'PosController@edit');
+        Route::post('/update/{id}' , 'PosController@update');
+        Route::get('/destroy/{id}' , 'PosController@destroy');
+        
+        Route::get('datatable' , 'PosController@datatable');
     });
 
 

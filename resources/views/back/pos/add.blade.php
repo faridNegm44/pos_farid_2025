@@ -16,7 +16,6 @@
                     $('form [id^=errors]').text('');
                 },
                 error: function(res){
-
                     $.each(res.responseJSON.errors, function (index , value) {
                         $(`form #errors-${index}`).css('display' , 'block').text(value);
                     });               
@@ -29,19 +28,19 @@
                     alertify.set('notifier','delay', 3);
                     alertify.error("هناك شيئ ما خطأ");
                 },
-                success: function(res){                    
+                success: function(res){
                     $('#example1').DataTable().ajax.reload( null, false );
                     $(".modal form bold[class=text-danger]").css('display', 'none');
             
-                    $(".dataInput").val('');        
-                    $("#last_code").val(res.lastId);
+                    $(".dataInput").val('');
+                    $('.dataInput:first').select().focus();
+
+                    document.querySelector('.modal #save').disabled = false;
+                    document.querySelector('.spinner_request').style.display = 'none';
 
                     alertify.set('notifier','position', 'top-center');
                     alertify.set('notifier','delay', 3);
                     alertify.success("تمت الإضافة بنجاح");
-
-                    document.querySelector('.modal #save').disabled = false;
-                    document.querySelector('.spinner_request').style.display = 'none';
                 }
             });
         });
