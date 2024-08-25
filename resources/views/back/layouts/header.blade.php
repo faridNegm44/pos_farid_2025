@@ -9,11 +9,45 @@
                 <img src="{{ asset('back') }}/assets/img/brand/favicon.png" class="desktop-logo-1">
                 <img src="{{ asset('back') }}/assets/img/brand/favicon-white.png" class="desktop-logo-dark">
             </a>
-            <div class="main-header-center  mr-4">
+
+            {{-- <div class="horizontal-main header-layout">
+                <div class="horizontal-mainwrapper container clearfix">
+                    <nav class="horizontalMenu clearfix"><div class="horizontal-overlapbg"></div>
+                        <ul class="horizontalMenu-list">
+                            <li aria-haspopup="true"><span class="horizontalMenu-click"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span>
+                                <a class="sub-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                                
+                                إختصارات <i class="fe fe-chevron-down horizontal-icon"></i></a>
+                                <ul class="sub-menu">
+                                    <li aria-haspopup="true"><a href="http://localhost/edustage_system_2024/public/time_table" class="slide-item">جدول الحصص</a></li>
+                                    <li aria-haspopup="true"><a href="http://localhost/edustage_system_2024/public/time_table" class="slide-item">تقيمات الطلاب</a></li>
+
+                                   
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div> --}}
+            
+            {{-- <div class="main-header-center  mr-4">
                 <input class="form-control" placeholder="Search for anything..." type="search"><button class="btn"><i class="fe fe-search"></i></button>
-            </div>
+            </div> --}}
         </div><!-- search -->
+        
         <div class="main-header-right">
+            <div class="nav-item dark_theme">
+                <a class="new nav-link full-screen-link"style="font-size: 19px;cursor: pointer;position: relative;top: 1px;">
+                    <i class="fas fa-moon"></i>    
+                </a>
+            </div>
+            
+            <div class="nav-item light_theme" style="display: none;">
+                <a class="new nav-link full-screen-link" style="font-size: 19px;color: #eec706;cursor: pointer;position: relative;top: 1px;">
+                    <i class="fas fa-sun"></i>    
+                </a>
+            </div>
             <ul class="nav">
                 <li class="">
                     <div class="dropdown  nav-itemd-none d-md-flex">

@@ -149,6 +149,13 @@
             font-size: 14px;
         }
 
+        .hor-menu .horizontalMenu>.horizontalMenu-list>li>a.active{
+            background: #6a9ac6;
+            color: #FFF !important;
+            font-weight: bold !important;
+            font-size: 14px;
+        }
+
         .horizontalMenu>.horizontalMenu-list>li>ul.sub-menu>li>a:hover, .horizontalMenu>.horizontalMenu-list>li>ul.sub-menu>li>ul.sub-menu>li>a:hover{
             color: red;
             font-weight: bold !important;
@@ -159,6 +166,9 @@
             font-size: 12px !important;
         }
 
+        .horizontalMenu>.horizontalMenu-list>li>a{
+            padding: 11px 11px 10px 11px;
+        }
         .horizontalMenu>.horizontalMenu-list>li{
             font-size: 13px !important;
         }
@@ -181,6 +191,12 @@
             border: 1px solid gray !important;
         }
 
+        div.dataTables_wrapper div.dataTables_info{
+            font-size: 12px;
+            font-weight: bold;
+            position: relative;
+            top: 3px;
+        }
         /* ////////////////////////////////////////////  top css new css edit  ///////////////////////////////////////////////// */
 
 
