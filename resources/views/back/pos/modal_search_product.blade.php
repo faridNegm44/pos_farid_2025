@@ -3,21 +3,18 @@
         <div class="modal-content">
 
             <!-- Modal Header -->
-            <div class="modal-header">
+            <div class="modal-header" style="position: relative;">
                 <h6 class="modal-title">بحث عن صنف</h6>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" style="position: absolute;left: 4px;color: red;">&times;</button>
             </div>
 
             <!-- Modal Body -->
             <div class="modal-body">
                 <form class="mb-2">
                     <div class="form-row align-items-center">
-                        <div class="col-auto">
-                            <input type="text" class="form-control form-control-sm mb-2" id="searchField" placeholder="أدخل الكود أو الاسم">
-                        </div>
-                        <div class="col-auto">
-                            <select class="form-control form-control-sm mb-2" id="categorySelect">
-                                <option>الاسم</option>
+                        <div class="col-md-3 col-sm-12">
+                            <select class="form-control form-control-sm mb-2" id="search_by">
+                                <option selected>الاسم عربي</option>
                                 <option>الكود</option>
                                 <option>الاسم (En)</option>
                                 <option>الأصناف العامة</option>
@@ -25,7 +22,20 @@
                                 <option>الأدوية الخاصة</option>
                             </select>
                         </div>
-                        <div class="col-auto">
+
+                        <div class="col-md-4 col-sm-12">
+                            <input type="text" class="form-control form-control-sm mb-2" id="searchField" placeholder="أدخل الكود أو الاسم">
+                        </div>
+
+                        <div class="col-md-1 col-sm-12">
+                            <input type="text" class="form-control form-control-sm mb-2" id="searchField" placeholder="من">
+                        </div>
+
+                        <div class="col-md-1 col-sm-12">
+                            <input type="text" class="form-control form-control-sm mb-2" id="searchField" placeholder="الي">
+                        </div>
+                        
+                        <div class="col-md-3 col-sm-12">
                             <button type="submit" class="btn btn-primary btn-sm mb-2">بحث</button>
                         </div>
                     </div>
