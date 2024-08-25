@@ -102,9 +102,9 @@
     }
 
     input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
 }
 
     thead tr{
@@ -117,5 +117,17 @@ input[type="number"]::-webkit-outer-spin-button {
     }
     .prod_name{
         font-size: 11px;
+    }
+
+    #countTableTr span{
+        font-size: 16px;
+        font-weight: bold;
+        color: red;
+    }
+    .header .btn-group .btn{
+        border-radius: 50% !important;
+    }
+    .header .btn-group i{
+        font-size: 20px;
     }
 </style>
