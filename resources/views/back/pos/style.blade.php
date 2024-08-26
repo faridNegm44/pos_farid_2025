@@ -18,8 +18,18 @@
     .main-content {
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 100px); /* Adjusted for the footer height */
+        height: calc(100vh - 120px);
     }
+
+    @media (max-width: 1024px) {
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            height: calc(60vh - 0px);
+        }
+    }
+
+
     @media (min-width: 768px) {
         .main-content {
             flex-direction: row;
@@ -64,15 +74,17 @@
         scrollbar-width: none;
     }
     .footer-btn-group {
-        background-color: #f8f9fa;
+        background-color: #1c2e3f;
         padding: 10px;
         position: fixed;
         bottom: 0;
+        left: 0;
         width: 100%;
         z-index: 1000;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        padding: 15px !important;
     }
     .footer-btn-group .btn {
         flex: 1;

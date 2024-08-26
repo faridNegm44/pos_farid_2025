@@ -26,25 +26,23 @@
 
         {{--  ///////////////////////////////////////////////// start navbar /////////////////////////////////////////////////
         ///////////////////////////////////////////////// start navbar /////////////////////////////////////////////////  --}}
-        {{--  <div class="header d-flex align-items-center justify-content-between flex-wrap text-center" style="background: #dbdaee;margin-bottom: 12px;border-radius: 0 0 10px 10px;">  --}}
-        <div class="header d-flex align-items-center justify-content-between flex-wrap row" style="background: #dbdaee;margin-bottom: 12px;border-radius: 0 0 10px 10px;">
+        <div class="header d-flex align-items-center justify-content-between flex-wrap row" style="background: #15222f;margin: 0;margin-bottom: 12px;border-radius: 0 0 15px 15px;">
 
             {{--  right  --}}
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 <div class="">
-
                     <div class="row">
-                        <div class="col-md-4 col-sm-12">
-                            <select class="form-control form-control-sm" >
+                        <div class="col-lg-4 col-sm-12">
+                            <select class="form-control form-control-sm" style="margin: 5px 0;">
                                 <option>Walk In Customer</option>
                             </select>
                         </div>
 
-                        <div class="col-md-1 col-sm-12">
-                            <button class="btn btn-light btn-sm"><i class="fas fa-user-plus"></i></button>
+                        <div class="col-lg-1 col-sm-12">
+                            <button class="btn btn-light btn-sm btn-block btn-block" style="margin: 5px 0;"><i class="fas fa-user-plus"></i></button>
                         </div>
 
-                        <div class="col-md-6 col-sm-12" style="position: relative;">
+                        <div class="col-lg-6 col-sm-12" style="position: relative;margin: 5px 0;">
                             <input type="text" class="form-control form-control-sm" placeholder="بحث عن صنف" >
                             
                             <div id="hidden_div">
@@ -73,8 +71,8 @@
                             </div>
                         </div>
 
-                        <div class="col-md-1 col-sm-12">
-                            <button class="btn btn-light btn-sm" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product">
+                        <div class="col-lg-1 col-sm-12">
+                            <button class="btn btn-light btn-sm btn-block" style="margin: 5px 0;" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product">
                                 <i class="fas fa-search-plus"></i>
                             </button>
                         </div>
@@ -83,12 +81,12 @@
             </div>
 
             {{--  left  --}}
-            <div class="col-md-4 text-left">
+            <div class="col-lg-4 text-left">
                 <div class="btn-group">
-                    <button class="btn btn-light btn-sm" data-effect="effect-scale" data-toggle="modal" href="#calc"><i class="fas fa-calculator"></i></button>
-                    <button class="btn btn-light btn-sm"><i class="fas fa-bell"></i></button>
-                    <button class="btn btn-light btn-sm"><i class="fas fa-sync-alt"></i></button>
-                    <button class="btn btn-light btn-sm"><i class="fas fa-maximize"></i></button>
+                    <button class="btn btn-danger btn-sm" data-effect="effect-scale" data-toggle="modal" href="#calc"><i class="fas fa-calculator"></i></button>
+                    <button class="btn btn-success btn-sm"><i class="fas fa-bell"></i></button>
+                    <button class="btn btn-primary btn-sm"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn btn-warning btn-sm"><i class="fas fa-maximize"></i></button>
                 </div>
             </div>            
         </div>
@@ -107,7 +105,9 @@
 
         <div class="main-content">
             {{--  <div class="row">  --}}
-                <div class="cart p-3 no-scrollbar col-lg-8 col-12"> 
+
+                {{-- right --}}
+                <div class="cart p-3 no-scrollbar"> 
                     <table class="table table-bordered table-hover" id="products_table" style="height: 100px;overflow: hidden;">
                         <thead class="text-center thead-dark">
                             <tr>
@@ -144,15 +144,16 @@
                     </table>
                 </div>
 
-            
-                <div class="product-selection p-3 no-scrollbar col-lg-4 col-12">
+                {{-- left --}}
+                
+                <div class="product-selection p-3 no-scrollbar">
                     <div class="text-center" style="width: 175px;font-weight: bold;text-decoration: underline;background: #3b8ce2;color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
                         فاتورة بيع: <span class="">139</span>
                     </div>
                     
                     <div class="text-center">
                         <span class="badge badge-light" id="date"></span>
-                        <span class="badge badge-danger mx-2" id="time" style="font-weight: bold;"></span>
+                        <span class="badge badge-danger mx-2" id="time" style="font-weight: bold;font-size: 15px !important;margin-top: 10px;"></span>
                         {{--  <button class="btn btn-dark btn-sm ml-2"><i class="fas fa-sign-out-alt"></i> Sign Out</button>  --}}
                     </div>
 
@@ -160,13 +161,28 @@
 
                     <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border-top: 2px solid #ddd; ">
                         <div>
-                            <p id="countTableTr">عدد العناصر: <span>0</span></p>
-                            <p>Sub Total: 32000.00</p>
-                            <p>Tax: 5760.00</p>
-                            <p>Coupon: 0.00</p>
+                            <p id="countTableTr">
+                                عدد العناصر:
+                                <span class="font-weight-bold">0</span>
+                            </p>
+                            <p>
+                                م الفرعي: 
+                                <span class="font-weight-bold">32000.00</span>
+                            </p>
+                            <p>
+                                الضريبة: 
+                                <span class="font-weight-bold">32000.00</span>
+                            </p>
+                            <p>
+                                ك خصم: 
+                                <span class="font-weight-bold">32000.00</span>
+                            </p>
                         </div>
                         <div>
-                            <p>Total Payable: 37760.00</p>
+                            <p>
+                                م مستحق: 
+                                <span class="font-weight-bold" style="color: red;font-size: 24px;">28,000</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -186,13 +202,11 @@
         ///////////////////////////////////////////////// start footer /////////////////////////////////////////////////  --}}
         <div class="footer-btn-group">
             <button class="btn btn-primary btn-sm" id="order"><i class="fas fa-check"></i> Order</button>
-            <button class="btn btn-secondary btn-sm"><i class="fas fa-quote-left"></i> Quote</button>
             <button class="btn btn-warning btn-sm"><i class="fas fa-pause"></i> Hold Order</button>
             <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Cancel</button>
             <button class="btn btn-success btn-sm"><i class="fas fa-gift"></i> Coupon</button>
             <button class="btn btn-info btn-sm"><i class="fas fa-percentage"></i> % Discount</button>
             <button class="btn btn-light btn-sm"><i class="fas fa-credit-card"></i> Credit Card</button>
-            <button class="btn btn-dark btn-sm"><i class="fas fa-file-alt"></i> Quotation</button>
         </div>
         {{--  ///////////////////////////////////////////////// end footer /////////////////////////////////////////////////
         ///////////////////////////////////////////////// end footer /////////////////////////////////////////////////  --}}
