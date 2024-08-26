@@ -10,93 +10,74 @@
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <form class="mb-2">
+                <form class="" id="search_form">
                     <div class="form-row align-items-center">
-                        <div class="col-md-3 col-sm-12">
-                            <select class="form-control form-control-sm mb-2" id="search_by">
-                                <option selected>الاسم عربي</option>
+                        <div class="col-md-2 col-sm-12">
+                            <select class="form-control form-control-sm" id="search_by">
+                                <option selected>الاسم (ع)</option>
                                 <option>الكود</option>
                                 <option>الاسم (En)</option>
-                                <option>الأصناف العامة</option>
-                                <option>الأصناف الغير محلية</option>
-                                <option>الأدوية الخاصة</option>
                             </select>
                         </div>
 
-                        <div class="col-md-4 col-sm-12">
-                            <input type="text" class="form-control form-control-sm mb-2" id="searchField" placeholder="أدخل الكود أو الاسم">
+                        <div class="col-md-5 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" id="product_name" name="product_name" placeholder="اسم الصنف">
                         </div>
 
-                        <div class="col-md-1 col-sm-12">
-                            <input type="text" class="form-control form-control-sm mb-2" id="searchField" placeholder="من">
+                        <div class="col-md-2 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" id="from" name="from" placeholder="من">
                         </div>
 
-                        <div class="col-md-1 col-sm-12">
-                            <input type="text" class="form-control form-control-sm mb-2" id="searchField" placeholder="الي">
+                        <div class="col-md-2 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" id="to" name="to" placeholder="الي">
                         </div>
                         
-                        <div class="col-md-3 col-sm-12">
-                            <button type="submit" class="btn btn-primary btn-sm mb-2">بحث</button>
+                        <div class="col-md-1 col-sm-12">
+                            <button type="submit" class="btn btn-primary btn-sm btn-block">بحث</button>
                         </div>
                     </div>
                 </form>
 
-                <table class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>الكود</th>
-                            <th>الاسم</th>
-                            <th>الاسم (En)</th>
-                            <th>السعر</th>
-                            <th>الشركة المصنعة</th>
-                            <th>الكود الداخلي</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>21061</td>
-                            <td>ACCU-CHEK SOFTCLIX 200 L</td>
-                            <td>ACCU-CHEK SOFTCLIX 200 L</td>
-                            <td>250.00</td>
-                            <td>Hoffmann-La Roche</td>
-                            <td>49928</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>Example Item 1</td>
-                            <td>Example Item 1 (En)</td>
-                            <td>100.00</td>
-                            <td>Company 1</td>
-                            <td>67890</td>
-                        </tr>
-                        <tr>
-                            <td>21061</td>
-                            <td>ACCU-CHEK SOFTCLIX 200 L</td>
-                            <td>ACCU-CHEK SOFTCLIX 200 L</td>
-                            <td>250.00</td>
-                            <td>Hoffmann-La Roche</td>
-                            <td>49928</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>Example Item 1</td>
-                            <td>Example Item 1 (En)</td>
-                            <td>100.00</td>
-                            <td>Company 1</td>
-                            <td>67890</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div id="table" class="table-responsive text-sm-center">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>الكود</th>
+                                <th>الاسم</th>
+                                <th>ك مخزن</th>
+                                <th>السعر</th>
+                                <th>القسم</th>
+                                <th>ملاحظات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for ($i = 0;  $i < 100; $i++)
+                                <tr>
+                                    <td>{{ $i+1 }}</td>
+                                    <td>21061</td>
+                                    <td>كوشن فرو في جلد ابيض مصري</td>
+                                    <td>20</td>
+                                    <td style="color: red;font-size: 14px;">1200,8</td>
+                                    <td>كوشنات</td>
+                                    <td></td>
+                                </tr>                            
+                            @endfor
+                        </tbody>
+                    </table>
+                </div>
 
                 <div class="form-row mt-2">
-                    <div class="col-auto">
-                        <input type="number" class="form-control form-control-sm" placeholder="الكمية">
+                    <div class="col-md-2 col-sm-12">
+                        <input type="text" readonly class="form-control form-control-sm" id="from" name="from" placeholder="ك مخزن">
                     </div>
-                    <div class="col-auto">
-                        <input type="text" class="form-control form-control-sm" placeholder="سعر الوحدة">
+
+                    <div class="col-md-2 col-sm-12">
+                        <input type="text" class="form-control form-control-sm" id="from" name="from" placeholder="ك مباعة">
                     </div>
-                    <div class="col-auto align-self-end">
-                        <button type="button" class="btn btn-success btn-sm">تنفيذ</button>
+                
+                    <div class="col-md-1 col-sm-12">
+                        <button type="button" class="btn btn-success btn-sm btn-block">موافق</button>
                     </div>
                 </div>
             </div>

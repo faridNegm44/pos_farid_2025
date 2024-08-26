@@ -130,4 +130,37 @@
     .header .btn-group i{
         font-size: 20px;
     }
+
+    input::placeholder{
+        font-size: 12px;         
+    }
+
+    #hidden_div{
+        width: 93%;
+        background: #fff;
+        height: 300px;
+        position: absolute;
+        z-index: 1;
+        overflow: auto;
+        display: none;        
+    }
+
+
+    {{--  start modal_search_product  --}}
+    #modal_search_product #search_by{
+        font-size: 13px;
+        font-weight: bold;
+    }
+    #modal_search_product #search_form{
+        margin-bottom: 20px; 
+    }
+    #modal_search_product #table{
+        height: 300px;
+        max-height: 300px;
+        overflow: auto;
+    }
+    #modal_search_product table tbody tr{
+        cursor: pointer;
+    }
+    {{--  end modal_search_product  --}}
 </style>
