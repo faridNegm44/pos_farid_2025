@@ -1,13 +1,12 @@
 <style>
     body {
         overflow: hidden;
-        background-color: #f8f9fa;
+        background-color: #fafafa;
         font-family: Almarai;
         text-align: right;
     }
     .header {
-        background-color: #f8f9fa;
-        padding: 10px;
+        padding: 3px 10px;
     }
     .header .btn {
         margin-right: 10px;
@@ -25,7 +24,7 @@
         .main-content {
             display: flex;
             flex-direction: column;
-            height: calc(60vh - 0px);
+            height: calc(50vh - 0px);
         }
     }
 
@@ -33,6 +32,12 @@
     @media (min-width: 768px) {
         .main-content {
             flex-direction: row;
+        }
+    }
+
+    @media (max-width: 768px) {
+        #icons_left, #add_user, #date_time{
+            display: none;
         }
     }
     .product-selection, .cart {
@@ -84,7 +89,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        padding: 15px !important;
+        padding: 3px 15px !important;
     }
     .footer-btn-group .btn {
         flex: 1;
@@ -157,7 +162,54 @@
         display: none;        
     }
 
+    .alertify .ajs-body .ajs-content {
+        padding: 16px 16px 16px 24px !important;
+        font-size: 100px !important;
+        font-weight: bold !important;
+        text-align: center !important;
+    }
 
+    .alertify{ 
+        z-index:999999 !important;
+        display: block !important;
+    }
+    
+    .alertify-notifier{ 
+        z-index:999999 !important;
+    }
+    
+    .ajs-button {
+        border: 0px;
+        font-weight: bold;
+    }
+
+    .ajs-cancel {
+        background: rgb(209, 56, 56) !important;
+        color: #fff !important;
+    }
+
+    .ajs-success{
+        font-weight: bold;
+        width: 320px !important;
+        {{--  background: rgb(77, 124, 91) !important;  --}}
+    }
+
+    .ajs-error{
+        font-weight: bold;
+        width: 320px !important;
+        background: rgb(155, 56, 64) !important;
+    }
+
+    .ajs-warning{
+        font-weight: bold;
+        width: 320px !important;
+        background: orange !important;
+    }
+
+    .alertify-notifier.ajs-center.ajs-bottom .ajs-message.ajs-visible{
+        bottom: 40px !important;
+    }
+    
     {{--  start modal_search_product  --}}
     #modal_search_product #search_by{
         font-size: 13px;

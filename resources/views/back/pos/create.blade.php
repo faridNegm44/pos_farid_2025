@@ -9,6 +9,12 @@
     <link href="{{ asset('back') }}/assets/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Cairo:slnt,wght@11,200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
 
+    {{-- selectize --}}
+    <link href="{{ asset('back/assets/selectize.css') }}" type="text/css" rel="stylesheet"/>
+    {{-- alertify --}}
+    <link href="{{ asset('back/assets/css-rtl/alertify.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
+    <link href="{{ asset('back/assets/css-rtl/default.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
+    
     @include('back.pos.style')
 </head>
 <body id="pos_create">
@@ -29,21 +35,25 @@
         <div class="header d-flex align-items-center justify-content-between flex-wrap row" style="background: #15222f;margin: 0;margin-bottom: 12px;border-radius: 0 0 15px 15px;">
 
             {{--  right  --}}
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <div class="">
                     <div class="row">
-                        <div class="col-lg-4 col-sm-12">
-                            <select class="form-control form-control-sm" style="margin: 5px 0;">
-                                <option>Walk In Customer</option>
+                        <div class="col-lg-4">
+                            <select class="selectize" style="margin: 5px 0;">
+                                <option value="" selected>العملاء</option>                              
+                                <option>اسماء نجم</option>
+                                <option>ام ليلي</option>
+                                <option>ali</option>
+                                <option>farid</option>
                             </select>
                         </div>
 
-                        <div class="col-lg-1 col-sm-12">
-                            <button class="btn btn-light btn-sm btn-block btn-block" style="margin: 5px 0;"><i class="fas fa-user-plus"></i></button>
+                        <div class="col-lg-1" id="add_user">
+                            <button class="btn btn-light btn-sm" style="margin: 5px 0;"><i class="fas fa-user-plus"></i></button>
                         </div>
 
                         <div class="col-lg-6 col-sm-12" style="position: relative;margin: 5px 0;">
-                            <input type="text" class="form-control form-control-sm" placeholder="بحث عن صنف" >
+                            <input type="text" class="form-control form-control-sm" placeholder="بحث عن صنف" autofocus>
                             
                             <div id="hidden_div">
                                 <div class="text-sm-center table-responsive">
@@ -71,7 +81,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-1 col-sm-12">
+                        <div class="col-lg-1" id="search_button">
                             <button class="btn btn-light btn-sm btn-block" style="margin: 5px 0;" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product">
                                 <i class="fas fa-search-plus"></i>
                             </button>
@@ -81,7 +91,7 @@
             </div>
 
             {{--  left  --}}
-            <div class="col-lg-4 text-left">
+            <div class="col-lg-3 text-left" id="icons_left">
                 <div class="btn-group">
                     <button class="btn btn-danger btn-sm" data-effect="effect-scale" data-toggle="modal" href="#calc"><i class="fas fa-calculator"></i></button>
                     <button class="btn btn-success btn-sm"><i class="fas fa-bell"></i></button>
@@ -148,10 +158,10 @@
                 
                 <div class="product-selection p-3 no-scrollbar">
                     <div class="text-center" style="width: 175px;font-weight: bold;text-decoration: underline;background: #3b8ce2;color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
-                        فاتورة بيع: <span class="">139</span>
+                        فاتورة بيع: <span class="">1397635</span>
                     </div>
                     
-                    <div class="text-center">
+                    <div class="text-center" id="date_time">
                         <span class="badge badge-light" id="date"></span>
                         <span class="badge badge-danger mx-2" id="time" style="font-weight: bold;font-size: 15px !important;margin-top: 10px;"></span>
                         {{--  <button class="btn btn-dark btn-sm ml-2"><i class="fas fa-sign-out-alt"></i> Sign Out</button>  --}}
@@ -161,27 +171,27 @@
 
                     <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border-top: 2px solid #ddd; ">
                         <div>
-                            <p id="countTableTr">
+                            <p id="countTableTr" style="font-size: 13px;font-weight: bold;">
                                 عدد العناصر:
-                                <span class="font-weight-bold">0</span>
+                                <span style="font-size: 24px !important;">0</span>
                             </p>
-                            <p>
+                            <p style="font-size: 13px;font-weight: bold;font-size: 14px;">
                                 م الفرعي: 
-                                <span class="font-weight-bold">32000.00</span>
+                                <span>32000.00</span>
                             </p>
-                            <p>
+                            <p style="font-size: 13px;font-weight: bold;">
                                 الضريبة: 
-                                <span class="font-weight-bold">32000.00</span>
+                                <span>32000.00</span>
                             </p>
-                            <p>
+                            <p style="font-size: 13px;font-weight: bold;">
                                 ك خصم: 
-                                <span class="font-weight-bold">32000.00</span>
+                                <span>32000.00</span>
                             </p>
                         </div>
                         <div>
-                            <p>
+                            <p style="font-size: 13px;font-weight: bold;">
                                 م مستحق: 
-                                <span class="font-weight-bold" style="color: red;font-size: 24px;">28,000</span>
+                                <span style="background: red;color: #fff;font-size: 24px;padding: 3px;">280,000</span>
                             </p>
                         </div>
                     </div>
@@ -213,16 +223,29 @@
 
     </div>
 
-    <!-- JQuery min js -->
+    {{--  JQuery min js  --}}
     <script src="{{ asset('back') }}/assets/plugins/jquery/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="{{ asset('back') }}/assets/plugins/bootstrap/js/bootstrap-rtl.js"></script>
     <script src="{{ asset('back') }}/assets/all.min.js"></script>
     <script src="{{ asset('back') }}/pos/js/customJs.js"></script>
+    
+    {{--  selectize  --}}
+    <script src="{{ asset('back/assets/selectize.min.js') }}"></script>
 
+    {{--  alertify  --}}
+    <script src="{{ asset('back/assets/js/alertify.min.js') }}"></script>
+    
     <script>
         $(document).ready(function () {
+            // selectize
+            $('.selectize').selectize({
+                hideSelected: true
+            });
 
+            {{--  alertify.set('notifier','position', 'bottom-center');
+            alertify.set('notifier','delay', 3);
+            alertify.success("تمت الإضافة بنجاح");  --}}
         });
     </script>
 </body>

@@ -1,5 +1,5 @@
 @include('back.layouts.app_style')
-<div class="modal fade" id="calc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+<div class="modal fade" id="calc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content" style="width: 70%;margin: 0 auto;border: 4px solid #7878a4;border-radius: 20px;">
             <div class="modal-body">
