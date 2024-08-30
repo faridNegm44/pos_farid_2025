@@ -15,26 +15,26 @@
 
                 <div class="pd-30 pd-sm-40 bg-gray-100">
                     <div class="row row-xs">
-                        <div class="col-md-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
                             <label for="client_supplier_type">نوع العميل</label>
                             <div>
                                 <select id="client_supplier_type" name="client_supplier_type" class="form-control">
                                     <option value="3">عميل</option>
-                                    <option value="4">عميل جهة داخلية</option>
+                                    <option value="4">عميل داخلي</option>
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-client_supplier_type" style="display: none;"></bold>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-lg-2 col-md-6 col-sm-12">
                             <label for="code">كود العميل</label>
                             <div>
-                                <input type="text" readonly class="form-control" id="code" name="code" value="1111">
+                                <input type="text" readonly disabled class="form-control" id="code" name="code" value="{{ ($latestId+1) }}" style="font-weight: bold;font-size: 17px;">
                             </div>
                             <bold class="text-danger" id="errors-code" style="display: none;"></bold>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-lg-4 col-md-6 col-sm-12">
                             <label for="name">اسم العميل</label>
                             <i class="fas fa-star require_input"></i>
                             <div>
@@ -43,7 +43,7 @@
                             <bold class="text-danger" id="errors-name" style="display: none;"></bold>
                         </div>
                         
-                        <div class="col-md-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
                             <label for="type_payment">طريقة الدفع</label>
                             <div>
                                 <select id="type_payment" name="type_payment" class="form-control">
@@ -85,19 +85,27 @@
                     </div>
                     
                     <div class="row row-xs">
-                        <div class="col-md-12">
+                        <div class="col-lg-6 col-md-12">
                             <label for="address">عنوان العميل</label>
                             <div>
                                 <input type="text" class="form-control" placeholder="عنوان العميل" id="address" name="address">
                             </div>
                             <bold class="text-danger" id="errors-address" style="display: none;"></bold>
                         </div>
+                        
+                        <div class="col-lg-6 col-md-12">
+                            <label for="note">ملاحظات</label>
+                            <div>    
+                                <input type="text" class="form-control" placeholder="ملاحظات"d="note" name="note">
+                            </div>
+                            <bold class="text-danger" id="errors-note" style="display: none;"></bold>
+                        </div>
                     </div>
 
                     <hr>
 
                     <div class="row row-xs">                        
-                        <div class="col-md-3">
+                        <div class="col-lg-3 col-md-12 col-sm-12" id="is_debtor">
                             <label class="text-danger" for="debit" style="text-align: center;">هل يجوز للعميل ان يكون مدين (عليه)</label>
                             <div style="text-align: center;padding-top: 9px;"> 
 
@@ -112,7 +120,7 @@
                             <bold class="text-danger" id="errors-debit" style="display: none;"></bold>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12" id="debtor_max">
                             <label for="debit_limit">الحد الآقصي لـ مدين (عليه)</label>
                             <div>    
                                 <input type="number" class="form-control" value="0" id="debit_limit" name="debit_limit">
@@ -120,7 +128,7 @@
                             <bold class="text-danger" id="errors-debit_limit" style="display: none;"></bold>
                         </div>
                         
-                        <div class="col-md-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12"  id="debtor_value">
                             <label for="money_on_him">مدين (عليه)</label>
                             <div>    
                                 <input type="number" class="form-control" value="0" id="money_on_him" name="money_on_him">
@@ -128,7 +136,7 @@
                             <bold class="text-danger" id="errors-money_on_him" style="display: none;"></bold>
                         </div>
                         
-                        <div class="col-md-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12" id="creditor_value">
                             <label for="money_for_him">دائن (له)</label>
                             <div>    
                                 <input type="number" class="form-control" value="0" id="money_for_him" name="money_for_him">
@@ -185,14 +193,6 @@
                     <hr>
 
                     <div class="row row-xs">
-                        <div class="col-md-12">
-                            <label for="note">ملاحظات</label>
-                            <div>    
-                                <input type="text" class="form-control" placeholder="ملاحظات"d="note" name="note">
-                            </div>
-                            <bold class="text-danger" id="errors-note" style="display: none;"></bold>
-                        </div> 
-
                         <div class="col-md-12">
                             <div class="custom-file-container fileinput_fileinput" data-upload-id="file_upload" style="margin-top: 12px;">
                                 <label style="color: #555;"> صورة

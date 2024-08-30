@@ -70,8 +70,41 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function () { 
+
+            // start close debtor_max and debtor_value when change debit to لاء
+            $('.debit input[type="radio"]').change(function() {
+                const thisVal = $(this).val();    
+                if(thisVal == 'لاء'){
+                    $('#debtor_max input').val(0).attr('disabled', true);
+                    $('#debtor_value input').val(0).attr('disabled', true);
+                }else{
+                    $('#debtor_max input').attr('disabled', false);
+                    $('#debtor_value input').attr('disabled', false);
+                }
+            });
+            // end close debtor_max and debtor_value when change debit to لاء
 
 
+            // start reset value to 0
+            $("#money_on_him").on('input', function(){
+                if($(this).val() !== ''){
+                    $('#money_for_him').val(0);
+                }
+            });
+
+            $("#money_for_him").on('input', function(){
+                if($(this).val() !== ''){
+                    $('#money_on_him').val(0);
+                }
+            });
+            // end reset value to 0
+
+            
+
+        });
+    </script>
 
     {{-- add, edit, delete => script --}}
     @include('back.clients.add')

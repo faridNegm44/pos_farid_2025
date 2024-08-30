@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 05, 2024 at 03:07 PM
--- Server version: 10.11.8-MariaDB
+-- Generation Time: Aug 30, 2024 at 10:41 PM
+-- Server version: 10.7.8-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -57,9 +57,9 @@ CREATE TABLE `clients_and_suppliers` (
 
 INSERT INTO `clients_and_suppliers` (`id`, `client_supplier_type`, `code`, `name`, `email`, `address`, `phone`, `image`, `type_payment`, `debit`, `debit_limit`, `money`, `status`, `commercial_register`, `tax_card`, `vat_registration_code`, `name_of_commissioner`, `phone_of_commissioner`, `note`, `created_at`, `updated_at`) VALUES
 (1, 3, 1, 'ali', '1', 'cairo', '011', 'df_image.png', 'كاش', '0', '0', '0', 1, '0', '0', '0', '0', '0', NULL, NULL, NULL),
-(2, 4, 1, 'farid', '1', 'mansoura', '010', 'df_image.png', 'كاش', '0', '0', '0', 1, '0', '0', '0', '0', '0', NULL, NULL, NULL),
-(3, 4, 1, 'ehab', '1', 'alex', '010', 'df_image.png', 'كاش', '0', '0', '0', 1, '0', '0', '0', '0', '0', NULL, NULL, NULL),
-(4, 3, 1, 'asmaa', '1', 'cairo', '011', 'df_image.png', 'كاش', '0', '0', '0', 1, '0', '0', '0', '0', '0', NULL, NULL, NULL);
+(2, 3, 1, 'farid', '1', 'mansoura', '010', 'df_image.png', 'كاش', '0', '0', '0', 1, '0', '0', '0', '0', '0', NULL, NULL, NULL),
+(3, 1, 1, 'ehab', '1', 'alex', '010', 'df_image.png', 'كاش', '0', '0', '0', 1, '0', '0', '0', '0', '0', NULL, NULL, NULL),
+(4, 1, 1, 'asmaa', '1', 'cairo', '011', 'df_image.png', 'كاش', '0', '0', '0', 1, '0', '0', '0', '0', '0', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -80,9 +80,9 @@ CREATE TABLE `clients_and_suppliers_types` (
 
 INSERT INTO `clients_and_suppliers_types` (`id`, `name`, `type`, `status`) VALUES
 (1, 'مورد', '+', 1),
-(2, 'مورد جهة خارجية', '+', 1),
+(2, 'مورد داخلي', '+', 1),
 (3, 'عميل', '-', 1),
-(4, 'عميل جهة داخلية', '-', 1);
+(4, 'عميل داخلي', '-', 1);
 
 -- --------------------------------------------------------
 
@@ -601,7 +601,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `clients_and_suppliers`
 --
 ALTER TABLE `clients_and_suppliers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `clients_and_suppliers_types`

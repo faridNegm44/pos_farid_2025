@@ -6,14 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Back\ClientsAndSuppliers;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class ClientsController extends Controller
 {
     public function index()
-    {                               
+    {                   
         $pageNameAr = 'العملاء';
         $pageNameEn = 'clients';
-        return view('back.clients.index' , compact('pageNameAr' , 'pageNameEn'));
+        $latestId = DB::table('clients_and_suppliers')->where('client_supplier_type', 3)->orWhere('client_supplier_type', 4)->max('id');
+        
+        return view('back.clients.index' , compact('pageNameAr' , 'pageNameEn', 'latestId'));
     }
 
     public function create()
