@@ -1,99 +1,88 @@
-{{-- Edit --}}
 <script>
-    $(document).on("click" , "#datatable tr .edit" ,function(){
-        const row_id = $(this).attr("row_id");
+    ///////////////////////////////// edit /////////////////////////////////
+    $(document).on("click" , "#example1 tr .edit" ,function(){
+        const res_id = $(this).attr("res_id");
 
         $.ajax({
-            url: `{{ url($pageNameEn.'/edit') }}/${row_id}`,
+            url: `{{ url($pageNameEn) }}/edit/${res_id}`,
             type: 'GET',
             dataType: 'json',
-            beforeSend:function () {
-                $("#spinner-div").show();
+            beforeSend: function(){
+                $(".dataInput").val('');
             },
             success: function(res){
+                document.querySelector("#res_id").value = res_id;
 
-                $.each(res , function (index, value) {
-
-                    if (index === 'id'){
-                        $(".offcanvas form #row_id").val(value);
-                    }
-
-                    if ($(`.offcanvas form #${index}`).hasClass('select2')){
-                        $(`.offcanvas form #${index}`).val(value).trigger('change');
-                    }
-                    else {
-                        $(`.offcanvas form #${index}`).val(value);
-                    }
-
+                $.each(res , function(index, value){                    
+                    $(`.modal form #${index}`).val(value);
                 });
+                
+                $(`.modal form #code`).val(res.code);
+                
+                $("#debtor_value").css('display', 'none');
+                $("#creditor_value").css('display', 'none');
+        
 
-                $('#password , #confirmed_password').val(
-                    res['password_text']
-                );
+                $(`#image_preview_form`).attr('src', `{{ url('back/images/clients') }}/${res.image}`);
+                document.querySelector("#image_preview_form").src = `{{ url('back/images/clients') }}/${res.image}`;
+                document.querySelector("#image_hidden").value = res.image;
 
 
-                // $(".offcanvas form #note").val(res['note']);
-                // $(".offcanvas form .status").val(res['status']);
-            },
-            complete:function () {
-                $("#spinner-div").hide();
+                alertify.set('notifier','position', 'top-center');
+                alertify.set('notifier','delay', 2);
+                alertify.success("تم استرجاع البيانات بنجاح");
             }
         });
 
     });
 
 
-    // Update
-    ///////////////////////////////// update when click to footer button /////////////////////////////////
-    $("#offcanvasWithBothOptions #update").click(function(e){
-        e.preventDefault();
-        const row_id = $(".offcanvas form #row_id").val();
+    
 
+
+    ///////////////////////////////// update /////////////////////////////////
+    $(".modal #update").click(function(e){
+        e.preventDefault();
+        document.querySelector('.modal #update').disabled = true;        
+        document.querySelector('.spinner_request2').setAttribute("style", "display: inline-block;");
+
+
+        const res_id = $(".modal form #res_id").val();
         $.ajax({
-            url: `{{ url($pageNameEn.'/update') }}/${row_id}`,
+            url: `{{ url($pageNameEn) }}/update/${res_id}`,
             type: 'POST',
             processData: false,
             contentType: false,
-            data: new FormData($('#offcanvasWithBothOptions #form')[0]),
+            data: new FormData($('.modal #form')[0]),
             beforeSend:function () {
                 $('form [id^=errors]').text('');
             },
             error: function(res){
-                alertify.set('notifier','position', 'bottom-right');
-                alertify.set('notifier','delay', 4);
-                alertify.error("هناك شيئ ما خطأ");
-
-                $.each(res['responseJSON']['errors'] , function (index , value) {
-
+                $.each(res.responseJSON.errors, function (index , value) {
                     $(`form #errors-${index}`).css('display' , 'block').text(value);
-
-                });
-
-                // if(res['responseJSON']['errors']['start']){
-                //     $("form #errors-start").css('display' , 'block').text(res['responseJSON']['errors']['start']);
-                // }else{
-                //     $("form #errors-start").text('');
-                // }
-                // if(res['responseJSON']['errors']['end']){
-                //     $("form #errors-end").css('display' , 'block').text(res['responseJSON']['errors']['end']);
-                // }else{
-                //     $("form #errors-end").text('');
-                // }
-                // if(res['responseJSON']['errors']['branch']){
-                //     $("form #errors-branch").css('display' , 'block').text(res['responseJSON']['errors']['branch']);
-                // }else{
-                //     $("form #errors-branch").text('');
-                // }
+                });               
+                
+                $('.dataInput:first').select().focus();
+                document.querySelector('.modal #update').disabled = false;
+                document.querySelector('.spinner_request2').style.display = 'none';                
+                
+                alertify.set('notifier','position', 'top-center');
+                alertify.set('notifier','delay', 3);
+                alertify.error("هناك شيئ ما خطأ");
             },
-            success: function(){
-                $("#offcanvasWithBothOptions").offcanvas('hide');
-                $('#datatable').DataTable().ajax.reload( null, false );
-                // $("#offcanvasWithBothOptions form bold[class=text-danger]").css('display', 'none');
+            success: function(res){
+                $('#example1').DataTable().ajax.reload( null, false );
+                $(".modal form bold[class=text-danger]").css('display', 'none');
+        
+                $(".dataInput").val('');
+                $(".modal").modal('hide');
+
+                document.querySelector('.modal #update').disabled = false;
+                document.querySelector('.spinner_request2').style.display = 'none';
 
                 alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 4);
+                alertify.set('notifier','delay', 3);
                 alertify.success("تم التعديل بنجاح");
-
             }
         });
     });

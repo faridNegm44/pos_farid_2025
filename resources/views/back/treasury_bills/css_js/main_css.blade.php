@@ -1,12 +1,17 @@
 <style>
+    @font-face {
+        font-family: "4_F4";
+        src: url("{{ asset('back/fonts/4_F4.ttf') }}");
+    }
     body {
         overflow: hidden;
         background-color: #fafafa;
-        font-family: Almarai;
+        {{--  font-family: Almarai;  --}}
         text-align: right;
+        font-family: "4_F4", serif;
     }
     .header {
-        padding: 3px 10px;
+        padding: 10px !important;
     }
     .header .btn {
         margin-right: 10px;
@@ -15,19 +20,41 @@
         margin-bottom: 0;
     }
     .main-content {
-        display: flex;
-        flex-direction: column;
-        height: calc(100vh - 120px);
+        {{--  flex-direction: column;  --}}
+        width: 100% !important;
+        margin: 0px auto;
+        height: calc(100vh - 200px);
+    }
+
+    .product-selection{
+        border: 0px !important;
     }
 
     @media (max-width: 1024px) {
         .main-content {
             display: flex;
             flex-direction: column;
-            height: calc(50vh - 0px);
+            height: calc(100vh - 0px);
+        }
+
+        .btn:not(:disabled):not(.disabled){
+            font-size: 10px !important;
+        }
+
+        .product-selection{
+            border: 2px solid #ccc;
         }
     }
 
+    #modal_save_bill .table td, .table th, #modal_dismissal_notices .table td, .table th{
+        padding: 3px 0 !important; 
+        font-size: 10px;
+    }
+    
+    #modal_save_bill .table input, #modal_dismissal_notices .table input{
+        height: 25px !important;
+        font-size: 13px !important;
+    }
 
     @media (min-width: 768px) {
         .main-content {
@@ -40,18 +67,18 @@
             display: none;
         }
     }
-    .product-selection, .cart {
+    {{--  .product-selection, .cart {
         overflow-y: auto;
-    }
+    }  --}}
     .product-selection {
         flex: 1;
         border-left: 1px solid #ddd;
         padding-right: 10px;
     }
-    .cart {
-        flex: 2;
+    {{--  .cart {
+        flex: 4;
         padding-left: 10px;
-    }
+    }  --}}
     .table tbody td {
         vertical-align: middle;
     }
@@ -95,6 +122,11 @@
         flex: 1;
         margin: 2px;
     }
+
+    .total_info input::placeholder{
+        font-size: 10px;
+    }
+
 
     /* ////////////////////////////////////////////////////////////// */
 
@@ -210,6 +242,44 @@
         bottom: 40px !important;
     }
     
+
+
+
+    {{--  spinner overlay  --}}
+    .overlay_div {
+        {{--  background-color: rgba(1, 1, 1, 0.948);  --}}
+        background-color: black;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 20000;
+        display: none;
+    }
+    .spinner{
+        margin: 40vh auto;
+        display: block;
+        color: gold;
+        width: 60px;
+        height: 60px;
+    }
+    {{--  spinner overlay  --}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {{--  start modal_search_product  --}}
     #modal_search_product #search_by{
         font-size: 13px;

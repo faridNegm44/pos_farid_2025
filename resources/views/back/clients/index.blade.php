@@ -10,6 +10,27 @@
     <link href="{{ url('back') }}/assets/plugins/sweet-alert/sweetalert.css" rel="stylesheet">
     {{-- fileupload --}}
     <link href="{{ asset('back/assets/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            position: relative;
+            top: 4px;
+            left: 3px;
+        }
+
+        @media (min-width: 700px) {
+            .modal-xl {
+                max-width: 95%;
+            }
+        }
+        .ajs-warning, .ajs-error{
+            width: 400px !important;
+            max-width: 400px !important;
+            min-width: 400px !important;
+        }
+
+    </style>
 @endsection
 
 @section('footer')  
@@ -24,27 +45,37 @@
     <script>
         // open modal when click button (insert)
         document.addEventListener('keydown', function(event){
-            if( event.which === 45 ) {
-                $('.modal').modal('show');
-                document.querySelector('.modal .modal-header .modal-title').innerText = 'إضافة';
-                document.querySelector('.modal .modal-footer #save').setAttribute('style', 'display: inline;');
-                document.querySelector('.modal .modal-footer #update').setAttribute('style', 'display: none;');
+            if( event.which === 45 ){
+                $('#exampleModalCenter').modal('show');
+                document.querySelector('#exampleModalCenter .modal-header .modal-title').innerText = 'إضافة';
+                document.querySelector('#exampleModalCenter .modal-footer #save').setAttribute('style', 'display: inline;');
+                document.querySelector('#exampleModalCenter .modal-footer #update').setAttribute('style', 'display: none;');
+                $('.dataInput').val('');
             }
         });
-
-        // making client inpuy money_on_him disabled when change radio input debit
-        let debitInput = document.querySelectorAll('.debit');
-
-        for(const debit of debitInput){
-            debit.addEventListener('change', function(){
-                const firstChild = debit.querySelector(':first-child');
-
-                if(){
-                    
-                }
-            })
-        }
     </script>
+    
+    <script>
+        // remove all errors and inputs data when close modal
+        $('.modal').on('hidden.bs.modal', function(){
+            $('form [id^=errors]').text('');
+            $(this).find("input").not("[name='_token']").val('');
+        });
+    </script>
+
+    <script>
+        // when click on add button
+        $(".add").on('click', function(){
+            $("#debtor_value").css('display', 'block');
+            $("#creditor_value").css('display', 'block');
+            $('.modal form #code').val('{{ ($latestId) }}');
+            $('.dataInput').val('');
+
+            document.querySelector("#image_preview_form").src = `{{ url('back/images/df_image.png') }}`;
+            document.querySelector("#image_hidden").value = '';
+        });        
+    </script>
+
 
     <script>       
         $(document).ready(function () {
@@ -55,17 +86,27 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'type_name', name: 'type_name'},
+                    {data: 'action', name: 'action', orderable: false},
+                    {data: 'status', name: 'status'},
                     {data: 'name', name: 'name'},
+                    {data: 'type_name', name: 'type_name'},
                     {data: 'phone', name: 'phone'},
                     {data: 'address', name: 'address'},
-                    {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action', orderable: false},
+                    {data: 'start_dealing', name: 'start_dealing'},
+                    {data: 'last_bill', name: 'last_bill'},
+                    {data: 'opening_creditor', name: 'opening_creditor'},
+                    {data: 'opening_debtor', name: 'opening_debtor'},
+                    {data: 'max_limit', name: 'max_limit'},
+                    {data: 'notes', name: 'notes'},
+                    {data: 'created_at', name: 'created_at'},
                 ],
                 "bDestroy": true,
-                language: {
-                    sUrl: '{{ asset("back/assets/js/ar_dt.json") }}',
-                },
+                language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
+                lengthMenu: [[50, 100, 200, -1], [50, 100, 200, "الكل"]],
+                order: [[0, 'desc']],
+                fixedColumns: {
+                    leftColumns: 2
+                }
             });
         });
     </script>
@@ -77,8 +118,8 @@
             $('.debit input[type="radio"]').change(function() {
                 const thisVal = $(this).val();    
                 if(thisVal == 'لاء'){
-                    $('#debtor_max input').val(0).attr('disabled', true);
-                    $('#debtor_value input').val(0).attr('disabled', true);
+                    $('#debtor_max input').val('').attr('disabled', true);
+                    $('#debtor_value input').val('').attr('disabled', true);
                 }else{
                     $('#debtor_max input').attr('disabled', false);
                     $('#debtor_value input').attr('disabled', false);
@@ -90,19 +131,16 @@
             // start reset value to 0
             $("#money_on_him").on('input', function(){
                 if($(this).val() !== ''){
-                    $('#money_for_him').val(0);
+                    $('#money_for_him').val('');
                 }
             });
 
             $("#money_for_him").on('input', function(){
                 if($(this).val() !== ''){
-                    $('#money_on_him').val(0);
+                    $('#money_on_him').val('');
                 }
             });
             // end reset value to 0
-
-            
-
         });
     </script>
 
@@ -135,17 +173,24 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
+                        <div class="">
+                            <table class="table table-responsive table-bordered table-striped table-hover text-center nowrap" id="example1">
                                 <thead>
                                     <tr>
-                                        <th class="wd-15p border-bottom-0">#</th>
-                                        <th class="wd-15p border-bottom-0">النوع</th>
-                                        <th class="wd-15p border-bottom-0">الإسم</th>
-                                        <th class="wd-20p border-bottom-0">موبايل</th>
-                                        <th class="wd-15p border-bottom-0">العنوان</th>
-                                        <th class="wd-10p border-bottom-0">الحالة</th>
-                                        <th class="wd-25p border-bottom-0">التحكم</th>
+                                        <th class="border-bottom-0">#</th>
+                                        <th class="border-bottom-0">التحكم</th>
+                                        <th class="border-bottom-0">الحالة</th>
+                                        <th class="border-bottom-0">الإسم</th>
+                                        <th class="border-bottom-0">ن العميل</th>
+                                        <th class="border-bottom-0">موبايل</th>
+                                        <th class="border-bottom-0">العنوان</th>
+                                        <th class="border-bottom-0">بداية التعامل</th>
+                                        <th class="border-bottom-0">اخر فاتورة</th>
+                                        <th class="border-bottom-0">افتتاحي دائن</th>
+                                        <th class="border-bottom-0">افتتاحي مدين</th>
+                                        <th class="border-bottom-0">أقصي قيمة للمسحوبات</th>
+                                        <th class="border-bottom-0">ملاحظات</th>
+                                        <th class="border-bottom-0">تاريخ الإنشاء</th>
                                     </tr>
                                 </thead>
                                 

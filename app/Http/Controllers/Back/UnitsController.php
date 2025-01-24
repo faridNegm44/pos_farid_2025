@@ -71,7 +71,7 @@ class UnitsController extends Controller
 
     public function datatable()
     {
-        $all = Units::orderBy('id', 'DESC')->get();
+        $all = Units::all();
 
         return DataTables::of($all)
             ->addColumn('name', function($res){
@@ -79,14 +79,14 @@ class UnitsController extends Controller
             })
             ->addColumn('action', function($res){
                 return '
-                    <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                        <i class="fas fa-marker"></i>
-                    </button>
-
-                    <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                ';
+                        <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                            <i class="fas fa-marker"></i>
+                        </button>
+                    ';
+    
+                        //<button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'">
+                        //    <i class="fa fa-trash"></i>
+                        //</button>
             })
             ->rawColumns(['name', 'action'])
             ->toJson();

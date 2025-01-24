@@ -1,108 +1,87 @@
+
 @extends('back.layouts.app')
 
 @section('title')
-   {{$pageNameAr}} 
+    {{ $pageNameAr }}
 @endsection
 
 @section('header')
-    <style>
-        @media screen and (min-width: 481px) and (max-width: 768px) { 
-            .main-content .offcanvas {
-                width: 90%;
-            }
-        }
-       @media (min-width: 768px) { /* Tablet */
-            .main-content .offcanvas {
-                width: 90%;
-            }
-        }
-        @media (min-width: 992px){ /* Large Screen */
-            .main-content .offcanvas {
-                width: 80%;
-            }
-        }
-    </style>
-@endsection
-
-@section('content')
-    <div class="main-content">
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"></h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <h4 class="text-center" style="margin: 100px auto;">@lang('app.loading') ...</h4>
-            </div>
-        </div>
-        
-        <div class="page-content">
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-body">
-
-                        <h4 class="card-title" style="margin-bottom: 30px;">
-                            @lang('app.Settings')
-                        </h4>
-
-                        {{-- @if (auth()->user()->role_relation->settings_view == 1 ) --}}
-                        {{-- table --}}
-                        <div id="div_datatable">
-                            <table id="datatable" class="table table-hover dt-responsive w-100 table-striped table-bordered text-center">
-                                <thead class="table-light">                                
-                                    <tr>
-                                        <th>@lang('app.app_name')</th>
-                                        <th>@lang('app.phone')</th>
-                                        <th>@lang('app.address')</th>
-                                        <th>لوجو البرنامج</th>
-                                        <th>Fav Icon</th>
-                                        <th>@lang('app.action')</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>    
-                        {{-- @else   
-                            <h4 class="text-center" style="margin: 100px auto;">
-                                لاتمتلك الصلاحيات لرؤيه محتوي الصفحة
-                                <img src="{{ url('back/images/rej2.png') }}" style="width: 80px;height: 78px;position: relative;bottom: 7px;bo"/>
-                            </h4>
-                        @endif     --}}
-                    </div>
-                </div>
-            </div>  
-        </div>
-
-
-        {{-- Include Footer --}}
-        @include('back.layouts.footer')
-    </div>
+    {{-- fileupload --}}
+    <link href="{{ asset('back/assets/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('footer')
-    <script>
-        $(document).on('click', '.bt_modal', function (e) {
-            e.preventDefault();
-            let act = $(this).attr('act');
-            $('.offcanvas-body').load(act);
+    {{--  <!-- fileupload -->  --}}
+    <script src="{{ asset('back/assets/file-upload-with-preview.min.js') }}"></script>
+    <script> new FileUploadWithPreview('file_upload') </script>
+
+    <script>       
+        // cancel enter button 
+        $(document).keypress(function (e) {
+            if(e.which == 13){
+                e.preventDefault();  
+            }
+        });
+        
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: `{{ url('/settings/datatable') }}`,
+                dataType: 'json',
+                columns: [
+                    {data: 'app_name', name: 'app_name', orderable: false},
+                    {data: 'description', name: 'description', orderable: false},
+                    {data: 'phone', name: 'phone', orderable: false},
+                    {data: 'address', name: 'address', orderable: false},
+                    {data: 'action', name: 'action', orderable: false},
+                ],
+                "bDestroy": true,
+                language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
+            });
         });
     </script>
 
-    <script>
-        $('#datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ url($pageNameEn.'/datatable_settings') }}",
-            columns: [
-                {data: 'name', name: 'name'},
-                {data: 'phone', name: 'phone'},
-                {data: 'address', name: 'address'},
-                {data: 'logo', name: 'logo'},
-                {data: 'fav_icon', name: 'fav_icon'},
-                {data: 'action', name: 'action'},
-            ],
-            language: {
-                sUrl: '{{ asset("back/assets/js/ar_dt.json") }}',
-            }
-        });
-    </script>
+    {{-- edit => script --}}
+    @include('back.settings.edit')
 @endsection
+
+
+
+
+@section('content')
+    <div class="container-fluid">
+        <div class="breadcrumb-header justify-content-between">
+            <div class="my-auto">
+                <div class="d-flex">
+                    <h4 class="content-title mb-0 my-auto">{{ $pageNameAr }}</h4>
+                </div>
+            </div>
+        </div>
+
+        @include('back.settings.form')
+
+        <div class="row row-sm">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
+                                <thead>
+                                    <tr>
+                                        <th class="border-bottom-0" >إسم البرنامج</th>
+                                        <th class="border-bottom-0" >الوصف</th>
+                                        <th class="border-bottom-0" >التلفونات</th>
+                                        <th class="border-bottom-0" >العنوان</th>
+                                        <th class="border-bottom-0">التحكم</th>
+                                    </tr>
+                                </thead>                                
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+

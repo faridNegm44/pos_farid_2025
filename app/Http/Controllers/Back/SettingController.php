@@ -6,7 +6,6 @@ use DB;
 use App\Models\Back\Setting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Back\Branch;
 use Illuminate\Support\Facades\File;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -14,67 +13,64 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $pageNameAr = 'الإعدادات';
+        //dd('ss');
+        $pageNameAr = 'الإعدادات العامة';
         $pageNameEn = 'settings';
-        return view('back.settings.index', compact('pageNameAr', 'pageNameEn'));
+        $find = Setting::where('id', 1)->first();
+
+        return view('back.settings.index', compact('pageNameAr', 'pageNameEn', 'find'));
     }
 
-    public function show($id)
+    public function update(Request $request)
     {
-        $find = Setting::where('id' , $id)->first();
-        return view('back.settings.show', compact('find'));
-    }
+        $find = Setting::where('id', 1)->first();
 
-    public function edit($id)
-    {
-        $find = Setting::where('id' , $id)->first();
-        return view('back.settings.edit', compact('find'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $find = Setting::where('id', $id)->first();
-        
         $this->validate($request , [
-            'name' => 'required',
+            'app_name' => 'required',
             'phone1' => 'required',
             'address' => 'required',
+            'logo' => 'nullable|mimes:jpeg,jpg,png,gif,webp|max:1500',
+            'fav_icon' => 'nullable|mimes:jpeg,jpg,png,gif,webp|max:1500',
         ],[
-            'name.required' => 'الإسم مطلوب',
+            'app_name.required' => 'اسم البرنامج مطلوب',
             'phone1.required' => 'رقم التلفون الأول مطلوب',
             'address.required' => 'العنوان مطلوب',
+            'logo.max' => 'صورة لوحة التحكم حجمها أكبر من :max بيكسل.',
+            'logo.mimes' => 'صورة لوحة التحكم يجب أن تكون من نوع JPG أو PNG أو JPEG أو GIF.',
+            'fav_icon.max' => ':attribute حجمها أكبر من :max بيكسل.',
+            'fav_icon.mimes' => ':attribute يجب أن تكون من نوع JPG أو PNG أو JPEG أو GIF.',
         ]);
 
-        if(request('logo') == ""){
-            $logo = request("image_hidden_logo");
-        }else{
-            $file = request('logo');
-            $logo = rand(1,100) . '.' .$file->getClientOriginalName();
+
+        if(request()->hasFile('logo')){
+            File::delete(public_path('back/images/settings/'.$find['logo']));
+
+            $file = request('logo_dashboard');
+            $logo = 'logo' . '.' .$file->getClientOriginalExtension();
             $path = public_path('back/images/settings');
             $file->move($path , $logo);
-            
-            File::delete(public_path('back/images/settings/'.$find['logo']));
-        }
-                
-        if(request('fav_icon') == ""){
-            $fav_icon = request("image_hidden_fav_icon");
+
         }else{
+            $logo = request('logo_hidden');
+        }
+
+        if(request()->hasFile('fav_icon')){
+            File::delete(public_path('back/images/settings/'.$find['fav_icon']));
+
             $file = request('fav_icon');
-            $fav_icon = rand(200,300) . '.' .$file->getClientOriginalName();
+            $fav_icon = 'fav_icon' . '.' .$file->getClientOriginalExtension();
             $path = public_path('back/images/settings');
             $file->move($path , $fav_icon);
-            
-            File::delete(public_path('back/images/settings/'.$find['fav_icon']));
+
+        }else{
+            $fav_icon = request('fav_icon_hidden');
         }
 
         $data = [
-            'branch' => request('branch'),
-            'name' => request('name'),
+            'app_name' => request('app_name'),
             'description' => request('description'),
             'footer_text' => request('footer_text'),
             'address' => request('address'),
-            'city' => request('city'),
-            'zip_code' => request('zip_code'),
             'email' => request('email'),
             'phone1' => request('phone1'),
             'phone2' => request('phone2'),
@@ -88,6 +84,7 @@ class SettingController extends Controller
             'encryption' => request('encryption'),
             'username' => request('username'),
             'password' => request('password'),
+            'maintenance_mode' => request('maintenance_mode') == null ? 0 : 1,
         ];
 
         $find->update($data);
@@ -97,19 +94,30 @@ class SettingController extends Controller
 
 
 
-    ///////////////////////////////////////////////  datatableSettings  /////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////  datatable  /////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function datatableSettings()
+    public function datatable()
     {
         $all = Setting::all();
         return DataTables::of($all)
-        ->addColumn('name', function($res){
+        ->addColumn('app_name', function($res){
             return "
                 <div style='padding:2px;'>
-                    <a style='color:#24ABF2;margin: 0px 5px;font-weight: bold;font-size: 15px;'>"
-                        .$res->name.
-                    "</a>
-                </div>                    
+                    <i class='fas fa-globe'></i>
+                    <span style='margin: 0px 5px;'>"
+                        .$res->app_name.
+                    "</span>
+                </div>
+            ";
+        })
+        ->addColumn('description', function($res){
+            return "
+                <div style='padding:2px;'>
+                    <i class='fas fa-globe'></i>
+                    <span style='margin: 0px 5px;'>"
+                        .$res->description.
+                    "</span>
+                </div>
             ";
         })
         ->addColumn('phone', function($res){
@@ -149,11 +157,14 @@ class SettingController extends Controller
             return $fav_icon;
         })
         ->addColumn('action', function($res){
-            return '<a class="btn btn-outline-success btn-sm edit bt_modal" title="Edit" act="'.url('settings/edit/'.$res->id).'"  data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
-                <i class="fas fa-pencil-alt"></i>
-            </a>';
+            //if (userPermissions()->settings_update == 1){
+            //}
+            return '
+            <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                <i class="fas fa-marker"></i>
+            </button>';
         })
-        ->rawColumns(['name', 'phone', 'address', 'logo', 'fav_icon', 'action'])
+        ->rawColumns(['app_name', 'description', 'phone', 'address', 'action'])
         ->make(true);
     }
 }

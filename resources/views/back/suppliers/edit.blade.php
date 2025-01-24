@@ -11,15 +11,26 @@
                 $(".dataInput").val('');
             },
             success: function(res){
+                document.querySelector("#res_id").value = res_id;
+
                 $.each(res , function(index, value){                    
                     $(`.modal form #${index}`).val(value);
                 });
-
-                document.querySelector("#res_id").value = res_id;
                 
+                $(`.modal form #code`).val(res.code);
+                
+                $("#debtor_value").css('display', 'none');
+                $("#creditor_value").css('display', 'none');
+        
+
+                $(`#image_preview_form`).attr('src', `{{ url('back/images/suppliers') }}/${res.image}`);
+                document.querySelector("#image_preview_form").src = `{{ url('back/images/suppliers') }}/${res.image}`;
+                document.querySelector("#image_hidden").value = res.image;
+
+
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 2);
-                alertify.success("تمت جلب البيانات بنجاح");
+                alertify.success("تم استرجاع البيانات بنجاح");
             }
         });
 
@@ -54,7 +65,7 @@
                 $('.dataInput:first').select().focus();
                 document.querySelector('.modal #update').disabled = false;
                 document.querySelector('.spinner_request2').style.display = 'none';                
-
+                
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 3);
                 alertify.error("هناك شيئ ما خطأ");

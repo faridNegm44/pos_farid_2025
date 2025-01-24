@@ -15,7 +15,7 @@
     <link href="{{ asset('back/assets/css-rtl/alertify.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
     <link href="{{ asset('back/assets/css-rtl/default.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
     
-    @include('back.pos.style')
+    @include('back.pos.css_js.main_css')
 </head>
 <body id="pos_create">
     <div class="container-fluid">
@@ -28,6 +28,26 @@
         @include('back.pos.modal_search_product')
         {{--  end modal_search_product  --}}
 
+        {{--  start modal_save_bill  --}}
+        @include('back.pos.modal_save_bill')
+        {{--  end modal_save_bill  --}}
+
+        {{--  start modal_dismissal_noticess  --}}
+        @include('back.pos.modal_dismissal_notices')
+        {{--  end modal_dismissal_noticess  --}}
+
+        <style>
+            .alertify .ajs-body .ajs-content{
+                font-size: 13px !important;
+            }
+        </style>
+
+
+        <div class="overlay_div">
+            <div class="spinner spinner-border " role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
 
 
         {{--  ///////////////////////////////////////////////// start navbar /////////////////////////////////////////////////
@@ -38,8 +58,8 @@
             <div class="col-lg-9">
                 <div class="">
                     <div class="row">
-                        <div class="col-lg-4">
-                            <select class="selectize" style="margin: 5px 0;">
+                        <div class="col-lg-4" style="margin-top: 5px !important;">
+                            <select class="selectize">
                                 <option value="" selected>العملاء</option>                              
                                 <option>اسماء نجم</option>
                                 <option>ام ليلي</option>
@@ -48,12 +68,8 @@
                             </select>
                         </div>
 
-                        <div class="col-lg-1" id="add_user">
-                            <button class="btn btn-light btn-sm" style="margin: 5px 0;"><i class="fas fa-user-plus"></i></button>
-                        </div>
-
-                        <div class="col-lg-6 col-sm-12" style="position: relative;margin: 5px 0;">
-                            <input type="text" class="form-control form-control-sm" placeholder="بحث عن صنف" autofocus>
+                        <div class="col-lg-7 col-sm-12" style="position: relative;margin: 5px 0;">
+                            <input type="text" class="form-control form-control-sm" style="height: 30px !important;" placeholder="بحث عن صنف" autofocus>
                             
                             <div id="hidden_div">
                                 <div class="text-sm-center table-responsive">
@@ -81,9 +97,9 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-1" id="search_button">
-                            <button class="btn btn-light btn-sm btn-block" style="margin: 5px 0;" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product">
-                                <i class="fas fa-search-plus"></i>
+                        <div class="col-lg-1" id="search_button" style="margin-top: 2px;">
+                            <button class="btn btn-light btn-sm btn-block" style="margin: 5px 0px;" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product" data-toggle="tooltip" title="بحث عن صنف">
+                                <i class="fas fa-search-plus" style="font-size: 18px !important;"></i>
                             </button>
                         </div>
                     </div>
@@ -93,9 +109,9 @@
             {{--  left  --}}
             <div class="col-lg-3 text-left" id="icons_left">
                 <div class="btn-group">
-                    <button class="btn btn-danger btn-sm" data-effect="effect-scale" data-toggle="modal" href="#calc"><i class="fas fa-calculator"></i></button>
-                    <button class="btn btn-success btn-sm"><i class="fas fa-bell"></i></button>
-                    <button class="btn btn-primary btn-sm"><i class="fas fa-sync-alt"></i></button>
+                    <a href="{{ url('/') }}" target="_blank" style="color: #fff;" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="الصفحة الرئيسية">
+                        <i class="fas fa-store"></i>
+                    </a>
                     <button class="btn btn-warning btn-sm"><i class="fas fa-maximize"></i></button>
                 </div>
             </div>            
@@ -113,13 +129,14 @@
         {{--  ///////////////////////////////////////////////// start main-content /////////////////////////////////////////////////
         ///////////////////////////////////////////////// start main-content /////////////////////////////////////////////////  --}}
 
-        <div class="main-content">
+        <div class="main-content" style="background: white !important;margin-bottom: 30px;">
             {{--  <div class="row">  --}}
 
                 {{-- right --}}
                 <div class="cart p-3 no-scrollbar"> 
-                    <table class="table table-bordered table-hover" id="products_table" style="height: 100px;overflow: hidden;">
-                        <thead class="text-center thead-dark">
+                    <table class="table table-hover nowrap" id="products_table">
+                    {{--<table class="table table-bordered table-striped table-hover text-center nowrap" id="products_table">--}}
+                        <thead class="text-center thead-dark" style="position: sticky; top: -14px;">
                             <tr>
                                 <th>#</th>
                                 <th style="width: 25%;">الصنف</th>
@@ -147,7 +164,7 @@
                                     <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
                                     <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
                                     <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
-                                    <td><button class="btn btn-danger btn-sm btn-icon remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();"><i class="fas fa-times"></i></button></td>
+                                    <td><button class="btn btn-outline-danger btn-sm btn-icon remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();"><i class="fas fa-times"></i></button></td>
                                 </tr>
                             @endfor
                         </tbody>
@@ -156,9 +173,9 @@
 
                 {{-- left --}}
                 
-                <div class="product-selection p-3 no-scrollbar">
+                <div class="product-selection p-3 no-scrollbar total_info">
                     <div class="text-center" style="width: 175px;font-weight: bold;text-decoration: underline;background: #3b8ce2;color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
-                        فاتورة بيع: <span class="">1397635</span>
+                        فاتورة بيع: <span style="font-size: 15px;margin: 0px 5px;">1397635</span>
                     </div>
                     
                     <div class="text-center" id="date_time">
@@ -169,29 +186,64 @@
 
                     <br>
 
-                    <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border-top: 2px solid #ddd; ">
-                        <div>
-                            <p id="countTableTr" style="font-size: 13px;font-weight: bold;">
+                    <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #ddd; ">
+                        <div class="row">
+                            <p class="col-6" id="countTableTr" style="font-size: 13px;font-weight: bold;">
                                 عدد العناصر:
-                                <span style="font-size: 24px !important;">0</span>
+                                <span style="font-size: 16px;">0</span>
                             </p>
-                            <p style="font-size: 13px;font-weight: bold;font-size: 14px;">
+                            <p class="col-6" style="font-size: 13px;font-weight: bold;font-size: 14px;">
                                 م الفرعي: 
-                                <span>32000.00</span>
+                                <span style="font-size: 16px;">32000.00</span>
                             </p>
-                            <p style="font-size: 13px;font-weight: bold;">
-                                الضريبة: 
-                                <span>32000.00</span>
+                            <p class="col-4">
+                                <input type="text" class="form-control text-center" placeholder="ضريبة قيمة مضافة" style="font-size: 12px;"/>
                             </p>
-                            <p style="font-size: 13px;font-weight: bold;">
-                                ك خصم: 
-                                <span>32000.00</span>
+                            <p class="col-4">
+                                <select class="form-control text-center" name="" id="discount" style="font-size: 12px;">
+                                    <option value="" selected disabled>نوع الخصم</option>
+                                    <option value="discount_rate">خ نسبة</option>
+                                    <option value="discount_price">خ قيمة</option>
+                                </select>
                             </p>
-                        </div>
-                        <div>
-                            <p style="font-size: 13px;font-weight: bold;">
-                                م مستحق: 
-                                <span style="background: red;color: #fff;font-size: 24px;padding: 3px;">280,000</span>
+                            <p class="col-4">
+                                <input type="text" class="form-control text-center" placeholder="الخصم" style="font-size: 12px;"/>
+                            </p>
+
+                            <div class="col-12">
+                                <table class="table table-bordered table-striped text-center">
+                                    <thead class="table-dark" style="font-size: 9px;">
+                                        <tr>
+                                            <th>م الهدايا</th>
+                                            <th>م الخصومات</th>
+                                            <th>م ض.م</th>
+                                            <th>م مصاريف</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <span id="totalGift" style="font-weight: bold;">0.00</span>
+                                            </td>
+                                            <td>
+                                                <span id="totalDiscount" style="font-weight: bold;">0.00</span>
+                                            </td>
+                                            <td>
+                                                <span id="totalTax" style="font-weight: bold;">0.04</span>
+                                            </td>
+                                            <td>
+                                                <span id="totalExpenses" style="font-weight: bold;">0.00</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p class="col-lg-12">
+                                <div style="width: 97%;background: #ffc107;color: black;padding: 7px;text-align: center;margin: auto;">
+                                    <span style="font-size: 12px;">الإجمالي: </span>
+                                    <span style="font-size: 24px;">280,000</span>
+                                </div>
                             </p>
                         </div>
                     </div>
@@ -211,12 +263,29 @@
         {{--  ///////////////////////////////////////////////// start footer /////////////////////////////////////////////////
         ///////////////////////////////////////////////// start footer /////////////////////////////////////////////////  --}}
         <div class="footer-btn-group">
-            <button class="btn btn-primary btn-sm" id="order"><i class="fas fa-check"></i> Order</button>
-            <button class="btn btn-warning btn-sm"><i class="fas fa-pause"></i> Hold Order</button>
-            <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Cancel</button>
-            <button class="btn btn-success btn-sm"><i class="fas fa-gift"></i> Coupon</button>
-            <button class="btn btn-info btn-sm"><i class="fas fa-percentage"></i> % Discount</button>
-            <button class="btn btn-light btn-sm"><i class="fas fa-credit-card"></i> Credit Card</button>
+            <button class="btn btn-warning btn-sm"><i class="fas fa-pause">
+                </i> تعليق الفاتورة
+            </button>
+
+            <button class="btn btn-success btn-sm"><i class="fas fa-user-plus">
+                </i> عميل جديد
+            </button>
+
+            <button class="btn btn-danger btn-sm refresh_page">
+                <i class="fas fa-refresh"></i> الغاء  الفاتورة
+            </button>
+
+            <button class="btn btn-light btn-sm" id="save_bill" data-effect="effect-scale" data-toggle="modal" href="#modal_save_bill">
+                <i class="fas fa-check-double"></i> حفظ الفاتورة
+            </button>
+
+            <button class="btn btn-primary btn-sm" id="dismissal_notices" data-effect="effect-scale" data-toggle="modal" href="#modal_dismissal_notices">
+                <i class="fas fa-money-bill"></i> مصروفات الإذن
+            </button>
+            
+            <button class="btn btn-secondary btn-sm" data-effect="effect-scale" data-toggle="modal" href="#calc">
+                <i class="fas fa-calculator"></i> % الالة الحاسبة
+            </button>
         </div>
         {{--  ///////////////////////////////////////////////// end footer /////////////////////////////////////////////////
         ///////////////////////////////////////////////// end footer /////////////////////////////////////////////////  --}}
@@ -237,16 +306,12 @@
     <script src="{{ asset('back/assets/js/alertify.min.js') }}"></script>
     
     <script>
-        $(document).ready(function () {
-            // selectize
-            $('.selectize').selectize({
-                hideSelected: true
-            });
-
-            {{--  alertify.set('notifier','position', 'bottom-center');
-            alertify.set('notifier','delay', 3);
-            alertify.success("تمت الإضافة بنجاح");  --}}
-        });
+        @include('back.pos.css_js.main_js')
     </script>
+
+    {{--  start refresh_page  --}}
+        @include('back.layouts.refresh_page')
+    {{--  end refresh_page  --}}
+    
 </body>
 </html>

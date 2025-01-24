@@ -63,8 +63,6 @@
 	inputField.addEventListener('focus', () => {
 		inputField.select();
 	});
-
-
 	
 	
 	
@@ -93,6 +91,39 @@
 	// 	});
 	// });
 </script>
+
+
+{{-- start valid to inputs number  --}}
+<script>
+	$(document).on('input' , '.numValid', function (e) {
+		$(this).val($(this).val().replace(/[^0-9.]/g, ''));
+
+		if (($(this).val().split('.').length - 1) > 1)
+			$(this).val($(this).val().substring(0, $(this).val().length - 1));
+	});
+</script>
+{{-- end valid to inputs number  --}}
+
+
+{{--  start active light or dark theme  --}}
+<script>
+	$(document).ready(function () {
+		$(".dark_theme").click(function(){
+			$("body").toggleClass("dark-theme");
+			$(this).css('display', 'none');
+			$('.light_theme').css('display', 'block');
+		});		
+		
+		$(".light_theme").click(function(){
+			$("body").removeClass("dark-theme");
+			$(this).css('display', 'none');
+			$('.dark_theme').css('display', 'block');
+		});		
+	});
+</script>
+{{--  end active light or dark theme  --}}
+
+
 
 
 {{--  start calc  --}}

@@ -93,14 +93,10 @@ class CompanyController extends Controller
             })
             ->addColumn('action', function($res){
                 return '
-                    <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                        <i class="fas fa-marker"></i>
-                    </button>
-
-                    <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                ';
+                        <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                            <i class="fas fa-marker"></i>
+                        </button>
+                    ';
             })
             ->rawColumns(['name', 'status', 'action'])
             ->toJson();

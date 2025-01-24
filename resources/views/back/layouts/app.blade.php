@@ -12,7 +12,7 @@
 		<meta name="Keywords" content="dashboard, admin, bootstrap admin template, codeigniter, php, php framework, codeigniter 4, php mvc, php codeigniter, best php framework, codeigniter admin, codeigniter dashboard, admin panel template, bootstrap 4 admin template, bootstrap dashboard template"/>
 
         <!-- Title -->
-        <title> POS: @yield('title') </title>
+        <title> {{ GeneralSettingsInfo()->app_name }}: @yield('title') </title>
 
         <!-- Favicon -->
         <link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
@@ -25,7 +25,7 @@
 
         <!--  Right-sidemenu css -->
         <link href="{{ asset('back') }}/assets/plugins/sidebar/sidebar.css" rel="stylesheet">
-    
+
         <!-- P-scroll bar css-->
         <link href="{{ asset('back') }}/assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
 
@@ -56,14 +56,14 @@
         {{-- alertify --}}
         <link href="{{ asset('back/assets/css-rtl/alertify.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
         <link href="{{ asset('back/assets/css-rtl/default.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
-        
-        
+
+
         {{-- flatpickr --}}
         <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
-        
-        
-        
-        
+
+
+
+
         {{-- selectize --}}
         <link href="{{ asset('back/assets/selectize.css') }}" type="text/css" rel="stylesheet"/>
 
@@ -84,17 +84,26 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Cairo:slnt,wght@11,200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">
 
         <style>
-                 @font-face {
+        @font-face {
             font-family: "4_F4";
             src: url("{{ asset('back/fonts/4_F4.ttf') }}");
         }
         body{
             /* font-family: Arial, Helvetica, sans-serif, serif; */
-            /* font-family: "4_F4", serif; */
-            font-family: Almarai;
-            
+            font-family: "4_F4", serif;
+            {{--  font-family: Rubik;  --}}
+            {{--  font-weight: 100;    --}}
+        }
+
+        input::placeholder {
+            font-size: 10px !important;
+            position: relative;
+            top: -2px;
         }
 
         table.dataTable tbody th, table.dataTable tbody td{
@@ -187,7 +196,6 @@
 
 
         .form-control:disabled, .form-control[readonly] {
-            background-color: #ffffff !important;
             border: 1px solid gray !important;
         }
 
@@ -196,6 +204,18 @@
             font-weight: bold;
             position: relative;
             top: 3px;
+        }
+
+        .modal-header{
+            padding: 10px 20px 5px !important;
+        }
+        .modal-footer{
+            padding: 5px 0px !important;
+        }
+        .right-content .add{
+            padding: 0 !important;
+            width: 30px !important;
+            height: 25px !important;
         }
         /* ////////////////////////////////////////////  top css new css edit  ///////////////////////////////////////////////// */
 
@@ -207,10 +227,10 @@
             font-size: 7px;
             position: absolute;
             left: 15px;
-            top: 17px;
+            top: 11px;
             color: red;
         }
-        
+
         .breadcrumb-header {
             margin-top: 10px;
             margin-bottom: 10px;
@@ -281,22 +301,58 @@
             display: none;
         }
 
-        .alertify{ 
+        .alertify{
             z-index:999999 !important;
             display: block !important;
         }
-        
-        .alertify-notifier{ 
+
+        .alertify-notifier{
             z-index:999999 !important;
+        }
+        .horizontalMenu>.horizontalMenu-list>li>ul.sub-menu>li>a{
+            padding: 2px 30px !important;
+        }
+        .main-header{
+            height: 35px !important;
+        }
+        .main-profile-menu .profile-user img{
+            margin-top: 3px !important;
+            width: 27px !important;
+            height: 27px !important;
+        }
+        @media only screen and (max-width: 991px) {
+            .animated-arrow {
+                top: -16px !important;
+            }
+        }
+
+        .form-control{
+            height: 30px !important;
+            color: #000 !important; 
+        }
+        .selectize-input{
+            height: 30px !important;
+            padding: 5px 8px !important
+        }
+        .modal form label{
+            margin-top: 6px !important;
+            font-size: 10px !important;
+            color: #222 !important;
+        }
+        .form-control::placeholder {
+            transform: scale(0.9);
+        }
+        .horizontalMenu>.horizontalMenu-list>li>a{
+            font-size: 11px !important;
         }
         </style>
 	</head>
 
-    
+
 <body class="main-body {{-- dark-theme --}}">
 
     <!-- Start Switcher -->
-    @include('back.layouts.switcher')
+    {{--@include('back.layouts.switcher')--}}
     <!-- End Switcher -->
 
     <!-- Loader -->
@@ -320,7 +376,7 @@
         @include('back.layouts.notification_sidebar')
         @include('back.layouts.footer')
     </div>
-    
+
 
 
     <a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a>
@@ -351,7 +407,7 @@
 
     <!-- Horizontalmenu js-->
     <script src="{{ asset('back') }}/assets/plugins/horizontal-menu/horizontal-menu-2/horizontal-menu.js"></script>
-    
+
     <!-- Sticky js -->
     <script src="{{ asset('back') }}/assets/js/sticky.js"></script>
 
@@ -359,7 +415,7 @@
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-rtl.js"></script>
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-custom.js"></script>
 
-    
+
     <!--Internal  Chart.bundle js -->
     <script src="{{ asset('back') }}/assets/plugins/chart.js/Chart.bundle.min.js"></script>
 
@@ -404,17 +460,17 @@
     <script src="{{ url('back') }}/assets/plugins/datatable/js/dataTables.responsive.min.js"></script>
     <script src="{{ url('back') }}/assets/plugins/datatable/js/responsive.bootstrap4.min.js"></script>
     <script src="{{ url('back') }}/assets/js/table-data.js"></script>
-    
+
     {{-- flatpickr --}}
     <script src="https://unpkg.com/flatpickr/dist/flatpickr.min.js"></script>
-    
+
     <!-- alertify -->
     <script src="{{ asset('back/assets/js/alertify.min.js') }}"></script>
-    
+
     {{-- general scripts file js --}}
     @include('back.layouts.general_scripts')
-    
-    
+
+
     <!-- selectize -->
     <script src="{{ asset('back/assets/selectize.min.js') }}"></script>
 
@@ -427,5 +483,6 @@
     <!-- Switcher js -->
     <script src="{{ asset('back') }}/assets/switcher/js/switcher-rtl.js"></script>
 </body>
+
 
 </html>

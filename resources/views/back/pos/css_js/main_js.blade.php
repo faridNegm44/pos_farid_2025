@@ -22,7 +22,7 @@
 
 
 // start focus the input[type="number"]
-    $('input[type="number"]').on('focus', function() {
+    $('input[type="number"], .focused').on('focus', function() {
         $(this).select();
     });
 // end focus the input[type="number"]
@@ -37,28 +37,28 @@
 // end valid if input[type="number"].val < 1
 
 // start cancel enter button 
-$(document).keypress(function (e) {
-    if(e.which == 13){
-        e.preventDefault();  
-    }
-});
+    $(document).keypress(function (e) {
+        if(e.which == 13){
+            e.preventDefault();  
+        }
+    });
 // end cancel enter button 
 
 
 // start open modal when click button (insert) to search products
-document.addEventListener('keydown', function(event){
-    if( event.which === 45 ){
-        $('#modal_search_product').modal('show');
-    }
-});
+    document.addEventListener('keydown', function(event){
+        if( event.which === 45 ){
+            $('#modal_search_product').modal('show');
+        }
+    });
 // end open modal when click button (insert) to search products
 
 // start open modal calc when click button when click ctrl+/
-$(document).bind('keydown', function(event) {
-    if( event.which === 191 && event.ctrlKey ) {
-        $('#calc').modal('show');
-    }
-});
+    $(document).bind('keydown', function(event) {
+        if( event.which === 191 && event.ctrlKey ) {
+            $('#calc').modal('show');
+        }
+    });
 // end open modal calc when click button when click ctrl+/
 
 
@@ -66,28 +66,36 @@ $(document).bind('keydown', function(event) {
 function showDate() {
     const now = new Date();
     const options = {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-      locale: 'ar' 
+        weekday: 'long',
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        locale: 'ar' 
     };
     const formattedDateTime = now.toLocaleString('ar-EG', options);
     document.getElementById('date').textContent = formattedDateTime;
-  }
-  setInterval(showDate, 1000);
+}
+setInterval(showDate, 1000);
 
 
-  function showTime() {
+function showTime() {
     const now = new Date();
     const options = {
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      locale: 'ar' 
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        locale: 'ar' 
     };
     const formattedDateTime = now.toLocaleString('ar-EG', options);
     document.getElementById('time').textContent = formattedDateTime;
-  }
-  setInterval(showTime, 1000);
+}
+setInterval(showTime, 1000);
 // end get current full date and time
+
+
+$(document).ready(function () {
+    // selectize
+    $('.selectize').selectize({
+        hideSelected: true
+    });
+});

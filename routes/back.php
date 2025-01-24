@@ -28,10 +28,9 @@ Route::get('clear_cache', function() {
 });
 
  //404
-Route::fallback(function () {
-    return view("back.404");
+ Route::fallback(function () {
+     return view('back.404');
 });
-
 // , 'middleware' => 'checkLogin' , 'middleware' => 'throttle'
 Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], function(){
 
@@ -106,19 +105,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
         Route::get('datatable' , 'FinancialYearsController@datatable');
     });
 
-    // financialStorages Routes
-    Route::group(['prefix' => 'financialStorages'] , function (){
-        Route::get('/' , 'FinancialStoragesController@index');
-        Route::post('/store' , 'FinancialStoragesController@store');
-        Route::post('/store' , 'FinancialStoragesController@store');
-        Route::get('/edit/{id}' , 'FinancialStoragesController@edit');
-        Route::post('/update/{id}' , 'FinancialStoragesController@update');
-        Route::get('/destroy/{id}' , 'FinancialStoragesController@destroy');
-        
-        Route::get('datatable' , 'FinancialStoragesController@datatable');
-    });
-
-
 
     // stores Routes
     Route::group(['prefix' => 'stores'] , function (){
@@ -133,6 +119,61 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     });
 
 
+    
+    // financial_treasury Routes
+    Route::group(['prefix' => 'financial_treasury'] , function (){
+        Route::get('/' , 'FinancialTreasuryController@index');
+        Route::post('/store' , 'FinancialTreasuryController@store');
+        Route::post('/store' , 'FinancialTreasuryController@store');
+        Route::get('/edit/{id}' , 'FinancialTreasuryController@edit');
+        Route::post('/update/{id}' , 'FinancialTreasuryController@update');
+        Route::get('/destroy/{id}' , 'FinancialTreasuryController@destroy');
+        
+        Route::get('datatable' , 'FinancialTreasuryController@datatable');
+    });
+
+
+    // clients Routes
+    Route::group(['prefix' => 'clients'] , function (){
+        Route::get('/' , 'ClientsController@index');
+        Route::post('/store' , 'ClientsController@store');
+        Route::get('/edit/{id}' , 'ClientsController@edit');
+        Route::post('/update/{id}' , 'ClientsController@update');
+        Route::get('/destroy/{id}' , 'ClientsController@destroy');
+        
+        Route::post('store_client_from_pos_page' , 'ClientsController@storeClientFromPosPage');
+        Route::post('/import' , 'ClientsController@import');
+        Route::get('datatable' , 'ClientsController@datatable');
+    });
+    
+
+    // suppliers Routes
+    Route::group(['prefix' => 'suppliers'] , function (){
+        Route::get('/' , 'SuppliersController@index');
+        Route::post('/store' , 'SuppliersController@store');
+        Route::get('/edit/{id}' , 'SuppliersController@edit');
+        Route::post('/update/{id}' , 'SuppliersController@update');
+        Route::get('/destroy/{id}' , 'SuppliersController@destroy');
+        
+        Route::post('store_client_from_pos_page' , 'SuppliersController@storeClientFromPosPage');
+        Route::post('/import' , 'SuppliersController@import');
+        Route::get('datatable' , 'SuppliersController@datatable');
+    });
+    
+    
+
+    // treasury_bills Routes
+    Route::group(['prefix' => 'treasury_bills'] , function (){
+        Route::get('/' , 'TreasuryBillsController@index');
+        Route::get('/create' , 'TreasuryBillsController@create');
+        Route::get('/getAllDataByBranch/{id}' , 'TreasuryBillsController@getAllDataByBranch');
+        Route::get('/getStatusTreasuries/{id}' , 'TreasuryBillsController@getStatusTreasuries');
+        Route::get('/getStatusPlaces/{id}' , 'TreasuryBillsController@getStatusPlaces');
+        Route::post('/store' , 'TreasuryBillsController@store');
+        Route::get('/edit/{id}' , 'TreasuryBillsController@edit');
+        Route::post('/update/{id}' , 'TreasuryBillsController@update');
+        Route::get('datatable' , 'TreasuryBillsController@datatable');
+    });
     
     // products Routes
     Route::group(['prefix' => 'products'] , function (){
@@ -173,6 +214,19 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
 
 
 
+
+
+// financialStorages Routes
+// Route::group(['prefix' => 'financialStorages'] , function (){
+//     Route::get('/' , 'FinancialStoragesController@index');
+//     Route::post('/store' , 'FinancialStoragesController@store');
+//     Route::post('/store' , 'FinancialStoragesController@store');
+//     Route::get('/edit/{id}' , 'FinancialStoragesController@edit');
+//     Route::post('/update/{id}' , 'FinancialStoragesController@update');
+//     Route::get('/destroy/{id}' , 'FinancialStoragesController@destroy');
+    
+//     Route::get('datatable' , 'FinancialStoragesController@datatable');
+// });
 
 
 
@@ -220,7 +274,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     // clients Routes
     Route::group(['prefix' => 'clients'] , function (){
         Route::get('/' , 'ClientsController@index');
-        Route::post('/' , 'ClientsController@store');
+        Route::post('/store' , 'ClientsController@store');
         Route::get('/edit/{id}' , 'ClientsController@edit');
         Route::post('/update/{id}' , 'ClientsController@update');
         Route::get('/destroy/{id}' , 'ClientsController@destroy');
@@ -232,16 +286,16 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
 
     
     // supplier Routes
-    Route::group(['prefix' => 'suppliers'] , function (){
-        Route::get('/' , 'SupplierController@index');
-        Route::post('/' , 'SupplierController@store');
-        Route::get('/edit/{id}' , 'SupplierController@edit');
-        Route::post('/update/{id}' , 'SupplierController@update');
-        Route::get('/destroy/{id}' , 'SupplierController@destroy');
+    // Route::group(['prefix' => 'suppliers'] , function (){
+    //     Route::get('/' , 'SupplierController@index');
+    //     Route::post('/' , 'SupplierController@store');
+    //     Route::get('/edit/{id}' , 'SupplierController@edit');
+    //     Route::post('/update/{id}' , 'SupplierController@update');
+    //     Route::get('/destroy/{id}' , 'SupplierController@destroy');
         
-        Route::post('/import' , 'SupplierController@import');
-        Route::get('datatable_fiscal_years' , 'FiscalYearController@datatableFiscalYears');
-    });
+    //     Route::post('/import' , 'SupplierController@import');
+    //     Route::get('datatable_fiscal_years' , 'FiscalYearController@datatableFiscalYears');
+    // });
 
     
 
@@ -370,28 +424,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
         Route::get('/getStatusPlaces/{id}' , 'PurchasesReturnHeadController@getStatusPlaces');
     });
 
-    // financial-treasury Routes
-    Route::group(['prefix' => 'financial-treasury'] , function (){
-        Route::get('datatable_table' , 'FinancialTreasuryController@datatable');
-        Route::get('/' , 'FinancialTreasuryController@index');
-        Route::post('/' , 'FinancialTreasuryController@store');
-        Route::get('/edit/{id}' , 'FinancialTreasuryController@edit');
-        Route::post('/update/{id}' , 'FinancialTreasuryController@update');
-        //Route::get('/destroy/{id}' , 'FinancialTreasuryController@destroy');
-
-    });
-
-    // stores
-    Route::group(['prefix' => 'stores'] , function (){
-        Route::get('datatable_table' , 'StoreController@datatable');
-        Route::get('/' , 'StoreController@index');
-        Route::post('/' , 'StoreController@store');
-        Route::get('/edit/{id}' , 'StoreController@edit');
-        Route::post('/update/{id}' , 'StoreController@update');
-        //Route::get('/destroy/{id}' , 'StoreController@destroy');
-
-    });
-
     // expenses
     Route::group(['prefix' => 'expenses'] , function (){
         Route::get('/getExpensesByBranchAndDates/{id}/{from?}/{to?}' , 'ExpensesController@getExpensesByBranchAndDates');
@@ -421,8 +453,16 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     });
 
 
+    // settings Routes
+    Route::group(['prefix' => 'settings'] , function (){
+        Route::get('/' , 'SettingController@index');
+        Route::post('/update' , 'SettingController@update');
 
-     //
+        Route::get('datatable' , 'SettingController@datatable');
+    });
+
+
+
 
     //  notebook_shortcomings Routes
      Route::group(['prefix' => 'notebook_shortcomings'] , function (){
@@ -448,16 +488,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
         Route::get('/destroy/{id}' , 'RolesPermissionsController@destroy');
 
         Route::get('datatable_roles_permissions' , 'RolesPermissionsController@datatable_roles_permissions');
-    });
-
-    // settings Routes
-    Route::group(['prefix' => 'settings'] , function (){
-        Route::get('/' , 'SettingController@index');
-        Route::get('/show/{id}' , 'SettingController@show');
-        Route::get('/edit/{id}' , 'SettingController@edit');
-        Route::post('/update/{id}' , 'SettingController@update');
-        
-        Route::get('datatable_settings' , 'SettingController@datatableSettings');
     });
 
 

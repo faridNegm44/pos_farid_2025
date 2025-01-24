@@ -9,8 +9,8 @@
 
 @endsection
 
-@section('footer')  
-    <script>       
+@section('footer')
+    <script>
         // open modal when click button (insert)
         document.addEventListener('keydown', function(event){
             if( event.which === 45 ){
@@ -26,23 +26,23 @@
 
         // focus first input when open modal
         $('.modal').on('shown.bs.modal', function(){
-            $('.dataInput:first').focus();                
+            $('.dataInput:first').focus();
         });
 
         // remove all errors when close modal
         $('.modal').on('hidden.bs.modal', function(){
             $('form [id^=errors]').text('');
         });
-        
 
 
-        // cancel enter button 
+
+        // cancel enter button
         $(document).keypress(function (e) {
             if(e.which == 13){
-                e.preventDefault();  
+                e.preventDefault();
             }
         });
-        
+
         $(document).ready(function () {
             $('#example1').DataTable({
                 processing: true,
@@ -55,6 +55,10 @@
                     {data: 'action', name: 'action', orderable: false},
                 ],
                 "bDestroy": true,
+                order: [[0, 'desc']],
+                //fixedColumns: {
+                //    leftColumns: 4
+                //},
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
             });
@@ -103,7 +107,7 @@
                                         <th class="border-bottom-0" >إسم القسم</th>
                                         <th class="border-bottom-0">التحكم</th>
                                     </tr>
-                                </thead>                                
+                                </thead>
                             </table>
                         </div>
                     </div>

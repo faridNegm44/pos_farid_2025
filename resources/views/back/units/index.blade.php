@@ -55,6 +55,7 @@
                     {data: 'action', name: 'action', orderable: false},
                 ],
                 "bDestroy": true,
+                order: [[0, 'desc']],
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
             });

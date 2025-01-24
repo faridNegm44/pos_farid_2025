@@ -35,48 +35,57 @@
                         </div>
                     </li> --}}
 
-                    <li aria-haspopup="true">
-                        <a href="#" class="sub-icon">تعريفات<i class="fe fe-chevron-down horizontal-icon"></i></a>
-                        <ul class="sub-menu">
-                            <li aria-haspopup="true"><a href="{{ url('financialYears') }}" class="slide-item">السنوات المالية</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('financialStorages') }}" class="slide-item">الخزائن المالية</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('stores') }}" class="slide-item">المخازن</a></li>
-                        </ul>
-                    </li>
-
-                    
+                  
                     <li aria-haspopup="true"><a href="#" class="sub-icon">الأصناف<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('products') }}" class="slide-item">الأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('productsCategories') }}" class="slide-item">أقسام الأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('units') }}" class="slide-item">وحدات الأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('companies') }}" class="slide-item">شركات الأصناف</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('financialYears') }}" class="slide-item">السنوات المالية</a></li>
                         </ul>
                     </li>
 
-                    <li aria-haspopup="true"><a href="#" class="sub-icon">خزينة<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true">
+                        <a href="#" class="sub-icon">الأشخاص<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
-                            <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">Morris Charts</a></li>
-                            <li aria-haspopup="true"><a href="chart-flot.html" class="slide-item">Flot Charts</a></li>
-                            <li aria-haspopup="true"><a href="chart-chartjs.html" class="slide-item">ChartJS</a></li>
-                            <li aria-haspopup="true"><a href="chart-echart.html" class="slide-item">Echart</a></li>
-                            <li aria-haspopup="true"><a href="chart-sparkline.html" class="slide-item">Sparkline</a></li>
-                            <li aria-haspopup="true"><a href="chart-peity.html" class="slide-item"> Chart-peity</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('clients') }}" class="slide-item">العملاء</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('suppliers') }}" class="slide-item">الموردين</a></li>
                         </ul>
                     </li>
 
-                    <li aria-haspopup="true"><a href="#" class="sub-icon">مبيعات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="#" class="sub-icon">المخازن<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
-                            <li aria-haspopup="true" class="slide-item sub-menu-sub"><a href="#">العملاء</a>
-                                <ul class="sub-menu">
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">العملاء</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">حسابات العملاء</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">تصدير العملاء إلي ملف إكسيل</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">إستيراد العملاء من ملف إكسيل</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">تصدير ديون العملاء إلي ملف إكسيل</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('stores') }}" class="slide-item">المخازن</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">تسوية كميات الاصناف</a></li>
+                            <li aria-haspopup="true"><a href="chart-flot.html" class="slide-item">اذن اضافة أصنافف</a></li>
+                            <li aria-haspopup="true"><a href="chart-flot.html" class="slide-item">اذن صرف أصنافف</a></li>
+                            <li aria-haspopup="true"><a href="chart-chartjs.html" class="slide-item">الهالك</a></li>
+                            <li aria-haspopup="true"><a href="chart-echart.html" class="slide-item">المواد الخام</a></li>
+                            <li aria-haspopup="true"><a href="chart-sparkline.html" class="slide-item">التحويل من مخزن لآخر</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li aria-haspopup="true"><a href="#" class="sub-icon">الحسابات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                        <ul class="sub-menu">
+                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">الخزائن المالية</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">التحويل من خزنة لآخري</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">مسحوبات شخصية</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">مصاريف عامة</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">إغلاق وردية</a></li>
+                        </ul>
+                    </li>
 
-                                </ul>
-                            </li>                                                        
+                    <li aria-haspopup="true"><a href="{{ url('/') }}" class="sub-icon">مبيعات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                        <ul class="sub-menu">                                          
+                            <li aria-haspopup="true"><a href="#" class="slide-item">العملاء</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item">حسابات العملاء</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item">تصدير العملاء إلي ملف إكسيل</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item">إستيراد العملاء من ملف إكسيل</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item">تصدير ديون العملاء إلي ملف إكسيل</a></li>
+
+                            <hr />
+
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">فاتورة مبيعات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">تعديل فاتورة مبيعات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">مرتجع بيع</a></li>
@@ -88,64 +97,39 @@
                         </ul>
                     </li>
 
-                    <li aria-haspopup="true"><a href="#" class="sub-icon">مشتريات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="{{ url('/') }}" class="sub-icon">مشتريات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="product-details.html" class="slide-item">فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item">تعديل فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item">مرتجع فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item">مرتجع مشتريات بدون فاتورة</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item">تعديل مرتجع مشتريات</a></li>
-                            <li aria-haspopup="true" class="slide-item sub-menu-sub"><a href="#">الموردين</a>
-                                <ul class="sub-menu">
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">الموردين</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">حسابات الموردين</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">طلبيات مورد</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">إشعار خصم أو إضافة لمورد</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">نصدير ديون الموردين إلي ملف إكسيل</a></li>
-                                </ul>
-                            </li>
+                            
+                            <hr />
+                            
+                            <li aria-haspopup="true"><a href="#" class="slide-item">الموردين</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item">حسابات الموردين</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item">طلبيات مورد</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item">إشعار خصم أو إضافة لمورد</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item">نصدير ديون الموردين إلي ملف إكسيل</a></li>
                         </ul>
                     </li>
 
-
-                    <li aria-haspopup="true"><a href="#" class="sub-icon">شؤن العاملين<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="{{ url('/') }}" class="sub-icon">الموظفين<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
-                            <li aria-haspopup="true" class="slide-item sub-menu-sub"><a href="#">الموظفين</a>
-                                <ul class="sub-menu">
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">الموظفين</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">تقرير الموظفين</a></li>
-                                </ul>
-                            </li>                                                        
-                            <li aria-haspopup="true" class="slide-item sub-menu-sub"><a href="#">مستخدمين النظام</a>
-                                <ul class="sub-menu">
-                                    <li aria-haspopup="true"><a href="{{ url('users') }}" class="slide-item">مستخدمين النظام</a></li>
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">تقرير المستخدمين</a></li>
-                                </ul>
-                            </li>                                                        
-                            <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">فاتورة مبيعات</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">Morris Charts</a></li>
+                            <li aria-haspopup="true"><a href="chart-flot.html" class="slide-item">Flot Charts</a></li>
+                            <li aria-haspopup="true"><a href="chart-chartjs.html" class="slide-item">ChartJS</a></li>
+                            <li aria-haspopup="true"><a href="chart-echart.html" class="slide-item">Echart</a></li>
+                            <li aria-haspopup="true"><a href="chart-sparkline.html" class="slide-item">Sparkline</a></li>
+                            <li aria-haspopup="true"><a href="chart-peity.html" class="slide-item"> Chart-peity</a></li>
                         </ul>
                     </li>
 
-
-                    <li aria-haspopup="true"><a href="#" class="sub-icon">الإعدادات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="{{ url('/') }}" class="sub-icon">الإعدادات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
-                            <li aria-haspopup="true" class="slide-item sub-menu-sub"><a href="#">إعدادات البرنامج</a>
-                                <ul class="sub-menu">
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">إعدادات البرنامج</a></li>
-                                </ul>
-                            </li>
-                            
-                            <li aria-haspopup="true" class="slide-item sub-menu-sub"><a href="#">إعدادات المستخدمين</a>
-                                <ul class="sub-menu">
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">إعدادات المستخدمين</a></li>
-                                </ul>
-                            </li>
-                            
-                            <li aria-haspopup="true" class="slide-item sub-menu-sub"><a href="#">نسخة احتياطية</a>
-                                <ul class="sub-menu">
-                                    <li aria-haspopup="true"><a href="#" class="slide-item">نسخة احتياطية</a></li>
-                                </ul>
-                            </li>
+                            <li aria-haspopup="true"><a href="{{ url('/settings') }}" class="slide-item">إعدادات البرنامج</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">إعدادات المستخدمين</a></li>
                         </ul>
                     </li>
 

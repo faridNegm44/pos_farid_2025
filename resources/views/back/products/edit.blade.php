@@ -28,7 +28,7 @@
                 
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 2);
-                alertify.success("تمت جلب البيانات بنجاح");
+                alertify.success("تم استرجاع البيانات بنجاح");
             }
         });
     });

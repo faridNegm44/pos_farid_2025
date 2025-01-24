@@ -13,6 +13,17 @@
 
 @section('footer') 
     <script>
+        // open modal when click button (insert)
+        document.addEventListener('keydown', function(event){
+            if( event.which === 45 ){
+                $('.modal').modal('show');
+                document.querySelector('.modal .modal-header .modal-title').innerText = 'إضافة';
+                document.querySelector('.modal .modal-footer #save').setAttribute('style', 'display: inline;');
+                document.querySelector('.modal .modal-footer #update').setAttribute('style', 'display: none;');
+                $('.dataInput').val('');
+            }
+        });
+
         $(document).ready(function(){
             // $('.datetimepicker').datetimepicker({ dropdownParent: $('.modal') });
 
@@ -81,6 +92,7 @@
                     {data: 'action', name: 'action', orderable: false},
                 ],
                 "bDestroy": true,
+                order: [[0, 'desc']],
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
             });
