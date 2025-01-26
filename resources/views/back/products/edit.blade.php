@@ -2,6 +2,7 @@
     ///////////////////////////////// edit /////////////////////////////////
     $(document).on("click" , "#example1 tr .edit" ,function(){
         const res_id = $(this).attr("res_id");
+        $(".modal form #res_id").val(res_id);
 
         $.ajax({
             url: `{{ url($pageNameEn) }}/edit/${res_id}`,
@@ -11,6 +12,8 @@
                 $(".dataInput").val('');
             },
             success: function(res){
+                console.log(res.store);
+
                 $.each(res , function(index, value){                    
                     $(`.modal form #${index}`).val(value);
                 });
@@ -21,11 +24,16 @@
 
                 $("#end").flatpickr({
                     defaultDate: res.end, 
-                });
+                }); 
 
 
-                document.querySelector("#res_id").value = res_id;
-                
+
+                const store = $('#store')[0].selectize;
+                store.setValue(res.store, true);
+                store.refreshOptions();
+
+                //$("#addForm #group_id")[0].selectize.clear();
+
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 2);
                 alertify.success("تم استرجاع البيانات بنجاح");
@@ -45,6 +53,7 @@
 
 
         const res_id = $(".modal form #res_id").val();
+
         $.ajax({
             url: `{{ url($pageNameEn) }}/update/${res_id}`,
             type: 'POST',

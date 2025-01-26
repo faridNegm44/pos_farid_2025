@@ -92,7 +92,7 @@
     </header>
   
     <main>
-      <div class="container">
+      <div class="container-fluid">
         <h2>فاتورة رقم: 297939</h2>
         <table class="items">
           <thead>

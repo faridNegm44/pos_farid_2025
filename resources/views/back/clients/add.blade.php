@@ -31,9 +31,8 @@
                 $(".modal form bold[class=text-danger]").css('display', 'none');
         
                 $(".dataInput").val('');
-                $("#code").val(res.latestId);
-                $('.dataInput:first').select().focus();
-
+                $('.dataInput:eq(0)').focus();    
+                
                 document.querySelector('.modal #save').disabled = false;
                 document.querySelector('.spinner_request').style.display = 'none';
 

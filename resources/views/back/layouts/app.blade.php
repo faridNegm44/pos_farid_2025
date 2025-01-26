@@ -329,6 +329,7 @@
         .form-control{
             height: 30px !important;
             color: #000 !important; 
+            padding: 0px 10px;
         }
         .selectize-input{
             height: 30px !important;

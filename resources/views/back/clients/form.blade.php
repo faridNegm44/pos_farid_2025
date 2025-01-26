@@ -16,13 +16,13 @@
                 <div class="pd-30 pd-sm-40 bg-gray-100">
                     <div class="row row-xs">
                         
-                        <div class="col-lg-1 col-md-4">
+                        {{--<div class="col-lg-1 col-md-4">
                             <label for="code">كود العميل</label>
                             <div>
                                 <input type="text" readonly class="form-control" id="code" name="code" value="{{ ($latestId) }}" style="font-weight: bold;font-size: 17px;">
                             </div>
                             <bold class="text-danger" id="errors-code" style="display: none;"></bold>
-                        </div>
+                        </div>--}}
 
                         <div class="col-lg-2 col-md-8">
                             <label for="client_supplier_type">نوع العميل</label>
@@ -44,14 +44,25 @@
                             <bold class="text-danger" id="errors-name" style="display: none;"></bold>
                         </div>
                         
-                        <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="col-lg-2 col-md-6 col-sm-12">
                             <label for="phone">موبايل العميل</label>
                             <div>
                                 <input type="number" class="form-control dataInput numValid" placeholder="موبايل العميل" id="phone" name="phone">
                             </div>
                             <bold class="text-danger" id="errors-phone" style="display: none;"></bold>
                         </div>
-                        
+                    
+                        <div class="col-lg-2 col-md-6 col-sm-12">
+                            <label for="status">حالة العميل</label>
+                            <div>
+                                <select id="status" name="status" class="form-control">
+                                    <option value="1">نشط</option>
+                                    <option value="0">غير نشط</option>
+                                </select>
+                            </div>
+                            <bold class="text-danger" id="errors-status" style="display: none;"></bold>
+                        </div>
+
                         <div class="col-lg-2 col-md-12">
                             <label for="type_payment">طريقة الدفع</label>
                             <div>
@@ -64,17 +75,7 @@
                         </div>
                     </div>
                     
-                    <div class="row row-xs">
-                        <div class="col-lg-3 col-md-6 col-sm-12">
-                            <label for="status">حالة العميل</label>
-                            <div>
-                                <select id="status" name="status" class="form-control">
-                                    <option value="1">نشط</option>
-                                    <option value="0">غير نشط</option>
-                                </select>
-                            </div>
-                            <bold class="text-danger" id="errors-status" style="display: none;"></bold>
-                        </div>
+                    <div class="row row-xs">                       
 
                         <div class="col-lg-3 col-md-6 col-sm-12">
                             <label for="email">ايميل العميل</label>
@@ -84,12 +85,20 @@
                             <bold class="text-danger" id="errors-email" style="display: none;"></bold>
                         </div>
 
-                        <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-5 col-md-12">
                             <label for="address">عنوان العميل</label>
                             <div>
                                 <input type="text" class="form-control dataInput" placeholder="عنوان العميل" id="address" name="address">
                             </div>
                             <bold class="text-danger" id="errors-address" style="display: none;"></bold>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label for="note">ملاحظات</label>
+                            <div>    
+                                <input type="text" class="form-control dataInput" placeholder="ملاحظات" id="note" name="note">
+                            </div>
+                            <bold class="text-danger" id="errors-note" style="display: none;"></bold>
                         </div>
                     </div>
                     
@@ -180,18 +189,6 @@
                             </div>
                             <bold class="text-danger" id="errors-phone_of_commissioner" style="display: none;"></bold>
                         </div>                                          
-                    </div>
-                    
-                    <hr>
-
-                    <div class="row row-xs">
-                        <div class="col-lg-12">
-                            <label for="note">ملاحظات</label>
-                            <div>    
-                                <input type="text" class="form-control dataInput" placeholder="ملاحظات" id="note" name="note">
-                            </div>
-                            <bold class="text-danger" id="errors-note" style="display: none;"></bold>
-                        </div>
                     </div>
 
                     <div class="row row-xs">

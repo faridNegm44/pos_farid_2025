@@ -46,7 +46,7 @@
 		document.querySelector('.modal .modal-header .modal-title').innerText = 'إضافة';
 		document.querySelector('.modal .modal-footer #save').setAttribute('style', 'display: inline;');
 		document.querySelector('.modal .modal-footer #update').setAttribute('style', 'display: none;');
-		document.querySelector('.dataInput').value = "";
+		$('.dataInput').val('');
 	});
 	// edit
 	$("#example1").on("click", ".edit", function(event) {

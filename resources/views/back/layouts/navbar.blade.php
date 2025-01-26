@@ -7,7 +7,7 @@
                 <ul class="horizontalMenu-list">
                     {{-- <li aria-haspopup="true"><a href="#" class="sub-icon"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6.26 9L12 13.47 17.74 9 12 4.53z" opacity=".3"/><path d="M19.37 12.8l-7.38 5.74-7.37-5.73L3 14.07l9 7 9-7zM12 2L3 9l1.63 1.27L12 16l7.36-5.73L21 9l-9-7zm0 11.47L6.26 9 12 4.53 17.74 9 12 13.47z"/></svg> العملاء/الموردين<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <div class="horizontal-megamenu clearfix">
-                            <div class="container">
+                            <div class="container-fluid">
                                 <div class="mega-menubg hor-mega-menu">
                                     <div class="row">
                                         <div class="col-md-6 col-xs-12 link-list">

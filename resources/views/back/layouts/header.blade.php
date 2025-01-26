@@ -1,6 +1,6 @@
 <!-- main-header -->
 <div class="main-header nav nav-item hor-header">
-    <div class="container">
+    <div class="container-fluid">
         <div class="main-header-left ">
             <a class="animated-arrow hor-toggle horizontal-navtoggle"><span></span></a>
             <a class="header-brand" href="index.html">

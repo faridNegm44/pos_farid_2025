@@ -7,6 +7,7 @@ use App\Models\Back\FinancialTreasury;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 
 class FinancialTreasuryController extends Controller
 {
@@ -15,11 +16,6 @@ class FinancialTreasuryController extends Controller
         $pageNameAr = 'الخزائن المالية';
         $pageNameEn = 'financial_treasury';
         return view('back.financial_treasury.index' , compact('pageNameAr' , 'pageNameEn'));
-    }
-
-    public function create()
-    {
-        
     }
 
     public function store(Request $request)
@@ -42,7 +38,25 @@ class FinancialTreasuryController extends Controller
                 'notes' => 'ملاحظات',                
             ]);
 
-            FinancialTreasury::create($request->all());
+            DB::transaction(function () {
+                $getId = FinancialTreasury::create(request()->all());  
+                
+                DB::table('clients_and_suppliers_dets')->insert([
+                    'treasury_id' => 0,
+                    'bill_type' => 'رصيد اول خزنة',
+                    'bill_id' => 0,
+                    'treasury_bill_head_id' => 0,
+                    'treasury_bill_body_id' => 0,
+                    'client_supplier_id' => $getId->id,
+                    'money' => request('moneyFirstDuration'),
+                    'year_id' => $this->currentFinancialYear(),
+                    'notes' => request('note'),
+                    'created_at' => now()
+                ]);
+
+            });
+
+
         }
     }
 
@@ -110,7 +124,13 @@ class FinancialTreasuryController extends Controller
                 return '<strong>'.$res->name.'</strong>';
             })
             ->addColumn('moneyFirstDuration', function($res){
-                return '<strong style="font-size: 14px;">'.number_format($res->moneyFirstDuration).'</strong>';
+                return '<strong style="font-size: 15px;color: red;">'.number_format($res->moneyFirstDuration).'</strong>';
+            })
+            ->addColumn('created_at', function($res){
+                if($res->created_at){
+                    return Carbon::parse($res->created_at)->format('Y-m-d')
+                            .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
+                }
             })
             ->addColumn('status', function($res){
                 if($res->status == 1){
@@ -131,7 +151,7 @@ class FinancialTreasuryController extends Controller
                     //    <i class="fa fa-trash"></i>
                     //</button>
             })
-            ->rawColumns(['name', 'moneyFirstDuration', 'status', 'action'])
+            ->rawColumns(['name', 'moneyFirstDuration', 'created_at', 'status', 'action'])
             ->toJson();
     }
 }

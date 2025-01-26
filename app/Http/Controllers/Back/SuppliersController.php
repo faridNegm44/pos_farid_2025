@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 class SuppliersController extends Controller
 {
     protected $latestId;
-
     public function __construct()
     {
         $this->latestId = $latestId = DB::table('clients_and_suppliers')->where('client_supplier_type', 1)->orWhere('client_supplier_type', 2)->max('code');
@@ -23,9 +22,8 @@ class SuppliersController extends Controller
     {                   
         $pageNameAr = 'الموردين';
         $pageNameEn = 'suppliers';
-        $latestId = ($this->latestId+1);
         
-        return view('back.suppliers.index' , compact('pageNameAr' , 'pageNameEn', 'latestId'));
+        return view('back.suppliers.index' , compact('pageNameAr' , 'pageNameEn'));
     }
 
     public function store(Request $request)
@@ -82,7 +80,7 @@ class SuppliersController extends Controller
 
                 $getId = DB::table('clients_and_suppliers')->insertGetId([
                     'client_supplier_type' => request('client_supplier_type'),
-                    'code' => request('code'),
+                    'code' => ($this->latestId+1),
                     'name' => request('name'),
                     'email' => request('email'),
                     'phone' => request('phone'),
@@ -91,9 +89,6 @@ class SuppliersController extends Controller
                     'type_payment' => request('type_payment'),
                     'debit' => request('debit'),
                     'debit_limit' => request('debit_limit'),
-                    'money' => $moneyOnHim == 0
-                                        ? ($moneyForHim ?? -$moneyForHim)
-                                        : $moneyOnHim,                    
                     'status' => request('status'),
                     'commercial_register' => request('commercial_register'),
                     'tax_card' => request('tax_card'),
@@ -106,24 +101,18 @@ class SuppliersController extends Controller
                 
                 DB::table('clients_and_suppliers_dets')->insert([
                     'treasury_id' => 0,
-                    'bill_type' => 'رصيد اول المدة',
+                    'bill_type' => 'رصيد اول مورد',
                     'bill_id' => 0,
                     'treasury_bill_head_id' => 0,
                     'treasury_bill_body_id' => 0,
                     'client_supplier_id' => $getId,
-                    'money' => $moneyOnHim == 0
-                                        ? ($moneyForHim ?? -$moneyForHim)
-                                        : $moneyOnHim,                    
+                    'money' => $moneyOnHim > 0 ? $moneyOnHim : ($moneyForHim * -1),  
                     'year_id' => $this->currentFinancialYear(),
                     'notes' => request('note'),
+                    'created_at' => now()
                 ]);
 
             });
-
-            $latestId = $this->latestId;
-            return response()->json([
-                'latestId' => ($latestId+1)
-            ]);
         }
     }
 
@@ -212,45 +201,38 @@ class SuppliersController extends Controller
         } 
     }
 
-     
-    public function destroy($id)
-    {
-        $find = ClientsAndSuppliers::where('id', $id)->first();
-        $find_clients_and_suppliers_dets = DB::table('clients_and_suppliers_dets')->where('client_supplier_id', $id)->get();
-
-        if(count($find_clients_and_suppliers_dets) > 1){
-            return response()->json(['cannot_delete' => $find->name]);
-
-        }elseif(count($find_clients_and_suppliers_dets) == 1){
-            $find->delete();
-            DB::table('clients_and_suppliers_dets')->where('client_supplier_id', $id)->delete();
-            
-            $latestId = $this->latestId;
-            return response()->json([
-                'success_delete' => $find->name, 
-                'latestId' => ($latestId+1)
-            ]);
-        }
-    }
-
-
     public function datatable()
     {
+        //$all = ClientsAndSuppliers::where('client_supplier_type', 1)
+        //                            ->orWhere('client_supplier_type', 2)
+        //                            ->leftJoin('clients_and_suppliers_types', 'clients_and_suppliers_types.id', 'clients_and_suppliers.client_supplier_type')
+        //                            ->select('clients_and_suppliers.*', 'clients_and_suppliers_types.name as type_name')
+        //                            ->orderBy('id', 'desc')
+        //                            ->get();
+
+
         $all = ClientsAndSuppliers::where('client_supplier_type', 1)
                                     ->orWhere('client_supplier_type', 2)
                                     ->leftJoin('clients_and_suppliers_types', 'clients_and_suppliers_types.id', 'clients_and_suppliers.client_supplier_type')
-                                    ->select('clients_and_suppliers.*', 'clients_and_suppliers_types.name as type_name')
+                                    ->leftJoin('clients_and_suppliers_dets', 'clients_and_suppliers_dets.client_supplier_id', 'clients_and_suppliers.id')
+                                    ->select(
+                                        'clients_and_suppliers.*', 
+                                        'clients_and_suppliers_types.name as type_name',
+                                        'clients_and_suppliers_dets.money',
+                                        'clients_and_suppliers_dets.year_id',
+                                    
+                                    )
                                     ->orderBy('id', 'desc')
                                     ->get();
-
+        
                                 // dd($all);
 
         return DataTables::of($all)
-            ->addColumn('id', function($res){
-                return 'م-'.$res->code;
+            ->addColumn('code', function($res){
+                return  "<strong style='font-size: 15px;'>#".$res->code."</strong>";
             })
             ->addColumn('name', function($res){
-                return  "<strong>".$res->name."</strong>";
+                return  "<strong style='font-size: 13px;'>".$res->name."</strong>";
             })
             ->addColumn('type_name', function($res){
                 return $res->type_name;
@@ -274,7 +256,7 @@ class SuppliersController extends Controller
             })
             ->addColumn('opening_creditor', function($res){
                 if($res->money < 0){
-                    return '<span style="font-size: 14px;">'.number_format(abs($res->money), 0, '', '.').'</span>';
+                    return '<span style="font-size: 14px;color: red;">'.number_format(abs($res->money), 0, '', '.').'</span>';
                 }else{
                     return 0;
                 }
@@ -316,14 +298,9 @@ class SuppliersController extends Controller
                 // if (auth()->user()->role_relation->users_update == 1 ){
                 // }
                 return '
-                            <button class="btn btn-sm btn-rounded btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                                <i class="fas fa-marker"></i>
-                            </button>
-
-                            <button class="btn btn-sm btn-rounded btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" res_title="'.$res->name.'">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        
+                        <button class="btn btn-sm btn-rounded btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                            <i class="fas fa-marker"></i>
+                        </button>                        
                         ';
             })
             ->rawColumns(['code', 'name', 'type_name', 'phone', 'address', 'status', 'start_dealing', 'last_bill', 'opening_creditor', 'opening_debtor', 'max_limit', 'notes', 'created_at', 'action'])

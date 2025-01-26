@@ -68,7 +68,6 @@
         $(".add").on('click', function(){
             $("#debtor_value").css('display', 'block');
             $("#creditor_value").css('display', 'block');
-            $('.modal form #code').val('{{ ($latestId) }}');
             $('.dataInput').val('');
 
             document.querySelector("#image_preview_form").src = `{{ url('back/images/df_image.png') }}`;
@@ -85,7 +84,7 @@
                 ajax: `{{ url($pageNameEn.'/datatable') }}`,
                 dataType: 'json',
                 columns: [
-                    {data: 'id', name: 'id'},
+                    {data: 'code', name: 'code'},
                     {data: 'action', name: 'action', orderable: false},
                     {data: 'status', name: 'status'},
                     {data: 'name', name: 'name'},
@@ -107,6 +106,12 @@
                 fixedColumns: {
                     leftColumns: 2
                 }
+            });
+
+
+            // focus first input when open modal
+            $('.modal').on('shown.bs.modal', function(){
+                $('.dataInput:eq(0)').focus();                
             });
         });
     </script>
@@ -169,34 +174,30 @@
 
         @include('back.clients.form')
 
-        <div class="row row-sm">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="">
-                            <table class="table table-responsive table-bordered table-striped table-hover text-center nowrap" id="example1">
-                                <thead>
-                                    <tr>
-                                        <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0">التحكم</th>
-                                        <th class="border-bottom-0">الحالة</th>
-                                        <th class="border-bottom-0">الإسم</th>
-                                        <th class="border-bottom-0">ن العميل</th>
-                                        <th class="border-bottom-0">موبايل</th>
-                                        <th class="border-bottom-0">العنوان</th>
-                                        <th class="border-bottom-0">بداية التعامل</th>
-                                        <th class="border-bottom-0">اخر فاتورة</th>
-                                        <th class="border-bottom-0">افتتاحي دائن</th>
-                                        <th class="border-bottom-0">افتتاحي مدين</th>
-                                        <th class="border-bottom-0">أقصي قيمة للمسحوبات</th>
-                                        <th class="border-bottom-0">ملاحظات</th>
-                                        <th class="border-bottom-0">تاريخ الإنشاء</th>
-                                    </tr>
-                                </thead>
-                                
-                            </table>
-                        </div>
-                    </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom-0">#</th>
+                                <th class="border-bottom-0">التحكم</th>
+                                <th class="border-bottom-0">الحالة</th>
+                                <th class="border-bottom-0" style="max-width: 15%;">الإسم</th>
+                                <th class="border-bottom-0">ن العميل</th>
+                                <th class="border-bottom-0">موبايل</th>
+                                <th class="border-bottom-0">العنوان</th>
+                                <th class="border-bottom-0">بداية التعامل</th>
+                                <th class="border-bottom-0">اخر فاتورة</th>
+                                <th class="border-bottom-0">افتتاحي دائن</th>
+                                <th class="border-bottom-0">افتتاحي مدين</th>
+                                <th class="border-bottom-0">أقصي قيمة للمسحوبات</th>
+                                <th class="border-bottom-0">ملاحظات</th>
+                                <th class="border-bottom-0">تاريخ الإنشاء</th>
+                            </tr>
+                        </thead>
+                        
+                    </table>
                 </div>
             </div>
         </div>

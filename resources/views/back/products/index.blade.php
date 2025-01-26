@@ -6,6 +6,8 @@
 @endsection
 
 @section('header')
+    {{-- spotlight --}}
+    <link href="{{ asset('back/assets/spotlight.min.css') }}" rel="stylesheet" type="text/css" />
 
     <style>
         @media (min-width: 1200px) {
@@ -22,6 +24,10 @@
 @endsection
 
 @section('footer')  
+    {{--  <!-- spotlight -->  --}}
+    <script src="{{ asset('back/assets/spotlight.bundle.js') }}"></script>
+    <script src="{{ asset('back/assets/spotlight.min.js') }}"></script>
+
     <script>
         flatpickr(".datePicker", {
             yearSelectorType: 'dropdown',
@@ -46,7 +52,7 @@
 
         // focus first input when open modal
         $('.modal').on('shown.bs.modal', function(){
-            $('.dataInput:first').focus();                
+            $('.dataInput:eq(2)').focus();                
         });
 
         // remove all errors when close modal
@@ -78,15 +84,23 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
-                    {data: 'start', name: 'start'},
-                    {data: 'end', name: 'end'},
-                    {data: 'notes', name: 'notes'},
+                    {data: 'sellPrice', name: 'sellPrice'},
+                    {data: 'purchasePrice', name: 'purchasePrice'},
+                    {data: 'bigUnit', name: 'bigUnit'},
+                    {data: 'smallUnit', name: 'smallUnit'},
+                    {data: 'category', name: 'category'},
+                    {data: 'quantity', name: 'quantity'},
+                    {data: 'image', name: 'image'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false},
                 ],
+                order: [[ 0, 'desc' ]],
+                fixedColumns: {
+                    leftColumns: 2
+                },
                 "bDestroy": true,
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
-                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
+                lengthMenu: [[50, 100, 200, -1], [50, 100, 200, "الكل"]]
             });
         });
     </script>
@@ -132,29 +146,28 @@
             </div>
         @endif
 
-        <div class="row row-sm">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
-                                <thead>
-                                    <tr>
-                                        <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0" >الإسم</th>
-                                        <th class="border-bottom-0">بدايةالسنة</th>
-                                        <th class="border-bottom-0">نهاية السنة</th>
-                                        <th class="border-bottom-0" style="width: 30%;">ملاحظات</th>
-                                        <th class="border-bottom-0" >الحالة</th>
-                                        <th class="border-bottom-0">التحكم</th>
-                                    </tr>
-                                </thead>                                
-                            </table>
-                        </div>
-                    </div>
-                </div>
+        <div class="card">
+            <div class="card-body table-responsive">                        
+                <table class="table table-bordered table-striped table-hover text-center nowrap" id="example1">
+                    <thead>
+                        <tr>
+                            <th class="border-bottom-0">كود</th>
+                            <th class="border-bottom-0" style="width: 30%;">اسم الصنف</th>
+                            <th class="border-bottom-0">سعر البيع</th>
+                            <th class="border-bottom-0">سعر الشراء</th>
+                            <th class="border-bottom-0">الوحدة ك</th>
+                            <th class="border-bottom-0">الوحدة ص</th>
+                            <th class="border-bottom-0" >القسم</th>
+                            <th class="border-bottom-0" >ك الصنف</th>
+                            <th class="border-bottom-0" >صورة</th>
+                            <th class="border-bottom-0" >الحالة</th>
+                            <th class="border-bottom-0">التحكم</th>
+                        </tr>
+                    </thead>                                
+                </table>
             </div>
         </div>
+        
     </div>
 @endsection
 

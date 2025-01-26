@@ -91,6 +91,7 @@
                     {data: 'moneyFirstDuration', name: 'moneyFirstDuration'},
                     {data: 'status', name: 'status'},
                     {data: 'notes', name: 'notes'},
+                    {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false},
                 ],
                 order: [[ 0, "desc" ]],
@@ -148,6 +149,7 @@
                                         <th class="wd-15p border-bottom-0">رصيد أول المدة</th>
                                         <th class="wd-10p border-bottom-0">الحالة</th>
                                         <th class="wd-15p border-bottom-0">ملاحظات</th>
+                                        <th class="wd-15p border-bottom-0" >تاريخ الإنشاء</th>
                                         <th class="wd-25p border-bottom-0">التحكم</th>
                                     </tr>
                                 </thead>                                
