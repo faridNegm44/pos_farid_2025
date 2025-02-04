@@ -76,6 +76,10 @@
         <div class="main-header-right">
             {{-- d-none d-md-flex d-lg-flex --}}
             <div>
+                <a type="button" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="% الالة الحاسبة" data-effect="effect-scale" data-toggle="modal" href=".calc">
+                    <i class="mdi mdi-calculator bg-dark text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
+                </a>
+                
                 <a href="{{ url('/') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="فاتورة بيع">
                     <i class="mdi mdi-cart-outline bg-danger-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
                 </a>

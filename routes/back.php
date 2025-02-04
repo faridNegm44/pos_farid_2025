@@ -61,7 +61,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     Route::group(['prefix' => 'units'] , function (){
         Route::get('/' , 'UnitsController@index');
         Route::post('/store' , 'UnitsController@store');
-        Route::post('/store' , 'UnitsController@store');
         Route::get('/edit/{id}' , 'UnitsController@edit');
         Route::post('/update/{id}' , 'UnitsController@update');
         Route::get('/destroy/{id}' , 'UnitsController@destroy');
@@ -85,7 +84,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     Route::group(['prefix' => 'companies'] , function (){
         Route::get('/' , 'CompanyController@index');
         Route::post('/store' , 'CompanyController@store');
-        Route::post('/store' , 'CompanyController@store');
         Route::get('/edit/{id}' , 'CompanyController@edit');
         Route::post('/update/{id}' , 'CompanyController@update');
         Route::get('/destroy/{id}' , 'CompanyController@destroy');
@@ -96,7 +94,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     // financialYears Routes
     Route::group(['prefix' => 'financialYears'] , function (){
         Route::get('/' , 'FinancialYearsController@index');
-        Route::post('/store' , 'FinancialYearsController@store');
         Route::post('/store' , 'FinancialYearsController@store');
         Route::get('/edit/{id}' , 'FinancialYearsController@edit');
         Route::post('/update/{id}' , 'FinancialYearsController@update');
@@ -110,7 +107,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     Route::group(['prefix' => 'stores'] , function (){
         Route::get('/' , 'StoreController@index');
         Route::post('/store' , 'StoreController@store');
-        Route::post('/store' , 'StoreController@store');
         Route::get('/edit/{id}' , 'StoreController@edit');
         Route::post('/update/{id}' , 'StoreController@update');
         Route::get('/destroy/{id}' , 'StoreController@destroy');
@@ -123,7 +119,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     // financial_treasury Routes
     Route::group(['prefix' => 'financial_treasury'] , function (){
         Route::get('/' , 'FinancialTreasuryController@index');
-        Route::post('/store' , 'FinancialTreasuryController@store');
         Route::post('/store' , 'FinancialTreasuryController@store');
         Route::get('/edit/{id}' , 'FinancialTreasuryController@edit');
         Route::post('/update/{id}' , 'FinancialTreasuryController@update');
@@ -191,7 +186,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
         Route::get('/' , 'PosController@index');
         Route::get('/create' , 'PosController@create');
         Route::post('/store' , 'PosController@store');
-        Route::post('/store' , 'PosController@store');
         Route::get('/edit/{id}' , 'PosController@edit');
         Route::post('/update/{id}' , 'PosController@update');
         Route::get('/destroy/{id}' , 'PosController@destroy');
@@ -200,7 +194,41 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     });
 
 
+    // expenses
+    Route::group(['prefix' => 'expenses'] , function (){
+        Route::get('/' , 'ExpensesController@index');
+        Route::post('/store' , 'ExpensesController@store');
+        Route::get('/edit/{id}' , 'ExpensesController@edit');
+        Route::post('/update/{id}' , 'ExpensesController@update');
+        
+        Route::get('datatable' , 'ExpensesController@datatable');
+    });
 
+    // transfer_between_storages
+    Route::group(['prefix' => 'transfer_between_storages'] , function (){
+        Route::get('/' , 'TransferBetweenStoragesController@index');
+        Route::post('/store' , 'TransferBetweenStoragesController@store');
+        Route::get('/edit/{id}' , 'TransferBetweenStoragesController@edit');
+        Route::post('/update/{id}' , 'TransferBetweenStoragesController@update');
+        Route::get('/show/{id}' , 'TransferBetweenStoragesController@show');
+        
+        Route::get('/get_last_money_on_treasury/{transaction_from}/{transaction_to}' , 'TransferBetweenStoragesController@get_last_money_on_treasury');
+        
+        Route::get('datatable' , 'TransferBetweenStoragesController@datatable');
+    });
+
+    // transfer_between_stores
+    Route::group(['prefix' => 'transfer_between_stores'] , function (){
+        Route::get('/' , 'TransferBetweenStoresController@index');
+        Route::post('/store' , 'TransferBetweenStoresController@store');
+        Route::get('/edit/{id}' , 'TransferBetweenStoresController@edit');
+        Route::post('/update/{id}' , 'TransferBetweenStoresController@update');
+        Route::get('/show/{id}' , 'TransferBetweenStoresController@show');
+        
+        Route::get('/get_products/{transfer_from}' , 'TransferBetweenStoresController@get_products');
+        
+        Route::get('datatable' , 'TransferBetweenStoresController@datatable');
+    });
 
 
 
@@ -219,7 +247,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
 // financialStorages Routes
 // Route::group(['prefix' => 'financialStorages'] , function (){
 //     Route::get('/' , 'FinancialStoragesController@index');
-//     Route::post('/store' , 'FinancialStoragesController@store');
 //     Route::post('/store' , 'FinancialStoragesController@store');
 //     Route::get('/edit/{id}' , 'FinancialStoragesController@edit');
 //     Route::post('/update/{id}' , 'FinancialStoragesController@update');
@@ -422,19 +449,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
 
         Route::get('/getStatusTreasuries/{id}' , 'PurchasesReturnHeadController@getStatusTreasuries');
         Route::get('/getStatusPlaces/{id}' , 'PurchasesReturnHeadController@getStatusPlaces');
-    });
-
-    // expenses
-    Route::group(['prefix' => 'expenses'] , function (){
-        Route::get('/getExpensesByBranchAndDates/{id}/{from?}/{to?}' , 'ExpensesController@getExpensesByBranchAndDates');
-        Route::get('/' , 'ExpensesController@index');
-        Route::post('/' , 'ExpensesController@store');
-
-        Route::get('/get_treasury_by_branch/{id}' , 'ExpensesController@getTreasuryByBranch');
-
-        Route::get('/edit/{id}' , 'ExpensesController@edit');
-        Route::post('/update/{id}' , 'ExpensesController@update');
-        Route::get('/destroy/{id}' , 'ExpensesController@destroy');
     });
 
 

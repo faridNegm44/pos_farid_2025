@@ -283,7 +283,7 @@
                 <i class="fas fa-money-bill"></i> مصروفات الإذن
             </button>
             
-            <button class="btn btn-secondary btn-sm" data-effect="effect-scale" data-toggle="modal" href="#calc">
+            <button class="btn btn-secondary btn-sm" data-effect="effect-scale" data-toggle="modal" href=".calc">
                 <i class="fas fa-calculator"></i> % الالة الحاسبة
             </button>
         </div>

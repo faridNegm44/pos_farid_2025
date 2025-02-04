@@ -158,8 +158,8 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		font-size: 1.2em;
-		color: #666;
+		font-size: 1.4em;
+		color: #333;
 		border: 2px solid #edf1f4;
 		box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px #fff;
 		border-radius: 10px;

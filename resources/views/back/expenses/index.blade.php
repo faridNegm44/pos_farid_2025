@@ -14,25 +14,10 @@
 @section('footer') 
     <script>
         $(document).ready(function(){
-            // $('.datetimepicker').datetimepicker({ dropdownParent: $('.modal') });
-
-
-            // jQuery.datetimepicker.setLocale('en');
-            // jQuery('.datetimepicker').datetimepicker({
-            //     dropdownParent: $('.modal'),
-            //     timepicker:false,
-            //     format:'d-m-Y',
-            //     // theme:'dark'
-            // });
-
-
-
             $(document).on('click', '.modal-body .datetimepicker', function() {
                 $(this).datetimepicker('show');
             });
-
         });
-
     </script>
 
     <script>       
@@ -48,14 +33,6 @@
                 $('#moneyFirstDuration').val(0);
             }
         });
-
-        // show moneyFirstDurationSection whenn click on add button
-        $(".add").on('click', function(){
-            $("#moneyFirstDurationSection").css('display', 'block');
-            $('.dataInput').val('');
-            $('#moneyFirstDuration').val(0);
-        });
-
 
         // focus first input when open modal
         $('.modal').on('shown.bs.modal', function(){
@@ -87,10 +64,11 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'moneyFirstDuration', name: 'moneyFirstDuration'},
-                    {data: 'money_now', name: 'money_now'},
-                    {data: 'status', name: 'status'},
+                    {data: 'user', name: 'user'},
+                    {data: 'treasury', name: 'treasury'},
+                    {data: 'title', name: 'title'},
+                    {data: 'value', name: 'value'},
+                    {data: 'money', name: 'money'},
                     {data: 'notes', name: 'notes'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false},
@@ -107,9 +85,9 @@
     </script>
 
     {{-- add, edit, delete => script --}}
-    @include('back.financial_treasury.add')
-    @include('back.financial_treasury.edit')
-    @include('back.financial_treasury.delete')
+    @include('back.expenses.add')
+    @include('back.expenses.edit')
+    @include('back.expenses.delete')
 @endsection
 
 
@@ -134,7 +112,7 @@
         </div>
         <!-- breadcrumb -->
 
-        @include('back.financial_treasury.form')
+        @include('back.expenses.form')
 
 
         <div class="card">
@@ -144,12 +122,13 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0">الإسم</th>
-                                <th class="border-bottom-0">رصيد أول المدة</th>
-                                <th class="border-bottom-0">رصيد الخزنة الحالي</th>
-                                <th class="border-bottom-0">الحالة</th>
+                                <th class="border-bottom-0">مستخدم</th>
+                                <th class="border-bottom-0">الخزينة</th>
+                                <th class="border-bottom-0">وصف المصروف</th>
+                                <th class="border-bottom-0">م المصروف</th>
+                                <th class="border-bottom-0">مبلغ خزينة بعد المصروف</th>
                                 <th class="border-bottom-0">ملاحظات</th>
-                                <th class="border-bottom-0" >تاريخ الإنشاء</th>
+                                <th class="border-bottom-0">تاريخ</th>
                                 <th class="border-bottom-0">التحكم</th>
                             </tr>
                         </thead>                                

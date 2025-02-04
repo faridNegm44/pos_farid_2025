@@ -80,7 +80,7 @@
         <!---Switcher css-->
         <link href="{{ asset('back') }}/assets/switcher/css/switcher-rtl.css" rel="stylesheet">
         <link href="{{ asset('back') }}/assets/switcher/demo.css" rel="stylesheet">
-
+        
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Cairo:slnt,wght@11,200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
@@ -88,264 +88,18 @@
         <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">
 
+        {{-- custom css --}}
+        <link href="{{ asset('back') }}/assets/custom.css" rel="stylesheet">
+
         <style>
-        @font-face {
-            font-family: "4_F4";
-            src: url("{{ asset('back/fonts/4_F4.ttf') }}");
-        }
-        body{
-            /* font-family: Arial, Helvetica, sans-serif, serif; */
-            font-family: "4_F4", serif;
-            {{--  font-family: Rubik;  --}}
-            {{--  font-weight: 100;    --}}
-        }
-
-        input::placeholder {
-            font-size: 10px !important;
-            position: relative;
-            top: -2px;
-        }
-
-        table.dataTable tbody th, table.dataTable tbody td{
-            padding: 5px 5px 1px !important;
-        }
-
-        .breadcrumb-header .content-title{
-            font-size: 16px !important;
-            font-weight: bold !important;
-        }
-
-        table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td{
-            font-size: 11px !important;
-            font-weight: bold !important;
-        }
-
-        .modal form label {
-            font-size: 12px !important;
-            font-weight: bold;
-        }
-
-        .modal form .text-danger{
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        #image_preview_form{
-            display: block;
-            height: 200px;
-            width: 70%;
-            margin: 0px auto;
-            margin-top: -50px;
-            border-radius: 3px;
-            border: 1px solid #d7d7d7;
-        }
-
-        @media (min-width: 768px) {
-            #image_preview_form{
-                height: 293px;
-                display: block;
-                width: 100%;
-                margin-top: 66px;
-                border-radius: 3px;
-                border: 1px solid #d7d7d7;
+            @font-face {
+                font-family: "4_F4";
+                src: url("{{ asset('back/fonts/4_F4.ttf') }}");
             }
-        }
-
-        .hor-menu .horizontalMenu>.horizontalMenu-list>li>ul.sub-menu>li>a.active {
-            background: #6a9ac6;
-            color: #FFF;
-            font-weight: bold !important;
-            font-size: 14px;
-        }
-
-        .hor-menu .horizontalMenu>.horizontalMenu-list>li>a.active{
-            background: #6a9ac6;
-            color: #FFF !important;
-            font-weight: bold !important;
-            font-size: 14px;
-        }
-
-        .horizontalMenu>.horizontalMenu-list>li>ul.sub-menu>li>a:hover, .horizontalMenu>.horizontalMenu-list>li>ul.sub-menu>li>ul.sub-menu>li>a:hover{
-            color: red;
-            font-weight: bold !important;
-        }
-
-        .horizontalMenu>.horizontalMenu-list>li>a i{
-            margin-right: 2px !important;
-            font-size: 12px !important;
-        }
-
-        .horizontalMenu>.horizontalMenu-list>li>a{
-            padding: 11px 11px 10px 11px;
-        }
-        .horizontalMenu>.horizontalMenu-list>li{
-            font-size: 13px !important;
-        }
-
-        .horizontalMenu>.horizontalMenu-list>li .slide-item{
-            font-size: 11px !important;
-            padding-top: 5px !important;
-            padding-bottom: 5px !important;
-        }
-        .alertify .ajs-body .ajs-content {
-            padding: 16px 16px 16px 24px;
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-
-        .form-control:disabled, .form-control[readonly] {
-            border: 1px solid gray !important;
-        }
-
-        div.dataTables_wrapper div.dataTables_info{
-            font-size: 12px;
-            font-weight: bold;
-            position: relative;
-            top: 3px;
-        }
-
-        .modal-header{
-            padding: 10px 20px 5px !important;
-        }
-        .modal-footer{
-            padding: 5px 0px !important;
-        }
-        .right-content .add{
-            padding: 0 !important;
-            width: 30px !important;
-            height: 25px !important;
-        }
-        /* ////////////////////////////////////////////  top css new css edit  ///////////////////////////////////////////////// */
-
-
-
-
-
-        .require_input{
-            font-size: 7px;
-            position: absolute;
-            left: 15px;
-            top: 11px;
-            color: red;
-        }
-
-        .breadcrumb-header {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .dataTables_wrapper .dataTables_info {
-            margin-top: 29px !important;
-        }
-
-        .dataTables_length{
-            margin-left: 10px;
-        }
-
-        table .edit, table .delete, table .show, table .crm_info, table .print{
-            padding: 1px 6px;
-        }
-
-        .ajs-button {
-            border: 0px;
-            font-weight: bold;
-        }
-
-        .ajs-cancel {
-            background: rgb(209, 56, 56) !important;
-            color: #fff !important;
-        }
-
-        .ajs-success{
-            font-weight: bold;
-            width: 320px !important;
-            background: rgb(77, 124, 91) !important;
-        }
-
-        .ajs-error{
-            font-weight: bold;
-            width: 320px !important;
-            background: rgb(155, 56, 64) !important;
-        }
-
-        .ajs-warning{
-            font-weight: bold;
-            width: 320px !important;
-            background: orange !important;
-        }
-
-        .modal form label{
-            margin-top: 10px !important;
-        }
-        .modal form input::placeholder{
-            font-size: 12px;
-        }
-
-        .sub-icon{
-            color: rgb(37, 37, 37) !important;
-            font-weight: bold !important;
-        }
-        .slide-item{
-            font-weight: bold !important;
-        }
-
-        .spinner_request, .spinner_request2{
-            width: 1.4rem;
-            height: 1.4rem;
-            border-width: 0.2em;
-            position: relative;
-            bottom: 2px;
-            right: 5px;
-            display: none;
-        }
-
-        .alertify{
-            z-index:999999 !important;
-            display: block !important;
-        }
-
-        .alertify-notifier{
-            z-index:999999 !important;
-        }
-        .horizontalMenu>.horizontalMenu-list>li>ul.sub-menu>li>a{
-            padding: 2px 30px !important;
-        }
-        .main-header{
-            height: 35px !important;
-        }
-        .main-profile-menu .profile-user img{
-            margin-top: 3px !important;
-            width: 27px !important;
-            height: 27px !important;
-        }
-        @media only screen and (max-width: 991px) {
-            .animated-arrow {
-                top: -16px !important;
+            body{
+                /* font-family: Arial, Helvetica, sans-serif, serif; */
+                font-family: "4_F4", serif;        
             }
-        }
-
-        .form-control{
-            height: 30px !important;
-            color: #000 !important; 
-            padding: 0px 10px;
-        }
-        .selectize-input{
-            height: 30px !important;
-            padding: 5px 8px !important
-        }
-        .modal form label{
-            margin-top: 6px !important;
-            font-size: 10px !important;
-            color: #222 !important;
-        }
-        .form-control::placeholder {
-            transform: scale(0.9);
-        }
-        .horizontalMenu>.horizontalMenu-list>li>a{
-            font-size: 11px !important;
-        }
         </style>
 	</head>
 
@@ -366,18 +120,20 @@
 
     <!-- Page -->
     <div class="page">
+        
         @include('back.layouts.header')
         @include('back.layouts.navbar')
-
+        
         <!-- main-content opened -->
         <div class="main-content horizontal-content">
+            <div id="overlay_page"></div>
             @yield('content')
+            {{--@include('back.layouts.calc')--}}
         </div>
 
         @include('back.layouts.notification_sidebar')
         @include('back.layouts.footer')
     </div>
-
 
 
     <a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a>

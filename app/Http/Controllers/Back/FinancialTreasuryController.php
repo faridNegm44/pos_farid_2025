@@ -41,19 +41,25 @@ class FinancialTreasuryController extends Controller
             DB::transaction(function () {
                 $getId = FinancialTreasury::create(request()->all());  
                 
-                DB::table('clients_and_suppliers_dets')->insert([
-                    'treasury_id' => 0,
-                    'bill_type' => 'رصيد اول خزنة',
-                    'bill_id' => 0,
-                    'treasury_bill_head_id' => 0,
-                    'treasury_bill_body_id' => 0,
-                    'client_supplier_id' => $getId->id,
-                    'money' => request('moneyFirstDuration'),
+                $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'رصيد اول خزنة')->max('num_order'); 
+
+                DB::table('treasury_bill_dets')->insert([
+                    'num_order' => ($lastNumId+1), 
+                    'date' => Carbon::now(),
+                    'treasury_id' => $getId->id, 
+                    'treasury_type' => 'رصيد اول خزنة', 
+                    'bill_id' => 0, 
+                    'bill_type' => 'بدون', 
+                    'client_supplier_id' => 0, 
+                    'money' => request('moneyFirstDuration'), 
+                    'value' => request('moneyFirstDuration'),
+                    'transaction_from' => null, 
+                    'transaction_to' => null, 
+                    'notes' => request('notes'), 
+                    'user_id' => 1, 
                     'year_id' => $this->currentFinancialYear(),
-                    'notes' => request('note'),
                     'created_at' => now()
                 ]);
-
             });
 
 
@@ -117,14 +123,23 @@ class FinancialTreasuryController extends Controller
 
     public function datatable()
     {
-        $all = FinancialTreasury::orderBy('id', 'desc')->get();
+        $all = FinancialTreasury::orderBy('id', 'desc')
+                                ->leftJoin('treasury_bill_dets', function ($join) {
+                                    $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
+                                        ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
+                                })
+                                ->select('financial_treasuries.*', 'treasury_bill_dets.money')
+                                ->get();
 
         return DataTables::of($all)
             ->addColumn('name', function($res){
-                return '<strong>'.$res->name.'</strong>';
+                return '<strong class="text-primary">'.$res->name.'</strong>';
             })
             ->addColumn('moneyFirstDuration', function($res){
-                return '<strong style="font-size: 15px;color: red;">'.number_format($res->moneyFirstDuration).'</strong>';
+                return number_format($res->moneyFirstDuration);
+            })
+            ->addColumn('money_now', function($res){
+                return '<strong style="font-size: 13px;color: red;">'.number_format($res->money).'</strong>';
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
@@ -151,7 +166,7 @@ class FinancialTreasuryController extends Controller
                     //    <i class="fa fa-trash"></i>
                     //</button>
             })
-            ->rawColumns(['name', 'moneyFirstDuration', 'created_at', 'status', 'action'])
+            ->rawColumns(['name', 'moneyFirstDuration', 'money_now', 'created_at', 'status', 'action'])
             ->toJson();
     }
 }
