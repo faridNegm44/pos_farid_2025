@@ -18,7 +18,7 @@
                         <ul class="horizontalMenu-list">
                             <li aria-haspopup="true"><span class="horizontalMenu-click"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span>
                                 <a class="sub-icon active" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                                <i class="mdi mdi-box-shadow" style="font-size: 17px !important;color: gray;position: relative;top: 2px;"></i>
                                 
                                 إختصارات <i class="fe fe-chevron-down horizontal-icon"></i></a>
                                 <ul class="sub-menu">
@@ -28,20 +28,27 @@
                                     <li aria-haspopup="true" class="active"><a href="{{ url('financial_treasury') }}" class="slide-item active">الخزائن المالية</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('financial_treasury') }}" class="slide-item active">كشكول النواقص</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('') }}" class="slide-item active">الموظفين</a></li>
-                                    <hr />
+                                </ul>
+                            </li>
+
+                            <li aria-haspopup="true"><span class="horizontalMenu-click"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span>
+                                <a class="sub-icon active" href="#">
+                                <i class="mdi mdi-file-pdf" style="font-size: 17px !important;color: gray;position: relative;top: 2px;"></i>
+                            
+                                تقارير <i class="fe fe-chevron-down horizontal-icon"></i></a>
+                                <ul class="sub-menu">
                                     <li aria-haspopup="true" class="active"><a href="{{ url('') }}" class="slide-item active">تقرير مبيعات</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('') }}" class="slide-item active">تقرير مشتريات</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('') }}" class="slide-item active">تقرير تسليم الدرج</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('') }}" class="slide-item active">تقرير الحضور والإنصراف</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('') }}" class="slide-item active">تقرير المصروفات</a></li>
-                                    
                                 </ul>
                             </li>
                         </ul>
                     </nav>
                 </div>
             </div>
-            
+           
 
 
 

@@ -1,13 +1,6 @@
 <style>
-    .page{
+    #page_sales{
         margin-top: 5px;
-    }
-    
-    #page_purchases #main_content thead, #page_purchases #search_button button{
-        background: #c30606;
-    }
-    #page_purchases #main_content thead th{
-        color: #fff;
     }
 
     .product-selection{
@@ -53,7 +46,7 @@
     }
 
     @media (min-width: 769px) and (max-width: 1024px) {
-        .page{
+        #page_sales{
             margin-top: 40px; 
         }
     }

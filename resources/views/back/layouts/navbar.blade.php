@@ -105,7 +105,8 @@
 
                     <li aria-haspopup="true"><a href="{{ url('/') }}" class="sub-icon">مشتريات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
-                            <li aria-haspopup="true"><a href="product-details.html" class="slide-item">فاتورة مشتريات</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('/purchases/create') }}" class="slide-item">إضافة فاتورة مشتريات</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('/purchases') }}" class="slide-item">فواتير المشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item">تعديل فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item">مرتجع فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item">مرتجع مشتريات بدون فاتورة</a></li>

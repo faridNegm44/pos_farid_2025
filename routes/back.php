@@ -231,6 +231,17 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     });
 
 
+    // purchases Routes
+    Route::group(['prefix' => 'purchases'] , function (){
+        Route::get('/' , 'PurchaseBillController@index');
+        Route::get('/create' , 'PurchaseBillController@create');
+        Route::post('/store' , 'PurchaseBillController@store');
+        Route::get('/edit/{id}' , 'PurchaseBillController@edit');
+        Route::post('/update/{id}' , 'PurchaseBillController@update');
+        Route::get('/destroy/{id}' , 'PurchaseBillController@destroy');
+        
+        Route::get('datatable' , 'PurchaseBillController@datatable');
+    });
 
 
 
@@ -242,6 +253,12 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
 
 
 
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // financialStorages Routes
@@ -299,17 +316,17 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
 
 
     // clients Routes
-    Route::group(['prefix' => 'clients'] , function (){
-        Route::get('/' , 'ClientsController@index');
-        Route::post('/store' , 'ClientsController@store');
-        Route::get('/edit/{id}' , 'ClientsController@edit');
-        Route::post('/update/{id}' , 'ClientsController@update');
-        Route::get('/destroy/{id}' , 'ClientsController@destroy');
+    //Route::group(['prefix' => 'clients'] , function (){
+    //    Route::get('/' , 'ClientsController@index');
+    //    Route::post('/store' , 'ClientsController@store');
+    //    Route::get('/edit/{id}' , 'ClientsController@edit');
+    //    Route::post('/update/{id}' , 'ClientsController@update');
+    //    Route::get('/destroy/{id}' , 'ClientsController@destroy');
         
-        Route::post('store_client_from_pos_page' , 'ClientsController@storeClientFromPosPage');
-        Route::post('/import' , 'ClientsController@import');
-        Route::get('datatable' , 'ClientsController@datatable');
-    });
+    //    Route::post('store_client_from_pos_page' , 'ClientsController@storeClientFromPosPage');
+    //    Route::post('/import' , 'ClientsController@import');
+    //    Route::get('datatable' , 'ClientsController@datatable');
+    //});
 
     
     // supplier Routes
@@ -327,14 +344,14 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
     
 
     // dismissal_notices
-    Route::group(['prefix' => 'dismissal_notices'] , function (){
-        Route::get('datatable_dismissal_notices' , 'DismissalNoticeController@datatableDismissalNotices');
-        Route::get('/' , 'DismissalNoticeController@index');
-        Route::post('/' , 'DismissalNoticeController@store');
-        Route::get('/edit/{id}' , 'DismissalNoticeController@edit');
-        Route::post('/update/{id}' , 'DismissalNoticeController@update');
-        Route::get('/destroy/{id}' , 'DismissalNoticeController@destroy');
-    });
+    //Route::group(['prefix' => 'dismissal_notices'] , function (){
+    //    Route::get('datatable_dismissal_notices' , 'DismissalNoticeController@datatableDismissalNotices');
+    //    Route::get('/' , 'DismissalNoticeController@index');
+    //    Route::post('/' , 'DismissalNoticeController@store');
+    //    Route::get('/edit/{id}' , 'DismissalNoticeController@edit');
+    //    Route::post('/update/{id}' , 'DismissalNoticeController@update');
+    //    Route::get('/destroy/{id}' , 'DismissalNoticeController@destroy');
+    //});
 
 
 
@@ -365,106 +382,106 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
 
 
     // Purchases
-    Route::group(['prefix' => 'purchases'] , function (){
-        Route::get('/', 'PurchasesController@index');
-        Route::get('/list', 'PurchasesController@list');
-        Route::get('/getPurchaseBillsByBranchAndDates/{id}/{from?}/{to?}' , 'PurchasesController@getPurchaseBillsByBranchAndDates');
+    //Route::group(['prefix' => 'purchases'] , function (){
+    //    Route::get('/', 'PurchasesController@index');
+    //    Route::get('/list', 'PurchasesController@list');
+    //    Route::get('/getPurchaseBillsByBranchAndDates/{id}/{from?}/{to?}' , 'PurchasesController@getPurchaseBillsByBranchAndDates');
 
-        Route::get('/edit/{id}', 'PurchasesController@edit');
-        Route::post('/update/{id}', 'PurchasesController@update');
+    //    Route::get('/edit/{id}', 'PurchasesController@edit');
+    //    Route::post('/update/{id}', 'PurchasesController@update');
 
-        Route::get('/view/{id}', 'PurchasesController@view');
-        Route::get('/print/{id}', 'PurchasesController@print');
+    //    Route::get('/view/{id}', 'PurchasesController@view');
+    //    Route::get('/print/{id}', 'PurchasesController@print');
 
-        Route::get('/get_all_data_by_branch/{id}' , 'PurchasesController@getAllDataByBranch');
-        Route::post('/store' , 'PurchasesController@store');
+    //    Route::get('/get_all_data_by_branch/{id}' , 'PurchasesController@getAllDataByBranch');
+    //    Route::post('/store' , 'PurchasesController@store');
 
-        Route::get('/getStatusTreasuries/{id}' , 'PurchasesController@getStatusTreasuries');
-        Route::get('/getStatusPlaces/{id}' , 'PurchasesController@getStatusPlaces');
+    //    Route::get('/getStatusTreasuries/{id}' , 'PurchasesController@getStatusTreasuries');
+    //    Route::get('/getStatusPlaces/{id}' , 'PurchasesController@getStatusPlaces');
 
         // Route::get('/edit/{id}' , 'ProductCategoryController@edit');
         // Route::post('/update/{id}' , 'ProductCategoryController@update');
         // Route::get('/destroy/{id}' , 'ProductCategoryController@destroy');
-    });
+    //});
 
     // pos
-    Route::group(['prefix' => 'sales'] , function (){
+    //Route::group(['prefix' => 'sales'] , function (){
 
-        Route::get('/', 'SalesController@index');
-        Route::get('/list', 'SalesController@list');
-        Route::get('/get_all_data_by_branch/{id}' , 'SalesController@getAllDataByBranch');
-        Route::get('/getSalesBills/{id}/{from?}/{to?}' , 'SalesController@getSalesBills');
+    //    Route::get('/', 'SalesController@index');
+    //    Route::get('/list', 'SalesController@list');
+    //    Route::get('/get_all_data_by_branch/{id}' , 'SalesController@getAllDataByBranch');
+    //    Route::get('/getSalesBills/{id}/{from?}/{to?}' , 'SalesController@getSalesBills');
 
-        Route::get('/view/{id}', 'SalesController@view');
-        Route::get('/print/{id}', 'SalesController@print');
-        Route::get('/print_receipt/{id}', 'SalesController@print_receipt');
-        Route::get('/print_receipt_no_dis/{id}', 'SalesController@print_receipt_no_dis');
+    //    Route::get('/view/{id}', 'SalesController@view');
+    //    Route::get('/print/{id}', 'SalesController@print');
+    //    Route::get('/print_receipt/{id}', 'SalesController@print_receipt');
+    //    Route::get('/print_receipt_no_dis/{id}', 'SalesController@print_receipt_no_dis');
 
-        Route::post('/store' , 'SalesController@store');
+    //    Route::post('/store' , 'SalesController@store');
 
-        Route::get('/getStatusTreasuries/{id}' , 'SalesController@getStatusTreasuries');
-        Route::get('/getStatusPlaces/{id}' , 'SalesController@getStatusPlaces');
-    });
+    //    Route::get('/getStatusTreasuries/{id}' , 'SalesController@getStatusTreasuries');
+    //    Route::get('/getStatusPlaces/{id}' , 'SalesController@getStatusPlaces');
+    //});
 
 
     // add-sale-return
-    Route::group(['prefix' => 'add-sale-return'] , function (){
+    //Route::group(['prefix' => 'add-sale-return'] , function (){
 
-        Route::get('/idbill/{id}', 'SalesReturnHeadController@index');
-        Route::get('/get_all_data_by_branch/{id}' , 'SalesReturnHeadController@getAllDataByBranch');
-        Route::get('/get_all_data_by_num_bill/{branch}/{bill}' , 'SalesReturnHeadController@getAllDataByNumBill');
-        Route::post('/store/{id}' , 'SalesReturnHeadController@store');
-
-
-        Route::get('/list', 'SalesReturnHeadController@list');
-        Route::get('/getPurchaseBillsByBranchAndDates/{id}/{from?}/{to?}' , 'SalesReturnHeadController@getPurchaseBillsByBranchAndDates');
-
-        Route::get('/view/{id}', 'SalesReturnHeadController@view');
-        Route::get('/print/{id}', 'SalesReturnHeadController@print');
+    //    Route::get('/idbill/{id}', 'SalesReturnHeadController@index');
+    //    Route::get('/get_all_data_by_branch/{id}' , 'SalesReturnHeadController@getAllDataByBranch');
+    //    Route::get('/get_all_data_by_num_bill/{branch}/{bill}' , 'SalesReturnHeadController@getAllDataByNumBill');
+    //    Route::post('/store/{id}' , 'SalesReturnHeadController@store');
 
 
+    //    Route::get('/list', 'SalesReturnHeadController@list');
+    //    Route::get('/getPurchaseBillsByBranchAndDates/{id}/{from?}/{to?}' , 'SalesReturnHeadController@getPurchaseBillsByBranchAndDates');
 
-        Route::get('/getStatusTreasuries/{id}' , 'SalesReturnHeadController@getStatusTreasuries');
-        Route::get('/getStatusPlaces/{id}' , 'SalesReturnHeadController@getStatusPlaces');
-    });
+    //    Route::get('/view/{id}', 'SalesReturnHeadController@view');
+    //    Route::get('/print/{id}', 'SalesReturnHeadController@print');
+
+
+
+    //    Route::get('/getStatusTreasuries/{id}' , 'SalesReturnHeadController@getStatusTreasuries');
+    //    Route::get('/getStatusPlaces/{id}' , 'SalesReturnHeadController@getStatusPlaces');
+    //});
 
 
 
 
     // add-purchase-return
-    Route::group(['prefix' => 'add-purchase-return'] , function (){
-        Route::get('/idbill/{id}', 'PurchasesReturnHeadController@index');
-        Route::get('/get_all_data_by_branch/{id}' , 'PurchasesReturnHeadController@getAllDataByBranch');
-        Route::get('/get_all_data_by_num_bill/{branch}/{bill}' , 'PurchasesReturnHeadController@getAllDataByNumBill');
-        Route::post('/store/{id}' , 'PurchasesReturnHeadController@store');
+    //Route::group(['prefix' => 'add-purchase-return'] , function (){
+    //    Route::get('/idbill/{id}', 'PurchasesReturnHeadController@index');
+    //    Route::get('/get_all_data_by_branch/{id}' , 'PurchasesReturnHeadController@getAllDataByBranch');
+    //    Route::get('/get_all_data_by_num_bill/{branch}/{bill}' , 'PurchasesReturnHeadController@getAllDataByNumBill');
+    //    Route::post('/store/{id}' , 'PurchasesReturnHeadController@store');
 
 
-        Route::get('/list', 'PurchasesReturnHeadController@list');
-        Route::get('/getPurchaseBillsByBranchAndDates/{id}/{from?}/{to?}' , 'PurchasesReturnHeadController@getPurchaseBillsByBranchAndDates');
+    //    Route::get('/list', 'PurchasesReturnHeadController@list');
+    //    Route::get('/getPurchaseBillsByBranchAndDates/{id}/{from?}/{to?}' , 'PurchasesReturnHeadController@getPurchaseBillsByBranchAndDates');
 
-        Route::get('/view/{id}', 'PurchasesReturnHeadController@view');
-        Route::get('/print/{id}', 'PurchasesReturnHeadController@print');
+    //    Route::get('/view/{id}', 'PurchasesReturnHeadController@view');
+    //    Route::get('/print/{id}', 'PurchasesReturnHeadController@print');
 
 
 
-        Route::get('/getStatusTreasuries/{id}' , 'PurchasesReturnHeadController@getStatusTreasuries');
-        Route::get('/getStatusPlaces/{id}' , 'PurchasesReturnHeadController@getStatusPlaces');
-    });
+    //    Route::get('/getStatusTreasuries/{id}' , 'PurchasesReturnHeadController@getStatusTreasuries');
+    //    Route::get('/getStatusPlaces/{id}' , 'PurchasesReturnHeadController@getStatusPlaces');
+    //});
 
 
     // treasury-bills Routes
-    Route::group(['prefix' => 'treasury-bills'] , function (){
-        Route::get('/getTreasuryBillsByBranchAndDates/{id}/{type}/{from?}/{to?}' , 'TreasuriesBillsController@getTreasuryBillsByBranchAndDates');
-        Route::get('/' , 'TreasuriesBillsController@index');
-        Route::get('/create' , 'TreasuriesBillsController@create');
-        Route::get('/getAllDataByBranch/{id}' , 'TreasuriesBillsController@getAllDataByBranch');
-        Route::get('/getStatusTreasuries/{id}' , 'TreasuriesBillsController@getStatusTreasuries');
-        Route::get('/getStatusPlaces/{id}' , 'TreasuriesBillsController@getStatusPlaces');
-        Route::post('/store' , 'TreasuriesBillsController@store');
-        Route::get('/edit/{id}' , 'TreasuriesBillsController@edit');
-        Route::post('/update/{id}' , 'TreasuriesBillsController@update');
-        //Route::get('/destroy/{id}' , 'FinancialTreasuryController@destroy');
-    });
+    //Route::group(['prefix' => 'treasury-bills'] , function (){
+    //    Route::get('/getTreasuryBillsByBranchAndDates/{id}/{type}/{from?}/{to?}' , 'TreasuriesBillsController@getTreasuryBillsByBranchAndDates');
+    //    Route::get('/' , 'TreasuriesBillsController@index');
+    //    Route::get('/create' , 'TreasuriesBillsController@create');
+    //    Route::get('/getAllDataByBranch/{id}' , 'TreasuriesBillsController@getAllDataByBranch');
+    //    Route::get('/getStatusTreasuries/{id}' , 'TreasuriesBillsController@getStatusTreasuries');
+    //    Route::get('/getStatusPlaces/{id}' , 'TreasuriesBillsController@getStatusPlaces');
+    //    Route::post('/store' , 'TreasuriesBillsController@store');
+    //    Route::get('/edit/{id}' , 'TreasuriesBillsController@edit');
+    //    Route::post('/update/{id}' , 'TreasuriesBillsController@update');
+    //    //Route::get('/destroy/{id}' , 'FinancialTreasuryController@destroy');
+    //});
 
 
     // settings Routes
@@ -479,60 +496,66 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
 
 
     //  notebook_shortcomings Routes
-     Route::group(['prefix' => 'notebook_shortcomings'] , function (){
-        Route::get('/getProductsByBranch/{id}' , 'NotebookShortcomings@getProductsByBranch');
-        Route::get('/' , 'NotebookShortcomings@index');
+    // Route::group(['prefix' => 'notebook_shortcomings'] , function (){
+    //    Route::get('/getProductsByBranch/{id}' , 'NotebookShortcomings@getProductsByBranch');
+    //    Route::get('/' , 'NotebookShortcomings@index');
 
-        Route::post('/import' , 'NotebookShortcomings@import');
+    //    Route::post('/import' , 'NotebookShortcomings@import');
 
-        Route::post('/' , 'NotebookShortcomings@store');
-        Route::post('store_client_from_pos_page' , 'NotebookShortcomings@storeClientFromPosPage');
-        Route::get('/edit/{id}' , 'NotebookShortcomings@edit');
-        Route::post('/update/{id}' , 'NotebookShortcomings@update');
-        Route::get('/destroy/{id}' , 'NotebookShortcomings@destroy');
-    });
+    //    Route::post('/' , 'NotebookShortcomings@store');
+    //    Route::post('store_client_from_pos_page' , 'NotebookShortcomings@storeClientFromPosPage');
+    //    Route::get('/edit/{id}' , 'NotebookShortcomings@edit');
+    //    Route::post('/update/{id}' , 'NotebookShortcomings@update');
+    //    Route::get('/destroy/{id}' , 'NotebookShortcomings@destroy');
+    //});
 
     // roles_permissions Routes
-    Route::group(['prefix' => 'roles_permissions'] , function (){
-        Route::get('/' , 'RolesPermissionsController@index');
-        Route::get('create' , 'RolesPermissionsController@create');
-        Route::post('/store' , 'RolesPermissionsController@store');
-        Route::get('/edit/{id}' , 'RolesPermissionsController@edit');
-        Route::post('/update/{id}' , 'RolesPermissionsController@update');
-        Route::get('/destroy/{id}' , 'RolesPermissionsController@destroy');
+    //Route::group(['prefix' => 'roles_permissions'] , function (){
+    //    Route::get('/' , 'RolesPermissionsController@index');
+    //    Route::get('create' , 'RolesPermissionsController@create');
+    //    Route::post('/store' , 'RolesPermissionsController@store');
+    //    Route::get('/edit/{id}' , 'RolesPermissionsController@edit');
+    //    Route::post('/update/{id}' , 'RolesPermissionsController@update');
+    //    Route::get('/destroy/{id}' , 'RolesPermissionsController@destroy');
 
-        Route::get('datatable_roles_permissions' , 'RolesPermissionsController@datatable_roles_permissions');
-    });
-
-
-    Route::group(['prefix' => 'reports'] , function (){
-        // itemAll المخزن العام
-        Route::get('itemAll' , 'ReportController@gItemAll');
-        Route::get('itemAll/stores/{id}' , 'ReportController@gItemAllStores');
-        Route::get('itemAll/get/{store}' , 'ReportController@pItemAll');
-
-        //itemDet حركه صنف
-        Route::get('itemDet' , 'ReportController@gItemDet');
-        Route::get('itemDet/getStore/{branch}' , 'ReportController@gItemDetStores');
-        Route::get('itemDet/getProduct/{store}' , 'ReportController@gItemDetProduct');
-        Route::post('itemDet/post' , 'ReportController@pItemDet');
-
-        //supplierDet
-        Route::get('supplierDet' , 'ReportController@supplierDet');
-        Route::get('supplierDet/getSuppliers/{branch}' , 'ReportController@getSuppliers');
-        Route::post('supplierDet/view' , 'ReportController@supplierDetView');
-
-        //clientDet
-        Route::get('clientDet' , 'ReportController@clientDet');
-        Route::get('clientDet/getClients/{branch}' , 'ReportController@getClients');
-        //Route::post('clientDet/view' , 'ReportController@clientDetView');
+    //    Route::get('datatable_roles_permissions' , 'RolesPermissionsController@datatable_roles_permissions');
+    //});
 
 
-        //treasuryDet
-        Route::get('treasuryDet' , 'ReportController@treasuryDet');
-        Route::get('treasuryDet/getTreasuries/{branch}' , 'ReportController@getTreasuriesBranch');
-        Route::post('treasuryDet/view' , 'ReportController@treasuryDetView');
+    //Route::group(['prefix' => 'reports'] , function (){
 
-    });
+    //    //treasury_bills
+    //    Route::group(['prefix' => 'treasury_bills'] , function (){
+    //        Route::get('/' , 'ReportsTreasuryBills@index');
+    //        Route::post('result' , 'ReportsTreasuryBills@result');
+    //        Route::get('result/pdf' , 'ReportsTreasuryBills@result_pdf');
+    //    });
+
+
+    //    // itemAll المخزن العام
+    //    Route::get('itemAll' , 'ReportController@gItemAll');
+    //    Route::get('itemAll/stores/{id}' , 'ReportController@gItemAllStores');
+    //    Route::get('itemAll/get/{store}' , 'ReportController@pItemAll');
+
+    //    //itemDet حركه صنف
+    //    Route::get('itemDet' , 'ReportController@gItemDet');
+    //    Route::get('itemDet/getStore/{branch}' , 'ReportController@gItemDetStores');
+    //    Route::get('itemDet/getProduct/{store}' , 'ReportController@gItemDetProduct');
+    //    Route::post('itemDet/post' , 'ReportController@pItemDet');
+
+    //    //supplierDet
+    //    Route::get('supplierDet' , 'ReportController@supplierDet');
+    //    Route::get('supplierDet/getSuppliers/{branch}' , 'ReportController@getSuppliers');
+    //    Route::post('supplierDet/view' , 'ReportController@supplierDetView');
+
+    //    //clientDet
+    //    Route::get('clientDet' , 'ReportController@clientDet');
+    //    Route::get('clientDet/getClients/{branch}' , 'ReportController@getClients');
+    //    //Route::post('clientDet/view' , 'ReportController@clientDetView');
+
+
+        
+
+    //});
 });
 

@@ -77,15 +77,15 @@
     @include('back.layouts.header')
     @include('back.layouts.navbar')
     
-    <div class="page" id="page_sales">        
+    <div class="page" id="page_purchases">        
 
-        {{--@include('back.layouts.calc')
+        @include('back.layouts.calc')
     
         @include('back.pos.modal_search_product')
     
         @include('back.pos.modal_save_bill')
     
-        @include('back.pos.modal_dismissal_notices')--}}
+        @include('back.pos.modal_dismissal_notices')
 
         <div class="container-fluid">
 
@@ -93,8 +93,14 @@
             <div class="row">
                 <div class="col-lg-4" style="margin-bottom: 8px;">
                     <select class="selectize" style="border: 1px solid #5c5c5c !important;">
-                        <option value="" selected>العملاء</option>                              
-                        <option>اسماء نجم</option>
+                        <option value="" selected>الموردين</option>     
+                        @foreach ($suppliers as $supplier)
+                            <option>
+                                @if ($supplier->phone)
+                                    {{ $supplier->phone }} - 
+                                @endif
+                                {{ $supplier->name }}</option>
+                        @endforeach                         
                         
                     </select>
                 </div>
@@ -128,7 +134,7 @@
                 </div>
 
                 <div class="col-lg-1" id="search_button" style="margin-top: 2px;margin-bottom: 8px;">
-                    <button class="btn btn-danger-gradient btn-sm btn-block" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product" data-toggle="tooltip" title="بحث عن صنف">
+                    <button class="btn btn-danger btn-sm btn-block" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product" data-toggle="tooltip" title="بحث عن صنف" style="height: 30px;">
                         <i class="fas fa-search-plus" style="font-size: 18px !important;"></i>
                     </button>
                 </div>
@@ -147,7 +153,7 @@
     
                     <div class="col-lg-8" style="height: 90vh;overflow: auto;">
                         <table class="table table-hover table-striped table-responsive" id="products_table">
-                            <thead class="text-center thead-dark">
+                            <thead class="text-center">
                                 <tr>
                                     <th>#</th>
                                     <th style="width: 25%;">الصنف</th>
@@ -184,8 +190,8 @@
     
                     
                     <div class="col-lg-4 product-selection p-3 total_info">
-                        <div class="text-center" style="width: 175px;font-weight: bold;text-decoration: underline;background: #3b8ce2;color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
-                            فاتورة بيع: <span style="font-size: 15px;margin: 0px 5px;">1397635</span>
+                        <div class="text-center" style="width: 175px;font-weight: bold;text-decoration: underline;background: rgb(195, 6, 6);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                            فاتورة شراء رقم: <span style="font-size: 15px;margin: 0px 5px;">1397635</span>
                         </div>
                         
                         <div class="text-center" id="date_time">

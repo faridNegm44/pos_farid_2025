@@ -1,9 +1,9 @@
 ### اذون الخزانه
     رصيد اول خزنة -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
-    اذن اضافة -> relation with ( treasury_id ) in ( treasury_bill_dets )
+    اذن اضافة نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
-    اذن صرف -> relation with ( treasury_id ) in ( treasury_bill_dets )
+    اذن صرف نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
     اذن ارتجاع مبيعات -> relation with ( treasury_id ) in ( treasury_bill_dets )
 

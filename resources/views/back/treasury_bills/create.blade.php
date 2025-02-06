@@ -144,11 +144,11 @@
                 {{--  start مبلغ المعاملة && ملاحظات --}}
                 <div class="row justify-content-center" style="margin: 10px 0 20px;">
                     <div class="col-lg-2">
-                        <label for="" class="text-dark">مبلغ المعاملة</label>
-                        <input type="number" class="form-control mb-1" name="" id="" placeholder="مبلغ المعاملة" style="font-size: 13px;" value="0" required>  
+                        <label for="value" class="text-dark">مبلغ المعاملة</label>
+                        <input type="number" class="form-control mb-1 text-center" name="value" id="value" placeholder="مبلغ المعاملة" style="font-size: 13px;" required>  
                     </div>
                     
-                    <div class="col-lg-7">
+                    <div class="col-lg-8">
                         <label for="" class="text-dark">ملاحظات</label>
                         <input type="text" class="form-control" name="" id="" placeholder="ملاحظات">  
                     </div>
@@ -248,6 +248,9 @@
         </div>
     </div>
 
+    @include('back.layouts.footer')
+
+
 
     <!-- JQuery min js -->
     <script src="{{ asset('back') }}/assets/plugins/jquery/jquery.min.js"></script>
@@ -342,13 +345,7 @@
 
 
             clientsSelectize.on('change', function(value) {
-
                 checKifFoundCliendAndSupplierVal();
-                
-
-
-
-                //clientOrSupplier(value);
             });
 
             suppliersSelectize.on('change', function(value) {
@@ -368,6 +365,7 @@
             const treasury_id = $("#treasury_id").val();
             const client = $(".clients").val();
             const supplier = $(".suppliers").val();
+            const value = $("#value").val();
 
             $("#overlay_page").fadeIn();
 
@@ -390,6 +388,13 @@
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 3);
                 alertify.error("يُرجى اختيار عميل أو مورد لإتمام المعاملة");
+                
+                $("#overlay_page").fadeOut();
+
+            }else if(!value){
+                alertify.set('notifier','position', 'top-center');
+                alertify.set('notifier','delay', 3);
+                alertify.error("مبلغ المعاملة مطلوب");
                 
                 $("#overlay_page").fadeOut();
 
