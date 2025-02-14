@@ -1,15 +1,16 @@
 <style>
-    #page_sales{
+    .page{
         margin-top: 5px;
     }
-
     .product-selection{
         border: 0px !important;
     }
     #products_table{
-        -webkit-box-shadow: -3px 3px 15px 0px rgba(194,194,194,1);
+        width: 100%;
+        overflow: auto;
+        /*-webkit-box-shadow: -3px 3px 15px 0px rgba(194,194,194,1);
         -moz-box-shadow: -3px 3px 15px 0px rgba(194,194,194,1);
-        box-shadow: -3px 3px 15px 0px rgba(194,194,194,1);
+        box-shadow: -3px 3px 15px 0px rgba(194,194,194,1);*/
 
         /*height: 70vh;
         overflow: auto;*/
@@ -84,8 +85,9 @@
         border-radius: 50%;
     }
     .total-bar {
-        background-color: #f1f1f1;
         padding: 10px;
+        background-color: #d9d6d6;        
+        border: 2px solid #9ba1b0 !important;    
     }
     .total-bar .btn {
         margin-left: 10px;
@@ -101,9 +103,10 @@
         scrollbar-width: none;
     }
     .footer-btn-group {
-        background-color: #fafafa;
+        background-color: #e3bfc6;
         position: fixed;
         bottom: 0;
+        right: 0;
         left: 0;
         width: 100%;
         z-index: 1000;
@@ -116,6 +119,14 @@
         flex: 1;
         margin: 2px;
         height: 35px !important;
+        color: #1a1a1a;
+    }
+    .footer-btn-group .btn i{
+        font-size: 20px;
+    }
+    .footer-btn-group .btn span{
+        position: relative;
+        bottom: 5px;
     }
 
     .total_info input::placeholder{
@@ -199,13 +210,13 @@
     }
 
     #hidden_div{
-        width: 93%;
-        background: #fff;
+        width: 98%;
+        background: #f3dc9d;
         height: 300px;
         position: absolute;
         z-index: 1;
         overflow: auto;
-        display: none;        
+        display: none;       
     }
 
     .alertify .ajs-body .ajs-content {

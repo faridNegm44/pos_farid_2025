@@ -259,7 +259,8 @@ table .edit, table .delete, table .show, table .crm_info, table .print{
 
 
 .selectize-control.single .selectize-input, .selectize-control.single .selectize-input input, .form-control, .selectize-dropdown [data-selectable].option, label{
-    font-size: 10px;
+    font-size: 11px;
+    color: #000;
 }
 #page_create_treasury_bill label{
     margin-bottom: 0px;

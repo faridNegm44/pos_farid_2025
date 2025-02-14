@@ -55,6 +55,7 @@
         {{-- custom css --}}
         <link href="{{ asset('back/assets/custom.css') }}" rel="stylesheet">
 
+
         <style>
             @font-face {
                 font-family: "4_F4";
@@ -63,13 +64,25 @@
             body{
                 /* font-family: Arial, Helvetica, sans-serif, serif; */
                 font-family: "4_F4", serif;
+                overflow: hidden; /* or overflow: auto if you want scroll only for content and not whole page */
+                height: 100vh; /* Ensure full viewport height */
+                display: flex; /* Use flexbox for layout */
+                flex-direction: column; /* Stack elements vertically */
+
             }
+
+            .page {
+              overflow-y: auto; /* Scrollable content area */
+              flex-grow: 1;  /* Allow content to take up available space */
+              height: 100%; /* Important: Set a height for the scrollable area */
+            }
+
         </style>
 	</head>
 
-    @include('back.pos.css_js.main_css')
+    @include('back.purchases.css_js.main_css')
 
-<body style="height: 100vh !important;overflow: auto;">
+<body style="height: 100vh !important;overflow: auto;background: #ffe8ed !important;">
 
     <div id="overlay_page"></div>
 
@@ -81,65 +94,69 @@
 
         @include('back.layouts.calc')
     
-        @include('back.pos.modal_search_product')
+        @include('back.purchases.modal_search_product')
     
-        @include('back.pos.modal_save_bill')
+        @include('back.purchases.modal_save_bill')
     
-        @include('back.pos.modal_dismissal_notices')
+        @include('back.purchases.modal_dismissal_notices')
 
         <div class="container-fluid">
 
-            {{-- start top --}}
-            <div class="row">
-                <div class="col-lg-4" style="margin-bottom: 8px;">
-                    <select class="selectize" style="border: 1px solid #5c5c5c !important;">
-                        <option value="" selected>الموردين</option>     
-                        @foreach ($suppliers as $supplier)
-                            <option>
-                                @if ($supplier->phone)
-                                    {{ $supplier->phone }} - 
-                                @endif
-                                {{ $supplier->name }}</option>
-                        @endforeach                         
+            {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
+            {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
+            <div id="top_section" style="padding: 7px 10px 0;">
+                <div class="row">
+                    <div class="col-lg-4" style="margin-bottom: 8px;">
+                        <select class="selectize" style="border: 1px solid #5c5c5c !important;">
+                            <option value="" selected>الموردين</option>     
+                            @foreach ($suppliers as $supplier)
+                                <option>
+                                    @if ($supplier->phone)
+                                        {{ $supplier->phone }} - 
+                                    @endif
+                                    {{ $supplier->name }}</option>
+                            @endforeach                         
+                        </select>
+                    </div>
+    
+                    <div class="col-lg-7 col-sm-12" style="margin-bottom: 8px;position: relative;">
+                        <input type="text" class="form-control form-control-sm" style="height: 30px !important;border: 1px solid #5c5c5c !important;" placeholder="بحث عن صنف"  autofocus>
                         
-                    </select>
-                </div>
-
-                <div class="col-lg-7 col-sm-12" style="margin-bottom: 8px;">
-                    <input type="text" class="form-control form-control-sm" style="height: 30px !important;border: 1px solid #5c5c5c !important;" placeholder="بحث عن صنف"  autofocus>
-                    <div id="hidden_div">
-                        <div class="text-sm-center table-responsive">
-                            <table class="table table-bordered table-hover">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>الاسم</th>
-                                        <th>ك مخزن</th>
-                                        <th>السعر</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for ($i = 0;  $i < 100; $i++)
+                        <div id="hidden_div">
+                            <div class="text-sm-center table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="thead-dark">
                                         <tr>
-                                            <td>{{ $i+1 }}</td>
-                                            <td>كوشن فرو في جلد ابيض مصري</td>
-                                            <td>20</td>
-                                            <td style="color: red;font-size: 14px;">1200,8</td>
-                                        </tr>                            
-                                    @endfor
-                                </tbody>
-                            </table>
+                                            <th>#</th>
+                                            <th>الاسم</th>
+                                            <th>ك مخزن</th>
+                                            <th>السعر</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for ($i = 0;  $i < 100; $i++)
+                                            <tr>
+                                                <td>{{ $i+1 }}</td>
+                                                <td>كوشن فرو في جلد ابيض مصري</td>
+                                                <td>20</td>
+                                                <td style="color: red;font-size: 14px;">1200,8</td>
+                                            </tr>                            
+                                        @endfor
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-lg-1" id="search_button" style="margin-top: 2px;margin-bottom: 8px;">
-                    <button class="btn btn-danger btn-sm btn-block" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product" data-toggle="tooltip" title="بحث عن صنف" style="height: 30px;">
-                        <i class="fas fa-search-plus" style="font-size: 18px !important;"></i>
-                    </button>
+    
+                    <div class="col-lg-1" id="search_button" style="margin-top: 2px;margin-bottom: 8px;">
+                        <button class="btn btn-danger btn-sm btn-block" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product" data-toggle="tooltip" title="بحث عن صنف" style="height: 30px;">
+                            <i class="fas fa-search-plus" style="font-size: 18px !important;"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-            {{-- end top --}}
+            {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
+            {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
             
 
 
@@ -147,51 +164,20 @@
 
 
 
-            {{-- start content  --}}
-            <div class="" id="main_content">
+
+
+
+
+
+            {{-------------------------------------------------- start content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
+            {{-------------------------------------------------- start content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
+            <div class="" id="main_content" style="padding: 18px;margin-bottom: 60px;">
                 <div class="row"> 
-    
-                    <div class="col-lg-8" style="height: 90vh;overflow: auto;">
-                        <table class="table table-hover table-striped table-responsive" id="products_table">
-                            <thead class="text-center">
-                                <tr>
-                                    <th>#</th>
-                                    <th style="width: 25%;">الصنف</th>
-                                    <th>ك المخزن</th>
-                                    <th>ك مباعة</th>
-                                    <th style="width: 7.5%;">السعر</th>
-                                    <th style="width: 7.5%;">إجمالي</th>
-                                    <th>بونص</th>
-                                    <th>خ جنية</th>
-                                    <th>ضريبة %</th>
-                                    <th>الإجمالي</th>
-                                    <th>حذف</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center">
-                                @for($i = 0; $i < 30; $i++)
-                                    <tr>
-                                        <th>{{ $i+1 }}</th>
-                                        <td class="prod_name">ابليك مجزع اسود ف دهبي مقاس 10 اكس</td>
-                                        <td>20</td>
-                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="1"></td>
-                                        <td>600</td>
-                                        <td>600.00</td>
-                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
-                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
-                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
-                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
-                                        <td><button class="btn btn-outline-danger btn-sm btn-icon remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();"><i class="fas fa-times"></i></button></td>
-                                    </tr>
-                                @endfor
-                            </tbody>
-                        </table>
-                    </div>
-    
-                    
-                    <div class="col-lg-4 product-selection p-3 total_info">
-                        <div class="text-center" style="width: 175px;font-weight: bold;text-decoration: underline;background: rgb(195, 6, 6);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
-                            فاتورة شراء رقم: <span style="font-size: 15px;margin: 0px 5px;">1397635</span>
+
+                    <div class="col-lg-4 product-selection p-3 total_info" style="background: #e3bfc6;">
+                        <div class="text-center" style="font-weight: bold;text-decoration: underline;background: rgb(195, 6, 6);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                            فاتورة شراء رقم
+                            <span style="font-size: 15px;margin: 0px 5px;">1397635</span>
                         </div>
                         
                         <div class="text-center" id="date_time">
@@ -264,37 +250,99 @@
                             </div>
                         </div>
                     </div>
+
+
+
+                    <div class="col-lg-8" style="height: 70vh;overflow: auto;background: #fff;padding: 10px 10px 30px;">
+                        <table class="table table-hover table-bordered" id="products_table">
+                            <thead class="text-center thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>حذف</th>
+                                    <th style="width: 25%;">الصنف</th>
+                                    <th>ك المخزن</th>
+                                    <th>ك مباعة</th>
+                                    <th style="width: 7.5%;">السعر</th>
+                                    <th style="width: 7.5%;">إجمالي</th>
+                                    <th>بونص</th>
+                                    <th>خ جنية</th>
+                                    <th>ضريبة %</th>
+                                    <th>الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                @for($i = 0; $i < 30; $i++)
+                                    <tr>
+                                        <th>{{ $i+1 }}</th>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();"><i class="fas fa-times"></i></button>
+                                        </td>
+                                        <td class="prod_name">ابليك مجزع اسود ف دهبي مقاس 10 اكس</td>
+                                        <td>20</td>
+                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="1"></td>
+                                        <td>600</td>
+                                        <td>600.00</td>
+                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
+                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
+                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
+                                        <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
+                    </div>
+    
+                    
+                    
                  </div> 
             </div>
-            {{-- end content  --}}
+            {{-------------------------------------------------- end content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
+            {{-------------------------------------------------- end content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
 
 
 
 
-            {{-- start footer --}}
+
+
+
+
+
+
+
+
+
+            {{-------------------------------------------------- start footer --------------------------------------------------}}
+            {{-------------------------------------------------- start footer --------------------------------------------------}}
             <div class="row footer-btn-group justify-content-center">
-                <button class="col-lg-2 btn btn-warning-gradient btn-rounded mb-2"><i class="fas fa-pause">
-                    </i> تعليق الفاتورة
+                <button class="col-lg-2 col-12 btn btn-warning-gradient btn-rounded mb-2" data-placement="top" data-toggle="tooltip" title="تعليق الفاتورة">
+                    <i class="fas fa-pause"></i> 
+                    <span class="d-none d-lg-inline">تعليق الفاتورة</span>
                 </button>
     
-                <button class="col-lg-2 btn btn-info-gradient btn-rounded mb-2"><i class="fas fa-user-plus">
-                    </i> عميل جديد
+                <button class="col-lg-2 col-12 btn btn-info-gradient btn-rounded mb-2"  data-placement="top" data-toggle="tooltip" title="عميل جديد">
+                    <i class="fas fa-user-plus"></i> 
+                    <span class="d-none d-lg-inline">عميل جديد</span>
                 </button>
                 
-                <button class="col-lg-2 btn btn-success-gradient btn-rounded mb-2" id="save_bill" data-effect="effect-scale" data-toggle="modal" href="#modal_save_bill">
-                    <i class="fas fa-check-double"></i> حفظ الفاتورة
+                <button class="col-lg-2 col-12 btn btn-success-gradient btn-rounded mb-2"  data-placement="top" data-toggle="tooltip" title="حفظ الفاتورة" id="save_bill" data-effect="effect-scale" data-toggle="modal" href="#modal_save_bill">
+                    <i class="fas fa-check-double"></i> 
+                    <span class="d-none d-lg-inline">حفظ الفاتورة</span>
                 </button>
 
-                <button class="col-lg-2 btn btn-danger-gradient btn-rounded mb-2 refresh_page">
-                    <i class="fas fa-refresh"></i> الغاء  الفاتورة
+                <button class="col-lg-2 col-12 btn btn-danger-gradient btn-rounded mb-2 refresh_page">
+                    <i class="fas fa-trash-alt"></i> 
+                    <span class="d-none d-lg-inline">الغاء  الفاتورة</span>
+
                 </button>
     
     
-                <button class="col-lg-2 btn btn-primary-gradient btn-rounded mb-2" id="dismissal_notices" data-effect="effect-scale" data-toggle="modal" href="#modal_dismissal_notices">
-                    <i class="fas fa-money-bill"></i> مصروفات الإذن
+                <button class="col-lg-2 col-12 btn btn-primary-gradient btn-rounded mb-2"  data-placement="top" data-toggle="tooltip" title="مصروفات الإذن" id="dismissal_notices" data-effect="effect-scale" data-toggle="modal" href="#modal_dismissal_notices">
+                    <i class="fas fa-money-bill"></i> 
+                    <span class="d-none d-lg-inline">مصروفات الإذن</span>
                 </button>
             </div>
-            {{-- end footer --}}
+            {{-------------------------------------------------- end footer --------------------------------------------------}}
+            {{-------------------------------------------------- end footer --------------------------------------------------}}
 
         </div>
     </div>
@@ -507,7 +555,7 @@
 
 
     <script>
-        @include('back.pos.css_js.main_js')
+        @include('back.purchases.css_js.main_js')
     </script>
 
     {{--  start refresh_page  --}}
