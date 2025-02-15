@@ -209,19 +209,18 @@
         font-size: 12px;         
     }
 
-    #hidden_div{
-        width: 98%;
-        background: #f3dc9d;
-        height: 300px;
+    #hidden_div_main_search{
+        width: 97.1%;
+        background: #f1f0cb;
+        height: 200px;
         position: absolute;
         z-index: 1;
         overflow: auto;
-        display: none;       
+        display: none;      
     }
 
     .alertify .ajs-body .ajs-content {
         padding: 16px 16px 16px 24px !important;
-        font-size: 100px !important;
         font-weight: bold !important;
         text-align: center !important;
     }
@@ -320,4 +319,9 @@
         cursor: pointer;
     }
     {{--  end modal_search_product  --}}
+
+    #hidden_div_main_search table tbody tr{
+        cursor: pointer;
+    }
+
 </style>

@@ -242,6 +242,18 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], func
         
         Route::get('datatable' , 'PurchaseBillController@datatable');
     });
+    
+    
+    
+    // search_products Routes
+    Route::group(['prefix' => 'search_products'] , function (){
+        Route::get('/{data}' , 'SearchProducts@search_products');
+    });
+    Route::get('search_products_by_selectize' , 'SearchProducts@search_products_by_selectize');
+
+
+
+
 
 
 

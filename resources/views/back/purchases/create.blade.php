@@ -76,7 +76,12 @@
               flex-grow: 1;  /* Allow content to take up available space */
               height: 100%; /* Important: Set a height for the scrollable area */
             }
-
+         
+            .selectize-dropdown .selected {
+                background-color: #ead298;
+                color: #303030;
+            }
+    
         </style>
 	</head>
 
@@ -106,7 +111,7 @@
             {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
             <div id="top_section" style="padding: 7px 10px 0;">
                 <div class="row">
-                    <div class="col-lg-4" style="margin-bottom: 8px;">
+                    <div class="col-lg-3" style="margin-bottom: 8px;">
                         <select class="selectize" style="border: 1px solid #5c5c5c !important;">
                             <option value="" selected>الموردين</option>     
                             @foreach ($suppliers as $supplier)
@@ -118,11 +123,25 @@
                             @endforeach                         
                         </select>
                     </div>
+                    
+                    <div class="col-lg-6" style="margin-bottom: 8px;">
+                        <select class="" id="products_selectize" style="border: 1px solid #5c5c5c !important;">
+                            <option value="" selected>إبحث عن صنف</option>         
+                        </select>
+                    </div>
     
-                    <div class="col-lg-7 col-sm-12" style="margin-bottom: 8px;position: relative;">
-                        <input type="text" class="form-control form-control-sm" style="height: 30px !important;border: 1px solid #5c5c5c !important;" placeholder="بحث عن صنف"  autofocus>
+                    <div class="col-lg-3 col-sm-12" style="margin-bottom: 8px;position: relative;">
+                        <form id="main_form_search" style="position: relative;">
+                            <input type="text" id="main_input_search" class="form-control form-control-sm focus_input" style="height: 30px !important;border: 1px solid #5c5c5c !important;" placeholder="بحث عن صنف"  autofocus>
+
+                            <button type="submit" class="btn btn-danger btn-sm" data-effect="effect-scale" data-toggle="tooltip" title="بحث عن صنف" style="height: 30px !important;position: absolute;left: 0;top: 0;">
+                                <i class="fas fa-search-plus" style="font-size: 18px !important;"></i>
+                            </button>
+
+                            {{--<input type="submit" class="btn btn-primary-gradient" style="height: 30px !important;position: absolute;left: 0;top: 0;" value="بحث">--}}
+                        </form>
                         
-                        <div id="hidden_div">
+                        <div id="hidden_div_main_search">
                             <div class="text-sm-center table-responsive">
                                 <table class="table table-bordered table-hover">
                                     <thead class="thead-dark">
@@ -134,25 +153,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @for ($i = 0;  $i < 100; $i++)
-                                            <tr>
-                                                <td>{{ $i+1 }}</td>
-                                                <td>كوشن فرو في جلد ابيض مصري</td>
-                                                <td>20</td>
-                                                <td style="color: red;font-size: 14px;">1200,8</td>
-                                            </tr>                            
-                                        @endfor
+                                        
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
     
-                    <div class="col-lg-1" id="search_button" style="margin-top: 2px;margin-bottom: 8px;">
+                    {{--<div class="col-lg-1" id="search_button" style="margin-top: 2px;margin-bottom: 8px;">
                         <button class="btn btn-danger btn-sm btn-block" data-effect="effect-scale" data-toggle="modal" href="#modal_search_product" data-toggle="tooltip" title="بحث عن صنف" style="height: 30px;">
                             <i class="fas fa-search-plus" style="font-size: 18px !important;"></i>
                         </button>
-                    </div>
+                    </div>--}}
                 </div>
             </div>
             {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
@@ -271,7 +283,7 @@
                                 </tr>
                             </thead>
                             <tbody class="text-center">
-                                @for($i = 0; $i < 30; $i++)
+                                {{--@for($i = 0; $i < 30; $i++)
                                     <tr>
                                         <th>{{ $i+1 }}</th>
                                         <td>
@@ -287,7 +299,7 @@
                                         <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
                                         <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
                                     </tr>
-                                @endfor
+                                @endfor--}}
                             </tbody>
                         </table>
                     </div>
@@ -371,195 +383,154 @@
     <!-- custom js -->
     <script src="{{ asset('back') }}/assets/js/custom.js"></script>
 
-    <script>
 
-        // start reload page when click refresh_page btn
-        $(".refresh_page").on("click", function(){
-            alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من إلغاء المعاملة</p>', 
-                function(){
-                    location.reload();
-                },function(){
-                    
-                    
-                }).set({
-                    labels:{
-                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
-                        cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
-                    }
-            });
-        });
-        // end reload page when click refresh_page btn
-
-
-        // start when change clients or suppliers
-        $(document).ready(function() {
-            const $clients = $(".clients").selectize();
-            const $suppliers = $(".suppliers").selectize();
-
-            const clientsSelectize = $clients[0].selectize;
-            const suppliersSelectize = $suppliers[0].selectize;
-
-            // start function check if checked client and supplier in same time
-            function checKifFoundCliendAndSupplierVal(){
-                if($('.clients').val() && $('.suppliers').val() ){
-                    clientsSelectize.clear();
-                    suppliersSelectize.clear();
-
-                    alertify
-                    .dialog('alert')
-                    .set({transition:'slide',message: `
-                        <div style="text-align: center;font-weight: bold;">
-                            <p style="color: red;font-size: 18px;margin-bottom: 10px;">خطأ <i class="fas fa-exclamation-triangle" style="margin: 0px 3px;"></i></p>
-                            <p>يجب أن تكون المعاملة مسنودة إلي عميل أو مودر، وليس كلاهما معاً</p>
-                        </div>
-                    `, 'basic': true})
-                    .show();  
-
-                    
-                }
-            }
-            // end function check if checked client and supplier in same time
-
-
-
-
-            // start function get cleint or supplier info
-            //function clientOrSupplier($id){
-            //    const url = `{{ url('treasury_bills/create/get_client_or_supplier') }}/${id}`;
-
-            //    $.ajax({
-            //        type: "GET",
-            //        url: url,
-            //        success: function(res){
-                        
-            //        }
-            //    });
-                                    
-            //}
-            // end function get cleint or supplier info
-
-
-
-            clientsSelectize.on('change', function(value) {
-                checKifFoundCliendAndSupplierVal();
-            });
-
-            suppliersSelectize.on('change', function(value) {
-                checKifFoundCliendAndSupplierVal();
-            });
-        });
-        // end when change clients or suppliers
-
-
-
-
-        
-        // start save treasury bill when click save bill btn
-        $("#save_bill").on("click", function(){
-
-            const treasury_type = $("#treasury_type").val();
-            const treasury_id = $("#treasury_id").val();
-            const client = $(".clients").val();
-            const supplier = $(".suppliers").val();
-            const value = $("#value").val();
-
-            $("#overlay_page").fadeIn();
-
-
-            if(!treasury_type){
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("نوع المعاملة مطلوب");
-                
-                $("#overlay_page").fadeOut();
-                
-            }else if(!treasury_id){
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error(" الخزينة المالية مطلوبة");
-                
-                $("#overlay_page").fadeOut();
-
-            }else if(!client && !supplier){
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("يُرجى اختيار عميل أو مورد لإتمام المعاملة");
-                
-                $("#overlay_page").fadeOut();
-
-            }else if(!value){
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("مبلغ المعاملة مطلوب");
-                
-                $("#overlay_page").fadeOut();
-
-            }else{
-
-                $("#overlay_page").fadeOut();
-
-                alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من حفظ المعاملة في الخزينة المالية ؟</p>', 
-                    function(){
     
-                        //$.ajax({
-                        //    url: "{{ url($pageNameEn) }}/store",
-                        //    type: 'POST',
-                        //    processData: false,
-                        //    contentType: false,
-                        //    data: new FormData($('.modal #form')[0]),
-                        //    beforeSend:function () {
-                        //        $('form [id^=errors]').text('');
-                        //    },
-                        //    error: function(res){
-                        //        $.each(res.responseJSON.errors, function (index , value) {
-                        //            $(`form #errors-${index}`).css('display' , 'block').text(value);
-                        //        });               
-                                
-                        //        $('.dataInput:first').select().focus();
-                        //        document.querySelector('.modal #save').disabled = false;
-                        //        document.querySelector('.spinner_request').style.display = 'none';                
+    @include('back.purchases.css_js.main_js')
     
-                        //        alertify.set('notifier','position', 'top-center');
-                        //        alertify.set('notifier','delay', 3);
-                        //        alertify.error("هناك شيئ ما خطأ");
-                        //    },
-                        //    success: function(res){
-    
-                        //        document.querySelector('.modal #save').disabled = false;
-                        //        document.querySelector('.spinner_request').style.display = 'none';
-    
-                        //        $(".modal").modal('hide');
-                                
-                        //        alertify.set('notifier','position', 'top-center');
-                        //        alertify.set('notifier','delay', 6);
-                        //        alertify.success(`تم التحويل بنجاح`);
-                                
-                        //        location.reload();
-                        //    }
-                        //});
-                    },function(){
-                        
-                    }).set({
-                        labels:{
-                            ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
-                            cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
-                        }
-                });
-            }
+    @include('back.purchases.js.top_main_search')
 
-
-
-        });
-        // end save treasury bill when click save bill btn
-    </script>
-
-
-    <script>
-        @include('back.purchases.css_js.main_js')
-    </script>
+    @include('back.purchases.js.add_product_to_table_products')
 
     {{--  start refresh_page  --}}
-        @include('back.layouts.refresh_page')
+    @include('back.layouts.refresh_page')
     {{--  end refresh_page  --}}
+
+
+    <script>
+        // start focus main_input_search when page load
+        $(document).ready(function(){
+            $("#main_input_search").focus();
+        });
+        // end focus main_input_search when page load
+        
+        
+        // start when focus main_input_search or focus out 
+        $("#main_input_search").focus(function() {
+            $(this).css('background', '#a5e3a5');
+        });
+        $("#main_input_search").blur(function() {
+            $(this).css('background', '#fff');
+        });
+        // end when focus main_input_search or focus out 
+
+
+        // start shortcut to focus input main_input_search
+        $(document).keydown(function(event) {
+            if (event.shiftKey && event.keyCode === 112) {
+                $('#main_input_search').focus();
+            }
+        });
+        // end shortcut to focus input main_input_search
+
+
+        // start when focus any input conatin class focus_input
+        $('.focus_input').focus(function(){
+            $(this).select();
+        });
+        // end when focus any input conatin class focus_input
+
+
+        // start when click out of hidden_div_main_search
+        $(document).on("click", function (event) {
+            if (!$(event.target).closest("#hidden_div_main_search").length) {
+                $("#hidden_div_main_search").hide(); 
+            }
+        });
+        // end when click out of hidden_div_main_search
+        
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#products_selectize').selectize({
+                valueField: 'id',  // القيمة المخزنة عند الاختيار
+                labelField: 'nameAr', // النص الظاهر للمستخدم
+                searchField: ['id', 'nameAr', 'nameEn'], // البحث في كل الحقول
+                loadThrottle: 300, // تقليل عدد الطلبات عند البحث
+                maxItems: 1, // اختيار عنصر واحد فقط
+                create: false, // منع إضافة عناصر جديدة
+                preload: 'focus', // تحميل البيانات عند التركيز على الحقل
+                render: {
+                    option: function(item, escape) {
+                        return `<option>
+                                    كود: ( ${escape(item.id)} ) - 
+                                    الصنف: ( ${escape(item.nameAr)} ) - 
+                                    س بيع: ( ${escape(item.sellPrice)} ) - 
+                                    س شراء: ( ${escape(item.purchasePrice)} )
+                                
+                                </option>`;
+                    },
+                    item: function(item, escape) {
+                        return `<div>
+                                    كود: ( ${escape(item.id)} ) - 
+                                    الصنف: ( ${escape(item.nameAr)} ) - 
+                                    س بيع: ( ${escape(item.sellPrice)} ) - 
+                                    س شراء: ( ${escape(item.purchasePrice)} )
+                                </div>`;
+                    }
+                },
+                load: function(query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: `{{ url('search_products_by_selectize') }}`, // رابط البحث
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { q: query },
+                        success: function(response) {
+                            if (response.items && Array.isArray(response.items)) {
+                                callback(response.items);
+                            } else {
+                                console.error("البيانات غير صحيحة:", response);
+                                callback([]);
+                            }
+                        },
+                        error: function(error) {
+                            console.error("خطأ في جلب البيانات:", error);
+                            callback([]);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+        $('#products_selectize').change(function() {
+            var productId = $(this).val();
+            
+            
+            if(productId){
+                if ($(`#products_table tbody #tr_${productId}`).length > 0) {
+                    alertify.set('notifier','position', 'bottom-center');
+                    alertify.set('notifier','delay', 3);
+                    alertify.error("تم إضافة الصنف من قبل لأصناف الفاتورة");
+
+                } else {
+                    $('#products_table tbody').append(`
+                        <tr id="tr_${productId}">
+                            <th>${productId}</th>
+                            <td>
+                                <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();"><i class="fas fa-times"></i></button>
+                            </td>
+                            <td class="prod_name">ابليك مجزع اسود ف دهبي مقاس 10 اكس</td>
+                            <td>20</td>
+                            <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="1"></td>
+                            <td>600</td>
+                            <td>600.00</td>
+                            <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
+                            <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
+                            <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
+                            <td><input type="number" class="form-control form-control-sm text-center bill_qty" value="0"></td>
+                        </tr>
+                    `);
+                }
+            }
+        });
+        });
+    </script>
+
 </body>
 </html>
