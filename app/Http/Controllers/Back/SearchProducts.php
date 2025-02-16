@@ -21,6 +21,7 @@ class SearchProducts extends Controller
 
         $items = Product::where('nameAr', 'like', "%$query%")
                         ->orWhere('nameEn', 'like', "%$query%")
+                        ->orderBy('nameAr', 'asc')
                         ->limit(50)
                         ->get(['id', 'nameAr', 'nameEn', 'sellPrice', 'purchasePrice']);
 

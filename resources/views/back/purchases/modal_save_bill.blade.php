@@ -27,7 +27,7 @@
                         <div class="">
                             <label for="status">المبلغ المدفوع</label>
                             <div>    
-                                <input type="text" name="status" class="form-control status" id="status" placeholder="المبلغ المدفوع" style="font-size: 18px !important;text-align: center;">
+                                <input type="text" name="status" class="form-control" id="status" placeholder="المبلغ المدفوع" style="font-size: 18px !important;text-align: center;">
                             </div>
                             <bold class="text-danger" id="errors-status" style="display: none;"></bold>
                         </div>
