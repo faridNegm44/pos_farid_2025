@@ -4,93 +4,76 @@
 
             <!-- Modal Header -->
             <div class="modal-header" style="position: relative;">
-                <h6 class="modal-title">دفع الآن</h6>
+                <h6 class="modal-title">حفظ فاتورة المشتريات</h6>
                 <button type="button" class="close" data-dismiss="modal" style="position: absolute;left: 4px;color: red;">&times;</button>
             </div>
 
             <!-- Modal Body -->
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-8" style="margin-bottom: 15px;">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <table id="treasury_tbl" class="table table-bordered text-center">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th style="width: 10%;">#</th>
-                                            <th style="width: 30%;">اسم الخزينة</th>
-                                            <th style="width: 20%;">المبلغ</th>
-                                            <th style="width: 40%;">ملاحظات</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>درج النقدية اليومي<input type="hidden" name="price_id[]" value="1"></td>
-                                            <td><input type="text" class="form-control text-center priceCash numValidate focused" name="price_cash[]" value="0" autocomplete="off"></td>
-                                            <td><input type="text" class="form-control" name="price_note[]" placeholder="ملاحظات"></td>
-                                        </tr>
-                                    
-                                        <tr>
-                                            <td>2</td>
-                                            <td>انستاباي ايهاب<input type="hidden" name="price_id[]" value="2"></td>
-                                            <td><input type="text" class="form-control text-center priceCash numValidate focused" name="price_cash[]" value="0" autocomplete="off"></td>
-                                            <td><input type="text" class="form-control" name="price_note[]" placeholder="ملاحظات"></td>
-                                        </tr>
-                                    
-                                        <tr>
-                                            <td>3</td>
-                                            <td>انستاباي حسام<input type="hidden" name="price_id[]" value="3"></td>
-                                            <td><input type="text" class="form-control text-center priceCash numValidate focused" name="price_cash[]" value="0" autocomplete="off"></td>
-                                            <td><input type="text" class="form-control" name="price_note[]" placeholder="ملاحظات"></td>
-                                        </tr>
-                                    
-                                        <tr>
-                                            <td>4</td>
-                                            <td>محفظة فودافون كاش<input type="hidden" name="price_id[]" value="4"></td>
-                                            <td><input type="text" class="form-control text-center priceCash numValidate focused" name="price_cash[]" value="0" autocomplete="off"></td>
-                                            <td><input type="text" class="form-control" name="price_note[]" placeholder="ملاحظات"></td>
-                                        </tr>
-                                    
-                                        <tr>
-                                            <td>5</td>
-                                            <td>درج ترحيل<input type="hidden" name="price_id[]" value="5"></td>
-                                            <td><input type="text" class="form-control text-center priceCash numValidate focused" name="price_cash[]" value="0" autocomplete="off"></td>
-                                            <td><input type="text" class="form-control" name="price_note[]" placeholder="ملاحظات"></td>
-                                        </tr>
-                                
-                                        <tr>
-                                            <td>6</td>
-                                            <td>درج فريد نجم<input type="hidden" name="price_id[]" value="6"></td>
-                                            <td><input type="text" class="form-control text-center priceCash numValidate focused" name="price_cash[]" value="0" autocomplete="off"></td>
-                                            <td><input type="text" class="form-control" name="price_note[]" placeholder="ملاحظات"></td>
-                                        </tr>
-                                </tbody>
-                                </table>
+                    <div class="col-lg-6">
+                        <div class="">
+                            <label for="status">خزن النظام</label>
+                            <div>    
+                                <select  name="status" class="form-control status" id="status">
+                                    <option value="" selected>اختر خزينة</option>
+                                    <option value="1">خ 1</option>
+                                    <option value="0">خ2 </option>
+                                </select>
                             </div>
+                            <bold class="text-danger" id="errors-status" style="display: none;"></bold>
+                        </div>
+                        
+                        <div class="">
+                            <label for="status">المبلغ المدفوع</label>
+                            <div>    
+                                <input type="text" name="status" class="form-control status" id="status" placeholder="المبلغ المدفوع" style="font-size: 18px !important;text-align: center;">
+                            </div>
+                            <bold class="text-danger" id="errors-status" style="display: none;"></bold>
+                        </div>
+                        
+                        <div class="">
+                            <label for="status">ملاحظات</label>
+                            <div>    
+                                <input type="text" name="status" class="form-control status" id="status" placeholder="ملاحظات">
+                            </div>
+                            <bold class="text-danger" id="errors-status" style="display: none;"></bold>
                         </div>
                     </div>
                     
-                    <div class="col-lg-4" style="font-size: 14px;">
-                        <div class="total_items" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;font-weight: bold;">
-                            عدد العناصر:
-                            <span style="font-size: 20px;">2</span>
-                        </div>
-    
-                        <div class="" style="background: rgb(82, 82, 82);border: 1px dashed;color: #fff;padding: 7px 10px;margin-bottom: 10px;font-weight: bold;">
-                            المستحق دفعة:
-                            <span style="font-size: 23px;" id="total_amount">1491.12</span>
-                        </div>
-    
-                        <div class="" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;font-weight: bold;">
-                            إجمالي المدفوع:
-                            <span style="font-size: 23px;" id="sumPriceCash">0</span>
-                        </div>
-    
-                        <div class="" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;font-weight: bold;">
-                            متبقي:
-                            <span style="font-size: 20px;" id="minPriceCash">0</span>
+                    <div class="col-lg-6">    
+                        <div class="text-center" style="margin-bottom: 10px;">
+                            مورد: <span>ايهاب مسلم</span>
+
+                            <table class="table table-striped table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>دائن (له)</th>
+                                        <th>مدين (علية)</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    <tr>
+                                        <td>10.000</td>
+                                        <td>0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr>
+
+                            <div class="row justify-content-center">
+                                <button class="col-lg-6 col-12 btn btn-success btn-rounded mb-2" id="save_bill"  data-toggle="tooltip" title="حفظ الفاتورة">
+                                    <i class="fas fa-check-double"></i> 
+                                    <span>حفظ الفاتورة</span>
+                                </button>
+                
+                                <button class="col-lg-6 col-12 btn btn-primary btn-rounded mb-2 refresh_page">
+                                    <i class="fas fa-trash-alt"></i> 
+                                    <span>حفظ وطباعة</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

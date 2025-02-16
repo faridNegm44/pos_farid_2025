@@ -265,7 +265,15 @@
     .alertify-notifier.ajs-center.ajs-bottom .ajs-message.ajs-visible{
         bottom: 40px !important;
     }
+
+
+    #modal_save_bill input, label{
+        font-size: 12px !important;
+    }
     
+    #modal_save_bill table td{
+        font-size: 16px !important;
+    }
 
     {{--  spinner overlay  --}}
     .overlay_div {

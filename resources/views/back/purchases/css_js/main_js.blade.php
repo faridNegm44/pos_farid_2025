@@ -1,40 +1,35 @@
 <script>
-    // strt count table tr
-    function countTableTr(selector){
-        let countTableTr = $(selector).length;
-        $('#countTableTr span').text(countTableTr);
-    }
-    countTableTr('#pos_create #products_table tbody tr');
-    // end count table tr
+    // start focus products_selectize when page load
+    $(document).ready(function(){
+        $("#products_selectize")[0].selectize.focus();
+    });
+    // end focus products_selectize when page load
+        
+    
 
-
-    // start remove This Tr on table
-        function removeThisTr(selector) {
-            $(selector).on('click', '.remove_this_tr', function (e) { 
-                $(this).closest('tr').fadeOut(100, function(){
-                    $(this).remove();
-
-                    // countdown the tr pos_create page
-                    countTableTr('#pos_create #products_table tbody tr');
-                });    
-            });
+    // start focus product input search when click altKey + ctrlKey
+    $(document).bind('keydown', function(event) {
+        if( event.altKey  && event.ctrlKey) {
+            $("#products_selectize")[0].selectize.focus();
         }
-    // end remove This Tr on table
+    });
+    // end focus product input search when click altKey + ctrlKey
+
 
 
     // start focus the input[type="number"]
-        $('input[type="number"], .focused').on('focus', function() {
-            $(this).select();
-        });
+    $(document).on('focus', 'input[type="number"], .focused, .focus_input', function() {
+        $(this).select();
+    });
     // end focus the input[type="number"]
 
 
     // start valid if input[type="number"].val < 1
-        $('input[type="number"]').on('input', function() {
-            if ($(this).val() < 1) {
-                $(this).val(1);
-            }
-        });
+        //$(document).on('input', 'input[type="number"]', function() {
+        //    if ($(this).val() < 1) {
+        //        $(this).val(1);
+        //    }
+        //});
     // end valid if input[type="number"].val < 1
 
     // start cancel enter button 
@@ -44,23 +39,7 @@
             }
         });
     // end cancel enter button 
-
-
-    // start open modal when click button (insert) to search products
-        document.addEventListener('keydown', function(event){
-            if( event.which === 45 ){
-                $('#modal_search_product').modal('show');
-            }
-        });
-    // end open modal when click button (insert) to search products
-
-    // start open modal calc when click button when click ctrl+/
-        $(document).bind('keydown', function(event) {
-            if( event.which === 191 && event.ctrlKey ) {
-                $('#calc').modal('show');
-            }
-        });
-    // end open modal calc when click button when click ctrl+/
+    
 
 
     // start get current full date and time
@@ -100,4 +79,51 @@
             hideSelected: true
         });
     });
+
+
+
+
+
+
+
+
+
+
+
+    //  old data if making inpput search to products not selectize search
+                    //// start focus main_input_search when page load
+                    //$(document).ready(function(){
+                    //        $("#main_input_search").focus();
+                    //    });
+                    //    // end focus main_input_search when page load
+                        
+                        
+                    //    // start when focus main_input_search or focus out 
+                    //    $("#main_input_search").focus(function() {
+                    //        $(this).css('background', '#a5e3a5');
+                    //    });
+                    //    $("#main_input_search").blur(function() {
+                    //        $(this).css('background', '#fff');
+                    //    });
+                    //    // end when focus main_input_search or focus out 
+
+
+                    //    // start shortcut to focus input main_input_search
+                    //    $(document).keydown(function(event) {
+                    //        if (event.shiftKey && event.keyCode === 112) {
+                    //            $('#main_input_search').focus();
+                    //        }
+                    //    });
+                    //    // end shortcut to focus input main_input_search
+
+
+
+                    //    // start when click out of hidden_div_main_search
+                    //    $(document).on("click", function (event) {
+                    //        if (!$(event.target).closest("#hidden_div_main_search").length) {
+                    //            $("#hidden_div_main_search").hide(); 
+                    //        }
+                    //    });
+                    //    // end when click out of hidden_div_main_search
+    //  old data if making inpput search to products not selectize search
 </script>
