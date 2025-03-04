@@ -21,8 +21,6 @@
 @endsection
 
 @section('content')
-sssss
-
 	{{--<div class="container-fluid">
 		
 		<!-- breadcrumb -->
