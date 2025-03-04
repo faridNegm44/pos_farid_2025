@@ -1,6 +1,8 @@
 <script>
     $(".modal #save").click(function(e){
         e.preventDefault();
+        document.querySelector('.modal #save').disabled = true;        
+        document.querySelector('.spinner_request').setAttribute("style", "display: inline-block;");
 
         $.ajax({
             url: "{{ url($pageNameEn) }}/store",
@@ -16,17 +18,22 @@
                 alertify.set('notifier','delay', 4);
                 alertify.error("هناك شيئ ما خطأ");
 
-
-                console.log(res.responseJSON.errors);
+                document.querySelector('.modal #save').disabled = false;
+                document.querySelector('.spinner_request').style.display = 'none';                
 
                 $.each(res.responseJSON.errors, function (index , value) {
                     $(`form #errors-${index}`).css('display' , 'block').text(value);
                 });
             },
             success: function(res){
-                $(".modal").modal('hide');
-                $('#datatable').DataTable().ajax.reload( null, false );
+                $('#example1').DataTable().ajax.reload( null, false );
                 $(".modal form bold[class=text-danger]").css('display', 'none');
+        
+                $(".dataInput").val('');
+                $('.dataInput:first').select().focus();
+
+                document.querySelector('.modal #save').disabled = false;
+                document.querySelector('.spinner_request').style.display = 'none';
 
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 4);

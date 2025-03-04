@@ -1,5 +1,6 @@
 <?php
 use App\Models\Back\Setting;
+use App\Models\Back\User;
 use Illuminate\Support\Facades\DB;
 
 // start get GeneralSettingsInfo
@@ -9,6 +10,14 @@ use Illuminate\Support\Facades\DB;
         }
     }
 // end get GeneralSettingsInfo`
+
+// start get authUserInfo
+    if (!function_exists('authUserInfo')) {
+        function authUserInfo(){
+            return User::where('id', auth()->user()->id)->first();
+        }
+    }
+// end get authUserInfo`
 
 
 //// start function role_permissions

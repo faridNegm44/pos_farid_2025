@@ -32,7 +32,7 @@ Route::get('clear_cache', function() {
      return view('back.404');
 });
 // , 'middleware' => 'checkLogin' , 'middleware' => 'throttle'
-Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back'], function(){
+Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'middleware' => 'checkLogin'], function(){
 
     Route::get('/', 'HomeController@index');
 

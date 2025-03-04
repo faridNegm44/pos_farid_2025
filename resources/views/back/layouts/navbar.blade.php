@@ -124,12 +124,7 @@
 
                     <li aria-haspopup="true"><a href="{{ url('/') }}" class="sub-icon">الموظفين<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
-                            <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">Morris Charts</a></li>
-                            <li aria-haspopup="true"><a href="chart-flot.html" class="slide-item">Flot Charts</a></li>
-                            <li aria-haspopup="true"><a href="chart-chartjs.html" class="slide-item">ChartJS</a></li>
-                            <li aria-haspopup="true"><a href="chart-echart.html" class="slide-item">Echart</a></li>
-                            <li aria-haspopup="true"><a href="chart-sparkline.html" class="slide-item">Sparkline</a></li>
-                            <li aria-haspopup="true"><a href="chart-peity.html" class="slide-item"> Chart-peity</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('/users') }}" class="slide-item">مستخدمين النظام</a></li>
                         </ul>
                     </li>
 

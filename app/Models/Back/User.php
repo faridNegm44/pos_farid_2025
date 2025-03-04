@@ -73,23 +73,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'branch',
-        'name',
-        'email',
-        'password_text',
-        'password',
-        'login_name',
-        'login_barcode',
-        'phone',
-        'role',
-        'theme',
-        'address',
-        'nat_id',
-        'birth_date',
-        'image',
-        'gender',
-        'status',
-        'note',
+        'name', 'email', 'password', 'login_barcode', 'phone', 'role', 'theme', 'address', 'nat_id', 'birth_date', 'image', 'gender', 'status', 'last_login_time', 'note'
     ];
 
     /**
@@ -110,13 +94,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function role_relation(){
-        return $this->belongsTo("App\Models\Back\RolesPermissions" , "role");
-    }
-
-    public function branchRelUsers (): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Branch::class, 'branch');
-    }
 }

@@ -9,6 +9,7 @@ use App\Models\Back\User;
 use App\Models\Back\RolesPermissions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rule;
@@ -18,7 +19,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $pageNameAr = 'المستخدمين';
+        $pageNameAr = 'مستخدمين النظام';
         $pageNameEn = 'users';
         // $permissions = RolesPermissions::all();
         return view('back.users.index' , compact('pageNameAr' , 'pageNameEn'));
@@ -28,63 +29,51 @@ class UsersController extends Controller
     {
         if (request()->ajax()){
             $this->validate($request , [
-                'name' => 'required|string',
-                'email' => 'required|unique:users,email',
-                'birth_date' => 'date' ,
-                'phone' => 'required|integer',
-                'address' => 'required|string',
-                'nat_id' => 'integer|min:14',                
-                'password' => [
-                    'required',
-                    Password::min(8)
-                        ->mixedCase()
-                        ->numbers()
-                        ->symbols()
-                        ->uncompromised(),
-                ],
-                'confirmed_password' => [
-                    'required',
-                    'same:password',
-                    Password::min(8)
-                        ->mixedCase()
-                        ->numbers()
-                        ->symbols()
-                        ->uncompromised(),
-                ],
-            
+                'name' => 'required|string|max:100|unique:users,name',
+                'email' => 'required|string|email|max:100|unique:users,email',
+                'gender' => 'required|in:ذكر,انثي' ,
+                'birth_date' => 'nullable|date' ,
+                'phone' => 'nullable|numeric',
+                'address' => 'nullable|string',
+                'nat_id' => 'nullable|min:14|numeric|unique:users,nat_id',
+                'password' => ['required', 'string', Password::min(6)], // ->mixedCase()->numbers()->symbols()
+                'confirmed_password' => 'required|same:password',
+                //'role' => 'required',
+                'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1500',
+                'status' => 'required|in:1,0',
+                'note' => 'nullable|string',
             ],[
-                'name.required' => 'حقل الإسم مطلوب',
-                'name.string' => 'حقل الإسم يجب ان يكون من نوع نص',
-                
-                'email.required' => 'حقل البريد الإلكتروني مطلوب',
-                'email.unique' => ' البريد الإلكتروني مستخدم من قبل',
-
-                'birth_date' => 'حقل تاريخ الميلاد يجب ان يكون من نوع تاريخ',
-                
-                'phone.required' => 'حقل التليفون مطلوب',
-                'phone.integer' => 'حقل التليفون يجب ان يكون من نوع رقم',
-
-                'address.required' => 'حقل العنوان مطلوب',
-                'address.string' => 'حقل العنوان يجب ان يكون من نوع نص',
-                
-                'nat_id.integer' => 'حقل الرقم القومي يجب ان يكون من نوع رقم',
-                'nat_id.min' => 'الرقم القومي يجب ان يتكون على الأقل من 14 رقم',
-        
-                'password.required' => 'كلمة المرور مطلوبة',
-                'password.min' => 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل',
-                'password.mixedCase' => 'يجب أن تحتوي كلمة المرور على حروف كبيرة وصغيرة',
-                'password.numbers' => 'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل',
-                'password.symbols' => 'يجب أن تحتوي كلمة المرور على رمز واحد على الأقل',
-                'password.uncompromised' => 'كلمة المرور ضعيفة أو مستخدمة في مكان آخر، يرجى اختيار كلمة مرور أخرى',
-                
-                'confirmed_password.required' => 'كلمة المرور مطلوبة',
-                'confirmed_password.same' => ' كلمني المرور غير متطابقتين',
-                'confirmed_password.min' => 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل',
-                'confirmed_password.mixed_case' => 'يجب أن تحتوي كلمة المرور على حروف كبيرة وصغيرة',
-                'confirmed_password.numbers' => 'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل',
-                'confirmed_password.symbols' => 'يجب أن تحتوي كلمة المرور على رمز واحد على الأقل',
-                'confirmed_password.uncompromised' => 'كلمة المرور ضعيفة أو مستخدمة في مكان آخر، يرجى اختيار كلمة مرور أخرى',
-                
+                'required' => ':attribute مطلوب.',
+                'string' => ':attribute غير صحيح.',
+                'numeric' => ':attribute غير صحيح.',
+                'date' => ':attribute يجب ان يكون تاريخ.',
+                'email' => ':attribute البريد الإلكتروني.',
+                'unique' => ':attribute مستخدم من قبل.',
+                'min' => ':attribute أقل من القيمة المطلوبة.',
+                'nat_id.min' => ':attribute يجب أن يكون على الأقل :min رقم.',
+                'same' => ':attribute غير مطابقة مع كلمة المرور.',
+                'mimes' => ':attribute يجب أن تكون من نوع JPG أو PNG أو JPEG أو GIF.',
+                'max' => ':attribute كبير عن المطلوب.',
+                'password.min' => ':attribute يجب أن تكون كلمة المرور على الأقل 6 أحرف.',
+                'password.mixed_case' => ':attribute يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة.',
+                'password.numbers' => ':attribute يجب أن تحتوي كلمة المرور على أرقام.',
+                'password.symbols' => ':attribute يجب أن تحتوي كلمة المرور على رموز.',
+            ],[
+                'name' => 'إسم المستخدم',
+                'email' => 'البريد الإلكتروني',
+                'gender' => 'نوع المستخدم',
+                'birth_date' => 'تاريخ الميلاد',
+                'phone' => 'التليفون',
+                'address' => 'العنوان',
+                'nat_id' => 'الرقم القومي',
+                'role' => 'تراخيص المستخدم',
+                'status' => 'حالة المستخدم',
+                'address' => 'العنوان',
+                'nat_id' => 'الرقم القومي',
+                'password' => 'كلمة المرور',
+                'confirmed_password' => 'تأكيد كلمة المرور',
+                'theme' => 'ثيم النظام',
+                'image' => 'صورة المستخدم',
             ]);
 
             if($request->hasFile('image')){
@@ -97,13 +86,13 @@ class UsersController extends Controller
                 $name = "df_image.png";
             }
 
+            $data = request()->except(['_token', 'confirmed_password', 'image_hidden']);
+            $data['password'] = Hash::make(request()->get('password'));
+            $data['role'] = 1;
+            $data['theme'] = 1;
+            $data['image'] = $name;
 
-            $request['password_text'] = $request->get('password');
-            $request['password'] = Hash::make($request->get('password'));
-            $request['role'] = $request->get('user_role');
-            $request['image'] = $name;
-
-            User::create($request->all());
+            User::insert($data);
         }
     }
 
@@ -120,81 +109,76 @@ class UsersController extends Controller
     {
         if (request()->ajax()){
 
-            $find = User::whereId($id)->first();
+            $find = User::where('id', $id)->first();
 
             $this->validate($request , [
-                'branch' => 'required|integer',
-                'name' => 'required|string',
-                'email' => [
-                    'nullable', 'email',
-                    Rule::unique('users')->ignore($id , 'id')->where(function ($query) use ($request) {
-                        return $query->where('branch', $request->get('branch'));
-                    }),
-                ],
+                'name' => 'required|string|max:100|unique:users,name,'.$id,
+                'email' => 'required|string|email|max:100|unique:users,email,'.$id,
                 'gender' => 'required|in:ذكر,انثي' ,
-                'birth_date' => 'required|date' ,
-                'phone' => [
-                    'required' , 'numeric',
-                    Rule::unique('users')->ignore($id , 'id')->where(function ($query) use ($request) {
-                        return $query->where('branch', $request->get('branch'));
-                    }),
-                ],
-                'address' => 'required|string',
-                'nat_id' => [
-                    'required' , 'numeric',
-                    Rule::unique('users')->ignore($id , 'id')->where(function ($query) use ($request) {
-                        return $query->where('branch', $request->get('branch'));
-                    }),
-                ],
-                'login_name' => [
-                    'required' , 'string',
-                    Rule::unique('users')->ignore($id , 'id')->where(function ($query) use ($request) {
-                        return $query->where('branch', $request->get('branch'));
-                    }),
-                ],
-                'password' => 'required|min:6',
-                'confirmed_password' => 'required|min:6|same:password',
-                'theme' => 'required|in:light,dark' ,
-                'status' => 'required|boolean'
-            ],
-                [
-                    'required' => 'حقل :attribute إلزامي.',
-                    'integer' => 'حقل :attribute غير صحيح.',
-                    'unique' => 'حقل :attribute غير صحيح.',
-                    'min' => 'حقل :attribute يجب ان يكون مكون من 14 رقم.',
-                    'max' => 'حقل :attribute يجب ان يكون مكون من 14 رقم.',
-                ],
-                [
-                    'branch' => 'الفرع',
-                    'name' => 'اسم الموظف',
-                    'email' => 'ايميل الموظف',
-                    'login_name' => 'اسم المستخدم',
-                    'birth_date' => 'تاريخ الميلاد',
-                    'phone' => 'تليفون الموظف',
-                    'address' => 'عنوان الموظف',
-                    'nat_id' => 'الرقم القومي',
-                    'password' => 'كلمة المرور',
-                    'confirmed_password' => 'تاكيد كلمة المرور',
-                ]
-            );
+                'birth_date' => 'nullable|date' ,
+                'phone' => 'nullable|numeric',
+                'address' => 'nullable|string',
+                'nat_id' => 'nullable|min:14|numeric|unique:users,nat_id,'.$id,
+                'password' => ['nullable', 'string', Password::min(6)], // ->mixedCase()->numbers()->symbols()
+                'confirmed_password' => 'nullable|same:password',
+                //'role' => 'required',
+                'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1500',
+                'status' => 'required|in:1,0',
+                'note' => 'nullable|string',
+            ],[
+                'required' => ':attribute مطلوب.',
+                'string' => ':attribute غير صحيح.',
+                'numeric' => ':attribute غير صحيح.',
+                'date' => ':attribute يجب ان يكون تاريخ.',
+                'email' => ':attribute البريد الإلكتروني.',
+                'unique' => ':attribute مستخدم من قبل.',
+                'min' => ':attribute أقل من القيمة المطلوبة.',
+                'nat_id.min' => ':attribute يجب أن يكون على الأقل :min رقم.',
+                'same' => ':attribute غير مطابقة مع كلمة المرور.',
+                'mimes' => ':attribute يجب أن تكون من نوع JPG أو PNG أو JPEG أو GIF.',
+                'max' => ':attribute كبير عن المطلوب.',
+                'password.min' => ':attribute يجب أن تكون كلمة المرور على الأقل 6 أحرف.',
+                'password.mixed_case' => ':attribute يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة.',
+                'password.numbers' => ':attribute يجب أن تحتوي كلمة المرور على أرقام.',
+                'password.symbols' => ':attribute يجب أن تحتوي كلمة المرور على رموز.',
+            ],[
+                'name' => 'إسم المستخدم',
+                'email' => 'البريد الإلكتروني',
+                'gender' => 'نوع المستخدم',
+                'birth_date' => 'تاريخ الميلاد',
+                'phone' => 'التليفون',
+                'address' => 'العنوان',
+                'nat_id' => 'الرقم القومي',
+                'role' => 'تراخيص المستخدم',
+                'status' => 'حالة المستخدم',
+                'address' => 'العنوان',
+                'nat_id' => 'الرقم القومي',
+                'password' => 'كلمة المرور',
+                'confirmed_password' => 'تأكيد كلمة المرور',
+                'theme' => 'ثيم النظام',
+                'image' => 'صورة المستخدم',
+            ]);
 
-            if($request->hasFile('image')){
+            if(request('image') == ""){
+                $name = $find['image'];
+            }else{
                 $file = request('image');
                 $name = time() . '.' .$file->getClientOriginalExtension();
                 $path = public_path('back/images/users');
                 $file->move($path , $name);
+
+                if(request("image_hidden") != "df_image.png"){
+                    File::delete(public_path('back/images/users/'.$find['image']));
+                }
             }
-            else{
-                $name = $find['image'];
-            }
 
+            $data = request()->except(['_token', 'confirmed_password', 'image_hidden']);
+            $data['password'] = request('password') ? Hash::make(request('password')) : $find['password'];
+            $data['role'] = 1;
+            $data['theme'] = 1;
+            $data['image'] = $name;
 
-            $request['password_text'] = $request->get('password');
-            $request['password'] = Hash::make($request->get('password'));
-            $request['role'] = $request->get('user_role');
-            $request['image'] = $name;
-
-            $find->update($request->all());
+            $find->update($data);
         }
     }
 
@@ -205,11 +189,25 @@ class UsersController extends Controller
     {
         $all = User::all();
         return DataTables::of($all)
+            ->addColumn('gender', function($res){
+                if($res->gender == 'ذكر'){
+                    return '<span class="badge badge-success" style="width: 40px;">ذكر</span>';
+                }
+                else{
+                    return '<span class="badge badge-danger" style="width: 40px;">أنثي</span>';
+                }
+            })
+            ->addColumn('image', function($res){
+                return '
+                    <a class="spotlight" title="'.$res->name.'" href="'.url('back/images/users/'.$res->image).'">
+                        <img src="'.url('back/images/users/'.$res->image).'" alt="'.$res->name.'" style="width: 25px;height: 25px;border-radius: 5px;margin: 0px auto;display: block;">
+                    </a>
+                ';
+            })
             ->addColumn('status', function($res){
                 if($res->status == 1){
                     return '<span class="badge badge-success" style="width: 40px;">نشط</span>';
-                }
-                else{
+                }else{
                     return '<span class="badge badge-danger" style="width: 40px;">معطل</span>';
                 }
             })
@@ -220,14 +218,9 @@ class UsersController extends Controller
                             <button class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
                                 <i class="fas fa-marker"></i>
                             </button>
-
-                            <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        
                         ';
             })
-            ->rawColumns(['status', 'action'])
+            ->rawColumns(['gender', 'image', 'status', 'action'])
             ->toJson();
     }
 

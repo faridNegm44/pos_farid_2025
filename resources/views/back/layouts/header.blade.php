@@ -3,11 +3,11 @@
     <div class="container-fluid">
         <div class="main-header-left ">
             <a class="animated-arrow hor-toggle horizontal-navtoggle"><span></span></a>
-            <a class="header-brand" href="index.html">
-                <img src="{{ asset('back') }}/assets/img/brand/farid_logo_web white.png" class="desktop-dark">
-                <img src="{{ asset('back') }}/assets/img/brand/farid_logo_web dark.png" class="desktop-logo">
-                <img src="{{ asset('back') }}/assets/img/brand/farid_fav.png" class="desktop-logo-1">
-                <img src="{{ asset('back') }}/assets/img/brand/farid_fav.png" class="desktop-logo-dark">
+            <a class="header-brand" href="{{ url('') }}">
+                <img src="{{ asset('back') }}/assets/img/brand/logo-white.png" class="desktop-dark">
+                <img src="{{ asset('back') }}/assets/img/brand/logo.png" class="desktop-logo">
+                <img src="{{ asset('back') }}/assets/img/brand/favicon.png" class="desktop-logo-1">
+                <img src="{{ asset('back') }}/assets/img/brand/favicon.png" class="desktop-logo-dark">
             </a>
 
 
@@ -332,14 +332,15 @@
                 </div>
 
                 <div class="dropdown main-profile-menu nav nav-item nav-link">
-                    <a class="profile-user d-flex" href="#"><img alt="" src="{{ asset('back') }}/assets/img/faces/6.jpg"></a>
+                    <a class="profile-user d-flex" href="#"><img alt="" src="{{ asset('back/images/users/'.authUserInfo()->image) }}"></a>
                     <div class="dropdown-menu">
                         <div class="main-header-profile bg-primary p-3">
                             <div class="d-flex wd-100p">
-                                <div class="main-img-user"><img alt="" src="{{ asset('back') }}/assets/img/faces/6.jpg" class=""></div>
+                                <div class="main-img-user"><img alt="" src="{{ asset('back/images/users/'.authUserInfo()->image) }}" class=""></div>
                                 <div class="mr-3 my-auto">
-                                    <h6>Petey Cruiser</h6><span>Premium Member</span>
-                                </div>
+                                    <h6>{{ authUserInfo()->name }}</h6>
+                                    <span>{{ authUserInfo()->role }}</span>
+                                </div> 
                             </div>
                         </div>
                         <a class="dropdown-item" href="profile.html"><i class="bx bx-user-circle"></i>Profile</a>
@@ -347,7 +348,7 @@
                         <a class="dropdown-item" href="mail-compose.html"><i class="bx bxs-inbox"></i>Inbox</a>
                         <a class="dropdown-item" href="mail.html"><i class="bx bx-envelope"></i>Messages</a>
                         <a class="dropdown-item" href="mail-settings.html"><i class="bx bx-slider-alt"></i> Account Settings</a>
-                        <a class="dropdown-item" href="signin.html"><i class="bx bx-log-out"></i> Sign Out</a>
+                        <a class="dropdown-item text-danger" href="{{ url('logout') }}"><i class="bx bx-log-out"></i> تسجيل خروج</a>
                     </div>
                 </div>
 

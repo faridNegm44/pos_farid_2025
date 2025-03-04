@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 	
@@ -12,7 +10,7 @@
 		<meta name="Author" content="Spruko Technologies Private Limited">
 		<meta name="Keywords" content="dashboard, admin, bootstrap admin template, codeigniter, php, php framework, codeigniter 4, php mvc, php codeigniter, best php framework, codeigniter admin, codeigniter dashboard, admin panel template, bootstrap 4 admin template, bootstrap dashboard template"/>
 
-		<title> أكاديمية اديوستديج |  404 </title>
+		<title> أكاديمية اديوستديج |  403 </title>
 
 		<!-- Favicon -->
 		<link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
@@ -54,15 +52,15 @@
 	<body class="main-body">
 			        
 		<!-- Page -->
-		<div class="bg-primary-transparent error-bg">
+		<div class="bg-primary-transparent error-bg" style="background: #8e0a56 !important;">
 			<div class="page">
 			
 			<!-- Main-error-wrapper -->
 			<div class="main-error-wrapper  page page-h ">
-				<img src="{{ asset('back') }}/assets/img/media/404.png" class="error-page" alt="error">
-				<h2>عذرًا. الصفحة التي تبحث عنها غير موجودة.</h2>
-				<h6>قد تكون قد أخطأت في كتابة العنوان أو ربما تم نقل الصفحة.</h6>
-                <a class="btn btn-outline-danger" href="{{ url('/back_dash') }}">العودة للصفحة الرئيسية</a>
+				<img src="{{ asset('back') }}/assets/img/media/403.png" class="error-page" alt="error">
+				<h2 class="text-white">عذرًا. لا تمتلك الصلاحيات للدخول لهذة الصفحة.</h2>
+				<h6 style="color: #d8d8d8">من فضلك راجع مسؤلين النظام قبل الدخول للصفحة المطلوبة.</h6>
+                <a class="btn btn-outline-light text-white" href="{{ url('/back_dash') }}">العودة للصفحة الرئيسية</a>
 			</div>
 			<!-- /Main-error-wrapper -->
 				

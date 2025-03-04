@@ -10,6 +10,15 @@
     <link href="{{ url('back') }}/assets/plugins/sweet-alert/sweetalert.css" rel="stylesheet">
     {{-- fileupload --}}
     <link href="{{ asset('back/assets/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {{-- spotlight --}}
+    <link href="{{ asset('back/assets/spotlight.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <style>
+        .pd-sm-40 {
+            padding: 40px 40px 0 !important;
+        }
+    </style>
 @endsection
 
 @section('footer')  
@@ -17,19 +26,38 @@
     <script src="{{ url('back') }}/assets/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="{{ url('back') }}/assets/js/sweet-alert.js"></script>
 
+    {{--  <!-- spotlight -->  --}}
+    <script src="{{ asset('back/assets/spotlight.bundle.js') }}"></script>
+    <script src="{{ asset('back/assets/spotlight.min.js') }}"></script>
+
     <!-- fileupload -->
     <script src="{{ asset('back/assets/file-upload-with-preview.min.js') }}"></script>
     <script> new FileUploadWithPreview('file_upload') </script>
 
-    {{-- start datatable script --}}
     <script>       
         $(document).ready(function () {
             // selectize
-            $('select').selectize({
-                hideSelected: true
+            $('selectize').selectize();
+            
+
+            // show password or hide
+            $('.show_pass').click(function(){
+                const password = $("#password");
+                const confirmed_password = $("#confirmed_password");
+
+                if(password.attr('type') == 'password' || confirmed_password.attr('type') == 'password'){
+                    password.attr('type', 'text');
+                    confirmed_password.attr('type', 'text');
+                    $('i.fa.fa-eye').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
+
+                }else if(password.attr('type') == 'text' || confirmed_password.attr('type') == 'text'){
+                    password.attr('type', 'password');
+                    confirmed_password.attr('type', 'password');
+                    $('i.fa.fa-eye-slash').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
+                }
             });
 
-            
+
             // DataTable
             $('#example1').DataTable({
                 processing: true,
@@ -38,9 +66,12 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'image', name: 'image'},
                     {data: 'name', name: 'name'},
                     {data: 'email', name: 'email'},
-                    {data: 'address', name: 'address'},
+                    {data: 'gender', name: 'gender'},
+                    {data: 'phone', name: 'phone'},
+                    {data: 'role', name: 'role'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false},
                 ],
@@ -52,7 +83,6 @@
         });
 
     </script>
-    {{-- end datatable script --}}
 
 
 
@@ -60,9 +90,6 @@
     {{-- add, edit, delete => script --}}
     @include('back.users.add')
     @include('back.users.edit')
-    @include('back.users.delete')
-
-
 @endsection
 
 @section('content')
@@ -93,10 +120,13 @@
                                 <thead>
                                     <tr>
                                         <th class="wd-15p border-bottom-0">#</th>
-                                        <th class="wd-15p border-bottom-0">الإسم</th>
-                                        <th class="wd-20p border-bottom-0">الإيميل</th>
-                                        <th class="wd-15p border-bottom-0">العنوان</th>
-                                        <th class="wd-10p border-bottom-0">الحالة</th>
+                                        <th class="wd-15p border-bottom-0">الصورة</th>
+                                        <th class="wd-15p border-bottom-0" style="width: 20%;">الإسم</th>
+                                        <th class="wd-20p border-bottom-0" style="width: 20%;">الإيميل</th>
+                                        <th class="wd-20p border-bottom-0">النوع</th>
+                                        <th class="wd-15p border-bottom-0">موبايل</th>
+                                        <th class="wd-15p border-bottom-0">التراخيص</th>
+                                        <th class="wd-10p border-bottom-0">نشط</th>
                                         <th class="wd-25p border-bottom-0">التحكم</th>
                                     </tr>
                                 </thead>

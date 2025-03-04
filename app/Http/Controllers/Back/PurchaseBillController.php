@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
 use App\Models\Back\ClientsAndSuppliers;
+use App\Models\Back\FinancialTreasury;
 use App\Models\Back\PurchaseBill;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,14 +21,22 @@ class PurchaseBillController extends Controller
 
     public function create()
     {                               
-        $pageNameAr = 'إضافة فاتورة مشتريات';
+        $pageNameAr = 'فاتورة مشتريات # ';
         $pageNameEn = 'purchases_create';
         $suppliers = ClientsAndSuppliers::where('client_supplier_type', 1)
                                     ->orWhere('client_supplier_type', 2)
                                     ->orderBy('name', 'asc')
                                     ->get();
+
+        $treasuries = FinancialTreasury::where('status', 1)
+                                    ->leftJoin('treasury_bill_dets', function ($join) {
+                                        $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
+                                            ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
+                                    })
+                                    ->select('financial_treasuries.*', 'treasury_bill_dets.money')
+                                    ->get();
                                     
-        return view('back.purchases.create' , compact('pageNameAr' , 'pageNameEn', 'suppliers'));
+        return view('back.purchases.create' , compact('pageNameAr' , 'pageNameEn', 'suppliers', 'treasuries'));
     }
 
     public function store(Request $request)

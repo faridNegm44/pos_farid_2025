@@ -15,18 +15,19 @@ class CheckLogin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
-
-        if(Auth::user()){
-            if (Auth::user()->status){
+        if(Auth::check()){
+            $user = Auth::user();
+            
+            if ($user->status == 1){
                 return $next($request);
-            }
-            else{
+            }else{
+                auth()->logout();
                 return redirect('/login')->with("error_auth", "تم تعطيل حسابك الرجاء مراجعة مسؤول النظام");
             }
-        }
-        else{
+        }else{
+            auth()->logout();
             return redirect('/login')->with("error_auth", "قم بتسجيل الايميل والباسورد للدخول علي النظام");
         }
     }

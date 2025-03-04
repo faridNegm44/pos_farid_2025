@@ -62,7 +62,8 @@
         <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
 
 
-
+        
+        
 
         {{-- selectize --}}
         <link href="{{ asset('back/assets/selectize.css') }}" type="text/css" rel="stylesheet"/>

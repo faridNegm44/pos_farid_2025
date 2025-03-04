@@ -17,6 +17,14 @@
 
 
 
+    $(document).on('input' , '.numValidate', function (e) {
+        $(this).val($(this).val().replace(/[^0-9.]/g, ''));
+
+        if (($(this).val().split('.').length - 1) > 1)
+            $(this).val($(this).val().substring(0, $(this).val().length - 1));
+    });
+
+
     // start focus the input[type="number"]
     $(document).on('focus', 'input[type="number"], .focused, .focus_input', function() {
         $(this).select();
