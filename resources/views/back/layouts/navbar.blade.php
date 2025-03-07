@@ -58,10 +58,9 @@
                     <li aria-haspopup="true"><a href="#" class="sub-icon">المخازن<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('stores') }}" class="slide-item">المخازن</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item">تسوية كميات الاصناف</a></li>
                             <li aria-haspopup="true"><a href="chart-flot.html" class="slide-item">اذن اضافة أصنافف</a></li>
                             <li aria-haspopup="true"><a href="chart-flot.html" class="slide-item">اذن صرف أصنافف</a></li>
-                            <li aria-haspopup="true"><a href="chart-chartjs.html" class="slide-item">الهالك</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item">الهالك / تسوية أصناف</a></li>
                             <li aria-haspopup="true"><a href="chart-echart.html" class="slide-item">المواد الخام</a></li>
                             <li aria-haspopup="true"><a href="chart-sparkline.html" class="slide-item">التحويل من مخزن لآخر</a></li>
                         </ul>

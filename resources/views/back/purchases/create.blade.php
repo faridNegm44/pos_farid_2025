@@ -194,22 +194,22 @@
                                     م الفرعي: 
                                     <span style="font-size: 16px;" id="subtotal">0</span>
                                 </p>
-                                <p class="col-4">
+                                <p class="col-6">
                                     <label for="">ضريبة قيمة مضافة</label>
-                                    <input type="text" class="form-control numValidate text-center" id="vat" placeholder="ضريبة قيمة مضافة" style="font-size: 12px;"/>
+                                    <input type="text" class="form-control numValidate text-center" id="vat" placeholder="ضريبة قيمة مضافة" style="font-size: 12px;" />
                                 </p>
                                 
-                                <p class="col-4">
+                                <p class="col-6">
                                     <label for="">خصم قيمة</label>
-                                    <input type="text" class="form-control numValidate text-center" id="discountValue" placeholder="خصم قيمة" style="font-size: 12px;"/>
+                                    <input type="text" class="form-control numValidate text-center" id="discountValue" placeholder="خصم قيمة" style="font-size: 12px;" />
                                 </p>
                                 
-                                <p class="col-4">
+                                {{--<p class="col-4">
                                     <label for="">خصم نسبة %</label>
-                                    <input type="text" class="form-control numValidate text-center" id="discountPercentage" placeholder="خصم نسبة %" style="font-size: 12px;"/>
-                                </p>
+                                    <input type="text" class="form-control numValidate text-center" id="discountPercentage" placeholder="خصم نسبة %" style="font-size: 12px;" />
+                                </p>--}}
     
-                                <div class="col-12">
+                                {{--<div class="col-12">
                                     <table class="table table-bordered table-striped text-center">
                                         <thead class="table-dark" style="font-size: 9px;">
                                             <tr>
@@ -232,12 +232,12 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
+                                </div>--}}
     
                                 <p class="col-lg-12">
                                     <div style="width: 97%;background: #ffc107;color: black;padding: 7px;text-align: center;margin: auto;">
                                         <span style="font-size: 12px;">الإجمالي: </span>
-                                        <span style="font-size: 24px;" id="total">0</span>
+                                        <span style="font-size: 24px;" id="total">0.00</span>
                                     </div>
                                 </p>
                             </div>
@@ -260,15 +260,12 @@
                                     <th>ضريبة %</th>
                                     <th>خصم%</th>
                                     <th>بونص</th>
-                                    <th>الإجمالي</th>
+                                    <th style="width: 20%;">الإجمالي</th>
                                 </tr>
                             </thead>
                             <tbody class="text-center"></tbody>
                         </table>
                     </div>
-    
-                    
-                    
                  </div> 
             </div>
             {{-------------------------------------------------- end content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
@@ -358,6 +355,223 @@
     {{--  end refresh_page  --}}
 
 
+
+    <script>
+        $(document).ready(function() {
+            $('#products_selectize').selectize({
+                valueField: 'id',  // القيمة المخزنة عند الاختيار
+                labelField: 'nameAr', // النص الظاهر للمستخدم
+                searchField: ['id', 'nameAr', 'nameEn'], // البحث في كل الحقول
+                loadThrottle: 300, // تقليل عدد الطلبات عند البحث
+                maxItems: 1, // اختيار عنصر واحد فقط
+                create: false, // منع إضافة عناصر جديدة
+                preload: 'focus', // تحميل البيانات عند التركيز على الحقل
+                render: {
+                    option: function(item, escape) {
+                        return `<option>
+                                    الصنف: ${escape(item.nameAr)} - 
+                                    كود: ${escape(item.id)} - 
+                                    س بيع: ${escape(item.sellPrice)} - 
+                                    س شراء: ${escape(item.purchasePrice)}
+                                
+                                </option>`;
+                    },
+                    item: function(item, escape) {
+                        return `<div>
+                                    الصنف: ${escape(item.nameAr)} - 
+                                    كود: ${escape(item.id)} - 
+                                    س بيع: ${escape(item.sellPrice)} - 
+                                    س شراء: ${escape(item.purchasePrice)}
+                                </div>`;
+                    }
+                },
+                load: function(query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: `{{ url('search_products_by_selectize') }}`, // رابط البحث
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { q: query },
+                        success: function(response) {
+                            if (response.items && Array.isArray(response.items)) {
+                                callback(response.items);
+                            } else {
+                                console.error("البيانات غير صحيحة:", response);
+                                callback([]);
+                            }
+                        },
+                        error: function(error) {
+                            console.error("خطأ في جلب البيانات:", error);
+                            callback([]);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+
+    {{-- start function calcTotal --}}
+    <script>
+        function calcTotal() {
+            let subTotal = 0;
+            let total = 0;
+
+            $('#products_table tbody tr').each(function() {
+                let row = $(this).closest('tr');
+
+                let purchasePrice = parseFloat(row.find('.purchasePrice').val()) || 0;  // سعر القطعة
+                let product_new_qty = parseInt(row.find('.product_new_qty').val()) || 0;  // الكمية المشتراة
+                let discount = parseFloat(row.find('.prod_discount').val()) || 0; // نسبة الخصم (%)
+                let tax = parseFloat(row.find('.prod_tax').val()) || 0; // نسبة الضريبة (%)
+                let bonus = parseInt(row.find('.prod_bonus').val()) || 0; // عدد البونص
+                let vat = $("#vat").val();
+                let discountValue = $("#discountValue").val(); 
+
+
+
+                // 1. حساب إجمالي السعر قبل الخصم والضريبة
+                let totalBeforeDiscount = purchasePrice * product_new_qty;
+
+                // 2. حساب الخصم
+                let discountAmount = (totalBeforeDiscount * discount) / 100;
+                let totalAfterDiscount = totalBeforeDiscount - discountAmount;
+
+                // 3. حساب الضريبة
+                let taxAmount = (totalAfterDiscount * tax) / 100;
+                let totalAfterTax = totalAfterDiscount + taxAmount;
+
+                // 4. حساب سعر الوحدة بعد توزيع البونص
+                let totalUnits = product_new_qty + bonus;
+                let unitPriceAfterBonus = totalAfterTax / totalUnits;
+
+                // 5. تحديث إجمالي الصف
+                row.find('.prod_total').val(totalAfterTax.toFixed(2));
+
+                if(discountValue > 0){
+                    let discountBill = totalAfterTax - discountValue;
+                    total += discountBill;
+
+                }else{
+                    total += totalAfterTax;
+                    
+                }
+                subTotal += totalBeforeDiscount;
+
+            });
+
+            // عرض الإجمالي الكلي في الـ div
+            $('#subtotal').text(subTotal.toFixed(2));
+            $('#total').text(total.toFixed(2));
+        }
+
+
+    </script>
+    {{-- end function calcTotal --}}
+
+
+    {{-- start when change products_selectize options --}}
+    <script>
+        $(document).ready(function() {
+            $('#products_selectize').change(function() {
+                var productId = $(this).val();
+                var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
+                var selectedItem = selectizeInstance.getItem(productId); // الحصول على العنصر المحدد
+
+                if (selectedItem) {
+                    var productData = selectizeInstance.options[productId]; // بيانات العنصر المحدد
+                    var productName = productData.nameAr; // اسم الصنف
+                    var sellPrice = productData.sellPrice; // سعر البيع
+                    var purchasePrice = productData.purchasePrice; // سعر الشراء
+                    var quantity_all = productData.quantity_all; // كميه المخزن
+
+
+                    function appendToProductsTable() {
+                        $('#products_table tbody').append(`
+                            <tr id="tr_${productId}">
+                                <th>${productId}</th>
+                                <td>
+                                    <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                                <td class="prod_name">${productName}</td>
+                                <td>
+                                    <input type="number" readonly class="form-control form-control-sm text-center quantity_all" value="${quantity_all}">                    
+                                </td>
+                                <td><input type="number" class="form-control form-control-sm text-center focus_input product_new_qty" value="1"></td>
+                                <td>
+                                    <input type="number" class="form-control form-control-sm text-center focus_input purchasePrice" value="${purchasePrice}">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control form-control-sm text-center focus_input sellPrice" value="${sellPrice}">                                    
+                                </td>
+                                <td><input type="number" class="form-control form-control-sm text-center focus_input prod_tax" value="0"></td>
+                                <td><input type="number" class="form-control form-control-sm text-center focus_input prod_discount" value="0"></td>
+                                <td><input type="number" class="form-control form-control-sm text-center focus_input prod_bonus" value="0"></td>
+                                <td><input type="number" readonly class="form-control form-control-sm text-center focus_input prod_total" value="0"></td>
+                            </tr>
+                        `);
+                    }
+
+                    if (productId) {
+                        if ($(`#products_table tbody #tr_${productId}`).length > 0) {
+                            alertify.set('notifier', 'position', 'bottom-center');
+                            alertify.set('notifier', 'delay', 3);
+                            alertify.error("تم إضافة الصنف من قبل لأصناف الفاتورة");
+
+                            const product_new_qty = $(`#products_table tbody #tr_${productId} .product_new_qty`);
+                            const currentQty = parseInt(product_new_qty.val());
+                            product_new_qty.val(currentQty + 1);
+
+                            backgroundRedToSelectError(product_new_qty);
+
+                            calcTotal();
+
+                        } else {
+                            appendToProductsTable();
+                            $("#countTableTr span").text(countTableTr());
+
+                            calcTotal();
+                        }
+                    }
+                    selectizeInstance.clear();
+                }
+            });
+        });
+    </script>
+    {{-- end when change products_selectize options --}}
+
+    
+
+
+    {{-- start when change sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .tax --}}
+    <script>
+        $(document).ready(function () {
+            $(document).on('input', '.sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .tax, #discountValue', function () {
+
+                calcTotal();
+
+                const sellPrice = $(this).closest('tr').find('.sellPrice').val();
+                const purchasePrice = $(this).closest('tr').find('.purchasePrice').val();
+                
+                if (+purchasePrice > +sellPrice) {
+                    alertify.set('notifier', 'position', 'bottom-center');
+                    alertify.set('notifier', 'delay', 3);
+                    alertify.error("خطأ: سعر البيع أقل من سعر التكلفة");
+
+                    $(this).closest('tr').css('background', 'orange');
+                    setTimeout(() => {
+                        $(this).closest('tr').css('background', 'transparent');
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+    {{-- end when change sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .tax --}}
+
+
+    {{-- start general scripts --}}
     <script>
         // start count table tr
         function countTableTr(){ return $('#products_table tbody tr').length; }
@@ -369,22 +583,13 @@
             $(document).on('click', '#products_table tbody tr .remove_this_tr', function (e) { 
                 $(this).closest('tr').fadeOut(100, function(){
                     $(this).remove();
-
                     $("#countTableTr span").text(countTableTr());
+
+                    calcTotal();
                 });    
             });
         }
         // end remove This Tr on table
-
-
-        // start check if discountValue && discountPercentage value
-        $(document).on('input', '#discountValue, #discountPercentage', function() {
-            if ($("#discountValue").val() !== '' && $("#discountPercentage").val() !== '') {
-                $("#discountValue").val('');
-                $("#discountPercentage").val('');
-            }
-        });
-        // end check if discountValue && discountPercentage value
 
 
         // start open modal calc when click button when click ctrl+/
@@ -442,193 +647,7 @@
         //  end show div amount paid after select supplier and treasury
         
     </script>
-
-
-    <script>
-        $(document).ready(function() {
-            $('#products_selectize').selectize({
-                valueField: 'id',  // القيمة المخزنة عند الاختيار
-                labelField: 'nameAr', // النص الظاهر للمستخدم
-                searchField: ['id', 'nameAr', 'nameEn'], // البحث في كل الحقول
-                loadThrottle: 300, // تقليل عدد الطلبات عند البحث
-                maxItems: 1, // اختيار عنصر واحد فقط
-                create: false, // منع إضافة عناصر جديدة
-                preload: 'focus', // تحميل البيانات عند التركيز على الحقل
-                render: {
-                    option: function(item, escape) {
-                        return `<option>
-                                    الصنف: ${escape(item.nameAr)} - 
-                                    كود: ${escape(item.id)} - 
-                                    س بيع: ${escape(item.sellPrice)} - 
-                                    س شراء: ${escape(item.purchasePrice)}
-                                
-                                </option>`;
-                    },
-                    item: function(item, escape) {
-                        return `<div>
-                                    الصنف: ${escape(item.nameAr)} - 
-                                    كود: ${escape(item.id)} - 
-                                    س بيع: ${escape(item.sellPrice)} - 
-                                    س شراء: ${escape(item.purchasePrice)}
-                                </div>`;
-                    }
-                },
-                load: function(query, callback) {
-                    if (!query.length) return callback();
-                    $.ajax({
-                        url: `{{ url('search_products_by_selectize') }}`, // رابط البحث
-                        type: 'GET',
-                        dataType: 'json',
-                        data: { q: query },
-                        success: function(response) {
-                            if (response.items && Array.isArray(response.items)) {
-                                callback(response.items);
-                            } else {
-                                console.error("البيانات غير صحيحة:", response);
-                                callback([]);
-                            }
-                        },
-                        error: function(error) {
-                            console.error("خطأ في جلب البيانات:", error);
-                            callback([]);
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-
-
-    {{-- start when change products_selectize options --}}
-    <script>
-        $(document).ready(function() {
-            $('#products_selectize').change(function() {
-                var productId = $(this).val();
-                var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
-                var selectedItem = selectizeInstance.getItem(productId); // الحصول على العنصر المحدد
-
-                if (selectedItem) {
-                    var productData = selectizeInstance.options[productId]; // بيانات العنصر المحدد
-                    var productName = productData.nameAr; // اسم الصنف
-                    var sellPrice = productData.sellPrice; // سعر البيع
-                    var purchasePrice = productData.purchasePrice; // سعر الشراء
-                    var quantity_all = productData.quantity_all; // كميه المخزن
-
-                    function appendToProductsTable() {
-                        $('#products_table tbody').append(`
-                            <tr id="tr_${productId}">
-                                <th>${productId}</th>
-                                <td>
-                                    <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                <td class="prod_name">${productName}</td>
-                                <td>
-                                    <input type="number" readonly class="form-control form-control-sm text-center quantity_all" value="${quantity_all}">                    
-                                </td>
-                                <td><input type="number" class="form-control form-control-sm text-center focus_input product_new_qty" value="1"></td>
-                                <td>
-                                    <input type="number" class="form-control form-control-sm text-center focus_input purchasePrice" value="${purchasePrice}">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control form-control-sm text-center focus_input sellPrice" value="${sellPrice}">                                    
-                                </td>
-                                <td><input type="number" class="form-control form-control-sm text-center focus_input tax" value="0"></td>
-                                <td><input type="number" class="form-control form-control-sm text-center focus_input prod_discount" value="0"></td>
-                                <td><input type="number" class="form-control form-control-sm text-center focus_input prod_bonus" value="0"></td>
-                                <td><input type="number" readonly class="form-control form-control-sm text-center focus_input prod_total" value="0"></td>
-                            </tr>
-                        `);
-                    }
-
-                    if (productId) {
-                        if ($(`#products_table tbody #tr_${productId}`).length > 0) {
-                            alertify.set('notifier', 'position', 'bottom-center');
-                            alertify.set('notifier', 'delay', 3);
-                            alertify.error("تم إضافة الصنف من قبل لأصناف الفاتورة");
-
-                            const product_new_qty = $(`#products_table tbody #tr_${productId} .product_new_qty`);
-                            const currentQty = parseInt(product_new_qty.val());
-                            product_new_qty.val(currentQty + 1);
-
-                            backgroundRedToSelectError(product_new_qty);
-                        } else {
-                            appendToProductsTable();
-                            $("#countTableTr span").text(countTableTr());
-                        }
-                    }
-                    selectizeInstance.clear();
-                }
-            });
-        });
-    </script>
-    {{-- end when change products_selectize options --}}
-
-    {{-- start function calcTotalRow --}}
-    <script>
-        function calcTotalRow(){
-
-            let sellPrice = parseFloat($('.sellPrice').val()) || 0;  // سعر القطعة
-            let product_new_qty = parseInt($('.product_new_qty').val()) || 0;  // الكمية المشتراة
-            let discount = parseFloat($('.discount').val()) || 0; // نسبة الخصم (%)
-            let tax = parseFloat($('.tax').val()) || 0; // نسبة الضريبة (%)
-            let bonus = parseInt($('.bonus').val()) || 0; // عدد البونص
-
-            // 1. حساب إجمالي السعر قبل الخصم والضريبة
-            let totalBeforeDiscount = sellPrice * product_new_qty;
-
-            // 2. حساب الخصم
-            let discountAmount = (totalBeforeDiscount * discount) / 100;
-            let totalAfterDiscount = totalBeforeDiscount - discountAmount;
-
-            // 3. حساب الضريبة
-            let taxAmount = (totalAfterDiscount * tax) / 100;
-            let totalAfterTax = totalAfterDiscount + taxAmount;
-
-            // 4. حساب سعر الوحدة بعد توزيع البونص
-            let totalUnits = product_new_qty + bonus;
-            let unitPriceAfterBonus = totalAfterTax / totalUnits;
-
-            // 5. عرض النتائج
-            $('.totalAmount').text(totalAfterTax.toFixed(2) + " جنيه"); // إجمالي السعر بعد الضريبة
-            $('.unitPriceAfterBonus').text(unitPriceAfterBonus.toFixed(2) + " جنيه"); // سعر الوحدة بعد البونص
-
-        }
-    </script>
-    {{-- end function calcTotalRow --}}
-
-
-    {{-- start when change sellPrice --}}
-    <script>
-        $(document).ready(function () {
-            $(document).on('blur', '.sellPrice', function () {
-                const sellPrice = $(this).val();
-                const purchasePrice = $(this).closest('tr').find('.purchasePrice').val();
-                const tax = $(this).closest('tr').find('.tax').val();
-                const prod_total = $(this).closest('tr').find('.prod_total').val();
-                const prod_bonus = $(this).closest('tr').find('.prod_bonus').val();
-                const product_new_qty = $(this).closest('tr').find('.product_new_qty').val();
-                const productId = $(this).closest('tr').attr('id').replace('tr_', '');
-
-                if (+purchasePrice > +sellPrice) {
-                    alertify.set('notifier', 'position', 'bottom-center');
-                    alertify.set('notifier', 'delay', 3);
-                    alertify.error("خطأ: سعر البيع أقل من سعر التكلفة");
-
-                    $(this).closest('tr').css('background', 'orange');
-                    setTimeout(() => {
-                        $(this).closest('tr').css('background', 'transparent');
-                    }, 1500);
-
-                    $(this).val(purchasePrice);
-                    $(this).closest('tr').find('.prod_total').val(purchasePrice * product_new_qty);
-                    $(this).closest('tr').find('.prod_bonus').val(0);
-                }
-            });
-        });
-    </script>
-    {{-- end when change sellPrice --}}
+    {{-- end general scripts --}}
 
 </body>
 </html>

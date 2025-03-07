@@ -80,6 +80,19 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('datatable' , 'ProductCategoyController@datatable');
     });
 
+    // taswea_products Routes
+    Route::group(['prefix' => 'taswea_products'] , function (){
+        Route::get('/' , 'TasweaProductsController@index');
+        Route::post('/store' , 'TasweaProductsController@store');
+        Route::post('/store' , 'TasweaProductsController@store');
+        Route::get('/edit/{id}' , 'TasweaProductsController@edit');
+        Route::get('/getCurrentProductQuantity/{id}' , 'TasweaProductsController@getCurrentProductQuantity');
+        Route::post('/update/{id}' , 'TasweaProductsController@update');
+        Route::get('/destroy/{id}' , 'TasweaProductsController@destroy');
+        
+        Route::get('datatable' , 'TasweaProductsController@datatable');
+    });
+
     // companies Routes
     Route::group(['prefix' => 'companies'] , function (){
         Route::get('/' , 'CompanyController@index');
@@ -536,12 +549,12 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
     //Route::group(['prefix' => 'reports'] , function (){
 
-    //    //treasury_bills
-    //    Route::group(['prefix' => 'treasury_bills'] , function (){
-    //        Route::get('/' , 'ReportsTreasuryBills@index');
-    //        Route::post('result' , 'ReportsTreasuryBills@result');
-    //        Route::get('result/pdf' , 'ReportsTreasuryBills@result_pdf');
-    //    });
+        //treasury_bills
+        Route::group(['prefix' => 'treasury_bills'] , function (){
+            Route::get('/' , 'ReportsTreasuryBills@index');
+            Route::post('result' , 'ReportsTreasuryBills@result');
+            Route::get('result/pdf' , 'ReportsTreasuryBills@result_pdf');
+        });
 
 
     //    // itemAll المخزن العام
