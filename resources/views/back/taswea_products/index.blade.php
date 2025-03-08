@@ -69,18 +69,18 @@
 
 
         // start check if new quantity big than current quantity
-        $("#quantity").on('blur', function(){
-            const newQuantity = $(this).val();
-            const currentQuantity = $('#current_quantity').val();
+        //$("#quantity").on('blur', function(){
+        //    const newQuantity = $(this).val();
+        //    const currentQuantity = $('#current_quantity').val();
 
-            if(newQuantity > currentQuantity){
-                $(this).val('');
+        //    if(newQuantity > currentQuantity){
+        //        $(this).val('');
 
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("كمية المنتج المسواه اكبر من كمية المخزن");
-            }
-        });
+        //        alertify.set('notifier','position', 'top-center');
+        //        alertify.set('notifier','delay', 3);
+        //        alertify.error("كمية المنتج المسواه اكبر من كمية المخزن");
+        //    }
+        //});
 
 
         // start Datatable
@@ -91,15 +91,18 @@
                 ajax: `{{ url($pageNameEn.'/datatable') }}`,
                 dataType: 'json',
                 columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'action', name: 'action', orderable: false},
+                    {data: 'productId', name: 'productId'},
+                    {data: 'productName', name: 'productName'},
+                    {data: 'quantityBefore', name: 'quantityBefore'},
+                    {data: 'quantityAfterEdit', name: 'quantityAfterEdit'},
+                    {data: 'status', name: 'status'},
+                    {data: 'quantityAfter', name: 'quantityAfter'},
+                    {data: 'reasonName', name: 'reasonName'},
+                    {data: 'tasweaCreatedAt', name: 'tasweaCreatedAt'},
+                    {data: 'tasweaNotes', name: 'tasweaNotes'},
                 ],
                 "bDestroy": true,
                 order: [[0, 'desc']],
-                //fixedColumns: {
-                //    leftColumns: 4
-                //},
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
             });
@@ -145,8 +148,14 @@
                                 <thead>
                                     <tr>
                                         <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0" >إسم القسم</th>
-                                        <th class="border-bottom-0">التحكم</th>
+                                        <th class="border-bottom-0" >إسم الصنف</th>
+                                        <th class="border-bottom-0">الكمية قبل</th>
+                                        <th class="border-bottom-0">الكمية المسواة</th>
+                                        <th class="border-bottom-0">حالة التسوية</th>
+                                        <th class="border-bottom-0">الكمية بعد</th>
+                                        <th class="border-bottom-0">سبب التسوية</th>
+                                        <th class="border-bottom-0">تاريخ التسوية</th>
+                                        <th class="border-bottom-0">ملاحظات</th>
                                     </tr>
                                 </thead>
                             </table>

@@ -583,4 +583,3 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
     //});
 });
-

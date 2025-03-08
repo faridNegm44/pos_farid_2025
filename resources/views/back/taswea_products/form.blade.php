@@ -38,9 +38,9 @@
                         </div>  
                         
                         <div class="col-lg-6 col-12">
-                          <label for="quantity">عدد التسوية</label>
+                          <label for="quantity">الكمية الجديدة</label>
                           <div>
-                              <input type="number" class="form-control dataInput text-center" placeholder="عدد التسوية" id="quantity" name="quantity" style="font-size: 20px;" />
+                              <input type="number" class="form-control dataInput text-center" placeholder="الكمية الجديدة" id="quantity" name="quantity" style="font-size: 20px;" />
                           </div>
                           <bold class="text-danger" id="errors-quantity" style="display: none;"></bold>
                         </div>  
