@@ -44,6 +44,8 @@
                             <li aria-haspopup="true"><a href="{{ url('transfer_between_stores') }}" class="slide-item">تحويلات الأصناف بين المخازن</a></li>
                             <li aria-haspopup="true"><a href="{{ url('companies') }}" class="slide-item">شركات الأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('financialYears') }}" class="slide-item">السنوات المالية</a></li>
+                            <hr />
+                            <li aria-haspopup="true"><a href="{{ url('products/report') }}" class="slide-item">تقرير عن حركة صنف</a></li>
                         </ul>
                     </li>
 
@@ -72,12 +74,14 @@
                             <li aria-haspopup="true"><a href="{{ url('treasury_bills') }}" class="slide-item">معاملات الخزينة المالية</a></li>
                             
                             <hr />
-                            
                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">الخزائن المالية</a></li>
                             <li aria-haspopup="true"><a href="{{ url('transfer_between_storages') }}" class="slide-item">التحويل من خزنة لآخري</a></li>
                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">مسحوبات شخصية</a></li>
                             <li aria-haspopup="true"><a href="{{ url('expenses') }}" class="slide-item">مصاريف عامة</a></li>
                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">إغلاق وردية</a></li>
+                            
+                            <hr />
+                            <li aria-haspopup="true"><a href="{{ url('treasury_bills/report') }}" class="slide-item">تقرير عن حركة الخزائن المالية</a></li>
                         </ul>
                     </li>
 

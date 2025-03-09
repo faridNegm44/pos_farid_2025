@@ -75,7 +75,7 @@
 
         <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
-                <form method="post" action="{{ url('reports/treasury_bills/result') }}">
+                <form method="post" action="{{ url('treasury_bills/report/result') }}">
                     @csrf
                     <div class="row justify-content-center">
                         <div class="col-md-2">
@@ -134,8 +134,8 @@
                         <div class="col-md-1">
                             <label for="to">طباعة</label>
                             <div>
-                                <a target="_blank" href="{{ url('reports/treasury_bills/result/pdf') }}" type="submit" class="btn btn-dark-gradient btn-block" style="height: 30px;padding: 6px 20px !important;margin: 0 5px;">
-                                    طباعة <i class="mdi mdi-file-pdf"></i>                                    
+                                <a target="_blank" href="{{ url('/treasury_bills/report/result/pdf') }}" type="submit" class="btn btn-dark-gradient btn-block" style="height: 30px;padding: 4px 20px !important;margin: 0 5px;">
+                                    طباعة                                   
                                 </a>
                             </div>
                             <bold class="text-danger" id="errors-to" style="display: none;"></bold>

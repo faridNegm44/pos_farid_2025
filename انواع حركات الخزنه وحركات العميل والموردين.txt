@@ -1,4 +1,4 @@
-### اذون الخزانه
+################### اذون الخزانه
     رصيد اول خزنة -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
     اذن اضافة نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
@@ -18,5 +18,13 @@
 
 
 
-## اذون العملاء والموردين
+
+################### اذون المخزن
+    رصيد اول -> relation with ( product_id ) in ( store_dets )
+
+    تسوية صنف -> relation with ( product_id ) in ( store_dets )
+
+
+
+################### اذون العملاء والموردين
     

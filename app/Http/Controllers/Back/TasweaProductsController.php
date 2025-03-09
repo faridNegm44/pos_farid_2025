@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
 use App\Models\Back\Product;
+use App\Models\Back\StoreDets;
 use App\Models\Back\TasweaProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,7 @@ use Carbon\Carbon;
 class TasweaProductsController extends Controller
 {
     public function index()
-    {                               
+    {                                                           
         $pageNameAr = 'تسوية كميات الأصناف';
         $pageNameEn = 'taswea_products';
         $products = Product::all();
@@ -29,7 +30,7 @@ class TasweaProductsController extends Controller
             $this->validate($request , [
                 'product_id' => 'required|integer|exists:products,id',
                 'reason_id' => 'required|integer|exists:taswea_reasons,id',
-                'quantity' => 'required|numeric|min:1',
+                'quantity' => 'required|numeric',
             ],[
                 'required' => 'حقل :attribute إلزامي.',
                 'exists' => 'حقل :attribute غير موجود.',
@@ -42,12 +43,35 @@ class TasweaProductsController extends Controller
                 'reason_id' => 'سبب التسوية',                
             ]);
 
-            TasweaProducts::create([
-                'product_id' => request('product_id'),
-                'quantity' => request('quantity'),
-                'reason_id' => request('reason_id'),
-                'notes' => request('notes'),
-            ]);
+            $find = StoreDets::where('product_id', request('product_id'))->orderBy('id', 'desc')->first();
+            
+            DB::transaction(function() use($find){  // start db::transaction
+        
+                $insertGetId = TasweaProducts::create([
+                    'product_id' => request('product_id'),
+                    'quantity' => request('quantity'),
+                    'reason_id' => request('reason_id'),
+                    'notes' => request('notes'),
+                ]);
+
+                StoreDets::insert([
+                    'type' => 'تسوية صنف',
+                    'year_id' => $this->currentFinancialYear(),
+                    'bill_head_id' => $insertGetId->id,
+                    'bill_body_id' => 0,
+                    'product_id' => request('product_id'),
+                    'product_num_unit' => 0,
+                    'quantity' => $find->quantity_all,
+                    'quantity_all' => request('quantity'),
+                    'product_sellPrice' => $find->product_sellPrice,
+                    'product_purchasePrice' => $find->product_purchasePrice,
+                    'product_avg' => 0,
+                    'date' => date('Y-m-d'),
+                    'created_at' => now()
+                ]);
+
+            }); // end db::transaction 
+
         }
     }
 
@@ -92,15 +116,17 @@ class TasweaProductsController extends Controller
 
     public function datatable()
     {
-        $all = TasweaProducts::leftJoin('products', 'products.id', 'taswea_products.product_id')
+        $all = TasweaProducts::leftJoin('store_dets', 'store_dets.bill_head_id', 'taswea_products.id')
+                            ->where('store_dets.type', 'تسوية صنف')
+                            ->leftJoin('products', 'products.id', 'taswea_products.product_id')
                             ->leftJoin('taswea_reasons', 'taswea_reasons.id', 'taswea_products.reason_id')
-                            ->leftJoin('store_dets', 'store_dets.product_id', 'taswea_products.product_id')
                             ->select(
                                 'products.id as productId', 'products.nameAr as productName',
-                                'taswea_products.quantity as quantityAfterEdit', 'taswea_products.notes as tasweaNotes', 'taswea_products.created_at as tasweaCreatedAt',
+                                'taswea_products.id as tasweaId', 'taswea_products.notes as tasweaNotes', 'taswea_products.created_at as tasweaCreatedAt',
                                 'taswea_reasons.name as reasonName',
-                                'store_dets.quantity_all as quantityBefore',
+                                'store_dets.quantity as quantityBefore', 'store_dets.quantity_all as quantityAfter'
                             )
+                            ->orderBy('taswea_products.id', 'desc')
                             ->get();
 
         return DataTables::of($all)
@@ -113,15 +139,8 @@ class TasweaProductsController extends Controller
             ->addColumn('quantityBefore', function($res){
                 return $res->quantityBefore;
             })
-            ->addColumn('quantityAfterEdit', function($res){
-                return $res->quantityAfterEdit;
-            })
             ->addColumn('quantityAfter', function($res){
-                if($res->quantityAfterEdit  > $res->quantityBefore){
-                    return $res->quantityAfterEdit + $res->quantityBefore;
-                }else{
-                    return $res->quantityBefore - $res->quantityAfterEdit;
-                }
+                return $res->quantityAfter;
             })
             ->addColumn('reasonName', function($res){
                 return $res->reasonName;
@@ -131,13 +150,13 @@ class TasweaProductsController extends Controller
                             .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->tasweaCreatedAt)->format('h:i:s a').'</span>';
             })
             ->addColumn('status', function($res){
-                if($res->quantityAfterEdit  > $res->quantityBefore){
+                if($res->quantityAfter  > $res->quantityBefore){
                     return '<span class="badge badge-success">
-                        <i class="fa fa-plus"></i>
+                        <i class="fa fa-plus"></i> زيادة '.$res->quantityAfter - $res->quantityBefore.'
                     </span>';
                 }else{
                     return '<span class="badge badge-danger">
-                        <i class="fa fa-minus"></i>
+                        <i class="fa fa-minus"></i> عجز '.$res->quantityBefore - $res->quantityAfter.'
                     </span>';
                 }
             })
@@ -146,7 +165,7 @@ class TasweaProductsController extends Controller
                             '.Str::limit($res->tasweaNotes, 20).'
                         </span>';
             })
-            ->rawColumns(['productId', 'productName', 'quantityBefore', 'quantityAfterEdit', 'quantityAfter', 'reasonName', 'status', 'tasweaCreatedAt', 'tasweaNotes'])
+            ->rawColumns(['productId', 'productName', 'quantityBefore', 'quantityAfter', 'quantityAfter', 'reasonName', 'status', 'tasweaCreatedAt', 'tasweaNotes'])
             ->toJson();
     }
 }

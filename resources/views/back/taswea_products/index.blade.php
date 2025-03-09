@@ -55,6 +55,7 @@
                 type: 'GET',
                 beforeSend: function (){
                     $('#current_quantity').val('');
+                    $('form [id^=errors]').text('');
                 },
                 url: `{{ url($pageNameEn) }}/getCurrentProductQuantity/${thisVal}`,
                 success: function(res){
@@ -91,12 +92,12 @@
                 ajax: `{{ url($pageNameEn.'/datatable') }}`,
                 dataType: 'json',
                 columns: [
+                    {data: 'tasweaId', name: 'id'},
                     {data: 'productId', name: 'productId'},
                     {data: 'productName', name: 'productName'},
                     {data: 'quantityBefore', name: 'quantityBefore'},
-                    {data: 'quantityAfterEdit', name: 'quantityAfterEdit'},
-                    {data: 'status', name: 'status'},
                     {data: 'quantityAfter', name: 'quantityAfter'},
+                    {data: 'status', name: 'status'},
                     {data: 'reasonName', name: 'reasonName'},
                     {data: 'tasweaCreatedAt', name: 'tasweaCreatedAt'},
                     {data: 'tasweaNotes', name: 'tasweaNotes'},
@@ -111,8 +112,6 @@
 
     {{-- add, edit, delete => script --}}
     @include('back.taswea_products.add')
-    @include('back.taswea_products.edit')
-    @include('back.taswea_products.delete')
 @endsection
 
 
@@ -148,11 +147,11 @@
                                 <thead>
                                     <tr>
                                         <th class="border-bottom-0">#</th>
+                                        <th class="border-bottom-0">كود الصنف</th>
                                         <th class="border-bottom-0" >إسم الصنف</th>
                                         <th class="border-bottom-0">الكمية قبل</th>
-                                        <th class="border-bottom-0">الكمية المسواة</th>
-                                        <th class="border-bottom-0">حالة التسوية</th>
                                         <th class="border-bottom-0">الكمية بعد</th>
+                                        <th class="border-bottom-0">حالة التسوية</th>
                                         <th class="border-bottom-0">سبب التسوية</th>
                                         <th class="border-bottom-0">تاريخ التسوية</th>
                                         <th class="border-bottom-0">ملاحظات</th>

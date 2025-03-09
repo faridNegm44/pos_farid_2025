@@ -181,6 +181,13 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/edit/{id}' , 'TreasuryBillsController@edit');
         Route::post('/update/{id}' , 'TreasuryBillsController@update');
         Route::get('datatable' , 'TreasuryBillsController@datatable');
+
+        //تقرير عن حركة الخزائن المالية
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsTreasuryBills@index');
+            Route::post('result' , 'ReportsTreasuryBills@result');
+            Route::get('result/pdf' , 'ReportsTreasuryBills@result_pdf');
+        });
     });
     
     // products Routes
@@ -190,8 +197,16 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/edit/{id}' , 'ProductController@edit');
         Route::post('/update/{id}' , 'ProductController@update');
         Route::get('/destroy/{id}' , 'ProductController@destroy');
-        
         Route::get('datatable' , 'ProductController@datatable');
+        
+        Route::get('/getProductsByStore/{store}' , 'ReportsProductsController@getProductsByStore');
+
+        //تقرير عن حركة صنف
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsProductsController@index');
+            Route::post('result' , 'ReportsProductsController@result');
+            Route::get('result/pdf' , 'ReportsProductsController@result_pdf');
+        });
     });
 
     // pos Routes
@@ -549,12 +564,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
     //Route::group(['prefix' => 'reports'] , function (){
 
-        //treasury_bills
-        Route::group(['prefix' => 'treasury_bills'] , function (){
-            Route::get('/' , 'ReportsTreasuryBills@index');
-            Route::post('result' , 'ReportsTreasuryBills@result');
-            Route::get('result/pdf' , 'ReportsTreasuryBills@result_pdf');
-        });
+        
 
 
     //    // itemAll المخزن العام

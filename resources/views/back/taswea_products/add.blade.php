@@ -35,6 +35,8 @@
                     $(".dataInput").val('');
                     $('.dataInput:first').select().focus();
 
+                    $("#product_id")[0].selectize.clear();
+
                     document.querySelector('.modal #save').disabled = false;
                     document.querySelector('.spinner_request').style.display = 'none';
 
