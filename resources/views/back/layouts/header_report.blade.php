@@ -6,6 +6,6 @@
         </div>
     </div>
     <div class="col-xs-6 text-right">
-        <img src="{{ asset('back/images/settings/logo.png') }}" alt="" style="width: 80px;height: 70px;margin-top: -12px;margin-bottom: 10px;">
+        <img src="{{ asset('back/images/settings/logo.png') }}" alt="" style="width: 150px;height: 60px;margin-top: -12px;margin-bottom: 10px;">
     </div>
 </div>

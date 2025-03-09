@@ -33,10 +33,43 @@ class ReportsProductsController extends Controller
     {                   
         $pageNameAr = 'تقرير عن حركة صنف';      
 
-        $query = DB::table('store_dets')->leftJoin('products', 'products.id', 'store_dets.product_id')
+        $product = request('products');
+        
+        $query = DB::table('store_dets')
+                    ->leftJoin('products', 'products.id', 'store_dets.product_id')
+                    ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_head_id')
+                    ->leftJoin('users', 'users.id', 'taswea_products.user_id')
                     ->select(
                         'store_dets.*', 
                         'products.nameAr',
+                        'taswea_products.notes as tasweaNotes',
+                        'users.name as userName'
+                    )
+                    ->orderBy('store_dets.id', 'asc');
+
+        if($product){
+            $query->where('store_dets.product_id', $product);
+        }
+
+        $results = $query->get();
+        //return $results;
+        
+        return view('back.reports.products.result' , compact('pageNameAr', 'results', 'product'));
+    }
+    
+    public function result_pdf(Request $request)
+    {                
+        dd(request('products'));   
+        $pageNameAr = 'تقرير عن حركة صنف';      
+        $query = DB::table('store_dets')
+                    ->leftJoin('products', 'products.id', 'store_dets.product_id')
+                    ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_head_id')
+                    ->leftJoin('users', 'users.id', 'taswea_products.user_id')
+                    ->select(
+                        'store_dets.*', 
+                        'products.nameAr',
+                        'taswea_products.notes as tasweaNotes',
+                        'users.name as userName'
                     )
                     ->orderBy('store_dets.id', 'asc');
 
@@ -47,58 +80,8 @@ class ReportsProductsController extends Controller
         }
 
         $results = $query->get();
-        //return $results;
-        return view('back.reports.products.result' , compact('pageNameAr', 'results', 'product'));
-    }
-    
-    public function result_pdf(Request $request)
-    {                   
-        $pageNameAr = 'تقرير عن حركة الخزائن المالية';      
-
-        $treasury_id = request('treasury_id');
-        $treasury_type = request('treasury_type');
-        $from = request('from');
-        $to = request('to');
-
-        $query = DB::table('treasury_bill_dets')
-                    ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'treasury_bill_dets.treasury_id')
-                    ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'treasury_bill_dets.client_supplier_id')
-                    ->leftJoin('users', 'users.id', 'treasury_bill_dets.user_id')
-                    ->leftJoin('financial_years', 'financial_years.id', 'treasury_bill_dets.year_id')
-                    ->select(
-                'treasury_bill_dets.*', 
-                        'financial_treasuries.name as treasury_name',
-                        'clients_and_suppliers.name as clients_or_supplier_name',
-                        'users.name as user_name',
-                        'financial_years.name as financial_years',
-                    )
-                    ->orderBy('treasury_bill_dets.id', 'asc');
-
-        if($treasury_id){
-            $query->where('treasury_id', $treasury_id);
-        }
+        //return request('products');
         
-        if($treasury_type){
-            $query->where('treasury_type', $treasury_type);
-        }
-
-        if ($from && $to) {
-            $query->whereBetween('created_at', [$from, $to]);
-        } elseif ($from) {
-            $query->where('created_at', '>=', $from);
-        } elseif ($to) {
-            $query->where('created_at', '<=', $to);
-        }
-
-        $results = $query->get();
-
-
-        //return $results;
-
-
-        return view('back.reports.products.pdf', compact('pageNameAr', 'results'));
-
-
-        //return view('back.reports.products.result' , compact('pageNameAr', 'results'));
+        return view('back.reports.products.pdf' , compact('pageNameAr', 'results', 'product'));
     }
 }

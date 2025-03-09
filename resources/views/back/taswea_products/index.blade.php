@@ -60,10 +60,6 @@
                 url: `{{ url($pageNameEn) }}/getCurrentProductQuantity/${thisVal}`,
                 success: function(res){
                     $('#current_quantity').val(res.quantity_all);
-
-                    alertify.set('notifier','position', 'top-center');
-                    alertify.set('notifier','delay', 3);
-                    alertify.success("تمت جلب كمية المنتج الحالية بنجاح");
                 }
             });
         });
@@ -100,6 +96,7 @@
                     {data: 'status', name: 'status'},
                     {data: 'reasonName', name: 'reasonName'},
                     {data: 'tasweaCreatedAt', name: 'tasweaCreatedAt'},
+                    {data: 'userName', name: 'userName'},
                     {data: 'tasweaNotes', name: 'tasweaNotes'},
                 ],
                 "bDestroy": true,
@@ -154,6 +151,7 @@
                                         <th class="border-bottom-0">حالة التسوية</th>
                                         <th class="border-bottom-0">سبب التسوية</th>
                                         <th class="border-bottom-0">تاريخ التسوية</th>
+                                        <th class="border-bottom-0">مستخدم</th>
                                         <th class="border-bottom-0">ملاحظات</th>
                                     </tr>
                                 </thead>

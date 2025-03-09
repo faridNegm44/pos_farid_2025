@@ -11,24 +11,6 @@
 
 @section('footer')  
     <script>       
-        // open modal when click button (insert)
-        document.addEventListener('keydown', function(event){
-            if( event.which === 45 ){
-                $('.modal').modal('show');
-                document.querySelector('.modal .modal-header .modal-title').innerText = 'إضافة';
-                document.querySelector('.modal .modal-footer #save').setAttribute('style', 'display: inline;');
-                document.querySelector('.modal .modal-footer #update').setAttribute('style', 'display: none;');
-                $('.dataInput').val('');
-            }
-        });
-
-
-
-        // focus first input when open modal
-        $('.modal').on('shown.bs.modal', function(){
-            $('.dataInput:first').focus();                
-        });
-
         // remove all errors when close modal
         $('.modal').on('hidden.bs.modal', function(){
             $('form [id^=errors]').text('');
@@ -49,13 +31,6 @@
         });
     </script>
 
-    <script>
-        flatpickr(".datePicker", {
-            yearSelectorType: 'dropdown',
-            enableTime: false,
-            dateFormat: "Y-m-d",
-        });
-    </script>
 
     <script>
         $("#store_id").on('input', function(){
@@ -105,7 +80,7 @@
         <!-- breadcrumb -->
 
 
-        <div class="card bg bg-purple-gradient" style="padding: 20px 0 !important;">
+        <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
                 <form method="post" action="{{ url('products/report/result') }}">
                     @csrf
@@ -136,7 +111,7 @@
                         <div class="col-md-1">
                             <label for="to">عرض</label>
                             <div>
-                                <button type="submit" class="btn btn-success btn-block" style="height: 30px;padding: 0 20px !important;">عرض</button>
+                                <button type="submit" class="btn btn-primary btn-block" style="height: 30px;padding: 0 20px !important;">عرض</button>
                             </div>
                             <bold class="text-danger" id="errors-to" style="display: none;"></bold>
                         </div>    

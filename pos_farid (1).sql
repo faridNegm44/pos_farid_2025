@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 06, 2025 at 10:35 AM
+-- Generation Time: Mar 09, 2025 at 04:29 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -235,7 +235,8 @@ INSERT INTO `financial_treasuries` (`id`, `name`, `userOne`, `moneyFirstDuration
 (1, 'خزينة  رئيسية', 'علي مهران', 100000.00, '1', 'اول خزنة', '2025-01-30 11:22:27', '2025-01-30 11:22:27'),
 (2, 'فودافون كاش', NULL, 0.00, '1', NULL, '2025-01-30 11:23:35', '2025-01-30 11:23:35'),
 (3, 'انستاباي', 'احمد الشوربجي', 89010.00, '1', 'تم الفتح تحت اشراف احمد الشوربجي ف 2025', '2025-01-30 11:26:14', '2025-01-30 11:26:14'),
-(4, 'درج النقدية', NULL, 1500.00, '1', NULL, '2025-02-01 06:39:50', '2025-02-01 06:39:50');
+(4, 'درج النقدية', NULL, 1500.00, '1', NULL, '2025-02-01 06:39:50', '2025-02-01 06:39:50'),
+(5, 'D', NULL, 0.00, '1', NULL, '2025-03-04 22:48:38', '2025-03-04 22:48:38');
 
 -- --------------------------------------------------------
 
@@ -295,7 +296,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (19, '2024_08_31_082834_create_clients_and_suppliers_dets_table', 11),
 (20, '2024_08_31_085237_create_financial_treasuries_table', 11),
 (21, '2025_01_29_003248_create_expenses_table', 12),
-(22, '2025_01_29_200656_create_treasury_bill_dets_table', 13);
+(22, '2025_01_29_200656_create_treasury_bill_dets_table', 13),
+(23, '2025_03_05_225718_create_taswea_products_table', 14),
+(24, '2025_03_05_230552_create_taswea_reasons_table', 15);
 
 -- --------------------------------------------------------
 
@@ -372,9 +375,16 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `shortCode`, `natCode`, `nameAr`, `nameEn`, `store`, `company`, `category`, `stockAlert`, `divisible`, `sellPrice`, `purchasePrice`, `discountPercentage`, `tax`, `firstPeriodCount`, `bigUnit`, `smallUnit`, `smallUnitPrice`, `smallUnitNumbers`, `max_sale_quantity`, `status`, `image`, `desc`, `offerDiscountStatus`, `offerDiscountPercentage`, `offerStart`, `offerEnd`, `created_at`, `updated_at`) VALUES
 (1, NULL, NULL, 'بنادول اكسترا 3 شريط', NULL, 1, NULL, NULL, '0', '0', '90', '80', '0', '0', '0', 1, 2, '30', '3', '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-01-26 08:23:57', '2025-01-26 08:23:57'),
-(2, NULL, NULL, 'الفنترن اقراص 3 شريط', NULL, 1, 1, 1, '0', '0', '150', '140', '0', '0', '0', 1, 2, '50', '3', '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-01-26 08:26:36', '2025-01-26 08:26:36'),
+(2, NULL, NULL, 'الفنترن اقراص 3 شريط', 'alphintern ', 1, 1, 1, '0', '0', '150', '140', '0', '0', '0', 1, 2, '50', '3', '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-01-26 08:26:36', '2025-01-26 08:26:36'),
 (3, NULL, NULL, 'ميوفين اقراص 22', 'myofen cap', 1, NULL, NULL, '0', '0', '45', '40', '0', '0', '0', 3, 2, '15', '3', '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-01-26 08:30:08', '2025-01-26 08:46:19'),
-(4, NULL, NULL, 'جديد', 'neeeew', 2, 5, 3, '0', '0', '80', '70', '0', '0', '0', 1, 1, '10', NULL, '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-01-26 09:33:38', '2025-01-26 09:33:38');
+(4, NULL, NULL, 'جديد', 'neeeew', 3, 5, 3, '0', '0', '80', '70', '0', '0', '0', 1, 1, '10', NULL, '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-01-26 09:33:38', '2025-01-26 09:33:38'),
+(5, NULL, NULL, 'اميجران', 'amigran', 3, NULL, NULL, '0', '0', '100', '90', '0', '0', '0', 0, 2, '33.3', '3', '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-02-15 09:19:43', '2025-02-15 09:19:43'),
+(6, NULL, NULL, 'باور كابس', 'power caps', 3, NULL, NULL, '0', '0', '50', '45', '0', '0', '0', 0, 2, '25', NULL, '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-02-15 09:20:17', '2025-02-15 09:20:17'),
+(7, NULL, NULL, 'باور كولد اند فلو', 'power cold and flu', 1, NULL, NULL, '0', '0', '50', '45', '0', '0', '0', 1, 1, '25', NULL, '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-02-15 09:20:43', '2025-02-15 09:20:43'),
+(8, NULL, NULL, 'وان تو ثري اقراص', NULL, 1, NULL, NULL, '0', '0', '60', '50', '0', '0', '0', 2, 2, '30', '2', '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-02-15 09:21:16', '2025-02-15 09:21:16'),
+(9, NULL, NULL, 'جانوميت 50\\1000', 'janumet 50/1000', 1, NULL, NULL, '0', '0', '450', '400', '0', '0', '0', 1, 1, '450', NULL, '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-02-15 09:21:59', '2025-02-15 09:21:59'),
+(10, NULL, NULL, 'ايرالونير 25', 'eraloner 25', 1, NULL, NULL, '0', '0', '150', '150', '0', '0', '0', 1, 1, '150', NULL, '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-02-15 09:22:30', '2025-02-15 09:22:30'),
+(11, NULL, NULL, 'ايرالونير 50', 'eraloner 50', 1, NULL, NULL, '0', '0', '250', '230', '0', '0', '0', 2, 2, '125', '2', '0', '1', 'df_image.png', NULL, '0', '', NULL, NULL, '2025-02-15 09:22:56', '2025-02-15 09:22:56');
 
 -- --------------------------------------------------------
 
@@ -436,7 +446,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `app_name`, `description`, `footer_text`, `address`, `email`, `phone1`, `phone2`, `logo`, `fav_icon`, `mail_driver`, `from`, `to`, `host`, `port`, `encryption`, `username`, `password`, `maintenance_mode`, `created_at`, `updated_at`) VALUES
-(1, 'روزا ستور للمفروشات', 'روزا ستور للمفروشات وصف', 'جميع الحقوق محفوظه ( فريد نجم ) - 01012775704', 'الدقهلية المنصوره السنبلاوين قريه برهمتوش', 'decoration-house@decoration-house.com', '01016493611', '01117903055', 'logo.jpg', 'fav_icon.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-02-01 16:41:46');
+(1, 'روزا ستور للمفروشات', 'روزا ستور للمفروشات وصف', 'جميع الحقوق محفوظه ( فريد نجم ) - 01012775704', 'الدقهلية المنصوره السنبلاوين قريه برهمتوش', 'decoration-house@decoration-house.com', '01016493611', '01117903055', 'logo.png', 'fav_icon.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-02-01 16:41:46');
 
 -- --------------------------------------------------------
 
@@ -497,7 +507,91 @@ INSERT INTO `store_dets` (`id`, `type`, `year_id`, `bill_head_id`, `bill_body_id
 (1, 'رصيد اول', 1, 0, 0, 1, 0, '0', '0', '90', '80', '0', NULL, NULL, NULL, '2025-01-26', '2025-01-26 08:23:57', NULL),
 (2, 'رصيد اول', 1, 0, 0, 2, 0, '0', '0', '150', '140', '0', NULL, NULL, NULL, '2025-01-26', '2025-01-26 08:26:36', NULL),
 (3, 'رصيد اول', 1, 0, 0, 3, 0, '0', '0', '45', '40', '0', NULL, NULL, NULL, '2025-01-26', '2025-01-26 08:30:08', NULL),
-(4, 'رصيد اول', 1, 0, 0, 4, 0, '0', '0', '80', '70', '0', NULL, NULL, NULL, '2025-01-26', '2025-01-26 09:33:38', NULL);
+(4, 'رصيد اول', 1, 0, 0, 4, 0, '0', '0', '80', '70', '0', NULL, NULL, NULL, '2025-01-26', '2025-01-26 09:33:38', NULL),
+(5, 'رصيد اول', 1, 0, 0, 5, 0, '0', '0', '100', '90', '0', NULL, NULL, NULL, '2025-02-15', '2025-02-15 09:19:43', NULL),
+(6, 'رصيد اول', 1, 0, 0, 6, 0, '0', '0', '50', '45', '0', NULL, NULL, NULL, '2025-02-15', '2025-02-15 09:20:17', NULL),
+(7, 'رصيد اول', 1, 0, 0, 7, 0, '0', '0', '50', '45', '0', NULL, NULL, NULL, '2025-02-15', '2025-02-15 09:20:43', NULL),
+(8, 'رصيد اول', 1, 0, 0, 8, 0, '0', '0', '60', '50', '0', NULL, NULL, NULL, '2025-02-15', '2025-02-15 09:21:16', NULL),
+(9, 'رصيد اول', 1, 0, 0, 9, 0, '0', '0', '450', '400', '0', NULL, NULL, NULL, '2025-02-15', '2025-02-15 09:21:59', NULL),
+(10, 'رصيد اول', 1, 0, 0, 10, 0, '0', '0', '150', '150', '0', NULL, NULL, NULL, '2025-02-15', '2025-02-15 09:22:30', NULL),
+(11, 'رصيد اول', 1, 0, 0, 11, 0, '0', '0', '250', '230', '0', NULL, NULL, NULL, '2025-02-15', '2025-02-15 09:22:56', NULL),
+(13, 'تسوية صنف', 1, 1, 0, 3, 0, '0', '5', '45', '40', '0', NULL, NULL, NULL, '2025-03-08', '2025-03-08 22:38:22', NULL),
+(14, 'تسوية صنف', 1, 2, 0, 3, 0, '5', '3', '45', '40', '0', NULL, NULL, NULL, '2025-03-08', '2025-03-08 22:48:38', NULL),
+(15, 'تسوية صنف', 1, 3, 0, 1, 0, '0', '9', '90', '80', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 00:22:14', NULL),
+(16, 'تسوية صنف', 1, 4, 0, 6, 0, '0', '1', '50', '45', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 00:24:06', NULL),
+(17, 'تسوية صنف', 1, 5, 0, 3, 0, '3', '15', '45', '40', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 00:25:42', NULL),
+(18, 'تسوية صنف', 1, 6, 0, 6, 0, '1', '0', '50', '45', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 00:27:00', NULL),
+(19, 'تسوية صنف', 1, 7, 0, 1, 0, '9', '2', '90', '80', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 00:28:16', NULL),
+(20, 'تسوية صنف', 1, 8, 0, 3, 0, '15', '-5', '45', '40', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 09:38:07', NULL),
+(21, 'تسوية صنف', 1, 9, 0, 3, 0, '-5', '6', '45', '40', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 09:39:10', NULL),
+(22, 'تسوية صنف', 1, 10, 0, 1, 0, '2', '1', '90', '80', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 09:39:20', NULL),
+(23, 'تسوية صنف', 1, 11, 0, 3, 0, '6', '8', '45', '40', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 09:40:21', NULL),
+(24, 'تسوية صنف', 1, 12, 0, 4, 0, '0', '9', '80', '70', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 09:40:36', NULL),
+(25, 'تسوية صنف', 1, 13, 0, 1, 0, '1', '0', '90', '80', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 09:41:02', NULL),
+(26, 'تسوية صنف', 1, 14, 0, 11, 0, '0', '15', '250', '230', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 09:46:27', NULL),
+(27, 'تسوية صنف', 1, 15, 0, 11, 0, '15', '18', '250', '230', '0', NULL, NULL, NULL, '2025-03-09', '2025-03-09 09:48:55', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `taswea_products`
+--
+
+CREATE TABLE `taswea_products` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` decimal(10,2) NOT NULL,
+  `reason_id` int(11) NOT NULL,
+  `user_id` int(5) DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `taswea_products`
+--
+
+INSERT INTO `taswea_products` (`id`, `product_id`, `quantity`, `reason_id`, `user_id`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 3, 5.00, 1, NULL, NULL, '2025-03-08 22:38:20', '2025-03-08 22:38:20'),
+(2, 3, 3.00, 5, NULL, 'vvvvvv', '2025-03-08 22:48:38', '2025-03-08 22:48:38'),
+(3, 1, 9.00, 1, NULL, NULL, '2025-03-09 00:22:14', '2025-03-09 00:22:14'),
+(4, 6, 1.00, 1, NULL, 'mm', '2025-03-09 00:24:04', '2025-03-09 00:24:04'),
+(5, 3, 15.00, 1, NULL, NULL, '2025-03-09 00:25:42', '2025-03-09 00:25:42'),
+(6, 6, 0.00, 1, NULL, NULL, '2025-03-09 00:27:00', '2025-03-09 00:27:00'),
+(7, 1, 2.00, 1, NULL, NULL, '2025-03-09 00:28:15', '2025-03-09 00:28:15'),
+(8, 3, -5.00, 1, NULL, NULL, '2025-03-09 09:38:07', '2025-03-09 09:38:07'),
+(9, 3, 6.00, 1, NULL, NULL, '2025-03-09 09:39:10', '2025-03-09 09:39:10'),
+(10, 1, 1.00, 1, NULL, NULL, '2025-03-09 09:39:20', '2025-03-09 09:39:20'),
+(11, 3, 8.00, 1, NULL, NULL, '2025-03-09 09:40:21', '2025-03-09 09:40:21'),
+(12, 4, 9.00, 1, NULL, NULL, '2025-03-09 09:40:36', '2025-03-09 09:40:36'),
+(13, 1, 0.00, 1, NULL, NULL, '2025-03-09 09:41:02', '2025-03-09 09:41:02'),
+(14, 11, 15.00, 1, NULL, 'ملاحظه فريد', '2025-03-09 09:46:27', '2025-03-09 09:46:27'),
+(15, 11, 18.00, 1, 1, NULL, '2025-03-09 09:48:55', '2025-03-09 09:48:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `taswea_reasons`
+--
+
+CREATE TABLE `taswea_reasons` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `taswea_reasons`
+--
+
+INSERT INTO `taswea_reasons` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'تلف/هالك', NULL, NULL),
+(2, 'عيب صناعة', NULL, NULL),
+(3, 'زيادة غير مبررة', NULL, NULL),
+(4, 'سرقة', NULL, NULL),
+(5, 'انتهاء صلاحية', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -549,7 +643,8 @@ INSERT INTO `treasury_bill_dets` (`id`, `num_order`, `date`, `treasury_id`, `tre
 (17, 4, '2025-02-01', 4, 'تحويل', 0, 'بدون', 0, 2500.00, 1000.00, 4, 3, NULL, 1, 1, '2025-02-01 16:19:05', NULL),
 (18, 4, '2025-02-01', 3, 'تحويل', 0, 'بدون', 0, 7000.00, 1000.00, 4, 3, NULL, 1, 1, '2025-02-01 16:19:05', NULL),
 (19, 5, '2025-02-01', 4, 'تحويل', 0, 'بدون', 0, 2000.00, 500.00, 4, 3, 'neeeeeeeeeeew', 1, 1, '2025-02-01 16:22:52', NULL),
-(20, 5, '2025-02-01', 3, 'تحويل', 0, 'بدون', 0, 7500.00, 500.00, 4, 3, 'neeeeeeeeeeew', 1, 1, '2025-02-01 16:22:52', NULL);
+(20, 5, '2025-02-01', 3, 'تحويل', 0, 'بدون', 0, 7500.00, 500.00, 4, 3, 'neeeeeeeeeeew', 1, 1, '2025-02-01 16:22:52', NULL),
+(21, 5, '2025-03-04', 5, 'رصيد اول خزنة', 0, 'بدون', 0, 0.00, 0.00, NULL, NULL, NULL, 1, 1, '2025-03-04 22:48:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -594,16 +689,15 @@ CREATE TABLE `users` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `login_name` varchar(255) NOT NULL,
   `login_barcode` varchar(255) DEFAULT NULL,
-  `phone` int(11) DEFAULT NULL,
+  `phone` varchar(14) DEFAULT NULL,
   `role` tinyint(4) NOT NULL,
   `theme` tinyint(4) NOT NULL DEFAULT 1,
   `address` varchar(255) DEFAULT NULL,
-  `nat_id` int(11) DEFAULT NULL,
+  `nat_id` varchar(20) DEFAULT NULL,
   `birth_date` date DEFAULT NULL,
   `image` varchar(255) NOT NULL DEFAULT 'df_image.png',
-  `gender` tinyint(4) NOT NULL DEFAULT 1,
+  `gender` varchar(10) NOT NULL DEFAULT 'ذكر',
   `status` tinyint(4) NOT NULL DEFAULT 1,
   `last_login_time` datetime DEFAULT NULL,
   `note` varchar(255) DEFAULT NULL,
@@ -617,11 +711,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `login_name`, `login_barcode`, `phone`, `role`, `theme`, `address`, `nat_id`, `birth_date`, `image`, `gender`, `status`, `last_login_time`, `note`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'farid', 'farid@gmail.com', '111111', 'farid login', NULL, NULL, 1, 1, NULL, NULL, NULL, 'df_image.png', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'aya', 'aya@gmail.com', '222222', 'aya login', NULL, NULL, 0, 1, NULL, NULL, NULL, 'df_image.png', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL),
-(9, 'asmaa', 'asmaa@gmail.com', '111111', 'asmaa \r\nlogin', NULL, NULL, 1, 1, NULL, NULL, NULL, 'df_image.png', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(10, 'hala', 'hala@gmail.com', '222222', 'hala login', NULL, NULL, 0, 1, NULL, NULL, NULL, 'df_image.png', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `login_barcode`, `phone`, `role`, `theme`, `address`, `nat_id`, `birth_date`, `image`, `gender`, `status`, `last_login_time`, `note`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-03-09 10:31:45', NULL, NULL, NULL, NULL, '2025-03-09 10:31:45'),
+(2, 'Asmaa Negm', 'asmaa@gmail.com', '$2y$10$4jTJP/oP3HUdRUS5hEmH6e94eu7LKeOfMWjXJZBLLkFHAw4fvi4QW', NULL, NULL, 1, 1, NULL, NULL, NULL, 'df_image.png', 'انثي', 0, NULL, NULL, NULL, NULL, NULL, '2025-02-19 14:05:22');
 
 --
 -- Indexes for dumped tables
@@ -741,6 +833,18 @@ ALTER TABLE `store_dets`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `taswea_products`
+--
+ALTER TABLE `taswea_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `taswea_reasons`
+--
+ALTER TABLE `taswea_reasons`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `treasury_bill_dets`
 --
 ALTER TABLE `treasury_bill_dets`
@@ -759,7 +863,6 @@ ALTER TABLE `units`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`),
-  ADD UNIQUE KEY `users_login_name_unique` (`login_name`),
   ADD UNIQUE KEY `users_login_barcode_unique` (`login_barcode`),
   ADD UNIQUE KEY `users_nat_id_unique` (`nat_id`);
 
@@ -813,7 +916,7 @@ ALTER TABLE `financial_storages`
 -- AUTO_INCREMENT for table `financial_treasuries`
 --
 ALTER TABLE `financial_treasuries`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `financial_years`
@@ -825,7 +928,7 @@ ALTER TABLE `financial_years`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -837,7 +940,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `product_categoys`
@@ -861,13 +964,25 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `store_dets`
 --
 ALTER TABLE `store_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `taswea_products`
+--
+ALTER TABLE `taswea_products`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `taswea_reasons`
+--
+ALTER TABLE `taswea_reasons`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `treasury_bill_dets`
 --
 ALTER TABLE `treasury_bill_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `units`
@@ -879,7 +994,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

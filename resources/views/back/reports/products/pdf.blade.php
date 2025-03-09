@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $pageNameAr }} - {{ date('d-m-Y') }} - {{ date('h:i a') }}</title>
+    <title>{{ $pageNameAr }} ( {{ $product ? $results[0]->nameAr : 'جميع الأصناف' }} ) - {{ date('d-m-Y') }} - {{ date('h:i a') }}</title>
 
     <link rel="icon" href="{{ url('back') }}/images/settings/fiv.png" type="image/x-icon"/>
 
@@ -53,7 +53,7 @@
         <div class="">
             <div class="invoice-title">
                 <h4 class="text-center" style="font-weight: bold;">
-                    {{ $pageNameAr }}
+                    {{ $pageNameAr }} ( {{ $product ? $results[0]->nameAr : 'جميع الأصناف' }} )
                 </h4>
             </div>
             <hr>
@@ -65,12 +65,12 @@
             <table class="table-bordered" style="width: 100%;text-align: center;">
                 <thead>
                     <tr class="gray">
-                        <th>الحركة</th>
-                        <th >تاريخ الحركة</th>
-                        <th>خزينة الحركة</th>
+                        <th>رقم الحركة</th>
+                        <th>تاريخ الحركة</th>
+                        <th>اسم الصنف</th>
                         <th>نوع الحركة</th>
-                        <th>قيمة الحركة</th>
-                        <th >مستخدم</th>
+                        <th>تفاصيل الحركة</th>
+                        <th>مستخدم</th>
                         <th>ملاحظات</th>
                     </tr>
                 </thead>                               
@@ -78,16 +78,27 @@
                 <tbody>
                     @foreach ($results as $result)    
                         <tr>
-                            <td>{{ $result->num_order }}</td>
+                            <td>{{ $result->id }}</td>
                             <td>
                                 {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
+                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>                            
                             </td>
-                            <td>{{ $result->treasury_name }}</td>
-                            <td style="font-weight: bold;">{{ $result->treasury_type }}</td>
-                            <td>{{ number_format($result->value) }}</td>
-                            <td>{{ $result->user_name }}</td>
-                            <td>{{ $result->notes }}</td>
+                            <td style="font-weight: bold;">{{ $result->nameAr }}</td>
+                            <td>{{ $result->type }}</td>
+                            <td>
+                                @if ($result->type == 'تسوية صنف')
+                                    <span style="margin: 0 5px;">الكمية قبل: {{ $result->quantity }}</span> -
+                                    <span style="margin: 0 5px;">الكمية بعد: {{ $result->quantity_all }}</span> -
+
+                                    @if ($result->quantity_all > $result->quantity)
+                                        <span>زيادة {{ $result->quantity_all - $result->quantity }}</span>            
+                                    @else
+                                        <span>عجز {{ $result->quantity - $result->quantity_all }}</span>            
+                                    @endif
+                                @endif
+                            </td>
+                            <td>{{ $result->userName }}</td>
+                            <td>{{ $result->tasweaNotes }}</td>
                         </tr>
                     @endforeach
                 </tbody>

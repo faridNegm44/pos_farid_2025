@@ -101,6 +101,9 @@
                 /* font-family: Arial, Helvetica, sans-serif, serif; */
                 font-family: "4_F4", serif;        
             }
+            .navbar_hr{
+                margin: 3px 0 !important;
+            }
         </style>
 	</head>
 

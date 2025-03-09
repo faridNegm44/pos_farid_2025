@@ -48,9 +48,9 @@
                                 <th class="border-bottom-0" >تاريخ الحركة</th>
                                 <th class="border-bottom-0">اسم الصنف</th>
                                 <th class="border-bottom-0">نوع الحركة</th>
-                                {{--<th class="border-bottom-0">تفاصيل الحركة</th>--}}
-                                {{--<th class="border-bottom-0" >مستخدم</th>--}}
-                                {{--<th class="border-bottom-0">ملاحظات</th>--}}
+                                <th class="border-bottom-0">تفاصيل الحركة</th>
+                                <th class="border-bottom-0" >مستخدم</th>
+                                <th class="border-bottom-0">ملاحظات</th>
                             </tr>
                         </thead>                               
                         
@@ -64,7 +64,7 @@
                                     if($result->type == 'تسوية صنف'){
                                         $type = '#FF748B';
                                     }elseif($result->type == 'رصيد اول'){
-                                        $type = '#ddd';
+                                        $type = '#ccc';
                                     }elseif($result->type == 'تحويل'){
                                         $type = '#3D3BF3';
                                         $color = '#fff';
@@ -84,9 +84,20 @@
                                     </td>
                                     <td>{{ $result->nameAr }}</td>
                                     <td>{{ $result->type }}</td>
-                                    {{--<td>{{ $result->user_name }}</td>
-                                    <td>{{ $result->user_name }}</td>--}}
-                                    {{--<td>{{ $result->notes }}</td>--}}
+                                    <td>
+                                        @if ($result->type == 'تسوية صنف')
+                                            <span style="margin: 0 5px;">الكمية قبل: {{ $result->quantity }}</span> -
+                                            <span style="margin: 0 5px;">الكمية بعد: {{ $result->quantity_all }}</span> -
+
+                                            @if ($result->quantity_all > $result->quantity)
+                                                <span>زيادة {{ $result->quantity_all - $result->quantity }}</span>            
+                                            @else
+                                                <span>عجز {{ $result->quantity - $result->quantity_all }}</span>            
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td>{{ $result->userName }}</td>
+                                    <td>{{ $result->tasweaNotes }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
