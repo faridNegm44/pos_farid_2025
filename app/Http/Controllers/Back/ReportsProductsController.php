@@ -34,6 +34,8 @@ class ReportsProductsController extends Controller
         $pageNameAr = 'تقرير عن حركة صنف';      
 
         $product = request('products');
+        $from = request('from');
+        $to = request('to');
         
         $query = DB::table('store_dets')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
@@ -47,6 +49,14 @@ class ReportsProductsController extends Controller
                     )
                     ->orderBy('store_dets.id', 'asc');
 
+        if ($from && $to) {
+            $query->whereBetween('store_dets.created_at', [$from, $to]);
+        } elseif ($from) {
+            $query->where('store_dets.created_at', '>=', $from);
+        } elseif ($to) {
+            $query->where('store_dets.created_at', '<=', $to);
+        }
+        
         if($product){
             $query->where('store_dets.product_id', $product);
         }
@@ -54,13 +64,22 @@ class ReportsProductsController extends Controller
         $results = $query->get();
         //return $results;
         
-        return view('back.reports.products.result' , compact('pageNameAr', 'results', 'product'));
+
+        if(count($results) == 0){
+            return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
+        }else{
+            return view('back.reports.products.result' , compact('pageNameAr', 'results', 'product'));
+        }
     }
     
     public function result_pdf(Request $request)
-    {                
-        dd(request('products'));   
+    {                   
         $pageNameAr = 'تقرير عن حركة صنف';      
+
+        $product = request('products');
+        $from = request('from');
+        $to = request('to');
+        
         $query = DB::table('store_dets')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
                     ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_head_id')
@@ -73,15 +92,27 @@ class ReportsProductsController extends Controller
                     )
                     ->orderBy('store_dets.id', 'asc');
 
-        $product = request('products');
-
+        if ($from && $to) {
+            $query->whereBetween('store_dets.created_at', [$from, $to]);
+        } elseif ($from) {
+            $query->where('store_dets.created_at', '>=', $from);
+        } elseif ($to) {
+            $query->where('store_dets.created_at', '<=', $to);
+        }
+        
         if($product){
             $query->where('store_dets.product_id', $product);
         }
 
         $results = $query->get();
-        //return request('products');
+        //return $results;
         
-        return view('back.reports.products.pdf' , compact('pageNameAr', 'results', 'product'));
+
+        if(count($results) == 0){
+            return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
+        }else{
+            return view('back.reports.products.pdf' , compact('pageNameAr', 'results', 'product'));
+        }
     }
+    
 }

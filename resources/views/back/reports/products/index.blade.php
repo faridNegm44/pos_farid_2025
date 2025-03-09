@@ -33,6 +33,14 @@
 
 
     <script>
+        flatpickr(".datePicker", {
+            yearSelectorType: 'dropdown',
+            enableTime: false,
+            dateFormat: "Y-m-d",
+        });
+    </script>
+
+    <script>
         $("#store_id").on('input', function(){
             const thisVal = $(this).val();
 
@@ -63,12 +71,21 @@
             });
         });
     </script>
-    
+
+
+    {{-- start when click to button #print_report --}}
+    <script>
+        $(document).on('click', '#print_report', function(e) {
+            e.preventDefault();
+            let formData = $("form").serialize();
+            let printUrl = "{{ url('products/report/result/pdf') }}?" + formData;
+
+            window.open(printUrl);
+        });
+    </script>
+    {{-- end when click to button #print_report --}}
+
 @endsection
-
-
-
-
 
 
 @section('content')
@@ -79,7 +96,16 @@
         </div>
         <!-- breadcrumb -->
 
+        @if (session('notFound'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('notFound') }}
 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true" style="float: left;font-size: 30px;">&times;</span>
+                </button>
+            </div>
+        @endif
+        
         <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
                 <form method="post" action="{{ url('products/report/result') }}">
@@ -102,12 +128,28 @@
                             <label for="products">الأصناف</label>
                             <div>
                                 <select  name="products" class="products selectize" id="products">
-                                    <option value="" selected>اختر صنف</option>                                    
+                                    <option value="" selected>اختر مخزن أولا ثم صنف</option>                                    
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-products" style="display: none;"></bold>
                         </div>                                                
- 
+                        
+                        <div class="col-md-2">
+                            <label for="from">من</label>
+                            <div>
+                                <input type="text" class="form-control dataInput datePicker" placeholder="من" id="from" name="from">
+                            </div>
+                            <bold class="text-danger" id="errors-from" style="display: none;"></bold>
+                        </div>    
+                        
+                        <div class="col-md-2">
+                            <label for="to">الي</label>
+                            <div>
+                                <input type="text" class="form-control dataInput datePicker" placeholder="الي" id="to" name="to">
+                            </div>
+                            <bold class="text-danger" id="errors-to" style="display: none;"></bold>
+                        </div>    
+
                         <div class="col-md-1">
                             <label for="to">عرض</label>
                             <div>
@@ -119,7 +161,7 @@
                         <div class="col-md-1">
                             <label for="to">طباعة</label>
                             <div>
-                                <a target="_blank" href="{{ url('/products/report/result/pdf') }}" type="submit" class="btn btn-dark-gradient btn-block" style="height: 30px;padding: 4px 20px !important;margin: 0 5px;">
+                                <a id="print_report" class="btn btn-dark-gradient btn-block" style="height: 30px;padding: 4px 20px !important;margin: 0 5px;color: #fff;">
                                     طباعة                                    
                                 </a>
                             </div>
