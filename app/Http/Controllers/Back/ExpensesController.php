@@ -33,27 +33,6 @@ class ExpensesController extends Controller
     public function store(Request $request)
     {
         if (request()->ajax()){
-            $this->validate($request , [
-                'treasury' => 'required|integer|exists:financial_treasuries,id',
-                'title' => 'required||string|max:255',
-                'amount' => 'required|numeric|min:1',
-                'notes' => 'nullable|string|max:255',
-            ],[
-                'exists' => 'حقل :attribute غير موجود.',
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'min' => 'حقل :attribute أقل قيمة له هي 1 حرف.',
-                'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
-                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-            ],[
-                'treasury' => 'الخزينة',                
-                'title' => 'وصف المصروف',                
-                'amount' => 'مبلغ المصروف',                
-                'notes' => 'ملاحظات',                
-            ]);
-
-
             $lastAmountOfTreasury = DB::table('treasury_bill_dets')
                                         ->where('treasury_id', request('treasury'))
                                         ->orderBy('id', 'desc')
@@ -63,16 +42,33 @@ class ExpensesController extends Controller
 
             if($amount > $lastAmountOfTreasury){
                 return response()->json(['error' => 'مبلغ المصروف اكبر من المبلغ الموجود بالخزينة']);
+            
             }else{
-                
+                $this->validate($request , [
+                    'treasury' => 'required|integer|exists:financial_treasuries,id',
+                    'title' => 'required||string|max:255',
+                    'amount' => 'required|numeric|min:1',
+                    'notes' => 'nullable|string|max:255',
+                ],[
+                    'exists' => 'حقل :attribute غير موجود.',
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'min' => 'حقل :attribute أقل قيمة له هي 1 حرف.',
+                    'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
+                    'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                ],[
+                    'treasury' => 'الخزينة',                
+                    'title' => 'وصف المصروف',                
+                    'amount' => 'مبلغ المصروف',                
+                    'notes' => 'ملاحظات',                
+                ]);
+                    
                 DB::transaction(function() use($lastAmountOfTreasury){                   
                     $getId = Expense::create(request()->all());
 
                     $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'مصروف')->max('num_order');
                     
-
-                                                //dd($lastAmountOfTreasury);
-
                     DB::table('treasury_bill_dets')->insert([
                         'num_order' => ($lastNumId+1), 
                         'date' => Carbon::now(),
@@ -86,37 +82,12 @@ class ExpensesController extends Controller
                         'transaction_from' => null, 
                         'transaction_to' => null, 
                         'notes' => request('notes'), 
-                        'user_id' => 1, 
+                        'user_id' => auth()->user()->id, 
                         'year_id' => $this->currentFinancialYear(),
                         'created_at' => now()
                     ]);
-
                 });
-
-
             }
-
-
-
-            //DB::transaction(function () {
-            //    $getId = Expense::create(request()->all());  
-                
-            //    DB::table('clients_and_suppliers_dets')->insert([
-            //        'treasury_id' => 0,
-            //        'bill_type' => 'رصيد اول خزنة',
-            //        'bill_id' => 0,
-            //        'treasury_bill_head_id' => 0,
-            //        'treasury_bill_body_id' => 0,
-            //        'client_supplier_id' => $getId->id,
-            //        'money' => request('moneyFirstDuration'),
-            //        'year_id' => $this->currentFinancialYear(),
-            //        'notes' => request('note'),
-            //        'created_at' => now()
-            //    ]);
-
-            //});
-
-
         }
     }
 
@@ -180,17 +151,25 @@ class ExpensesController extends Controller
         $all = Expense::orderBy('id', 'desc')
                         ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'expenses.id')
                         ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'treasury_bill_dets.treasury_id')
+                        ->leftJoin('users', 'users.id', 'treasury_bill_dets.user_id')
                         ->select(
                             'treasury_bill_dets.*', 
                             'expenses.id as expenses_id',
                             'expenses.title',
                             'financial_treasuries.name as treasuryName',
+                            'users.name as userName',
                         )
                         ->orderBy('treasury_bill_dets.bill_id', 'ASC')
                         ->where('treasury_type', 'مصروف')
                         ->get();
 
         return DataTables::of($all)
+            ->addColumn('id', function($res){
+                return $res->num_order;
+            })
+            ->addColumn('user', function($res){
+                return $res->userName;
+            })
             ->addColumn('treasury', function($res){
                 return '<strong class="text-primary">'.$res->treasuryName.'</strong>';
             })
@@ -203,12 +182,12 @@ class ExpensesController extends Controller
                 return number_format($res->money);
             })
             ->addColumn('value', function($res){
-                return '<strong style="color: red;font-size: 13px;">'.number_format($res->value).'</strong>';
+                return '<strong style="color: red;font-size: 15px;">'.number_format($res->value).'</strong>';
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
-                    return Carbon::parse($res->created_at)->format('Y-m-d')
-                            .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
+                    return Carbon::parse($res->created_at)->format('d-m-Y')
+                            .' <p style="font-weight: bold;margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</p>';
                 }
             })
             ->addColumn('notes', function($res){

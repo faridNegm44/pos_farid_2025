@@ -43,11 +43,6 @@
         $('.modal').on('hidden.bs.modal', function(){
             $('form [id^=errors]').text('');
         });
-        
-        // selectize
-        $('.selectize').selectize({
-            hideSelected: true
-        });
 
         // cancel enter button 
         $(document).keypress(function (e) {
@@ -64,19 +59,16 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'user', name: 'user'},
                     {data: 'treasury', name: 'treasury'},
                     {data: 'title', name: 'title'},
                     {data: 'value', name: 'value'},
                     {data: 'money', name: 'money'},
                     {data: 'notes', name: 'notes'},
                     {data: 'created_at', name: 'created_at'},
+                    {data: 'user', name: 'user'},
                     {data: 'action', name: 'action', orderable: false},
                 ],
                 order: [[ 0, "desc" ]],
-                //fixedColumns: {
-                //    leftColumns: 4
-                //},
                 "bDestroy": true,
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
@@ -122,13 +114,13 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0">مستخدم</th>
                                 <th class="border-bottom-0">الخزينة</th>
-                                <th class="border-bottom-0">وصف المصروف</th>
+                                <th class="border-bottom-0" style="width: 20%;">وصف المصروف</th>
                                 <th class="border-bottom-0">م المصروف</th>
                                 <th class="border-bottom-0">مبلغ خزينة بعد المصروف</th>
                                 <th class="border-bottom-0">ملاحظات</th>
                                 <th class="border-bottom-0">تاريخ</th>
+                                <th class="border-bottom-0">مستخدم</th>
                                 <th class="border-bottom-0">التحكم</th>
                             </tr>
                         </thead>                                

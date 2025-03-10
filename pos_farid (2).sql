@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2025 at 04:29 PM
+-- Generation Time: Mar 10, 2025 at 01:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -173,7 +173,7 @@ INSERT INTO `expenses` (`id`, `treasury`, `title`, `amount`, `notes`, `created_a
 (10, 3, 'فاتوره نت ارضي ومكالمات يناير', '10000', NULL, '2025-01-30 12:00:31', '2025-01-30 12:00:31'),
 (11, 3, '900 مصروف شاي', '900', NULL, '2025-01-30 12:14:43', '2025-01-30 12:14:43'),
 (12, 3, 'اخر مصروف لتسويه الخزنه', '77100', NULL, '2025-01-30 12:15:21', '2025-01-30 12:15:21'),
-(13, 3, 'اول مصروف ف انستاباي بعد التحويل', '2000', 'ملاحظااااات اول مصروف ف انستاباي بعد التحويل', '2025-02-01 07:55:39', '2025-02-01 07:55:39');
+(13, 3, '\n\nاول مصروف ف انستاباي بعداول مصروف ف انستاباي بعداول مصروف ف انستاباي بعد التحويل', '2000', 'ملاحظااااات اول مصروف ف انستاباي بعد التحويل', '2025-02-01 07:55:39', '2025-02-01 07:55:39');
 
 -- --------------------------------------------------------
 
@@ -409,7 +409,8 @@ INSERT INTO `product_categoys` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (3, 'بلاستيك', '2024-05-24 12:44:55', '2024-05-24 12:44:55'),
 (4, 'خراطيم كهرباء 22', '2024-05-24 12:45:03', '2025-01-22 12:05:29'),
 (5, 'ggg 222', '2024-08-31 08:53:59', '2025-01-22 12:05:24'),
-(6, 'بوياتر', '2025-01-22 12:07:54', '2025-01-22 12:07:54');
+(6, 'بوياتر', '2025-01-22 12:07:54', '2025-01-22 12:07:54'),
+(7, 'قسم جديد', '2025-03-10 11:14:36', '2025-03-10 11:14:36');
 
 -- --------------------------------------------------------
 
@@ -712,7 +713,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `login_barcode`, `phone`, `role`, `theme`, `address`, `nat_id`, `birth_date`, `image`, `gender`, `status`, `last_login_time`, `note`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-03-09 10:31:45', NULL, NULL, NULL, NULL, '2025-03-09 10:31:45'),
+(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-03-10 09:57:17', NULL, NULL, NULL, NULL, '2025-03-10 07:57:17'),
 (2, 'Asmaa Negm', 'asmaa@gmail.com', '$2y$10$4jTJP/oP3HUdRUS5hEmH6e94eu7LKeOfMWjXJZBLLkFHAw4fvi4QW', NULL, NULL, 1, 1, NULL, NULL, NULL, 'df_image.png', 'انثي', 0, NULL, NULL, NULL, NULL, NULL, '2025-02-19 14:05:22');
 
 --
@@ -946,7 +947,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `product_categoys`
 --
 ALTER TABLE `product_categoys`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `settings`

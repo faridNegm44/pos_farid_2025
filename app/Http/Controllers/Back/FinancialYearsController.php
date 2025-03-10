@@ -31,7 +31,6 @@ class FinancialYearsController extends Controller
             } // end foreach
 
 
-
             $this->validate($request , [
                 'name' => 'required|string|unique:financial_years,name',
                 'start' => 'required|date',
@@ -52,8 +51,6 @@ class FinancialYearsController extends Controller
             ]);
 
             FinancialYears::create($request->all());
-
-
 
         } // end check request()->ajax()
     }
@@ -87,13 +84,6 @@ class FinancialYearsController extends Controller
         }   
     }
 
-     
-    public function destroy($id)
-    {
-        
-    }
-
-
     public function datatable()
     {
         $all = FinancialYears::orderBy('id', 'DESC')->get();
@@ -123,10 +113,6 @@ class FinancialYearsController extends Controller
                 return '
                     <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
                         <i class="fas fa-marker"></i>
-                    </button>
-
-                    <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'">
-                        <i class="fa fa-trash"></i>
                     </button>
                 ';
             })

@@ -10,6 +10,9 @@
         table.dataTable tbody td.sorting_1{
             background: transparent !important;
         }
+        .itemsSearch{
+            margin: 0 10px;
+        }
     </style>
 @endsection
 
@@ -28,7 +31,6 @@
 @endsection
 
 
-
 @section('content')
     <div class="container-fluid">
         <!-- breadcrumb -->
@@ -37,6 +39,19 @@
         </div>
         <!-- breadcrumb -->
 
+        <div style="margin-bottom: 10px;">
+            <div>
+                @if ($type)
+                    <span class="itemsSearch">نوع الحركة: {{ $type }}</span>
+                @endif
+                @if ($from)
+                    <span class="itemsSearch">تاريخ من: {{ $from }}</span>
+                @endif
+                @if ($to)
+                    <span class="itemsSearch">تاريخ الي: {{ $to }}</span>
+                @endif
+            </div>
+        </div>
 
         <div class="card">
             <div class="card-body">

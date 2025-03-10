@@ -24,7 +24,12 @@ class ReportsProductsController extends Controller
 
 
     public function getProductsByStore($store){
-        $products = DB::table('products')->where('store', $store)->get();
+        if($store == 'all'){
+            $products = DB::table('products')->orderBy('nameAr', 'asc')->get();
+        }else{
+            $products = DB::table('products')->where('store', $store)->orderBy('nameAr', 'asc')->get();
+        }
+
         return response()->json($products);
     }
 
@@ -36,6 +41,7 @@ class ReportsProductsController extends Controller
         $product = request('products');
         $from = request('from');
         $to = request('to');
+        $type = request('type');
         
         $query = DB::table('store_dets')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
@@ -60,6 +66,10 @@ class ReportsProductsController extends Controller
         if($product){
             $query->where('store_dets.product_id', $product);
         }
+        
+        if($type){
+            $query->where('store_dets.type', $type);
+        }
 
         $results = $query->get();
         //return $results;
@@ -68,7 +78,7 @@ class ReportsProductsController extends Controller
         if(count($results) == 0){
             return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
         }else{
-            return view('back.reports.products.result' , compact('pageNameAr', 'results', 'product'));
+            return view('back.reports.products.result' , compact('pageNameAr', 'results', 'product', 'type', 'from', 'to'));
         }
     }
     
@@ -79,7 +89,8 @@ class ReportsProductsController extends Controller
         $product = request('products');
         $from = request('from');
         $to = request('to');
-        
+        $type = request('type');
+
         $query = DB::table('store_dets')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
                     ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_head_id')
@@ -104,6 +115,10 @@ class ReportsProductsController extends Controller
             $query->where('store_dets.product_id', $product);
         }
 
+        if($type){
+            $query->where('store_dets.type', $type);
+        }
+        
         $results = $query->get();
         //return $results;
         
@@ -111,7 +126,7 @@ class ReportsProductsController extends Controller
         if(count($results) == 0){
             return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
         }else{
-            return view('back.reports.products.pdf' , compact('pageNameAr', 'results', 'product'));
+            return view('back.reports.products.pdf' , compact('pageNameAr', 'results', 'product', 'type', 'from', 'to'));
         }
     }
     

@@ -21,6 +21,12 @@
             font-size: 12px;
         }
 
+        .itemsSearch{
+            margin: 0 10px;
+        }
+        .itemsSearch span{
+            font-weight: bold;
+        }
 
         @media print {
             tr:nth-child(even) {
@@ -60,6 +66,23 @@
 
             @include('back.layouts.header_report')
         </div>
+
+        @if ($type || $from || $to)
+            <hr style="margin: 0 0 10px !important;"> 
+            <div style="margin-bottom: 10px;">
+                <div>
+                    @if ($type)
+                        <span class="itemsSearch">نوع الحركة: <span>{{ $type }}</span></span>
+                    @endif
+                    @if ($from)
+                        <span class="itemsSearch">تاريخ من: <span>{{ $from }}</span></span>
+                    @endif
+                    @if ($to)
+                        <span class="itemsSearch">تاريخ الي: <span>{{ $to }}</span></span>
+                    @endif
+                </div>
+            </div>
+        @endif
 
         <div>
             <table class="table-bordered" style="width: 100%;text-align: center;">

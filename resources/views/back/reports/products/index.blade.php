@@ -111,11 +111,12 @@
                 <form method="post" action="{{ url('products/report/result') }}">
                     @csrf
                     <div class="row justify-content-center">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label for="store_id">المخازن</label>
                             <div>
                                 <select  name="store_id" class="store_id selectize" id="store_id">
                                     <option value="" selected>اختر مخزن</option>                              
+                                    <option value="all">الكل</option>                              
                                     @foreach ($stores as $store)
                                       <option value="{{ $store->id }}">{{ $store->id }} - {{ $store->name }}</option>                              
                                     @endforeach
@@ -124,7 +125,7 @@
                             <bold class="text-danger" id="errors-store_id" style="display: none;"></bold>
                         </div>    
                         
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label for="products">الأصناف</label>
                             <div>
                                 <select  name="products" class="products selectize" id="products">
@@ -132,6 +133,18 @@
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-products" style="display: none;"></bold>
+                        </div>                                                
+                        
+                        <div class="col-md-2">
+                            <label for="type">أنواع الحركات علي الأصناف</label>
+                            <div>
+                                <select  name="type" class="type form-control" id="type">
+                                    <option value="" selected>أنواع الحركات علي الأصناف</option>                                    
+                                    <option value="رصيد اول">رصيد اول مدة</option>                                    
+                                    <option value="تسوية صنف" class="text-danger">تسوية صنف</option>                                    
+                                </select>
+                            </div>
+                            <bold class="text-danger" id="errors-type" style="display: none;"></bold>
                         </div>                                                
                         
                         <div class="col-md-2">
