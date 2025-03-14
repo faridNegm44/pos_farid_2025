@@ -84,7 +84,7 @@
                                     </td>
                                     <td>{{ $result->treasury_name }}</td>
                                     <td>{{ $result->treasury_type }}</td>
-                                    <td>{{ number_format($result->value) }}</td>
+                                    <td>{{ number_format($result->value, 0, '', '.') }}</td>
                                     <td>{{ $result->user_name }}</td>
                                     <td>{{ $result->notes }}</td>
                                 </tr>

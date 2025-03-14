@@ -31,7 +31,6 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/GetFinancialYearHelper.php",
             "app/Helpers/helpers.php"
         ]
     },

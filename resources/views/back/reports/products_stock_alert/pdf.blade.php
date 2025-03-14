@@ -21,6 +21,12 @@
             font-size: 12px;
         }
 
+        .itemsSearch{
+            margin: 0 10px;
+        }
+        .itemsSearch span{
+            font-weight: bold;
+        }
 
         @media print {
             tr:nth-child(even) {
@@ -65,29 +71,25 @@
             <table class="table-bordered" style="width: 100%;text-align: center;">
                 <thead>
                     <tr class="gray">
-                        <th>الحركة</th>
-                        <th >تاريخ الحركة</th>
-                        <th>خزينة الحركة</th>
-                        <th>نوع الحركة</th>
-                        <th>قيمة الحركة</th>
-                        <th >مستخدم</th>
-                        <th>ملاحظات</th>
+                        <th class="border-bottom-0">كود الصنف</th>
+                        <th class="border-bottom-0">اسم الصنف</th>
+                        <th class="border-bottom-0">حد الطلب</th>
+                        <th class="border-bottom-0">كمية الصنف حاليا</th>
+                        <th class="border-bottom-0">المخزن</th>
+                        <th class="border-bottom-0" >القسم</th>
                     </tr>
                 </thead>                               
                 
                 <tbody>
-                    @foreach ($results as $result)    
+                    @foreach ($supp_results as $result)    
+
                         <tr>
-                            <td>{{ $result->num_order }}</td>
-                            <td>
-                                {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
-                            </td>
-                            <td>{{ $result->treasury_name }}</td>
-                            <td style="font-weight: bold;">{{ $result->treasury_type }}</td>
-                            <td>{{ number_format($result->value, 0, '', '.') }}</td>
-                            <td>{{ $result->user_name }}</td>
-                            <td>{{ $result->notes }}</td>
+                            <td>{{ $result->productId }}</td>
+                            <td>{{ $result->nameAr }}</td>
+                            <td>{{ $result->stockAlert }}</td>                                    
+                            <td>{{ $result->quantity_all }}</td>
+                            <td>{{ $result->storeName }}</td>
+                            <td>{{ $result->categoryName }}</td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -156,14 +156,16 @@ class TransferBetweenStoragesController extends Controller
                         ->where('treasury_type', 'تحويل')
                         ->leftJoin('financial_treasuries as transaction_from_name', 'transaction_from_name.id', 'treasury_bill_dets.treasury_id')
                         ->leftJoin('financial_treasuries as transaction_to_name', 'transaction_to_name.id', 'treasury_bill_dets.treasury_id')
+                        ->leftJoin('users', 'users.id', 'treasury_bill_dets.user_id')
                         ->select(
                             'treasury_bill_dets.*', 
                             'transaction_from_name.name as transaction_from_name',
                             'transaction_to_name.name as transaction_to_name',
+                            'users.name as userName',
                         )
                         ->get();
 
-            $created_at = Carbon::parse($find[0]->created_at)->format('Y-m-d h:i:s a');
+            $created_at = Carbon::parse($find[0]->created_at)->format('d-m-Y h:i:s a');
 
             //dd($created_at);
 
@@ -226,10 +228,12 @@ class TransferBetweenStoragesController extends Controller
         $all = DB::table('treasury_bill_dets')->orderBy('num_order', 'asc')
                         ->leftJoin('financial_treasuries as transaction_from_name', 'transaction_from_name.id', 'treasury_bill_dets.treasury_id')
                         ->leftJoin('financial_treasuries as transaction_to_name', 'transaction_to_name.id', 'treasury_bill_dets.treasury_id')
+                        ->leftJoin('users', 'users.id', 'treasury_bill_dets.user_id')
                         ->select(
                             'treasury_bill_dets.*', 
                             'transaction_from_name.name as transaction_from_name',
                             'transaction_to_name.name as transaction_to_name',
+                            'users.name as userName',
                         )
                         ->orderBy('treasury_bill_dets.bill_id', 'ASC')
                         ->groupBy('treasury_bill_dets.num_order')
@@ -243,12 +247,15 @@ class TransferBetweenStoragesController extends Controller
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
-                    return Carbon::parse($res->created_at)->format('Y-m-d')
+                    return Carbon::parse($res->created_at)->format('d-m-Y')
                             .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
                 }
             })
+            ->addColumn('value', function($res){
+                return "<strong style='font-size: 13px;'>".number_format($res->value, 0, '', '.')."</strong>";
+            })
             ->addColumn('user', function($res){
-                return $res->user_id;
+                return $res->userName;
             })
             ->addColumn('notes', function($res){
                 return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->notes.'">

@@ -229,48 +229,36 @@ class SuppliersController extends Controller
 
         return DataTables::of($all)
             ->addColumn('code', function($res){
-                return  "<strong style='font-size: 15px;'>#".$res->code."</strong>";
+                return  "<strong>#".$res->code."</strong>";
             })
             ->addColumn('name', function($res){
-                return  "<strong style='font-size: 13px;'>".$res->name."</strong>";
+                return  "<strong>".$res->name."</strong>";
             })
             ->addColumn('type_name', function($res){
                 return $res->type_name;
             })
             ->addColumn('address', function($res){
                 return '<span class="text-primary" data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->address.'">
-                            '.Str::limit($res->address, 30).'
+                            '.Str::limit($res->address, 20).'
                         </span>';
-            })
-            ->addColumn('start_dealing', function($res){
-                if($res->start_dealing){
-                    return $res->start_dealing;
-                }
-            })
-            ->addColumn('last_bill', function($res){
-                if($res->last_bill){
-                    return '<span style="font-size: 14px;">'.number_format($res->last_bill, 0, '', '.').'</span>';
-                }else{
-                    return 0;
-                }
             })
             ->addColumn('opening_creditor', function($res){
                 if($res->money < 0){
-                    return '<span style="font-size: 14px;color: red;">'.number_format(abs($res->money), 0, '', '.').'</span>';
+                    return '<span style="color: red;">'.number_format(abs($res->money), 0, '', '.').'</span>';
                 }else{
                     return 0;
                 }
             })
             ->addColumn('opening_debtor', function($res){
                 if($res->money > 0){
-                    return '<span style="font-size: 14px;">'.number_format($res->money, 0, '', '.').'</span>';
+                    return number_format($res->money, 0, '', '.');
                 }else{
                     return 0;
                 }
             })
             ->addColumn('max_limit', function($res){
                 if($res->debit_limit){
-                    return '<span class="text-danger" style="font-size: 14px;">'.number_format($res->debit_limit, 0, '', '.').'</span>';
+                    return '<span class="text-danger">'.number_format($res->debit_limit, 0, '', '.').'</span>';
                 }else{
                     return 0;
                 }
@@ -282,7 +270,7 @@ class SuppliersController extends Controller
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
-                    return Carbon::parse($res->created_at)->format('Y-m-d')
+                    return Carbon::parse($res->created_at)->format('d-m-Y')
                             .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
                 }
             })
@@ -303,7 +291,7 @@ class SuppliersController extends Controller
                         </button>                        
                         ';
             })
-            ->rawColumns(['code', 'name', 'type_name', 'phone', 'address', 'status', 'start_dealing', 'last_bill', 'opening_creditor', 'opening_debtor', 'max_limit', 'notes', 'created_at', 'action'])
+            ->rawColumns(['code', 'name', 'type_name', 'phone', 'address', 'status', 'opening_creditor', 'opening_debtor', 'max_limit', 'notes', 'created_at', 'action'])
             ->toJson();
     }
 }

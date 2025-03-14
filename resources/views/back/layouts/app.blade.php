@@ -103,6 +103,7 @@
             }
             .navbar_hr{
                 margin: 3px 0 !important;
+                border-top: 1px solid #0162e8;
             }
         </style>
 	</head>

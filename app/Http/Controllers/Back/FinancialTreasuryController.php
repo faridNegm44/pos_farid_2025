@@ -136,14 +136,14 @@ class FinancialTreasuryController extends Controller
                 return '<strong class="text-primary">'.$res->name.'</strong>';
             })
             ->addColumn('moneyFirstDuration', function($res){
-                return number_format($res->moneyFirstDuration);
+                return number_format($res->moneyFirstDuration, 0, '', '.');
             })
             ->addColumn('money_now', function($res){
-                return '<strong style="font-size: 13px;color: red;">'.number_format($res->money).'</strong>';
+                return '<strong style="font-size: 13px;color: red;">'.number_format($res->money, 0, '', '.').'</strong>';
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
-                    return Carbon::parse($res->created_at)->format('Y-m-d')
+                    return Carbon::parse($res->created_at)->format('d-m-Y')
                             .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
                 }
             })
@@ -156,15 +156,13 @@ class FinancialTreasuryController extends Controller
                 }
             })
             ->addColumn('action', function($res){
-                return '
-                        <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                            <i class="fas fa-marker"></i>
-                        </button>
-                    ';
-                    
-                    //<button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" res_title="'.$res->name.'">
-                    //    <i class="fa fa-trash"></i>
-                    //</button>
+                if($res->id != 1){
+                    return '
+                            <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                                <i class="fas fa-marker"></i>
+                            </button>
+                        ';
+                }                    
             })
             ->rawColumns(['name', 'moneyFirstDuration', 'money_now', 'created_at', 'status', 'action'])
             ->toJson();

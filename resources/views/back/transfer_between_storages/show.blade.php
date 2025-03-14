@@ -25,10 +25,10 @@
               <tbody>
                 <tr>
                   <td class="data_removed" id="num_order"></td>
-                  <td class="data_removed" id="created_at"></td>
+                  <td class="data_removed" id="created_at" style="font-size: 11px !important;"></td>
                   <td class="data_removed" id="value"></td>
                   <td class="data_removed" id="user_id"></td>
-                  <td class="data_removed" id="notes"></td>
+                  <td class="data_removed" id="notes" style="font-size: 10px !important;"></td>
                 </tr>
               </tbody>
             </table>

@@ -162,91 +162,107 @@
 
                   <h5 style="text-decoration: underline;font-weight: bold;">بيانات السعر والوحدات</h5>
                   <div class="row row-xs">
-                    <div class="col-lg-2 col-12">
-                        <label for="sellPrice">س البيع</label>
-                        <i class="fas fa-star require_input"></i>
-                        <div>
-                            <input type="text" class="form-control dataInput" placeholder="س البيع" id="sellPrice" name="sellPrice" >
+
+                    {{-- start right --}}
+                    <div class="col-lg-6 col-12">
+                      <div class="row row-xs">
+                        <div class="col-lg-4 col-12">
+                            <label for="sellPrice">س البيع</label>
+                            <i class="fas fa-star require_input"></i>
+                            <div>
+                                <input type="text" class="form-control dataInput" placeholder="س البيع" id="sellPrice" name="sellPrice" >
+                            </div>
+                            <bold class="text-danger" id="errors-sellPrice" style="display: none;"></bold>
+                        </div>                        
+                        
+                        <div class="col-lg-4 col-12">
+                            <label for="purchasePrice">س الشراء</label>
+                            <div>
+                                <input type="text" class="form-control dataInput" placeholder="س الشراء" id="purchasePrice" name="purchasePrice" >
+                            </div>
+                            <bold class="text-danger" id="errors-purchasePrice" style="display: none;"></bold>
+                        </div>                        
+    
+                        <div class="col-lg-4 col-12">
+                          <label for="tax">الضريبة</label>
+                          <div>
+                              <input type="text" class="form-control dataInput" placeholder="الضريبة" id="tax" name="tax" value="0">
+                          </div>
+                          <bold class="text-danger" id="errors-tax" style="display: none;"></bold>
+                        </div>   
+                        
+                        <div class="col-lg-4 col-12">
+                          <label for="discountPercentage">أقصي نسبة خصم %</label>
+                          <i class="fas fa-star require_input"></i>
+                          <div>
+                              <input type="text" class="form-control dataInput" placeholder="أقصي نسبة خصم %" id="discountPercentage" name="discountPercentage" value="0">
+                          </div>
+                          <bold class="text-danger" id="errors-discountPercentage" style="display: none;"></bold>
                         </div>
-                        <bold class="text-danger" id="errors-sellPrice" style="display: none;"></bold>
-                    </div>                        
-                    
-                    <div class="col-lg-2 col-12">
-                        <label for="purchasePrice">س الشراء</label>
-                        <div>
-                            <input type="text" class="form-control dataInput" placeholder="س الشراء" id="purchasePrice" name="purchasePrice" >
+                      
+                        <div class="col-lg-4 col-12">
+                            <label for="max_sale_quantity">أقصي كمية بيع</label>
+                            <i class="fas fa-star require_input"></i>
+                            <div>
+                                <input type="text" class="form-control dataInput" placeholder="أقصي كمية بيع" id="max_sale_quantity" name="max_sale_quantity" value="0">
+                            </div>
+                            <bold class="text-danger" id="errors-max_sale_quantity" style="display: none;"></bold>
                         </div>
-                        <bold class="text-danger" id="errors-purchasePrice" style="display: none;"></bold>
-                    </div>                        
-
-                    <div class="col-lg-2 col-12">
-                      <label for="tax">الضريبة</label>
-                      <div>
-                          <input type="text" class="form-control dataInput" placeholder="الضريبة" id="tax" name="tax" value="0">
+                        
                       </div>
-                      <bold class="text-danger" id="errors-tax" style="display: none;"></bold>
-                    </div>                                            
+                    </div>
+                    {{-- end right --}}
 
-                    <div class="col-lg-2 col-12">
-                      <label for="bigUnit">الوحدة الكبري</label>
-                      <div>    
-                          <select  name="bigUnit" class="bigUnit selectize" id="bigUnit">
-                            <option value="" selected>الوحدة الكبري</option>
-                            @foreach ($units as $unit)
-                              <option value="{{ $unit->id }}">{{ $unit->name }}</option>                              
-                            @endforeach
-                          </select>
-                      </div>
-                      <bold class="text-danger" id="errors-bigUnit" style="display: none;"></bold>
-                    </div>                        
 
-                    <div class="col-lg-2 col-12">
-                      <label for="smallUnit">الوحدة الصغري</label>
-                      <div>    
-                          <select  name="smallUnit" class="smallUnit selectize" id="smallUnit">
-                            <option value="" selected>الوحدة الصغري</option>
-                            @foreach ($units as $unit)
-                              <option value="{{ $unit->id }}">{{ $unit->name }}</option>                              
-                            @endforeach
-                          </select>
-                      </div>
-                      <bold class="text-danger" id="errors-smallUnit" style="display: none;"></bold>
-                    </div> 
+                    {{-- start left --}}
+                    <div class="col-lg-6 col-12">
+                      <div class="row row-xs">
+                        <div class="col-lg-4 col-12">
+                          <label for="bigUnit">الوحدة الكبري</label>
+                          <div>    
+                              <select  name="bigUnit" class="bigUnit selectize" id="bigUnit">
+                                <option value="" selected>الوحدة الكبري</option>
+                                @foreach ($units as $unit)
+                                  <option value="{{ $unit->id }}">{{ $unit->name }}</option>                              
+                                @endforeach
+                              </select>
+                          </div>
+                          <bold class="text-danger" id="errors-bigUnit" style="display: none;"></bold>
+                        </div>                        
+    
+                        <div class="col-lg-4 col-12">
+                          <label for="smallUnit">الوحدة الصغري</label>
+                          <div>    
+                              <select  name="smallUnit" class="smallUnit selectize" id="smallUnit">
+                                <option value="" selected>الوحدة الصغري</option>
+                                @foreach ($units as $unit)
+                                  <option value="{{ $unit->id }}">{{ $unit->name }}</option>                              
+                                @endforeach
+                              </select>
+                          </div>
+                          <bold class="text-danger" id="errors-smallUnit" style="display: none;"></bold>
+                        </div> 
+    
+                        <div class="col-lg-4 col-12">
+                          <label for="smallUnitPrice">سعر وحدة الصغري</label>
+                          <div>
+                              <input type="text" class="form-control dataInput" placeholder="سعر وحدة الصغري" id="smallUnitPrice" name="smallUnitPrice" >
+                          </div>
+                          <bold class="text-danger" id="errors-smallUnitPrice" style="display: none;"></bold>
+                        </div>                        
+                      
+                        <div class="col-lg-4 col-12">
+                          <label for="smallUnitNumbers">عدد وحدات الصغري</label>
+                          <div>
+                              <input type="text" class="form-control dataInput" placeholder="عدد وحدات الصغري" id="smallUnitNumbers" name="smallUnitNumbers" >
+                          </div>
+                          <bold class="text-danger" id="errors-smallUnitNumbers" style="display: none;"></bold>
+                        </div>                    
 
-                    <div class="col-lg-2 col-12">
-                      <label for="smallUnitPrice">سعر وحدة الصغري</label>
-                      <div>
-                          <input type="text" class="form-control dataInput" placeholder="سعر وحدة الصغري" id="smallUnitPrice" name="smallUnitPrice" >
                       </div>
-                      <bold class="text-danger" id="errors-smallUnitPrice" style="display: none;"></bold>
-                    </div>                        
+                    </div>
+                    {{-- end left --}}
                   
-                    <div class="col-lg-2 col-12">
-                      <label for="smallUnitNumbers">عدد وحدات الصغري</label>
-                      <div>
-                          <input type="text" class="form-control dataInput" placeholder="عدد وحدات الصغري" id="smallUnitNumbers" name="smallUnitNumbers" >
-                      </div>
-                      <bold class="text-danger" id="errors-smallUnitNumbers" style="display: none;"></bold>
-                    </div>
-
-                    <div class="col-lg-2 col-12">
-                      <label for="discountPercentage">أقصي نسبة خصم %</label>
-                      <i class="fas fa-star require_input"></i>
-                      <div>
-                          <input type="text" class="form-control dataInput" placeholder="أقصي نسبة خصم %" id="discountPercentage" name="discountPercentage" value="0">
-                      </div>
-                      <bold class="text-danger" id="errors-discountPercentage" style="display: none;"></bold>
-                    </div>
-                  
-                    <div class="col-lg-2 col-12">
-                        <label for="max_sale_quantity">أقصي كمية بيع</label>
-                        <i class="fas fa-star require_input"></i>
-                        <div>
-                            <input type="text" class="form-control dataInput" placeholder="أقصي كمية بيع" id="max_sale_quantity" name="max_sale_quantity" value="0">
-                        </div>
-                        <bold class="text-danger" id="errors-max_sale_quantity" style="display: none;"></bold>
-                    </div>
-                    
                   </div>
                   
                   

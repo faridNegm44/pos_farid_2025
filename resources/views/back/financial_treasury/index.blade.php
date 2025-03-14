@@ -95,7 +95,6 @@
                     {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false},
                 ],
-                order: [[ 0, "desc" ]],
                 //fixedColumns: {
                 //    leftColumns: 4
                 //},

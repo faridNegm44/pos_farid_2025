@@ -179,10 +179,10 @@ class ExpensesController extends Controller
                         </span>';
             })
             ->addColumn('money', function($res){
-                return number_format($res->money);
+                return number_format($res->money, 0, '', '.');
             })
             ->addColumn('value', function($res){
-                return '<strong style="color: red;font-size: 15px;">'.number_format($res->value).'</strong>';
+                return '<strong style="color: red;font-size: 15px;">'.number_format($res->value, 0, '', '.').'</strong>';
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){

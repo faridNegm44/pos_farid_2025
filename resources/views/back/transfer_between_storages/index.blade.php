@@ -147,6 +147,7 @@
                 columns: [
                     {data: 'num_order', name: 'num_order'},
                     {data: 'created_at', name: 'created_at'},
+                    {data: 'value', name: 'value'},
                     {data: 'user', name: 'user'},
                     {data: 'notes', name: 'notes'},
                     {data: 'action', name: 'action', orderable: false},
@@ -201,6 +202,7 @@
                             <tr>
                                 <th class="border-bottom-0">#</th>
                                 <th class="border-bottom-0">تاريخ</th>
+                                <th class="border-bottom-0">مبلغ التحويل</th>
                                 <th class="border-bottom-0">مستخدم</th>
                                 <th class="border-bottom-0">ملاحظات</th>
                                 <th class="border-bottom-0">التحكم</th>

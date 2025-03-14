@@ -91,8 +91,6 @@
                     {data: 'type_name', name: 'type_name'},
                     {data: 'phone', name: 'phone'},
                     {data: 'address', name: 'address'},
-                    {data: 'start_dealing', name: 'start_dealing'},
-                    {data: 'last_bill', name: 'last_bill'},
                     {data: 'opening_creditor', name: 'opening_creditor'},
                     {data: 'opening_debtor', name: 'opening_debtor'},
                     {data: 'max_limit', name: 'max_limit'},
@@ -181,12 +179,10 @@
                                 <th class="border-bottom-0">#</th>
                                 <th class="border-bottom-0">التحكم</th>
                                 <th class="border-bottom-0">الحالة</th>
-                                <th class="border-bottom-0" style="max-width: 15%;">الإسم</th>
-                                <th class="border-bottom-0">ن المورد</th>
+                                <th class="border-bottom-0">الإسم</th>
+                                <th class="border-bottom-0">نوع المورد</th>
                                 <th class="border-bottom-0">موبايل</th>
                                 <th class="border-bottom-0">العنوان</th>
-                                <th class="border-bottom-0">بداية التعامل</th>
-                                <th class="border-bottom-0">اخر فاتورة</th>
                                 <th class="border-bottom-0">افتتاحي دائن</th>
                                 <th class="border-bottom-0">افتتاحي مدين</th>
                                 <th class="border-bottom-0">أقصي قيمة للمسحوبات</th>

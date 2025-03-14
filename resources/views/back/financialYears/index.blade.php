@@ -5,11 +5,7 @@
     {{ $pageNameAr }}
 @endsection
 
-@section('header')
-
-
-
-@endsection
+@section('header') @endsection
 
 @section('footer')  
     <script>
@@ -32,8 +28,6 @@
             }
         });
 
-
-
         // focus first input when open modal
         $('.modal').on('shown.bs.modal', function(){
             $('.dataInput:first').focus();                
@@ -44,7 +38,6 @@
             $('form [id^=errors]').text('');
         });
         
-
 
         // cancel enter button 
         $(document).keypress(function (e) {
@@ -78,12 +71,7 @@
     {{-- add, edit, delete => script --}}
     @include('back.financialYears.add')
     @include('back.financialYears.edit')
-    @include('back.financialYears.delete')
 @endsection
-
-
-
-
 
 
 @section('content')
@@ -105,7 +93,6 @@
 
         @include('back.financialYears.form')
 
-
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -116,26 +103,22 @@
             </div>
         @endif
 
-        <div class="row row-sm">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
-                                <thead>
-                                    <tr>
-                                        <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0" >الإسم</th>
-                                        <th class="border-bottom-0">بدايةالسنة</th>
-                                        <th class="border-bottom-0">نهاية السنة</th>
-                                        <th class="border-bottom-0" style="width: 30%;">ملاحظات</th>
-                                        <th class="border-bottom-0" >الحالة</th>
-                                        <th class="border-bottom-0">التحكم</th>
-                                    </tr>
-                                </thead>                                
-                            </table>
-                        </div>
-                    </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom-0">#</th>
+                                <th class="border-bottom-0" >الإسم</th>
+                                <th class="border-bottom-0">بدايةالسنة</th>
+                                <th class="border-bottom-0">نهاية السنة</th>
+                                <th class="border-bottom-0" style="width: 30%;">ملاحظات</th>
+                                <th class="border-bottom-0" >الحالة</th>
+                                <th class="border-bottom-0">التحكم</th>
+                            </tr>
+                        </thead>                                
+                    </table>
                 </div>
             </div>
         </div>

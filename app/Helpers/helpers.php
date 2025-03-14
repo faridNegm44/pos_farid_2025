@@ -1,7 +1,17 @@
 <?php
+
+use App\Models\Back\FinancialYears;
 use App\Models\Back\Setting;
 use App\Models\Back\User;
 use Illuminate\Support\Facades\DB;
+
+
+
+// start get curren financial year where status 1
+    function getFinancialYear(){
+        return FinancialYears::where('status', 1)->first();
+    }
+// end get curren financial year where status 1
 
 // start get GeneralSettingsInfo
     if (!function_exists('GeneralSettingsInfo')) {

@@ -16,7 +16,7 @@
                 $(`#exampleModalCenterShow .modal-body #num_order`).text(res.find[0].num_order);
                 $(`#exampleModalCenterShow .modal-body #created_at`).text(res.created_at);
                 $(`#exampleModalCenterShow .modal-body #value`).text(res.find[0].value);
-                $(`#exampleModalCenterShow .modal-body #user_id`).text(res.find[0].user_id);
+                $(`#exampleModalCenterShow .modal-body #user_id`).text(res.find[0].userName);
                 $(`#exampleModalCenterShow .modal-body #notes`).text(res.find[0].notes);
                 
                 $(`#exampleModalCenterShow .modal-body #num_order_treasure_from span`).text(res.find[0].transaction_from_name);

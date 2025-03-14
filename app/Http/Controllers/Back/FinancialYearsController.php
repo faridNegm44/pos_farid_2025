@@ -27,9 +27,8 @@ class FinancialYearsController extends Controller
             foreach($allData as $item){
                 if($item->status == 1){
                     return response()->json(['foundedActiveFinYear' => 'تحذير: هناك سنة مالية لم تقفل بعد']);
-                } // end if $item->status == 1
-            } // end foreach
-
+                }
+            }
 
             $this->validate($request , [
                 'name' => 'required|string|unique:financial_years,name',
@@ -70,17 +69,26 @@ class FinancialYearsController extends Controller
             $find = FinancialYears::where('id', $id)->first();
 
             $this->validate($request , [
-                'name' => 'required|string|unique:financialYears,name,'.$id,
+                'name' => 'required|string|unique:financial_years,name,'.$id,
+                'start' => 'required|date',
+                'end' => 'required|date',
+                'notes' => 'nullable|string|max:255',
             ],[
                 'required' => 'حقل :attribute إلزامي.',
                 'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
                 'unique' => 'حقل :attribute مستخدم من قبل.',
+                'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
+                'date' => 'حقل :attribute يجب ان يكون من نوع تاريخ.',
 
             ],[
-                'name' => 'إسم الشركة',                
+                'name' => 'إسم السنة المالية',                
+                'start' => 'تاريخ بداية السنة المالية',                
+                'end' => 'تاريخ نهاية السنة المالية',                
+                'notes' => 'الملاحظات',                
             ]);
 
             $find->update($request->all());
+
         }   
     }
 
@@ -93,10 +101,10 @@ class FinancialYearsController extends Controller
                 return '<strong>'.$res->name.'</strong>';
             })
             ->addColumn('start', function($res){
-                return '<strong>'.Carbon::parse($res->start)->format('Y-m-d').'</strong>';
+                return '<strong>'.Carbon::parse($res->start)->format('d-m-Y').'</strong>';
             })
             ->addColumn('end', function($res){
-                return '<strong>'.Carbon::parse($res->end)->format('Y-m-d').'</strong>';
+                return '<strong>'.Carbon::parse($res->end)->format('d-m-Y').'</strong>';
             })
             ->addColumn('notes', function($res){
                 return '<strong data-bs-toggle="tooltip" data-bs-placement="top" title="'.$res->notes.'">'.Str::words($res->notes, 10, ' ....').'</strong>';
@@ -106,15 +114,19 @@ class FinancialYearsController extends Controller
                     return '<span class="label text-success" style="position: relative;"><div class="dot-label bg-success ml-1" style="position: absolute;right: -17px;top: 7px;"></div>نشط</span>';
                 }
                 else{
-                    return '<span class="label text-danger" style="position: relative;"><div class="dot-label bg-danger ml-1" style="position: absolute;right: -15px;top: 7px;"></div>معطل</span>';
+                    return '<span class="label text-danger" style="position: relative;"><div class="dot-label bg-danger ml-1" style="position: absolute;right: -15px;top: 7px;"></div>مقفل</span>';
                 }
             })
             ->addColumn('action', function($res){
-                return '
-                    <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                        <i class="fas fa-marker"></i>
-                    </button>
-                ';
+                if($res->status == 1){
+                    return '
+                        <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                            <i class="fas fa-marker"></i>
+                        </button>
+                    ';
+                }else{
+                    return '';
+                }
             })
             ->rawColumns(['name', 'start', 'end', 'notes', 'status', 'action'])
             ->toJson();

@@ -26,7 +26,7 @@
                                     <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">العملاء</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('suppliers') }}" class="slide-item active">الموردين</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('financial_treasury') }}" class="slide-item active">الخزائن المالية</a></li>
-                                    <li aria-haspopup="true" class="active"><a href="{{ url('financial_treasury') }}" class="slide-item active">كشكول النواقص</a></li>
+                                    <li aria-haspopup="true" class="active"><a href="{{ url('products/report/stock_alert') }}" class="slide-item active">كشكول النواقص</a></li>
                                     <li aria-haspopup="true" class="active"><a href="{{ url('') }}" class="slide-item active">الموظفين</a></li>
                                 </ul>
                             </li>

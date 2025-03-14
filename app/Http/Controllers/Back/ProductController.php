@@ -325,7 +325,7 @@ class ProductController extends Controller
 
         return DataTables::of($all)
             ->addColumn('id', function($res){
-                return '<strong>'.number_format($res->id).'</strong>';
+                return '<strong>#'.$res->id.'</strong>';
             })
             ->addColumn('name', function($res){
                 $names = "<div>
@@ -347,10 +347,10 @@ class ProductController extends Controller
                 return $names;
             })
             ->addColumn('sellPrice', function($res){
-                return '<strong style="font-size: 14px;">'.number_format($res->sellPrice).'</strong>';
+                return '<strong style="font-size: 14px;">'.number_format($res->sellPrice, 0, '', '.').'</strong>';
             })
             ->addColumn('purchasePrice', function($res){
-                return number_format($res->purchasePrice);
+                return number_format($res->purchasePrice, 0, '', '.');
             })
             ->addColumn('bigUnit', function($res){
                 return $res->big_unit_name;

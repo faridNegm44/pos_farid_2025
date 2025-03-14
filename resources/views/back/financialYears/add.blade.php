@@ -34,7 +34,7 @@
                     if(res.foundedActiveFinYear){
                         alertify.set('notifier','position', 'top-center');
                         alertify.set('notifier','delay', 5);
-                        alertify.warning("تحذير: هناك سنة مالية لم تقفل بعد");
+                        alertify.warning("خطأ: هناك سنة مالية لم تقفل بعد");
                     }else{
                         
                         $('#example1').DataTable().ajax.reload( null, false );

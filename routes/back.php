@@ -207,6 +207,13 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
             Route::post('result' , 'ReportsProductsController@result');
             Route::get('result/pdf' , 'ReportsProductsController@result_pdf');
         });
+        
+        //تقرير عن كشكول النواقص
+        Route::group(['prefix' => 'report/stock_alert'] , function (){
+            Route::get('/' , 'ReportsProductsStockAlertController@index');
+            Route::post('result' , 'ReportsProductsStockAlertController@result');
+            Route::get('result/pdf' , 'ReportsProductsStockAlertController@result_pdf');
+        });
     });
 
     // pos Routes

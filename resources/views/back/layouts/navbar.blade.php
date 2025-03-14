@@ -36,18 +36,19 @@
                     </li> --}}
 
                   
-                    <li aria-haspopup="true"><a href="#" class="sub-icon text-primary">الأصناف/المخازن<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="{{ url('products') }}" class="sub-icon text-primary">الأصناف/المخازن<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('products') }}" class="slide-item text-primary">الأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('productsCategories') }}" class="slide-item text-primary">أقسام الأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('units') }}" class="slide-item text-primary">وحدات الأصناف</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('transfer_between_stores') }}" class="slide-item text-primary">تحويلات الأصناف بين المخازن</a></li>
                             <li aria-haspopup="true"><a href="{{ url('companies') }}" class="slide-item text-primary">شركات الأصناف</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('financialYears') }}" class="slide-item text-primary">السنوات المالية</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item text-primary">الهالك / تسوية أصناف</a></li>
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('stores') }}" class="slide-item text-primary">المخازن</a></li>
-                            <li aria-haspopup="true"><a href="chart-echart.html" class="slide-item text-primary">المواد الخام</a></li>
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('transfer_between_stores') }}" class="slide-item text-primary">تحويلات الأصناف بين المخازن</a></li>
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item text-primary">الهالك / تسوية أصناف</a></li>
+                            {{--<li aria-haspopup="true"><a href="chart-echart.html" class="slide-item text-primary">المواد الخام</a></li>--}}
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('products/report') }}" class="slide-item text-primary">تقرير عن حركة صنف</a></li>
                         </ul>
@@ -62,16 +63,16 @@
                     </li>
                     
                     <li aria-haspopup="true"><a href="#" class="sub-icon text-primary">الحسابات<i class="fe fe-chevron-down horizontal-icon"></i></a>
-                        <ul class="sub-menu">
-                            <li aria-haspopup="true"><a href="{{ url('treasury_bills/create') }}" class="slide-item text-primary">أجراء معاملة في الخزينة المالية</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('treasury_bills') }}" class="slide-item text-primary">معاملات الخزينة المالية</a></li>
-                            
-                            <hr class="navbar_hr"/>
+                        <ul class="sub-menu">                            
                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-primary">الخزائن المالية</a></li>
                             <li aria-haspopup="true"><a href="{{ url('transfer_between_storages') }}" class="slide-item text-primary">التحويل من خزنة لآخري</a></li>
                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-primary">مسحوبات شخصية</a></li>
                             <li aria-haspopup="true"><a href="{{ url('expenses') }}" class="slide-item text-primary">مصاريف عامة</a></li>
                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-primary">إغلاق وردية</a></li>
+                            
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('treasury_bills') }}" class="slide-item text-primary">معاملات الخزينة المالية</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('treasury_bills/create') }}" class="slide-item text-primary">أجراء معاملة في الخزينة المالية</a></li>
                             
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('treasury_bills/report') }}" class="slide-item text-primary">تقرير عن حركة الخزائن المالية</a></li>
@@ -93,7 +94,8 @@
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item text-primary">مرتجع بيع</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item text-primary">مرتجع بيع بدون فاتورة</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item text-primary">تعديل مرتجع مبيعات</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item text-primary">كشكول النواقص</a></li>
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('products/report/stock_alert') }}" class="slide-item text-primary">كشكول النواقص</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item text-primary">عرض أسعار</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item text-primary">المندوبون</a></li>
                         </ul>
@@ -126,6 +128,7 @@
 
                     <li aria-haspopup="true"><a href="{{ url('/') }}" class="sub-icon text-primary">الإعدادات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
+                            <li aria-haspopup="true"><a href="{{ url('financialYears') }}" class="slide-item text-primary">السنوات المالية</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/settings') }}" class="slide-item text-primary">إعدادات البرنامج</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item text-primary">إعدادات المستخدمين</a></li>
                         </ul>

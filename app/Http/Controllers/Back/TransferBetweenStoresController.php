@@ -152,7 +152,7 @@ class TransferBetweenStoresController extends Controller
                         )
                         ->get();
 
-            $created_at = Carbon::parse($find[0]->created_at)->format('Y-m-d h:i:s a');
+            $created_at = Carbon::parse($find[0]->created_at)->format('d-m-Y h:i:s a');
 
             //dd($created_at);
 
@@ -232,7 +232,7 @@ class TransferBetweenStoresController extends Controller
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
-                    return Carbon::parse($res->created_at)->format('Y-m-d')
+                    return Carbon::parse($res->created_at)->format('d-m-Y')
                             .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
                 }
             })
