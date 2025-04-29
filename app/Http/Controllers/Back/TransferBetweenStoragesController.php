@@ -22,7 +22,7 @@ class TransferBetweenStoragesController extends Controller
                                             $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
                                                 ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
                                         })
-                                        ->select('financial_treasuries.*', 'treasury_bill_dets.money')
+                                        ->select('financial_treasuries.*', 'treasury_bill_dets.treasury_money_after')
                                         ->get();
                                         
         return view('back.transfer_between_storages.index' , compact('pageNameAr' , 'pageNameEn', 'treasuries'));
@@ -33,12 +33,12 @@ class TransferBetweenStoragesController extends Controller
         if(request()->ajax()){
             $transaction_from = DB::table('treasury_bill_dets')
                                     ->whereRaw('id = (select max(id) from treasury_bill_dets where treasury_id = '.$transaction_from.')')                              
-                                    ->value('money');
+                                    ->value('treasury_money_after');
 
 
             $transaction_to = DB::table('treasury_bill_dets')
                                     ->whereRaw('id = (select max(id) from treasury_bill_dets where treasury_id = '.$transaction_to.')')                              
-                                    ->value('money');
+                                    ->value('treasury_money_after');
 
             return response()->json([
                 'transaction_from' => floatval($transaction_from),
@@ -73,18 +73,18 @@ class TransferBetweenStoragesController extends Controller
 
             $transaction_from_last_money = DB::table('treasury_bill_dets')
                                     ->whereRaw('id = (select max(id) from treasury_bill_dets where treasury_id = '.request('transaction_from').')')                              
-                                    ->value('money');
+                                    ->value('treasury_money_after');
 
 
             $transaction_to_last_money = DB::table('treasury_bill_dets')
                                     ->whereRaw('id = (select max(id) from treasury_bill_dets where treasury_id = '.request('transaction_to').')')                              
-                                    ->value('money');
+                                    ->value('treasury_money_after');
 
             $value = request('value');
             $req_from = request('transaction_from');
             $req_to = request('transaction_to');
 
-            $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'تحويل')->max('num_order');
+            $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'تحويل بين خزنتين')->max('num_order');
 
             
             if($value > $transaction_from_last_money){
@@ -98,16 +98,17 @@ class TransferBetweenStoragesController extends Controller
                         'num_order' => ($lastNumId+1), 
                         'date' => Carbon::now(),
                         'treasury_id' => $req_from, 
-                        'treasury_type' => 'تحويل', 
+                        'treasury_type' => 'تحويل بين خزنتين', 
                         'bill_id' => 0, 
-                        'bill_type' => 'بدون', 
+                        'bill_type' => 0, 
                         'client_supplier_id' => 0, 
-                        'money' => ($transaction_from_last_money - $value), 
-                        'value' => $value, 
+                        'treasury_money_after' => ($transaction_from_last_money - $value), 
+                        'amount_money' => $value, 
+                        'remaining_money' => ($transaction_from_last_money - $value), 
                         'transaction_from' => $req_from, 
                         'transaction_to' => $req_to, 
                         'notes' => request('notes'), 
-                        'user_id' => 1, 
+                        'user_id' => auth()->user()->id, 
                         'year_id' => $this->currentFinancialYear(),
                         'created_at' => now()
                     ]);
@@ -117,43 +118,31 @@ class TransferBetweenStoragesController extends Controller
                         'num_order' => ($lastNumId+1), 
                         'date' => Carbon::now(),
                         'treasury_id' => $req_to, 
-                        'treasury_type' => 'تحويل', 
+                        'treasury_type' => 'تحويل بين خزنتين', 
                         'bill_id' => 0, 
-                        'bill_type' => 'بدون', 
+                        'bill_type' => 0, 
                         'client_supplier_id' => 0, 
-                        'money' => ($transaction_to_last_money + $value), 
-                        'value' => $value, 
+                        'treasury_money_after' => ($transaction_to_last_money + $value), 
+                        'amount_money' => $value, 
+                        'remaining_money' => ($transaction_to_last_money + $value), 
                         'transaction_from' => $req_from, 
                         'transaction_to' => $req_to, 
                         'notes' => request('notes'), 
-                        'user_id' => 1, 
+                        'user_id' => auth()->user()->id, 
                         'year_id' => $this->currentFinancialYear(),
                         'created_at' => now()
                     ]);
                 });
-
-
             }
         }
     }   
-    
-    
-    public function edit($id)
-    {
-        if(request()->ajax()){
-            $find = Expense::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return view('back.welcome');
-    }
-    
     
     public function show($id)
     {
         if(request()->ajax()){
             $find = DB::table('treasury_bill_dets')
                         ->where('num_order', $id)
-                        ->where('treasury_type', 'تحويل')
+                        ->where('treasury_type', 'تحويل بين خزنتين')
                         ->leftJoin('financial_treasuries as transaction_from_name', 'transaction_from_name.id', 'treasury_bill_dets.treasury_id')
                         ->leftJoin('financial_treasuries as transaction_to_name', 'transaction_to_name.id', 'treasury_bill_dets.treasury_id')
                         ->leftJoin('users', 'users.id', 'treasury_bill_dets.user_id')
@@ -177,51 +166,6 @@ class TransferBetweenStoragesController extends Controller
         return view('back.welcome');
     }
 
-    public function update(Request $request, $id)
-    {
-        if (request()->ajax()){
-            $find = Expense::where('id', $id)->first();
-
-            $this->validate($request , [
-                'name' => 'required|string|unique:financial_treasuries,name,'.$id,
-                //'moneyFirstDuration' => 'min:0|numeric',
-                'notes' => 'nullable|string|max:255',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-                'min' => 'حقل :attribute أقل قيمة له هي 0 حرف.',
-                'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
-                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-            ],[
-                'name' => 'إسم الخزنة',                
-                'moneyFirstDuration' => 'رصيد أول المدة',                
-                'notes' => 'ملاحظات',                
-            ]);
-
-            $data = $request->all();
-            unset($data['moneyFirstDuration']);
-
-            $find->update($data);
-        }   
-    }
-
-     
-    //public function destroy($id)
-    //{
-    //    $find = Expense::where('id', $id)->get();
-    //    $find_relation = DB::table('treasury_bills_head')->where('expenses_id', $id)->get();
-
-    //    if(count($find_relation) > 0){
-    //        return response()->json('');
-    //    }else{
-    //        DB::transaction(function($find, $find_relation){
-    //            $find->delete();
-    //            $find_relation->delete();
-    //        });
-    //    }
-    //}
-
 
     public function datatable()
     {
@@ -237,7 +181,7 @@ class TransferBetweenStoragesController extends Controller
                         )
                         ->orderBy('treasury_bill_dets.bill_id', 'ASC')
                         ->groupBy('treasury_bill_dets.num_order')
-                        ->where('treasury_type', 'تحويل')
+                        ->where('treasury_type', 'تحويل بين خزنتين')
                         ->get();
 
 
@@ -252,7 +196,7 @@ class TransferBetweenStoragesController extends Controller
                 }
             })
             ->addColumn('value', function($res){
-                return "<strong style='font-size: 13px;'>".number_format($res->value, 0, '', '.')."</strong>";
+                return "<strong style='font-size: 13px;'>".$res->amount_money."</strong>";
             })
             ->addColumn('user', function($res){
                 return $res->userName;
@@ -264,10 +208,6 @@ class TransferBetweenStoragesController extends Controller
             })
             ->addColumn('action', function($res){
                 return '
-                        <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->num_order.'">
-                            <i class="fas fa-marker"></i>
-                        </button>
-                        
                         <button type="button" class="btn btn-sm btn-outline-success show" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenterShow" data-placement="top" data-toggle="tooltip" title="عرض التحويل" res_id="'.$res->num_order.'">
                             <i class="fas fa-eye"></i>
                         </button>

@@ -12,31 +12,54 @@
                 $(".dataInput").val('');
             },
             success: function(res){
-                console.log(res.store);
+                if (res.countBigThanOne) {
+                    alertify.set('notifier', 'position', 'top-center');
+                    alertify.set('notifier', 'delay', 8);
+                    alertify.warning(res.message);
 
-                $.each(res , function(index, value){                    
-                    $(`.modal form #${index}`).val(value);
-                });
+                    $('#firstPeriodCountSection').fadeOut();
+                    $('#small_unit_numbers_section').fadeOut();
 
-                $("#start").flatpickr({
-                    defaultDate: res.start, 
-                });
-
-                $("#end").flatpickr({
-                    defaultDate: res.end, 
-                }); 
-
-
-
+                } else {
+                    $('#firstPeriodCountSection').fadeIn();
+                    $('#small_unit_numbers_section').fadeIn();
+                }
+                
                 const store = $('#store')[0].selectize;
-                store.setValue(res.store, true);
-                store.refreshOptions();
+                const company = $('#company')[0].selectize;
+                const category = $('#category')[0].selectize;
+                const bigUnit = $('#bigUnit')[0].selectize;
+                const smallUnit = $('#smallUnit')[0].selectize;
+                const status = $('#status')[0].selectize;
+                
+                store.setValue(res.product.store);
+                company.setValue(res.product.company);
+                category.setValue(res.product.category);
+                bigUnit.setValue(res.product.bigUnit);
+                smallUnit.setValue(res.product.smallUnit);
+                status.setValue(res.product.status);
+                
+                $('.modal form #shortCode').val(res.product.shortCode);
+                $('.modal form #natCode').val(res.product.natCode);
+                $('.modal form #nameAr').val(res.product.nameAr);
+                $('.modal form #nameEn').val(res.product.nameEn);
+                $('.modal form #stockAlert').val(display_number_js(res.product.stockAlert));
+                $('.modal form #discountPercentage').val(display_number_js(res.product.discountPercentage));
+                $('.modal form #tax').val(display_number_js(res.product.tax));
+                $('.modal form #firstPeriodCount').val(display_number_js(res.product.firstPeriodCount));
+                $('.modal form #small_unit_numbers').val(display_number_js(res.product.small_unit_numbers));
+                $('.modal form #sell_price_small_unit').val(display_number_js(res.product.sell_price_small_unit));
+                $('.modal form #last_cost_price_small_unit').val(display_number_js(res.product.last_cost_price_small_unit));
+                $('.modal form #max_sale_quantity').val(display_number_js(res.product.max_sale_quantity));
+                $('.modal form #desc').val(res.product.desc);
+                $('.modal form #offerDiscountStatus').val(res.product.offerDiscountStatus);
+                $('.modal form #offerDiscountPercentage').val(display_number_js(res.product.offerDiscountPercentage));
+                $('.modal form #offerStart').val(res.product.offerStart);
+                $('.modal form #offerEnd').val(res.product.offerEnd);
+                $('.modal form #image_hidden').val(res.product.image);
+                $('.modal form #res_id').val(res.product.id);
 
-                //$("#addForm #group_id")[0].selectize.clear();
 
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 2);
-                alertify.success("تم استرجاع البيانات بنجاح");
             }
         });
     });

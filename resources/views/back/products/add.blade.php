@@ -2,8 +2,8 @@
     $(document).ready(function () {
         $(".modal #save").click(function(e){
             e.preventDefault();
-            document.querySelector('.modal #save').disabled = true;        
-            document.querySelector('.spinner_request').setAttribute("style", "display: inline-block;");
+            //document.querySelector('.modal #save').disabled = true;        
+            //document.querySelector('.spinner_request').setAttribute("style", "display: inline-block;");
 
             
             $.ajax({
@@ -33,8 +33,7 @@
                     $('#example1').DataTable().ajax.reload( null, false );
                     $(".modal form bold[class=text-danger]").css('display', 'none');
             
-                    $(".dataInput").val('');        
-                    $("#last_code").val(res.lastId);
+                    //$(".dataInput").val('');        
 
                     alertify.set('notifier','position', 'top-center');
                     alertify.set('notifier','delay', 3);

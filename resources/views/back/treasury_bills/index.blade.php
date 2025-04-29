@@ -50,11 +50,20 @@
                 ajax: `{{ url($pageNameEn.'/datatable') }}`,
                 dataType: 'json',
                 columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'action', name: 'action', orderable: false},
+                    {data: 'num_order', name: 'num_order'},
+                    {data: 'created_at', name: 'created_at'},
+                    {data: 'date', name: 'date'},
+                    {data: 'client_supplier', name: 'client_supplier'},
+                    {data: 'treasury_type', name: 'treasury_type'},
+                    {data: 'treasury', name: 'treasury'},
+                    {data: 'amount_money', name: 'amount_money'},
+                    {data: 'remaining_money', name: 'remaining_money'},
+                    {data: 'treasury_money_after', name: 'treasury_money_after'},
+                    {data: 'user', name: 'user'},
+                    {data: 'notes', name: 'notes'},
                 ],
                 "bDestroy": true,
+                order: [[ 1, "desc" ]],
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
             });
@@ -80,7 +89,7 @@
             </div>
             <div class="d-flex my-xl-auto right-content">
                 <div class="pr-1 mb-xl-0">
-                    <button type="button" class="btn btn-danger btn-icon ml-2 add" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter"><i class="mdi mdi-plus"></i></button>
+                    <a type="button" href="{{ url('treasury_bills/create') }}" class="btn btn-danger btn-icon ml-2 add"><i class="mdi mdi-plus"></i></a>
                 </div>
             </div>
         </div>
@@ -96,8 +105,16 @@
                                 <thead>
                                     <tr>
                                         <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0" >إسم القسم</th>
-                                        <th class="border-bottom-0">التحكم</th>
+                                        <th class="border-bottom-0" >تاريخ المعاملة</th>
+                                        <th class="border-bottom-0" >تاريخ اخر</th>
+                                        <th class="border-bottom-0">الجهة</th>
+                                        <th class="border-bottom-0">نوع المعاملة</th>
+                                        <th class="border-bottom-0">خزينة المعاملة</th>
+                                        <th class="border-bottom-0">مبلغ المعاملة</th>
+                                        <th class="border-bottom-0">علي الجهة / لها</th>
+                                        <th class="border-bottom-0">مبلغ الخزينة بعد</th>
+                                        <th class="border-bottom-0">موظف</th>
+                                        <th class="border-bottom-0">ملاحظات</th>
                                     </tr>
                                 </thead>                                
                             </table>

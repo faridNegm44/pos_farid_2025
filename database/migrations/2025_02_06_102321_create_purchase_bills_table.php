@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('purchase_bills', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->enum('type', ['فاتورة شراء جديدة', 'مرتجع شراء']);
             $table->integer('num_order');
+            $table->string('custom_bill_num')->default('')->unique();
             $table->integer('supplier_id');
-            $table->integer('supplier_bill_num');
             $table->integer('treasury_id')->nullable();
+            $table->date('custom_date')->nullable();
             $table->integer('user_id');
             $table->integer('year_id');
             $table->string('notes')->nullable();

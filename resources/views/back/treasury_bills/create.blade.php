@@ -11,7 +11,7 @@
 		<meta name="Author" content="Spruko Technologies Private Limited">
 
         <!-- Title -->
-        <title> {{ GeneralSettingsInfo()->app_name }}: @yield('title') </title>
+        <title> {{ GeneralSettingsInfo()->app_name }}: {{ $pageNameAr }} </title>
 
         <!-- Favicon -->
         <link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
@@ -63,6 +63,12 @@
                 /* font-family: Arial, Helvetica, sans-serif, serif; */
                 font-family: "4_F4", serif;
             }
+
+            bold{
+                font-size: 10px;
+                color: #000;
+                text-shadow: 2px 2px 4px red;
+            }
         </style>
 	</head>
 
@@ -74,177 +80,198 @@
     @include('back.layouts.header')
     @include('back.layouts.navbar')
     
-    <div class="page" id="page_create_treasury_bill" style="margin-top: 30px;min-height: 0vh;">        
+    <div class="page" id="page_create_treasury_bill" style="margin-top: 30px;min-height: 0vh;">    
+        
+        
         <div class="container">
+            
+            <div class="panel-group1" id="accordion11">
+                <div class="panel panel-default  mb-4">
+                    <div class="panel-heading1 bg-warning-gradient ">
+                        <h4 class="panel-title1">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion11" href="#collapseFour1" aria-expanded="false">
+                                ملاحظات حول كيفية إضافة معاملة في الخزينة
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour1" class="panel-collapse collapse" role="tabpanel" aria-expanded="false" style="">
+                        <div class="panel-body border">
+                            <ul style="font-size: 11px;">
+                                <ol>
+                                    <li>اختر نوع المعاملة أولاً، سواء كان إذن توريد نقدية، أو صرف نقدية، أو ارتجاع نقدية.</li>
+                                    <li>بعد ذلك، حدد الخزينة التي سيتم تنفيذ الإذن عليها.</li>
+                                    <li>ثم، حدد الجهة المراد تنفيذ الإذن عليها، سواء كانت موردًا أو عميلًا.</li>
+                                    <li>يجب اختيار عميل أو مورد فقط، وليس كلاهما معًا.</li>
+                                    <li>اكتب مبلغ الإذن.</li>
+                                </ol>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
             <h5 class="text-center" style="background: #383a3e;color: #fff;padding: 10px;border-radius: 0px;margin: 0 auto;">
                 {{ $pageNameAr }}
             </h5>
-            <div class="bg-secondary-gradient" style="padding: 0px 15px;">
+            <form class="" id="form">
+                @csrf
 
-                {{--  start نوع المعامل && العملاء && الموردين --}}
-                <div class="row justify-content-center" style="padding: 10px 10px 0 10px;">
-                    <div class="col-lg-2">
-                        <label for="treasury_type" class="text-dark">نوع المعاملة</label>
-                        <i class="fas fa-star require_input"></i>
-                        <select class="form-control" id="treasury_type" required>
-                            <option value="" disabled selected>نوع المعاملة</option>                              
-                            <option value="اذن توريد نقدية">اذن توريد نقدية</option>
-                            <option value="اذن صرف نقدية">اذن صرف نقدية</option>
-                            <option value="اذن ارتجاع نقدية">اذن ارتجاع نقدية</option>
-                        </select>
+                <div class="bg-secondary-gradient" style="padding: 0px 15px;">
+    
+                    {{--  start نوع المعامل && العملاء && الموردين --}}
+                    <div class="row justify-content-center" style="padding: 10px 10px 0 10px;">
+                        <div class="col-lg-2">
+                            <label for="treasury_type" class="text-dark">نوع المعاملة</label>
+                            <i class="fas fa-star require_input"></i>
+                            <select class="form-control" id="treasury_type" name="treasury_type" required>
+                                <option value="" selected>نوع المعاملة</option>                              
+                                <option value="اذن توريد نقدية">اذن توريد نقدية</option>
+                                <option value="اذن صرف نقدية">اذن صرف نقدية</option>
+                                <option value="اذن ارتجاع نقدية">اذن ارتجاع نقدية</option>
+                            </select>
+                            <bold id="errors-treasury_type" style="display: none;"></bold>
+                        </div>
+                        
+                        <div class="col-lg-2">
+                            <label for="treasury_id" class="text-dark">اختر الخزينة المالية</label>
+                            <i class="fas fa-star require_input"></i>
+                            <select class="form-control" id="treasury_id" name="treasury_id">
+                                <option value="" selected>اختر الخزينة المالية</option>                              
+                                @foreach ($treasuries as $treasury)
+                                    <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->treasury_money_after }}</option>                                
+                                @endforeach
+                            </select>
+                            <bold id="errors-treasury_id" style="display: none;"></bold>
+                        </div>
+                        
+                        <div class="col-lg-3" id="clients">
+                            <label for="" class="text-dark">العملاء</label>
+                            <i class="fas fa-star require_input"></i>
+                            <select class="selectize clients" name="client">
+                                <option value="" disabled selected>العملاء</option>     
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->id }}">
+                                        ( {{ $client->id }} ) -
+                                        ( {{ $client->name }} )
+    
+                                        @if ($client->phone)
+                                            ( {{ $client->phone }} )
+                                        @endif                                    
+                                    </option>
+                                @endforeach                         
+                            </select>
+                            <bold id="errors-client_supplier_id" style="display: none;"></bold>
+                        </div>
+                        
+                        <div class="col-lg-3" id="suppliers">
+                            <label for="" class="text-dark">الموردين</label>
+                            <i class="fas fa-star require_input"></i>
+                            <select class="selectize suppliers" name="supplier">
+                                <option value="" disabled selected>الموردين</option>                              
+                                @foreach ($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}">
+                                        ( {{ $supplier->id }} ) - 
+                                        ( {{ $supplier->name }} )
+    
+                                        @if ($supplier->phone)
+                                            ( {{ $supplier->phone }} )
+                                        @endif                                    
+                                    </option>
+                                @endforeach       
+                            </select>
+                            <bold id="errors-client_supplier_id" style="display: none;"></bold>
+                        </div>    
                     </div>
+                    {{--  start نوع المعامل && العملاء && الموردين --}}
                     
-                    <div class="col-lg-2">
-                        <label for="treasury_id" class="text-dark">اختر الخزينة المالية</label>
-                        <i class="fas fa-star require_input"></i>
-                        <select class="form-control" id="treasury_id">
-                            <option value="" disabled selected>اختر الخزينة المالية</option>                              
-                            @foreach ($treasuries as $treasury)
-                                <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->money }}</option>                                
-                            @endforeach
-                        </select>
+                    
+            
+                    {{--  start مبلغ المعاملة && ملاحظات --}}
+                    <div class="row justify-content-center" style="margin: 10px 0 20px;">
+                        <div class="col-lg-2">
+                            <label for="value" class="text-dark">مبلغ المعاملة</label>
+                            <i class="fas fa-star require_input"></i>
+                            <input type="number" class="form-control mb-1 text-center" name="value" id="value" min="1" placeholder="مبلغ المعاملة" style="font-size: 13px;" required>  
+                        </div>
+                        <bold id="errors-value" style="display: none;"></bold>
+                        
+                        <div class="col-lg-2">
+                            <label for="date" class="text-dark">تاريخ المعاملة</label>
+                            <input type="date" class="form-control mb-1 text-center" name="date" id="date" min="1" placeholder="تاريخ المعاملة" style="font-size: 13px;"  value="{{ date('Y-m-d') }}">  
+                        </div>
+                        <bold id="errors-date" style="display: none;"></bold>
+                        
+                        <div class="col-lg-6">
+                            <label for="" class="text-dark">ملاحظات</label>
+                            <input type="text" class="form-control" name="notes" id="notes" placeholder="ملاحظات">  
+                        </div>
+                        <bold id="errors-notes" style="display: none;"></bold>
                     </div>
+                    {{--  end مبلغ المعاملة && ملاحظات --}}
                     
-                    <div class="col-lg-3" id="clients">
-                        <label for="" class="text-dark">العملاء</label>
-                        <i class="fas fa-star require_input"></i>
-                        <select class="selectize clients">
-                            <option value="" disabled selected>العملاء</option>     
-                            @foreach ($clients as $client)
-                                <option value="{{ $client->id }}">
-                                    @if ($client->phone)
-                                        {{ $client->phone }} - 
-                                    @endif
-                                    {{ $client->name }}
-                                </option>
-                            @endforeach                         
-                        </select>
-                    </div>
                     
-                    <div class="col-lg-3" id="suppliers">
-                        <label for="" class="text-dark">الموردين</label>
-                        <i class="fas fa-star require_input"></i>
-                        <select class="selectize suppliers">
-                            <option value="" disabled selected>الموردين</option>                              
-                            @foreach ($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}">
-                                    @if ($supplier->phone)
-                                        {{ $supplier->phone }} - 
-                                    @endif
-                                    {{ $supplier->name }}
-                                </option>
-                            @endforeach       
-                        </select>
-                    </div>    
-                </div>
-                {{--  start نوع المعامل && العملاء && الموردين --}}
-                
-                
+                    
+                    {{--  start الموقف المالي للجهة && الموقف المالي للخزينة --}}
+                    <div class="row" style="margin-bottom: 30px;">
+                        <div class="col-lg-6 col-12"> 
+                            <table class="table table-bordered text-center">
+                                <caption style="text-align: center;caption-side: top;font-weight: inherit;font-size: 10pt;background: #383a3e;color: white;">
+                                    الموقف المالي للخزينة
+                                </caption>
+                                <thead class="">
+                                <tr>
+                                    <th>قبل</th>
+                                    <th>بعد</th>
+                                </tr>
+                                </thead>
+                                <tbody style="background: #fff;">
+                                <tr>
+                                    <td>
+                                        <span id="totalBeforeTreasury">0</span>
+                                        <input id="totalBeforeTreasuryInput" type="hidden" value="0">
+                                    </td>
+                                    <td><span id="totalAfterTreasury">0</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
         
-                {{--  start مبلغ المعاملة && ملاحظات --}}
-                <div class="row justify-content-center" style="margin: 10px 0 20px;">
-                    <div class="col-lg-2">
-                        <label for="value" class="text-dark">مبلغ المعاملة</label>
-                        <input type="number" class="form-control mb-1 text-center" name="value" id="value" placeholder="مبلغ المعاملة" style="font-size: 13px;" required>  
-                    </div>
-                    
-                    <div class="col-lg-8">
-                        <label for="" class="text-dark">ملاحظات</label>
-                        <input type="text" class="form-control" name="" id="" placeholder="ملاحظات">  
-                    </div>
-                </div>
-                {{--  end مبلغ المعاملة && ملاحظات --}}
+                        <div class="col-lg-6 col-12"> 
+                            <table class="table table-bordered text-center">
+                                <caption style="text-align: center;caption-side: top;font-weight: inherit;font-size: 10pt;background: #383a3e;color: white;">
+                                    الموقف المالي للجهة
+                                    <span id="userStatus" style="margin: 0 5px;color: #deea17;display: none;"></span>
+                                </caption>
+                                <thead class="">
+                                <tr>
+                                    <th>قبل</th>
+                                    <th>متبقي/لة</th>
+                                </tr>
+                                </thead>
+                                <tbody  style="background: #fff;">
+                                <tr>
+                                    <td><span id="totalBeforeUser" style="color: red;">0</span></td>
+                                    <td><span id="totalAfterUser" style="color: red;">0</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>  
+                    {{--  end الموقف المالي للجهة && الموقف المالي للخزينة --}}
+                </div> 
                 
-                
-                
-                {{--  start الموقف المالي للجهة && الموقف المالي للخزينة --}}
-                <div class="row" style="margin-bottom: 30px;">
-                    <div class="col-lg-6 col-12"> 
-                        <table class="table table-bordered text-center">
-                            <caption style="text-align: center;caption-side: top;font-weight: inherit;font-size: 10pt;background: #383a3e;color: white;">
-                                الموقف المالي للخزينة
-                            </caption>
-                            <thead class="">
-                            <tr>
-                                <th>#</th>
-                                <th>مدين (عليه)</th>
-                                <th>دائن (له)</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>قبل</td>
-                                <td>
-                                    <span id="totalBeforeTreasuryOne">13399.80</span>
-                                </td>
-                                <td>
-                                    <span id="totalBeforeTreasuryTwo">0.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>بعد</td>
-                                <td>
-                                    <span id="totalAfterTreasuryOne">13399.80</span>
-                                </td>
-                                <td>
-                                    <span id="totalAfterTreasuryTwo">0.00</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-    
-                    <div class="col-lg-6 col-12"> 
-                        <table class="table table-bordered text-center">
-                            <caption style="text-align: center;caption-side: top;font-weight: inherit;font-size: 10pt;background: #383a3e;color: white;">
-                                الموقف المالي للجهة
-                                <span id="name_client" style="margin: 0 5px;color: #deea17;display: none;">( عميل: علي مجدي )</span>
-                                <span id="name_supplier" style="margin: 0 5px;color: #deea17;display: none;">( مورد: علي مجدي )</span>
-                            </caption>
-                            <thead class="">
-                            <tr>
-                                <th>#</th>
-                                <th>مدين (عليه)</th>
-                                <th>دائن (له)</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>قبل</td>
-                                <td>
-                                    <span id="totalBeforeTreasuryOne">13399.80</span>
-                                </td>
-                                <td>
-                                    <span id="totalBeforeTreasuryTwo">0.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>بعد</td>
-                                <td>
-                                    <span id="totalAfterTreasuryOne">13399.80</span>
-                                </td>
-                                <td>
-                                    <span id="totalAfterTreasuryTwo">0.00</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>  
-                {{--  end الموقف المالي للجهة && الموقف المالي للخزينة --}}
-            </div> 
-    
-    
-            <div class="row footer-btn-group justify-content-center">
-                <button class="col-lg-2 btn btn-success-gradient btn-rounded mb-2" id="save_bill">
-                    <i class="mdi mdi-content-save"></i> حفظ المعاملة
-                </button>
+                <div class="row footer-btn-group justify-content-center">
+                    <button class="col-lg-2 btn btn-success-gradient btn-rounded mb-2" id="save_bill">
+                        <i class="mdi mdi-content-save"></i> حفظ المعاملة
+                    </button>
 
-                <button class="col-lg-2 btn btn-warning-gradient btn-rounded mb-2 refresh_page">
-                    <i class="mdi mdi-refresh"></i> الغاء  المعاملة
-                </button>
+                    <button class="col-lg-2 btn btn-warning-gradient btn-rounded mb-2 refresh_page">
+                        <i class="mdi mdi-refresh"></i> الغاء  المعاملة
+                    </button>        
+                </div>
+            </form>
     
-            </div>
         </div>
     </div>
 
@@ -254,194 +281,35 @@
 
     <!-- JQuery min js -->
     <script src="{{ asset('back') }}/assets/plugins/jquery/jquery.min.js"></script>
-
     <!-- Bootstrap js -->
     <script src="{{ asset('back') }}/assets/plugins/bootstrap/js/popper.min.js"></script>
     <script src="{{ asset('back') }}/assets/plugins/bootstrap/js/bootstrap-rtl.js"></script>
-
     <!-- Horizontalmenu js-->
     <script src="{{ asset('back') }}/assets/plugins/horizontal-menu/horizontal-menu-2/horizontal-menu.js"></script>
-
     <!-- Right-sidebar js -->
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-rtl.js"></script>
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-custom.js"></script>
-
     <!-- alertify -->
     <script src="{{ asset('back/assets/js/alertify.min.js') }}"></script>
-
+     <!-- Internal Modal js-->
+     <script src="{{ url('back') }}/assets/js/modal.js"></script>
+     {{-- bootstrap.bundle --}}
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <!-- selectize -->
     <script src="{{ asset('back/assets/selectize.min.js') }}"></script>
-
     <!-- custom js -->
     <script src="{{ asset('back') }}/assets/js/custom.js"></script>
 
+
     <script>
-
-        // start reload page when click refresh_page btn
-        $(".refresh_page").on("click", function(){
-            alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من إلغاء المعاملة</p>', 
-                function(){
-                    location.reload();
-                },function(){
-                    
-                    
-                }).set({
-                    labels:{
-                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
-                        cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
-                    }
-            });
-        });
-        // end reload page when click refresh_page btn
-
-
-        // start when change clients or suppliers
-        $(document).ready(function() {
-            const $clients = $(".clients").selectize();
-            const $suppliers = $(".suppliers").selectize();
-
-            const clientsSelectize = $clients[0].selectize;
-            const suppliersSelectize = $suppliers[0].selectize;
-
-            // start function check if checked client and supplier in same time
-            function checKifFoundCliendAndSupplierVal(){
-                if($('.clients').val() && $('.suppliers').val() ){
-                    clientsSelectize.clear();
-                    suppliersSelectize.clear();
-
-                    alertify
-                    .dialog('alert')
-                    .set({transition:'slide',message: `
-                        <div style="text-align: center;font-weight: bold;">
-                            <p style="color: red;font-size: 18px;margin-bottom: 10px;">خطأ <i class="fas fa-exclamation-triangle" style="margin: 0px 3px;"></i></p>
-                            <p>يجب أن تكون المعاملة مسنودة إلي عميل أو مودر، وليس كلاهما معاً</p>
-                        </div>
-                    `, 'basic': true})
-                    .show();  
-
-                    
-                }
-            }
-            // end function check if checked client and supplier in same time
-
-
-
-
-            // start function get cleint or supplier info
-            //function clientOrSupplier($id){
-            //    const url = `{{ url('treasury_bills/create/get_client_or_supplier') }}/${id}`;
-
-            //    $.ajax({
-            //        type: "GET",
-            //        url: url,
-            //        success: function(res){
-                        
-            //        }
-            //    });
-                                    
-            //}
-            // end function get cleint or supplier info
-
-
-
-            clientsSelectize.on('change', function(value) {
-                checKifFoundCliendAndSupplierVal();
-            });
-
-            suppliersSelectize.on('change', function(value) {
-                checKifFoundCliendAndSupplierVal();
-            });
-        });
-        // end when change clients or suppliers
-
-
-
-
         
-        // start save treasury bill when click save bill btn
-        $("#save_bill").on("click", function(){
-
-            const treasury_type = $("#treasury_type").val();
-            const treasury_id = $("#treasury_id").val();
-            const client = $(".clients").val();
-            const supplier = $(".suppliers").val();
-            const value = $("#value").val();
-
-            $("#overlay_page").fadeIn();
-
-
-            if(!treasury_type){
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("نوع المعاملة مطلوب");
-                
-                $("#overlay_page").fadeOut();
-                
-            }else if(!treasury_id){
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error(" الخزينة المالية مطلوبة");
-                
-                $("#overlay_page").fadeOut();
-
-            }else if(!client && !supplier){
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("يُرجى اختيار عميل أو مورد لإتمام المعاملة");
-                
-                $("#overlay_page").fadeOut();
-
-            }else if(!value){
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("مبلغ المعاملة مطلوب");
-                
-                $("#overlay_page").fadeOut();
-
-            }else{
-
-                $("#overlay_page").fadeOut();
-
-                alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من حفظ المعاملة في الخزينة المالية ؟</p>', 
+        // start reload page when click refresh_page btn
+            $(".refresh_page").on("click", function(){
+                alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من إلغاء المعاملة</p>', 
                     function(){
-    
-                        //$.ajax({
-                        //    url: "{{ url($pageNameEn) }}/store",
-                        //    type: 'POST',
-                        //    processData: false,
-                        //    contentType: false,
-                        //    data: new FormData($('.modal #form')[0]),
-                        //    beforeSend:function () {
-                        //        $('form [id^=errors]').text('');
-                        //    },
-                        //    error: function(res){
-                        //        $.each(res.responseJSON.errors, function (index , value) {
-                        //            $(`form #errors-${index}`).css('display' , 'block').text(value);
-                        //        });               
-                                
-                        //        $('.dataInput:first').select().focus();
-                        //        document.querySelector('.modal #save').disabled = false;
-                        //        document.querySelector('.spinner_request').style.display = 'none';                
-    
-                        //        alertify.set('notifier','position', 'top-center');
-                        //        alertify.set('notifier','delay', 3);
-                        //        alertify.error("هناك شيئ ما خطأ");
-                        //    },
-                        //    success: function(res){
-    
-                        //        document.querySelector('.modal #save').disabled = false;
-                        //        document.querySelector('.spinner_request').style.display = 'none';
-    
-                        //        $(".modal").modal('hide');
-                                
-                        //        alertify.set('notifier','position', 'top-center');
-                        //        alertify.set('notifier','delay', 6);
-                        //        alertify.success(`تم التحويل بنجاح`);
-                                
-                        //        location.reload();
-                        //    }
-                        //});
+                        location.reload();
                     },function(){
+                        
                         
                     }).set({
                         labels:{
@@ -449,11 +317,346 @@
                             cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
                         }
                 });
+            });
+        // end reload page when click refresh_page btn
+
+
+
+        // start function resetDefault
+            function resetDefault(){
+                $('#value').val('');
+                $('#totalBeforeTreasury').text(0);
+                $('#totalBeforeTreasuryInput').val(0);
+                $('#totalAfterTreasury').text(0);
+                $('#totalBeforeUser').text(0);
+                $('#totalAfterUser').text(0);
+                $('#userStatus').css('display', 'none').text('');
+            }
+        // end function resetDefault
+
+
+
+        // start when change نوع المعاملة
+            $("#treasury_type").on("change", function(){
+                //resetDefault();
+                $('#value').val('');
+                $("#treasury_id").val('');
+                $('#totalBeforeTreasury').text(0);
+                $('#totalBeforeTreasuryInput').val(0);
+                $('#totalAfterTreasury').text(0);
+                $('.clients')[0].selectize.setValue('');
+                $('.suppliers')[0].selectize.setValue('');
+            });
+        // end when change نوع المعاملة
+
+
+
+        // start when change الخزينة المالية
+            $("#treasury_id").on("change", function(){
+                //resetDefault();
+                $('#value').val('');
+                $('#totalBeforeTreasury').text(0);
+                $('#totalBeforeTreasuryInput').val(0);
+                $('#totalAfterTreasury').text(0);
+                $('.clients')[0].selectize.setValue('');
+                $('.suppliers')[0].selectize.setValue('');
+            });
+        // end when change الخزينة المالية
+
+
+
+        // start when change clients or suppliers
+            $(document).ready(function() {
+                resetDefault();
+                
+                const $clients = $(".clients").selectize();
+                const $suppliers = $(".suppliers").selectize();
+
+                const clientsSelectize = $clients[0].selectize;
+                const suppliersSelectize = $suppliers[0].selectize;
+
+
+                // start function check if checked client and supplier in same time
+                function checKifFoundCliendAndSupplierVal(){
+                    if($('.clients').val() && $('.suppliers').val() ){
+                        resetDefault();
+                        location.reload();    
+                    }
+                }
+                // end function check if checked client and supplier in same time
+
+
+
+                // start function get cleint or supplier info
+                function getClientOrSupplierInfo(id){
+                    const url = `{{ url('get_info/client_or_supplier') }}/${id}`;
+
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        beforeSend: function(){
+                            $("#totalBeforeUser").text(0);
+                            $("#totalAfterUser").text(0);
+                            $("#userStatus").css('display', 'none');
+                        },
+                        success: function(res){
+                            if(res.remaining_money){
+
+                                alertify.set('notifier','position', 'top-center');
+                                alertify.set('notifier','delay', 3);
+                                alertify.success("تم استدعاء الموقف المالي للجهة بنجاح");
+                                
+                                if(res.remaining_money < 0){
+                                    $("#totalBeforeUser").text(parseFloat(res.remaining_money));          
+                                    $("#userStatus").css('display', 'inline').text(`دائن (له): ${parseFloat(res.remaining_money).toLocaleString()}`);
+                                }else{
+                                    $("#totalBeforeUser").text(parseFloat(res.remaining_money));
+                                    $("#userStatus").css('display', 'inline').text(`مدين (عليه): ${parseFloat(res.remaining_money).toLocaleString()}`);
+                                }
+                            }                        
+                        }
+                    });             
+                }
+                // end function get cleint or supplier info
+
+                clientsSelectize.on('change', function(value) {
+                    //resetDefault();
+                    $('#value').val('');
+                    $('#totalAfterTreasury').text(0);
+
+                    $("#overlay_page").fadeIn();
+                    getClientOrSupplierInfo($('.clients').val());
+                    $("#overlay_page").fadeOut();
+                    checKifFoundCliendAndSupplierVal();
+                });
+                
+                suppliersSelectize.on('change', function(value) {
+                    //resetDefault();
+                    $('#value').val('');
+                    $('#totalAfterTreasury').text(0);
+
+                    $("#overlay_page").fadeIn();
+                    getClientOrSupplierInfo($('.suppliers').val());
+                    $("#overlay_page").fadeOut();
+                    checKifFoundCliendAndSupplierVal();
+                });
+            });
+        // end when change clients or suppliers
+
+
+
+        // start function get treasury info
+            function getTreasuryInfo(id){
+                const url = `{{ url('get_info/treasury') }}/${id}`;
+
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    beforeSend: function(){
+                        $("#totalBeforeTreasury").text(0);
+                        $("#totalBeforeTreasuryInput").val(0);
+                        $("#totalAfterTreasury").text(0);
+                    },
+                    success: function(res){                    
+                        if(res.treasury_money_after){
+                            alertify.set('notifier','position', 'top-center');
+                            alertify.set('notifier','delay', 3);
+                            alertify.success("تم استدعاء بيانات الخزينة بنجاح");
+
+                            $("#totalBeforeTreasury").text(parseFloat(res.treasury_money_after).toLocaleString());
+                            $("#totalBeforeTreasuryInput").val(parseFloat(res.treasury_money_after));
+                        }
+                    }
+                });             
             }
 
+            $('#treasury_id').on('change', function(value) {
+                $("#overlay_page").fadeIn();
+                getTreasuryInfo($(this).val());
+                $("#overlay_page").fadeOut();
+            });
+        // end function get treasury info
 
 
-        });
+
+
+        // start when change مبلغ المعاملة
+            $("#value").on("input", function(){
+                //$("#overlay_page").fadeIn();
+
+                const thisVal = parseFloat($(this).val());
+                const treasury_id = $("#treasury_id").val(); // استرجاع قيمة treasury_id
+                const totalBeforeUser = $("#totalBeforeUser").text();
+                const treasury_type = $("#treasury_type").val();
+                const clients = $(".clients");
+                const suppliers = $(".suppliers");
+                const totalBeforeTreasuryInput = parseFloat($("#totalBeforeTreasuryInput").val());
+
+
+                if (!treasury_id || !treasury_type) {
+                    alert('قم باختيار نوع المعاملة ثم الخزينة ثم عميل او مورد');
+                    $(this).val('');
+
+                }else{
+
+                    if (!isNaN(thisVal) && !isNaN(totalBeforeUser)) { // start check if thisVal and totalBeforeUser is numbers
+
+                        if(thisVal < 1){  // start check if thisVal big than 1
+                            alertify.set('notifier','position', 'top-center');
+                            alertify.set('notifier','delay', 3);
+                            alertify.error(" مبلغ المعاملة يجب ان يكون أكبر من صفر");
+                            $(this).val('');
+
+                        } else{
+                            
+                            if(treasury_type == 'اذن توريد نقدية'){  // start check if treasury_type == اذن توريد نقدية
+
+                                if (thisVal <= totalBeforeUser) {  // start check if thisVal <= totalBeforeUser
+                                    $("#totalAfterUser").text('متبقي '+(totalBeforeUser - thisVal).toFixed(2)); // حساب مبلغ الجهه
+                                }else{
+                                    $("#totalAfterUser").text('لة '+(thisVal - totalBeforeUser).toFixed(2)); // حساب مبلغ الجهه
+                                } // end check if thisVal <= totalBeforeUser
+        
+                                $('#totalAfterTreasury').text((thisVal + totalBeforeTreasuryInput).toLocaleString()); // تزويد مبلغ الخزينة
+                            
+
+
+
+                            } else if(treasury_type == 'اذن صرف نقدية'){  // start check if treasury_type == اذن صرف نقدية
+                                if(thisVal > totalBeforeTreasuryInput){
+                                    alertify.set('notifier','position', 'top-center');
+                                    alertify.set('notifier','delay', 3);
+                                    alertify.error(" مبلغ المعاملة أكبر من مبلغ الخزينة");
+
+                                    $(this).val('');
+                                    $("#totalAfterUser").text(0);
+                                    $('#totalAfterTreasury').text(0);
+
+                                }else{
+
+                                    if (totalBeforeUser < 0) {
+                                        
+                                        if(thisVal > (totalBeforeUser * -1)){
+                                            $("#totalAfterUser").text('علية '+(thisVal - (totalBeforeUser * -1)).toFixed(2)); // حساب مبلغ الجهه
+
+                                        }else{
+                                            $("#totalAfterUser").text('لة '+((totalBeforeUser * -1) - thisVal).toFixed(2)); // حساب مبلغ الجهه
+                                        }
+
+                                    } else {
+                                        $("#totalAfterUser").text('علية '+(parseFloat(totalBeforeUser) + thisVal).toLocaleString()); // حساب مبلغ الجهه
+                                    }
+
+
+                                    $('#totalAfterTreasury').text((totalBeforeTreasuryInput - thisVal).toLocaleString()); // تزويد مبلغ الخزينة
+                                }
+
+
+                            }  // end check if treasury_type == اذن ارتجاع نقدية || اذن صرف نقدية || اذن صرف نقدية
+
+                        }  // end check if thisVal big than 1
+
+                    } else{
+                        $("#totalAfterUser").text(0);
+                        $('#totalAfterTreasury').text(0);
+                    }  // end check if thisVal and totalBeforeUser is numbers                
+                }
+
+                
+            });
+        // end when change مبلغ المعاملة
+
+
+        
+        // start save treasury bill when click save bill btn
+            $("#save_bill").on("click", function(e){
+                e.preventDefault();
+
+                const treasury_type = $("#treasury_type").val();
+                const treasury_id = $("#treasury_id").val();
+                const client = $(".clients").val();
+                const supplier = $(".suppliers").val();
+                const value = $("#value").val();
+
+                //$("#overlay_page").fadeIn();
+
+
+                if(!treasury_type){
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 3);
+                    alertify.error("نوع المعاملة مطلوب");
+                    
+                    $("#overlay_page").fadeOut();
+                    
+                }else if(!treasury_id){
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 3);
+                    alertify.error(" الخزينة المالية مطلوبة");
+                    
+                    $("#overlay_page").fadeOut();
+
+                }else if(!client && !supplier){
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 3);
+                    alertify.error("يُرجى اختيار عميل أو مورد لإتمام المعاملة");
+                    
+                    $("#overlay_page").fadeOut();
+
+                }else if(!value){
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 3);
+                    alertify.error("مبلغ المعاملة مطلوب");
+                    
+                    $("#overlay_page").fadeOut();
+
+                }else{
+
+                    $("#overlay_page").fadeOut();
+
+                    alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من حفظ المعاملة في الخزينة المالية ؟</p>', 
+                        function(){
+        
+                            $.ajax({
+                                url: "{{ url($pageNameEn) }}/store",
+                                type: 'POST',
+                                processData: false,
+                                contentType: false,
+                                data: new FormData($('#form')[0]),
+                                beforeSend:function () {
+                                    $('form [id^=errors]').text('');
+                                    $("#overlay_page").fadeIn();
+                                },
+                                error: function(res){
+                                    $.each(res.responseJSON.errors, function (index , value) {
+                                        $(`form #errors-${index}`).css('display' , 'block').text(value);
+                                    });               
+                                            
+                                    $("#overlay_page").fadeOut();
+
+                                    alertify.set('notifier','position', 'top-center');
+                                    alertify.set('notifier','delay', 3);
+                                    alertify.error("هناك شيئ ما خطأ");
+                                },
+                                success: function(res){
+                                    $("#overlay_page").fadeOut();                                    
+                                    alert('تم أجراء المعاملة بنجاح');
+                                    
+                                    location.reload();
+                                }
+                            });
+                        },function(){
+                            
+                        }).set({
+                            labels:{
+                                ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                                cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                            }
+                    });
+                }
+
+
+
+            });
         // end save treasury bill when click save bill btn
     </script>
 

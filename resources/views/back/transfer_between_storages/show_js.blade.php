@@ -15,15 +15,15 @@
 
                 $(`#exampleModalCenterShow .modal-body #num_order`).text(res.find[0].num_order);
                 $(`#exampleModalCenterShow .modal-body #created_at`).text(res.created_at);
-                $(`#exampleModalCenterShow .modal-body #value`).text(res.find[0].value);
+                $(`#exampleModalCenterShow .modal-body #value`).text(res.find[0].amount_money);
                 $(`#exampleModalCenterShow .modal-body #user_id`).text(res.find[0].userName);
                 $(`#exampleModalCenterShow .modal-body #notes`).text(res.find[0].notes);
                 
                 $(`#exampleModalCenterShow .modal-body #num_order_treasure_from span`).text(res.find[0].transaction_from_name);
-                $(`#exampleModalCenterShow .modal-body #value_treasure_from span`).text(res.find[0].money);
+                $(`#exampleModalCenterShow .modal-body #value_treasure_from span`).text(res.find[0].treasury_money_after);
                 
                 $(`#exampleModalCenterShow .modal-body #num_order_treasure_to span`).text(res.find[1].transaction_to_name);
-                $(`#exampleModalCenterShow .modal-body #value_treasure_to span`).text(res.find[1].money);
+                $(`#exampleModalCenterShow .modal-body #value_treasure_to span`).text(res.find[1].treasury_money_after);
 
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 2);

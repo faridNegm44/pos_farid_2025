@@ -7,6 +7,7 @@ use App\Models\Back\ClientsAndSuppliers;
 use App\Models\Back\FinancialTreasury;
 use App\Models\Back\PurchaseBill;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class PurchaseBillController extends Controller
@@ -35,8 +36,9 @@ class PurchaseBillController extends Controller
                                     })
                                     ->select('financial_treasuries.*', 'treasury_bill_dets.money')
                                     ->get();
-                                    
-        return view('back.purchases.create' , compact('pageNameAr' , 'pageNameEn', 'suppliers', 'treasuries'));
+        $lastBillNum = DB::table('purchase_bills')->max('id');
+    
+        return view('back.purchases.create' , compact('pageNameAr' , 'pageNameEn', 'suppliers', 'treasuries', 'lastBillNum'));
     }
 
     public function store(Request $request)

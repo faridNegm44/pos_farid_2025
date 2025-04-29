@@ -11,7 +11,7 @@
 		<meta name="Author" content="Spruko Technologies Private Limited">
 
         <!-- Title -->
-        <title> {{ GeneralSettingsInfo()->app_name }}: {{ $pageNameAr }} </title>
+        <title> {{ GeneralSettingsInfo()->app_name }}: {{ $pageNameAr }} {{ ($lastBillNum+1) }}</title>
 
         <!-- Favicon -->
         <link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
@@ -25,6 +25,22 @@
         <!--  Right-sidemenu css -->
         <link href="{{ asset('back') }}/assets/plugins/sidebar/sidebar.css" rel="stylesheet">
 
+        <!---Switcher css-->
+        <link href="{{ asset('back') }}/assets/switcher/css/switcher-rtl.css" rel="stylesheet">
+        <link href="{{ asset('back') }}/assets/switcher/demo.css" rel="stylesheet">
+
+        <!-- P-scroll bar css-->
+        <link href="{{ asset('back') }}/assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
+
+        <!-- Maps css -->
+		<link href="{{ asset('back') }}/assets/plugins/jqvmap/jqvmap.min.css" rel="stylesheet">
+
+        <!---Internal Owl Carousel css-->
+		<link href="{{ url('back') }}/assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
+
+        <!---Internal  Multislider css-->
+		<link href="{{ url('back') }}/assets/plugins/multislider/multislider.css" rel="stylesheet">
+        
         <!-- Style css -->
         <link href="{{ asset('back') }}/assets/css-rtl/style.css" rel="stylesheet">
         <link href="{{ asset('back') }}/assets/css-rtl/style-dark.css" rel="stylesheet">
@@ -107,10 +123,10 @@
     <div id="overlay_page"></div>
 
     
-    @include('back.layouts.header')
     {{--@include('back.layouts.navbar')--}}
     
     <div class="page" id="page_purchases">        
+        @include('back.layouts.header')
 
         @include('back.layouts.calc')
     
@@ -141,7 +157,7 @@
                     </div>
                     
                     <div class="col-lg-1" style="margin-bottom: 8px;">
-                        <input type="text" class="form-control" id="bill_num" name="bill_num" placeholder="رقم الفاتورة">
+                        <input type="text" class="form-control" id="bill_num" name="bill_num" placeholder="رقم الفاتورة" value="{{ ($lastBillNum+1) }}">
                     </div>
                     
                     <div class="col-lg-7" style="margin-bottom: 8px;">
@@ -173,7 +189,7 @@
                     <div class="col-lg-4 product-selection p-3 total_info" style="background: #e3bfc6;">
                         <div class="text-center" style="font-weight: bold;text-decoration: underline;background: rgb(195, 6, 6);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
                             {{ $pageNameAr }}
-                            <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">1</span>
+                            <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ ($lastBillNum+1) }}</span>
                         </div>
                         
                         <div class="text-center" id="date_time">
@@ -333,6 +349,35 @@
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-rtl.js"></script>
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-custom.js"></script>
 
+    <!--Internal  Chart.bundle js -->
+    <script src="{{ asset('back') }}/assets/plugins/chart.js/Chart.bundle.min.js"></script>
+
+    <!--Internal Sparkline js -->
+    <script src="{{ asset('back') }}/assets/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Raphael js -->
+    <script src="{{ asset('back') }}/assets/plugins/raphael/raphael.min.js"></script>
+
+    <!-- Internal Map -->
+    <script src="{{ asset('back') }}/assets/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="{{ asset('back') }}/assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+
+    <!--Internal  index js -->
+    <script src="{{ asset('back') }}/assets/js/index.js"></script>
+    <script src="{{ asset('back') }}/assets/js/jquery.vmap.sampledata.js"></script>
+
+    <!--Internal  Datepicker js -->
+    <script src="{{ url('back') }}/assets/plugins/jquery-ui/ui/widgets/datepicker.js"></script>
+
+    <!-- Internal Select2 js-->
+    <script src="{{ url('back') }}/assets/plugins/select2/js/select2.min.js"></script>
+
+    <!-- Internal Modal js-->
+    <script src="{{ url('back') }}/assets/js/modal.js"></script>
+
+    {{-- bootstrap.bundle --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    
     <!-- alertify -->
     <script src="{{ asset('back/assets/js/alertify.min.js') }}"></script>
 
@@ -342,8 +387,23 @@
     <!-- custom js -->
     <script src="{{ asset('back') }}/assets/js/custom.js"></script>
 
+    <!-- Switcher js -->
+    <script src="{{ asset('back') }}/assets/switcher/js/switcher-rtl.js"></script>
 
+    <!-- Moment js -->
+    <script src="{{ asset('back') }}/assets/plugins/moment/moment.js"></script>
+
+    <!-- P-scroll js -->
+    <script src="{{ asset('back') }}/assets/plugins/perfect-scrollbar/perfect-scrollbar.min-rtl.js"></script>
+    <script src="{{ asset('back') }}/assets/plugins/perfect-scrollbar/p-scroll-rtl.js"></script>
     
+    <!-- eva-icons js -->
+    <script src="{{ asset('back') }}/assets/js/eva-icons.min.js"></script>
+
+    <!-- Sticky js -->
+    <script src="{{ asset('back') }}/assets/js/sticky.js"></script>
+
+
     @include('back.purchases.css_js.main_js')
     
     @include('back.purchases.js.top_main_search')
@@ -353,6 +413,58 @@
     {{--  start refresh_page  --}}
     @include('back.layouts.refresh_page')
     {{--  end refresh_page  --}}
+
+
+    <script>
+        // start when change clients or suppliers
+            $(document).ready(function() {                
+                const $suppliers = $(".suppliers").selectize();
+                const suppliersSelectize = $suppliers[0].selectize;
+    
+                // start function get cleint or supplier info
+                function getClientOrSupplierInfo(id){
+                    const url = `{{ url('get_info/client_or_supplier') }}/${id}`;
+    
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        beforeSend: function(){
+                            $("#totalBeforeUser").text(0);
+                            $("#totalAfterUser").text(0);
+                            $("#userStatus").css('display', 'none');
+                        },
+                        success: function(res){
+                            if(res.value){
+    
+                                alertify.set('notifier','position', 'top-center');
+                                alertify.set('notifier','delay', 3);
+                                alertify.success("تم استدعاء الموقف المالي للجهة بنجاح");
+                                
+                                if(res.value < 0){
+                                    $("#totalBeforeUser").text(parseFloat(res.value));          
+                                    $("#userStatus").css('display', 'inline').text(`دائن (له): ${parseFloat(res.value).toLocaleString()}`);
+                                }else{
+                                    $("#totalBeforeUser").text(parseFloat(res.value));
+                                    $("#userStatus").css('display', 'inline').text(`مدين (عليه): ${parseFloat(res.value).toLocaleString()}`);
+                                }
+                            }                        
+                        }
+                    });             
+                }
+                // end function get cleint or supplier info
+                
+                suppliersSelectize.on('change', function(value) {
+                    $('#value').val('');
+                    $('#totalAfterTreasury').text(0);
+    
+                    $("#overlay_page").fadeIn();
+                    getClientOrSupplierInfo($('.suppliers').val());
+                    $("#overlay_page").fadeOut();
+                });
+            });
+        // end when change clients or suppliers
+    </script>
+
 
 
 
@@ -471,75 +583,75 @@
 
 
     {{-- start when change products_selectize options --}}
-    <script>
-        $(document).ready(function() {
-            $('#products_selectize').change(function() {
-                var productId = $(this).val();
-                var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
-                var selectedItem = selectizeInstance.getItem(productId); // الحصول على العنصر المحدد
+        <script>
+            $(document).ready(function() {
+                $('#products_selectize').change(function() {
+                    var productId = $(this).val();
+                    var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
+                    var selectedItem = selectizeInstance.getItem(productId); // الحصول على العنصر المحدد
 
-                if (selectedItem) {
-                    var productData = selectizeInstance.options[productId]; // بيانات العنصر المحدد
-                    var productName = productData.nameAr; // اسم الصنف
-                    var sellPrice = productData.sellPrice; // سعر البيع
-                    var purchasePrice = productData.purchasePrice; // سعر الشراء
-                    var quantity_all = productData.quantity_all; // كميه المخزن
+                    if (selectedItem) {
+                        var productData = selectizeInstance.options[productId]; // بيانات العنصر المحدد
+                        var productName = productData.nameAr; // اسم الصنف
+                        var sellPrice = productData.sellPrice; // سعر البيع
+                        var purchasePrice = productData.purchasePrice; // سعر الشراء
+                        var quantity_all = productData.quantity_all; // كميه المخزن
 
 
-                    function appendToProductsTable() {
-                        $('#products_table tbody').append(`
-                            <tr id="tr_${productId}">
-                                <th>${productId}</th>
-                                <td>
-                                    <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                <td class="prod_name">${productName}</td>
-                                <td>
-                                    <input type="number" readonly class="form-control form-control-sm text-center quantity_all" value="${quantity_all}">                    
-                                </td>
-                                <td><input type="number" class="form-control form-control-sm text-center focus_input product_new_qty" value="1"></td>
-                                <td>
-                                    <input type="number" class="form-control form-control-sm text-center focus_input purchasePrice" value="${purchasePrice}">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control form-control-sm text-center focus_input sellPrice" value="${sellPrice}">                                    
-                                </td>
-                                <td><input type="number" class="form-control form-control-sm text-center focus_input prod_tax" value="0"></td>
-                                <td><input type="number" class="form-control form-control-sm text-center focus_input prod_discount" value="0"></td>
-                                <td><input type="number" class="form-control form-control-sm text-center focus_input prod_bonus" value="0"></td>
-                                <td><input type="number" readonly class="form-control form-control-sm text-center focus_input prod_total" value="0"></td>
-                            </tr>
-                        `);
-                    }
-
-                    if (productId) {
-                        if ($(`#products_table tbody #tr_${productId}`).length > 0) {
-                            alertify.set('notifier', 'position', 'bottom-center');
-                            alertify.set('notifier', 'delay', 3);
-                            alertify.error("تم إضافة الصنف من قبل لأصناف الفاتورة");
-
-                            const product_new_qty = $(`#products_table tbody #tr_${productId} .product_new_qty`);
-                            const currentQty = parseInt(product_new_qty.val());
-                            product_new_qty.val(currentQty + 1);
-
-                            backgroundRedToSelectError(product_new_qty);
-
-                            calcTotal();
-
-                        } else {
-                            appendToProductsTable();
-                            $("#countTableTr span").text(countTableTr());
-
-                            calcTotal();
+                        function appendToProductsTable() {
+                            $('#products_table tbody').append(`
+                                <tr id="tr_${productId}">
+                                    <th>${productId}</th>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </td>
+                                    <td class="prod_name">${productName}</td>
+                                    <td>
+                                        <input type="number" readonly class="form-control form-control-sm text-center quantity_all" value="${quantity_all}">                    
+                                    </td>
+                                    <td><input type="number" class="form-control form-control-sm text-center focus_input product_new_qty" value="1"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm text-center focus_input purchasePrice" value="${purchasePrice}">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm text-center focus_input sellPrice" value="${sellPrice}">                                    
+                                    </td>
+                                    <td><input type="number" class="form-control form-control-sm text-center focus_input prod_tax" value="0"></td>
+                                    <td><input type="number" class="form-control form-control-sm text-center focus_input prod_discount" value="0"></td>
+                                    <td><input type="number" class="form-control form-control-sm text-center focus_input prod_bonus" value="0"></td>
+                                    <td><input type="number" readonly class="form-control form-control-sm text-center focus_input prod_total" value="0"></td>
+                                </tr>
+                            `);
                         }
+
+                        if (productId) {
+                            if ($(`#products_table tbody #tr_${productId}`).length > 0) {
+                                alertify.set('notifier', 'position', 'bottom-center');
+                                alertify.set('notifier', 'delay', 3);
+                                alertify.error("تم إضافة الصنف من قبل لأصناف الفاتورة");
+
+                                const product_new_qty = $(`#products_table tbody #tr_${productId} .product_new_qty`);
+                                const currentQty = parseInt(product_new_qty.val());
+                                product_new_qty.val(currentQty + 1);
+
+                                backgroundRedToSelectError(product_new_qty);
+
+                                calcTotal();
+
+                            } else {
+                                appendToProductsTable();
+                                $("#countTableTr span").text(countTableTr());
+
+                                calcTotal();
+                            }
+                        }
+                        selectizeInstance.clear();
                     }
-                    selectizeInstance.clear();
-                }
+                });
             });
-        });
-    </script>
+        </script>
     {{-- end when change products_selectize options --}}
 
     
@@ -572,81 +684,81 @@
 
 
     {{-- start general scripts --}}
-    <script>
-        // start count table tr
-        function countTableTr(){ return $('#products_table tbody tr').length; }
-        // end count table tr
+        <script>
+            // start count table tr
+            function countTableTr(){ return $('#products_table tbody tr').length; }
+            // end count table tr
 
-        
-        // start remove This Tr on table
-        function removeThisTr() {
-            $(document).on('click', '#products_table tbody tr .remove_this_tr', function (e) { 
-                $(this).closest('tr').fadeOut(100, function(){
-                    $(this).remove();
-                    $("#countTableTr span").text(countTableTr());
+            
+            // start remove This Tr on table
+            function removeThisTr() {
+                $(document).on('click', '#products_table tbody tr .remove_this_tr', function (e) { 
+                    $(this).closest('tr').fadeOut(100, function(){
+                        $(this).remove();
+                        $("#countTableTr span").text(countTableTr());
 
-                    calcTotal();
-                });    
+                        calcTotal();
+                    });    
+                });
+            }
+            // end remove This Tr on table
+
+
+            // start open modal calc when click button when click ctrl+/
+            $(document).bind('keydown', function(event) {
+                if( event.which === 191 && event.ctrlKey ) {
+                    $('.calc').modal('show');
+                }
             });
-        }
-        // end remove This Tr on table
+            // end open modal calc when click button when click ctrl+/
 
 
-        // start open modal calc when click button when click ctrl+/
-        $(document).bind('keydown', function(event) {
-            if( event.which === 191 && event.ctrlKey ) {
-                $('.calc').modal('show');
+            // start check if product quantity is big zero
+            $(document).on('input', '#products_table tbody .product_new_qty', function(){
+                const thisVal = $(this);
+                if(thisVal.val() < 1){
+                    thisVal.val(1);
+                    backgroundRedToSelectError(thisVal);
+
+                    alertify.set('notifier','position', 'bottom-center');
+                    alertify.set('notifier','delay', 3);
+                    alertify.error("خطأ في كمية المنتج");
+                }
+            });
+            // end check if product quantity is big zero
+
+            
+            // start function to add style to inputs error 
+            function backgroundRedToSelectError(selector){
+                selector.css('background', 'orange');
+                setTimeout(() => {
+                    selector.css('background', 'transparent');
+                }, 1500);
             }
-        });
-        // end open modal calc when click button when click ctrl+/
+            // end function to add style to inputs error 
 
 
-        // start check if product quantity is big zero
-        $(document).on('input', '#products_table tbody .product_new_qty', function(){
-            const thisVal = $(this);
-            if(thisVal.val() < 1){
-                thisVal.val(1);
-                backgroundRedToSelectError(thisVal);
+            // start show div amount paid after select supplier and treasury
+            $(document).on('input', '#treasuries, #supplier', function(){
+                if( $('#treasuries').val() && $('#supplier').val() ){
+                    $("#amount_paid").fadeIn();
 
-                alertify.set('notifier','position', 'bottom-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("خطأ في كمية المنتج");
-            }
-        });
-        // end check if product quantity is big zero
+                }else{            
+                    $("#amount_paid").fadeOut();
+                }
+            });
+            
+            $(document).on('input', '#supplier', function(){
+                if( $(this).val() ){
+                    $("#supplier_div").fadeIn();
 
-        
-        // start function to add style to inputs error 
-        function backgroundRedToSelectError(selector){
-            selector.css('background', 'orange');
-            setTimeout(() => {
-                selector.css('background', 'transparent');
-            }, 1500);
-        }
-        // end function to add style to inputs error 
-
-
-        // start show div amount paid after select supplier and treasury
-        $(document).on('input', '#treasuries, #supplier', function(){
-            if( $('#treasuries').val() && $('#supplier').val() ){
-                $("#amount_paid").fadeIn();
-
-            }else{            
-                $("#amount_paid").fadeOut();
-            }
-        });
-        
-        $(document).on('input', '#supplier', function(){
-            if( $(this).val() ){
-                $("#supplier_div").fadeIn();
-
-            }else{            
-                $("#supplier_div").fadeOut();
-            }
-        });
-        //  end show div amount paid after select supplier and treasury
-        
-    </script>
+                }else{            
+                    $("#supplier_div").fadeOut();
+                }
+            });
+            //  end show div amount paid after select supplier and treasury
+            
+        </script>
     {{-- end general scripts --}}
 
 </body>

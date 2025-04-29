@@ -23,7 +23,7 @@ class Controller extends BaseController
         return $latestId ? $latestId+1 : 1;
     }
     function ifNullToZero($column){
-        return request($column) === null ? 0 : request($column);
+        return request($column) ?? 0 ;
     }
     function ifFoundedRequestFile($column, $pathToSave){
         if(request($column) == ""){

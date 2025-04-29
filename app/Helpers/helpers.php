@@ -30,6 +30,15 @@ use Illuminate\Support\Facades\DB;
 // end get authUserInfo`
 
 
+// start show الارقام العشريه
+if (!function_exists('display_number')) {
+    function display_number($value) {
+        return rtrim(rtrim(strval($value), '0'), '.');
+    }
+}
+// end show الارقام العشريه
+
+
 //// start function role_permissions
 //function userPermissions(){
 //    $permissions = DB::table('users')

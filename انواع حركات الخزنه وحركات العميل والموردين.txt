@@ -1,15 +1,21 @@
 ################### اذون الخزانه
     رصيد اول خزنة -> relation with ( treasury_id ) in ( treasury_bill_dets )
+    
+    رصيد اول عميل -> relation with ( treasury_id ) in ( treasury_bill_dets )
+    
+    رصيد اول مورد -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
-    اذن اضافة نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
+    اذن توريد نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
     اذن صرف نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
+    
+    اذن ارتجاع نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
     اذن ارتجاع مبيعات -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
     اذن ارتجاع مشتريات -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
-    تحويل نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
+    تحويل بين خزنتين -> relation with ( treasury_id ) in ( treasury_bill_dets )
 
     تسوية نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
     
@@ -20,7 +26,7 @@
 
 
 ################### اذون المخزن
-    رصيد اول -> relation with ( product_id ) in ( store_dets )
+    رصيد اول مدة للصنف -> relation with ( product_id ) in ( store_dets )
 
     تسوية صنف -> relation with ( product_id ) in ( store_dets )
 

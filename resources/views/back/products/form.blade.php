@@ -16,15 +16,24 @@
                 <div class="pd-30 pd-sm-40 bg-gray-100">
                   <h5 style="text-decoration: underline;font-weight: bold;">بيانات أساسية</h5>
                   <div class="row row-xs">
-                    <div class="col-lg-1 col-12">
-                        <label for="last_code">ك الصنف</label>
-                        <div>
-                            <input type="text" readonly class="form-control" placeholder="ك الصنف" id="last_code" name="last_code" value="{{ $lastId }}">
-                        </div>
-                        <bold class="text-danger" id="errors-last_code" style="display: none;"></bold>
-                    </div>                        
+                    <div class="col-lg-3 col-md-6 col-12">
+                      <label for="nameAr">إسم الصنف بالعربية</label>
+                      <i class="fas fa-star require_input"></i>
+                      <div>
+                          <input type="text" class="form-control dataInput" placeholder="إسم الصنف بالعربية" id="nameAr" name="nameAr" data-autofocus >
+                      </div>
+                      <bold class="text-danger" id="errors-nameAr" style="display: none;"></bold>
+                  </div>                        
 
-                    <div class="col-lg-1 col-12">
+                  <div class="col-lg-3 col-md-6 col-12">
+                      <label for="nameEn">إسم الصنف بالأجنبية</label>
+                      <div>
+                          <input type="text" class="form-control dataInput" placeholder="إسم الصنف بالأجنبية" id="nameEn" name="nameEn" >
+                      </div>
+                      <bold class="text-danger" id="errors-nameEn" style="display: none;"></bold>
+                  </div>
+
+                    <div class="col-lg-1 col-md-6 col-12">
                         <label for="shortCode">ك مختصر</label>
                         <div>
                             <input type="text" class="form-control dataInput" placeholder="ك مختصر" id="shortCode" name="shortCode" >
@@ -32,7 +41,7 @@
                         <bold class="text-danger" id="errors-shortCode" style="display: none;"></bold>
                     </div>                        
                     
-                    <div class="col-lg-2 col-12">
+                    <div class="col-lg-2 col-md-6 col-12">
                         <label for="natCode">ك دولي</label>
                         <div>
                             <input type="text" class="form-control dataInput" placeholder="ك دولي" id="natCode" name="natCode" >
@@ -40,31 +49,10 @@
                         <bold class="text-danger" id="errors-natCode" style="display: none;"></bold>
                     </div>                        
 
-                    <div class="col-lg-3 col-12">
-                        <label for="nameAr">إسم الصنف بالعربية</label>
-                        <i class="fas fa-star require_input"></i>
-                        <div>
-                            <input type="text" class="form-control dataInput" placeholder="إسم الصنف بالعربية" id="nameAr" name="nameAr" data-autofocus >
-                        </div>
-                        <bold class="text-danger" id="errors-nameAr" style="display: none;"></bold>
-                    </div>                        
-
-                    <div class="col-lg-3 col-12">
-                        <label for="nameEn">إسم الصنف بالأجنبية</label>
-                        <div>
-                            <input type="text" class="form-control dataInput" placeholder="إسم الصنف بالأجنبية" id="nameEn" name="nameEn" >
-                        </div>
-                        <bold class="text-danger" id="errors-nameEn" style="display: none;"></bold>
-                    </div>        
-                    
-                    <div class="col-lg-2 col-12">
+                    <div class="col-lg-1 col-md-6 col-12">
                       <label for="status">حالة الصنف</label>
-                      {{-- <div>
-                          <input type="text" class="form-control dataInput" placeholder="إسم الصنف بالأجنبية" id="nameEn" name="nameEn" >
-                      </div> --}}
-
                         <div>    
-                            <select  name="status" class="status form-control" id="status">
+                            <select  name="status" class="status selectize" id="status">
                                 <option value="1">نشط</option>
                                 <option value="0">معطل</option>
                             </select>
@@ -72,21 +60,30 @@
                       <bold class="text-danger" id="errors-status" style="display: none;"></bold>
                     </div>  
 
-                    <div class="col-lg-2 col-12">
+                    <div class="col-lg-2 col-md-6 col-12">
+                      <label for="image">صورة الصنف</label>
+                      <div>
+                          <input type="file" class="form-control dataInput" placeholder="صورة الصنف" id="image" name="image" >
+                          <input type="hidden" class="dataInput" id="image_hidden" name="image_hidden" >
+                      </div>
+                      <bold class="text-danger" id="errors-image" style="display: none;"></bold>
+                    </div> 
+
+                    <div class="col-lg-2 col-md-6 col-12">
                       <label for="store">المخزن</label>
                       <i class="fas fa-star require_input"></i>
                       <div>    
                           <select  name="store" class="store selectize" id="store">
                             <option value="" selected>المخزن</option>                              
-                            @foreach ($stores as $store)
-                              <option value="{{ $store->id }}">{{ $store->name }}</option>                              
+                            @foreach ($stores as $index => $store)
+                              <option value="{{ $store->id }}" {{ $index == 0 ? 'selected' : '' }}>{{ $store->name }}</option>                              
                             @endforeach
                           </select>
                       </div>
                       <bold class="text-danger" id="errors-store" style="display: none;"></bold>
                     </div>                        
 
-                    <div class="col-lg-2 col-12">
+                    <div class="col-lg-2 col-md-6 col-12">
                       <label for="category">قسم الصنف</label>
                       <div>    
                           <select  name="category" class="category selectize" id="category">
@@ -99,7 +96,7 @@
                       <bold class="text-danger" id="errors-category" style="display: none;"></bold>
                     </div>                        
 
-                    <div class="col-lg-2 col-12">
+                    <div class="col-lg-2 col-md-6 col-12">
                       <label for="company">الشركة المصنعة</label>
                       <div>    
                           <select  name="company" class="company selectize" id="company">
@@ -112,157 +109,115 @@
                       <bold class="text-danger" id="errors-company" style="display: none;"></bold>
                     </div>                                            
 
-                    <div class="col-lg-2 col-12">
-                      <label for="firstPeriodCount">رصيد أول مدة</label>
-                      <div>
-                          <input type="text" class="form-control dataInput" placeholder="رصيد أول مدة" id="firstPeriodCount" name="firstPeriodCount" value="0">
-                      </div>
-                      <bold class="text-danger" id="errors-firstPeriodCount" style="display: none;"></bold>
-                  </div>    
-
-                    <div class="col-lg-2 col-12">
+                    <div class="col-lg-2 col-md-6 col-12">
                       <label for="stockAlert">الحد الأدني للطلب</label>
                       <div>
-                          <input type="text" class="form-control dataInput" placeholder="الحد الأدني للطلب" id="stockAlert" name="stockAlert" value="0">
+                          <input type="number" class="form-control dataInput" placeholder="الحد الأدني للطلب" id="stockAlert" name="stockAlert" min="0">
                       </div>
                       <bold class="text-danger" id="errors-stockAlert" style="display: none;"></bold>
                     </div> 
 
-                    <div class="col-lg-2 col-12">
-                      <label for="divisible">قابل للتجزئة</label>
-                      <div>    
-                          <select  name="divisible" class="divisible form-control" id="divisible">
-                              <option value="0">لاء</option>
-                              <option value="1">نعم</option>
-                          </select>
-                      </div>
-                      <bold class="text-danger" id="errors-divisible" style="display: none;"></bold>
-                    </div> 
-
-                    <div class="col-lg-8 col-12">
+                    <div class="col-lg-4 col-md-6 col-12">
                       <label for="desc">وصف الصنف</label>
                       <div>
                           <input type="text" class="form-control dataInput" placeholder="وصف المنتج" id="desc" name="desc" >
                       </div>
                       <bold class="text-danger" id="errors-desc" style="display: none;"></bold>
                     </div>   
-
-                    <div class="col-lg-4 col-12">
-                      <label for="image">صورة الصنف</label>
-                      <div>
-                          <input type="file" class="form-control dataInput" placeholder="صورة الصنف" id="image" name="image" >
-                      </div>
-                      <bold class="text-danger" id="errors-image" style="display: none;"></bold>
-                    </div>   
                   </div>
                   <hr>
 
 
-
-
                   <h5 style="text-decoration: underline;font-weight: bold;">بيانات السعر والوحدات</h5>
                   <div class="row row-xs">
-
-                    {{-- start right --}}
-                    <div class="col-lg-6 col-12">
-                      <div class="row row-xs">
-                        <div class="col-lg-4 col-12">
-                            <label for="sellPrice">س البيع</label>
-                            <i class="fas fa-star require_input"></i>
-                            <div>
-                                <input type="text" class="form-control dataInput" placeholder="س البيع" id="sellPrice" name="sellPrice" >
-                            </div>
-                            <bold class="text-danger" id="errors-sellPrice" style="display: none;"></bold>
-                        </div>                        
-                        
-                        <div class="col-lg-4 col-12">
-                            <label for="purchasePrice">س الشراء</label>
-                            <div>
-                                <input type="text" class="form-control dataInput" placeholder="س الشراء" id="purchasePrice" name="purchasePrice" >
-                            </div>
-                            <bold class="text-danger" id="errors-purchasePrice" style="display: none;"></bold>
-                        </div>                        
-    
-                        <div class="col-lg-4 col-12">
-                          <label for="tax">الضريبة</label>
-                          <div>
-                              <input type="text" class="form-control dataInput" placeholder="الضريبة" id="tax" name="tax" value="0">
-                          </div>
-                          <bold class="text-danger" id="errors-tax" style="display: none;"></bold>
-                        </div>   
-                        
-                        <div class="col-lg-4 col-12">
-                          <label for="discountPercentage">أقصي نسبة خصم %</label>
-                          <i class="fas fa-star require_input"></i>
-                          <div>
-                              <input type="text" class="form-control dataInput" placeholder="أقصي نسبة خصم %" id="discountPercentage" name="discountPercentage" value="0">
-                          </div>
-                          <bold class="text-danger" id="errors-discountPercentage" style="display: none;"></bold>
-                        </div>
-                      
-                        <div class="col-lg-4 col-12">
-                            <label for="max_sale_quantity">أقصي كمية بيع</label>
-                            <i class="fas fa-star require_input"></i>
-                            <div>
-                                <input type="text" class="form-control dataInput" placeholder="أقصي كمية بيع" id="max_sale_quantity" name="max_sale_quantity" value="0">
-                            </div>
-                            <bold class="text-danger" id="errors-max_sale_quantity" style="display: none;"></bold>
-                        </div>
-                        
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                      <label for="bigUnit">الوحدة الكبري</label>
+                      <div>    
+                          <select  name="bigUnit" class="bigUnit selectize" id="bigUnit">
+                            <option value="" selected>الوحدة الكبري</option>
+                            @foreach ($units as $unit)
+                              <option value="{{ $unit->id }}">{{ $unit->name }}</option>                              
+                            @endforeach
+                          </select>
                       </div>
-                    </div>
-                    {{-- end right --}}
+                      <bold class="text-danger" id="errors-bigUnit" style="display: none;"></bold>
+                    </div>                        
 
-
-                    {{-- start left --}}
-                    <div class="col-lg-6 col-12">
-                      <div class="row row-xs">
-                        <div class="col-lg-4 col-12">
-                          <label for="bigUnit">الوحدة الكبري</label>
-                          <div>    
-                              <select  name="bigUnit" class="bigUnit selectize" id="bigUnit">
-                                <option value="" selected>الوحدة الكبري</option>
-                                @foreach ($units as $unit)
-                                  <option value="{{ $unit->id }}">{{ $unit->name }}</option>                              
-                                @endforeach
-                              </select>
-                          </div>
-                          <bold class="text-danger" id="errors-bigUnit" style="display: none;"></bold>
-                        </div>                        
-    
-                        <div class="col-lg-4 col-12">
-                          <label for="smallUnit">الوحدة الصغري</label>
-                          <div>    
-                              <select  name="smallUnit" class="smallUnit selectize" id="smallUnit">
-                                <option value="" selected>الوحدة الصغري</option>
-                                @foreach ($units as $unit)
-                                  <option value="{{ $unit->id }}">{{ $unit->name }}</option>                              
-                                @endforeach
-                              </select>
-                          </div>
-                          <bold class="text-danger" id="errors-smallUnit" style="display: none;"></bold>
-                        </div> 
-    
-                        <div class="col-lg-4 col-12">
-                          <label for="smallUnitPrice">سعر وحدة الصغري</label>
-                          <div>
-                              <input type="text" class="form-control dataInput" placeholder="سعر وحدة الصغري" id="smallUnitPrice" name="smallUnitPrice" >
-                          </div>
-                          <bold class="text-danger" id="errors-smallUnitPrice" style="display: none;"></bold>
-                        </div>                        
-                      
-                        <div class="col-lg-4 col-12">
-                          <label for="smallUnitNumbers">عدد وحدات الصغري</label>
-                          <div>
-                              <input type="text" class="form-control dataInput" placeholder="عدد وحدات الصغري" id="smallUnitNumbers" name="smallUnitNumbers" >
-                          </div>
-                          <bold class="text-danger" id="errors-smallUnitNumbers" style="display: none;"></bold>
-                        </div>                    
-
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                      <label for="smallUnit">الوحدة الصغري</label>
+                      <div>    
+                          <select  name="smallUnit" class="smallUnit selectize" id="smallUnit">
+                            <option value="" selected>الوحدة الصغري</option>
+                            @foreach ($units as $unit)
+                              <option value="{{ $unit->id }}">{{ $unit->name }}</option>                              
+                            @endforeach
+                          </select>
                       </div>
+                      <bold class="text-danger" id="errors-smallUnit" style="display: none;"></bold>
+                    </div> 
+
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12" id="small_unit_numbers_section">
+                      <label for="small_unit_numbers">عدد وحدات الصغري</label>
+                      <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" title="عدد الوحدات الصغرى التي تُكوِّن وحدة كبرى واحدة من هذا المنتج (مثال: 1 كرتونة = 12 علبة)"></i>
+                      <i class="fas fa-star require_input"></i>
+
+                      <div>
+                          <input type="number" class="form-control dataInput" placeholder="عدد وحدات الصغري" id="small_unit_numbers" name="small_unit_numbers" min="1">
+                      </div>
+                      <bold class="text-danger" id="errors-small_unit_numbers" style="display: none;"></bold>
+                    </div>  
+
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                        <label for="last_cost_price_small_unit">س الشراء</label>
+                        <div>
+                            <input type="number" class="form-control dataInput" placeholder="س الشراء" id="last_cost_price_small_unit" name="last_cost_price_small_unit" min="0">
+                        </div>
+                        <bold class="text-danger" id="errors-last_cost_price_small_unit" style="display: none;"></bold>
+                    </div>                        
+
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                      <label for="sell_price_small_unit">سعر البيع</label>
+                      <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" title="هذا السعر مخصص لبيع أصغر وحدة ممكنة من هذا المنتج، مثل العبوة أو القطعة أو الجرام بحسب طبيعة المنتج"></i>
+
+                      <div>
+                          <input type="number" class="form-control dataInput" placeholder="سعر البيع" id="sell_price_small_unit" name="sell_price_small_unit" min="0">
+                      </div>
+                      <bold class="text-danger" id="errors-sell_price_small_unit" style="display: none;"></bold>
+                    </div>  
+
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                      <label for="tax">الضريبة</label>
+                      <div>
+                          <input type="number" class="form-control dataInput" placeholder="الضريبة" id="tax" name="tax" min="0">
+                      </div>
+                      <bold class="text-danger" id="errors-tax" style="display: none;"></bold>
+                    </div>   
+                    
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                      <label for="discountPercentage">أقصي نسبة خصم %</label>
+                      <div>
+                          <input type="number" class="form-control dataInput" placeholder="أقصي نسبة خصم %" id="discountPercentage" name="discountPercentage" min="0">
+                      </div>
+                      <bold class="text-danger" id="errors-discountPercentage" style="display: none;"></bold>
                     </div>
-                    {{-- end left --}}
                   
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                        <label for="max_sale_quantity">أقصي كمية بيع</label>
+                        <div>
+                            <input type="number" class="form-control dataInput" placeholder="أقصي كمية بيع" id="max_sale_quantity" name="max_sale_quantity" min="0">
+                        </div>
+                        <bold class="text-danger" id="errors-max_sale_quantity" style="display: none;"></bold>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6 col-12" id="firstPeriodCountSection">
+                      <label for="firstPeriodCount">رصيد أول مدة</label>
+                      <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" title="يرجى إدخال رصيد أول المدة لهذا الصنف بعدد الوحدات الصغرى فقط، مثلًا: إذا كانت الكرتونة تحتوي على 12 قطعة، يتم إدخال 12."></i>
+
+                      <div>
+                          <input type="number" class="form-control dataInput" placeholder="رصيد أول مدة" id="firstPeriodCount" name="firstPeriodCount" min="0">
+                      </div>
+                      <bold class="text-danger" id="errors-firstPeriodCount" style="display: none;"></bold>
+                    </div>  
                   </div>
                   
                   
@@ -271,7 +226,7 @@
                   {{--<hr>--}}
                   {{-- <h5 style="text-decoration: underline;font-weight: bold;">س ترويجي للصنف</h5> --}}
                   {{--<div class="row">
-                    <div class="col-lg-12 col-lg-12 col-12">
+                    <div class="col-lg-12 col-md-6 col-lg-12 col-md-6 col-12">
                       <div class="card overflow-hidden">
                         <div class="card-body">
                           <div class="panel-group1" id="accordion11">
@@ -284,7 +239,7 @@
                               <div id="collapseFour1" class="panel-collapse collapse" role="tabpanel" aria-expanded="false" style="">
                                 <div class="panel-body border">
                                   <div class="row row-xs">
-                                    <div class="col-lg-3 col-12">
+                                    <div class="col-lg-3 col-md-6 col-12">
                                       <label for="offerDiscountStatus">حالة السعر الترويجي</label>
                                       <div>
                                           <select  name="offerDiscountStatus" class="offerDiscountStatus form-control" id="offerDiscountStatus">
@@ -295,7 +250,7 @@
                                       <bold class="text-danger" id="errors-offerDiscountStatus" style="display: none;"></bold>
                                     </div>                        
                 
-                                    <div class="col-lg-3 col-12">
+                                    <div class="col-lg-3 col-md-6 col-12">
                                         <label for="offerDiscountPercentage">خصم % </label>
                                         <div>
                                             <input type="text" class="form-control dataInput" placeholder="خصم % " id="offerDiscountPercentage" name="offerDiscountPercentage" >
@@ -303,7 +258,7 @@
                                         <bold class="text-danger" id="errors-offerDiscountPercentage" style="display: none;"></bold>
                                     </div>                        
                                     
-                                    <div class="col-lg-3 col-12">
+                                    <div class="col-lg-3 col-md-6 col-12">
                                         <label for="offerStart">بداية العرض الترويجي</label>
                                         <div>
                                             <input type="text" class="form-control datePicker dataInput" placeholder="بداية العرض الترويجي" id="offerStart" name="offerStart" >
@@ -311,7 +266,7 @@
                                         <bold class="text-danger" id="errors-offerStart" style="display: none;"></bold>
                                     </div>                        
                 
-                                    <div class="col-lg-3 col-12">
+                                    <div class="col-lg-3 col-md-6 col-12">
                                         <label for="offerEnd">نهاية العرض الترويجي</label>
                                         <div>
                                             <input type="text" class="form-control datePicker dataInput" placeholder="نهاية العرض الترويجي" id="offerEnd" name="offerEnd" >

@@ -79,6 +79,9 @@ class ClientsController extends Controller
 
                 $moneyOnHim = request('money_on_him');
                 $moneyForHim = request('money_for_him');
+                $lastNumId = DB::table('treasury_bill_dets')
+                                ->where('treasury_type', 'رصيد اول عميل')
+                                ->max('num_order');
 
                 $getId = DB::table('clients_and_suppliers')->insertGetId([
                     'client_supplier_type' => request('client_supplier_type'),
@@ -101,16 +104,21 @@ class ClientsController extends Controller
                     'created_at' => now()
                 ]);
                 
-                DB::table('clients_and_suppliers_dets')->insert([
-                    'treasury_id' => 0,
-                    'bill_type' => 'رصيد اول عميل',
+                DB::table('treasury_bill_dets')->insert([
+                    'num_order' => ($lastNumId+1), 
+                    'date' => Carbon::now(),
+                    'treasury_id' => 0, 
+                    'treasury_type' => 'رصيد اول عميل',
                     'bill_id' => 0,
-                    'treasury_bill_head_id' => 0,
-                    'treasury_bill_body_id' => 0,
-                    'client_supplier_id' => $getId,
-                    'money' => $moneyOnHim > 0 ? $moneyOnHim : ($moneyForHim * -1),
+                    'bill_type' => 'رصيد اول عميل', 
+                    'client_supplier_id' => $getId, 
+                    'amount_money' => $moneyOnHim > 0 ? $moneyOnHim : ($moneyForHim * -1),
+                    'remaining_money' => $moneyOnHim > 0 ? $moneyOnHim : ($moneyForHim * -1),
+                    'transaction_from' => null, 
+                    'transaction_to' => null, 
+                    'notes' => request('note'), 
+                    'user_id' => auth()->user()->id, 
                     'year_id' => $this->currentFinancialYear(),
-                    'notes' => request('note'),
                     'created_at' => now()
                 ]);
 
@@ -231,13 +239,12 @@ class ClientsController extends Controller
                                     ->orWhere('client_supplier_type', 4)
                                     ->leftJoin('clients_and_suppliers_types', 'clients_and_suppliers_types.id', 'clients_and_suppliers.client_supplier_type')
                                     
-                                    ->leftJoin('clients_and_suppliers_dets', 'clients_and_suppliers_dets.client_supplier_id', 'clients_and_suppliers.id')
+                                    ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.client_supplier_id', 'clients_and_suppliers.id')
                                     ->select(
                                         'clients_and_suppliers.*', 
                                         'clients_and_suppliers_types.name as type_name',
-                                        'clients_and_suppliers_dets.money',
-                                        'clients_and_suppliers_dets.year_id',
-                                    
+                                        'treasury_bill_dets.amount_money',
+                                        'treasury_bill_dets.year_id',
                                     )
                                     ->orderBy('id', 'desc')
                                     ->get();
@@ -260,22 +267,22 @@ class ClientsController extends Controller
                         </span>';
             })
             ->addColumn('opening_creditor', function($res){
-                if($res->money < 0){
-                    return '<span style="color: red;">'.number_format(abs($res->money), 0, '', '.').'</span>';
+                if($res->amount_money < 0){
+                    return '<span style="color: red;font-size: 15px;">'.$res->amount_money.'</span>';
                 }else{
                     return 0;
                 }
             })
             ->addColumn('opening_debtor', function($res){
-                if($res->money > 0){
-                    return number_format($res->money, 0, '', '.');
+                if($res->amount_money > 0){
+                    return '<span style="font-size: 15px;">'.$res->amount_money.'</span>';
                 }else{
                     return 0;
                 }
             })
             ->addColumn('max_limit', function($res){
                 if($res->debit_limit){
-                    return '<span class="text-danger">'.number_format($res->debit_limit, 0, '', '.').'</span>';
+                    return '<span class="text-danger">'.$res->debit_limit.'</span>';
                 }else{
                     return 0;
                 }

@@ -26,7 +26,7 @@
                               <select class="form-control" id="transaction_from" name="transaction_from">
                                 <option value="" >-- اختر خزينة التحويل من --</option>
                                   @foreach ($treasuries as $treasury)
-                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->money }}</option>
+                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->treasury_money_after }}</option>
                                   @endforeach
                               </select>
                             </div>
@@ -43,7 +43,7 @@
                               <select class="form-control" id="transaction_to" name="transaction_to">
                                 <option value="" >-- اختر خزينة التحويل الي --</option>
                                   @foreach ($treasuries as $treasury)
-                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->money }}</option>
+                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->treasury_money_after }}</option>
                                   @endforeach
                               </select>
                             </div>

@@ -57,18 +57,11 @@
         <link href="{{ asset('back/assets/css-rtl/alertify.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
         <link href="{{ asset('back/assets/css-rtl/default.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
 
-
         {{-- flatpickr --}}
-        <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
-
-
-        
-        
+        <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">        
 
         {{-- selectize --}}
         <link href="{{ asset('back/assets/selectize.css') }}" type="text/css" rel="stylesheet"/>
-
-
 
         @yield('header')
 
@@ -101,9 +94,18 @@
                 /* font-family: Arial, Helvetica, sans-serif, serif; */
                 font-family: "4_F4", serif;        
             }
-            .navbar_hr{
-                margin: 3px 0 !important;
-                border-top: 1px solid #0162e8;
+            
+
+
+            @media (max-width: 991px) {
+               .horizontalMenucontainer .breadcrumb-header {
+                    margin-top: 20px;
+                    padding-top: 30px;
+                }
+            }
+            .horizontalMenucontainer .side-header{
+                background: #e0e7f8 !important;
+                box-shadow: 0 6px 15px 1px #c0c0c7;
             }
         </style>
 	</head>
@@ -232,15 +234,19 @@
     {{-- general scripts file js --}}
     @include('back.layouts.general_scripts')
 
-
+    {{-- bootstrap.bundle --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    
     <!-- selectize -->
     <script src="{{ asset('back/assets/selectize.min.js') }}"></script>
-
 
     @yield('footer')
 
     <!-- custom js -->
     <script src="{{ asset('back') }}/assets/js/custom.js"></script>
+    
+    <!-- Helper js -->
+    <script src="{{ asset('back') }}/assets/helpers.js"></script>
 
     <!-- Switcher js -->
     <script src="{{ asset('back') }}/assets/switcher/js/switcher-rtl.js"></script>

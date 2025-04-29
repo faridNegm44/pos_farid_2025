@@ -89,14 +89,14 @@ class TransferBetweenStoresController extends Controller
                         'treasury_id' => $req_from, 
                         'treasury_type' => 'تحويل', 
                         'bill_id' => 0, 
-                        'bill_type' => 'بدون', 
+                        'bill_type' => 0, 
                         'client_supplier_id' => 0, 
                         'money' => ($transaction_from_last_money - $value), 
                         'value' => $value, 
                         'transaction_from' => $req_from, 
                         'transaction_to' => $req_to, 
                         'notes' => request('notes'), 
-                        'user_id' => 1, 
+                        'user_id' => auth()->user()->id, 
                         'year_id' => $this->currentFinancialYear(),
                         'created_at' => now()
                     ]);
@@ -108,14 +108,14 @@ class TransferBetweenStoresController extends Controller
                         'treasury_id' => $req_to, 
                         'treasury_type' => 'تحويل', 
                         'bill_id' => 0, 
-                        'bill_type' => 'بدون', 
+                        'bill_type' => 0, 
                         'client_supplier_id' => 0, 
                         'money' => ($transaction_to_last_money + $value), 
                         'value' => $value, 
                         'transaction_from' => $req_from, 
                         'transaction_to' => $req_to, 
                         'notes' => request('notes'), 
-                        'user_id' => 1, 
+                        'user_id' => auth()->user()->id, 
                         'year_id' => $this->currentFinancialYear(),
                         'created_at' => now()
                     ]);

@@ -5,7 +5,7 @@ namespace App\Models\Back;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PurchaseBill extends Model
+class PurchaseBillDets extends Model
 {
     use HasFactory;
     protected $table = 'purchase_bills';

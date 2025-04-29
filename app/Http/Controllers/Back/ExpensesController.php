@@ -22,7 +22,7 @@ class ExpensesController extends Controller
                                             $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
                                                 ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
                                         })
-                                        ->select('financial_treasuries.*', 'treasury_bill_dets.money')
+                                        ->select('financial_treasuries.*', 'treasury_bill_dets.treasury_money_after')
                                         ->get();
                                         
                                         //dd($treasuries);
@@ -36,7 +36,7 @@ class ExpensesController extends Controller
             $lastAmountOfTreasury = DB::table('treasury_bill_dets')
                                         ->where('treasury_id', request('treasury'))
                                         ->orderBy('id', 'desc')
-                                        ->value('money');            
+                                        ->value('treasury_money_after');            
             
             $amount = request('amount');
 
@@ -75,10 +75,11 @@ class ExpensesController extends Controller
                         'treasury_id' => request('treasury'), 
                         'treasury_type' => 'مصروف', 
                         'bill_id' => $getId->id, 
-                        'bill_type' => 'بدون', 
+                        'bill_type' => 0, 
                         'client_supplier_id' => 0, 
-                        'money' => ($lastAmountOfTreasury - request('amount')), 
-                        'value' => request('amount'), 
+                        'treasury_money_after' => ($lastAmountOfTreasury - request('amount')), 
+                        'amount_money' => request('amount'), 
+                        'remaining_money' => ($lastAmountOfTreasury - request('amount')), 
                         'transaction_from' => null, 
                         'transaction_to' => null, 
                         'notes' => request('notes'), 
@@ -178,11 +179,11 @@ class ExpensesController extends Controller
                             '.Str::limit($res->title, 30).'
                         </span>';
             })
-            ->addColumn('money', function($res){
-                return number_format($res->money, 0, '', '.');
+            ->addColumn('amount_money', function($res){
+                return $res->amount_money;
             })
-            ->addColumn('value', function($res){
-                return '<strong style="color: red;font-size: 15px;">'.number_format($res->value, 0, '', '.').'</strong>';
+            ->addColumn('treasury_money_after', function($res){
+                return '<strong style="color: red;font-size: 15px;">'.$res->treasury_money_after.'</strong>';
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
@@ -202,7 +203,7 @@ class ExpensesController extends Controller
                         </button>
                     ';
             })
-            ->rawColumns(['user', 'treasury', 'title', 'money', 'value', 'created_at', 'notes', 'action'])
+            ->rawColumns(['user', 'treasury', 'title', 'amount_money', 'treasury_money_after', 'created_at', 'notes', 'action'])
             ->toJson();
     }
 }

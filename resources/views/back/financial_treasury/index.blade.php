@@ -89,7 +89,7 @@
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
                     {data: 'moneyFirstDuration', name: 'moneyFirstDuration'},
-                    {data: 'money_now', name: 'money_now'},
+                    //{data: 'money_now', name: 'money_now'},
                     {data: 'status', name: 'status'},
                     {data: 'notes', name: 'notes'},
                     {data: 'created_at', name: 'created_at'},
@@ -145,7 +145,7 @@
                                 <th class="border-bottom-0">#</th>
                                 <th class="border-bottom-0">الإسم</th>
                                 <th class="border-bottom-0">رصيد أول المدة</th>
-                                <th class="border-bottom-0">رصيد الخزنة الحالي</th>
+                                {{--<th class="border-bottom-0">رصيد الخزنة الحالي</th>--}}
                                 <th class="border-bottom-0">الحالة</th>
                                 <th class="border-bottom-0">ملاحظات</th>
                                 <th class="border-bottom-0" >تاريخ الإنشاء</th>

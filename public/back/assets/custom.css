@@ -257,6 +257,10 @@ table .edit, table .delete, table .show, table .crm_info, table .print{
     font-size: 11px !important;
 }
 
+.navbar_hr{
+    margin: 3px 0 !important;
+    border-top: 1px solid #0162e8;
+}
 
 .selectize-control.single .selectize-input, .selectize-control.single .selectize-input input, .form-control, .selectize-dropdown [data-selectable].option, label{
     font-size: 11px;
@@ -309,3 +313,48 @@ table .edit, table .delete, table .show, table .crm_info, table .print{
 .ajs-ok{
     background-color: #d7d7d7 !important;
 }
+
+
+/* start mega menu */
+.megamenu{ padding: 1rem; }
+@media all and (min-width: 992px) {
+    
+    .has-megamenu{position: static!important;}
+    .megamenu{left:0; right:0; width:90%; margin-top:0;  }
+    
+}	
+
+.megamenu .list-unstyled li{
+    margin-bottom: 0 !important;
+}
+
+.col_heading{
+    margin-bottom: 0 !important;
+}
+.main-header .dropdown-menu:after {
+    content: '';
+    position: absolute;
+    border-bottom: 0px solid ;
+    border-left: 0px solid transparent;
+    border-right: 0px solid transparent;
+}
+
+.dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0;
+    vertical-align: 0;
+    content: "";
+    /* border-top: .3em solid; */
+    border-right: 0 solid transparent;
+    border-bottom: 0;
+    border-left: 0 solid transparent;
+}
+
+@media(max-width: 991px){
+    .navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse{
+        overflow-y: auto;
+        max-height: 90vh;
+        margin-top:10px;
+    }
+}
+/* end mega menu */

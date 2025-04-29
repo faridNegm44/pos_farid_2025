@@ -45,13 +45,6 @@
             }
             
         }
-
-        /*@media print {
-            td.gray {
-                background-color: gray !important;
-                -webkit-print-color-adjust: exact;
-            }
-        }*/
     </style>
 </head>
 <body>
@@ -67,35 +60,34 @@
             @include('back.layouts.header_report')
         </div>
 
-        @if ($treasury_id || $treasury_type || $from || $to)
+        @if ($supplier_id || $treasury_type || $from || $to)
             <hr style="margin: 0 0 10px !important;"> 
             <div style="margin-bottom: 10px;">
-                <div>
-                    @if ($treasury_id)
-                        <span class="itemsSearch">خزينة الحركة: {{ $results[0]->treasury_name }}</span>
-                    @endif
-                    @if ($treasury_type)
-                        <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
-                    @endif
-                    @if ($from)
-                        <span class="itemsSearch">تاريخ من: <span>{{ $from }}</span></span>
-                    @endif
-                    @if ($to)
-                        <span class="itemsSearch">تاريخ الي: <span>{{ $to }}</span></span>
-                    @endif
-                </div>
+                @if ($supplier_id)
+                    <span class="itemsSearch">عميل: {{ $results[0]->supplierName }}</span>
+                @endif
+                @if ($treasury_type)
+                    <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
+                @endif
+                @if ($from)
+                    <span class="itemsSearch">تاريخ من: {{ $from }}</span>
+                @endif
+                @if ($to)
+                    <span class="itemsSearch">تاريخ الي: {{ $to }}</span>
+                @endif
             </div>
         @endif
 
         <div>
             <table class="table-bordered" style="width: 100%;text-align: center;">
                 <thead>
-                    <tr class="gray">
-                        <th>رقم الحركة</th>
-                        <th >تاريخ الحركة</th>
+                    <tr>
+                        {{--<th class="border-bottom-0">رقم الحركة</th>--}}
+                        <th>تاريخ الحركة</th>
                         <th >تاريخ اخر</th>
                         <th>خزينة الحركة</th>
                         <th>نوع الحركة</th>
+                        <th>الجهة</th>
                         <th>قيمة الحركة</th>
                         <th>علي الجهة / لها</th>
                         <th>مبلغ الخزينة بعد</th>
@@ -107,10 +99,10 @@
                 <tbody>
                     @foreach ($results as $result)    
                         <tr>
-                            <td>{{ $result->id }}</td>
+                            {{--<td>{{ $result->id }}</td>--}}
                             <td>
                                 {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
+                                <span style="margin: 0 5px;display: block;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
                             </td>
                             <td>
                                 @if(Carbon\Carbon::parse($result->created_at)->format('d-m-Y') != Carbon\Carbon::parse($result->date)->format('d-m-Y'))
@@ -118,24 +110,12 @@
                                 @endif                                        
                             </td>
                             <td>{{ $result->treasury_name }}</td>
-                            <td>
-                                @if ($result->treasury_type === 'مصروف')
-                                    {{ $result->treasury_type }}
-                                    <p>- {{ $result->expensesTitle }}</p>
-                                @else
-                                    {{ $result->treasury_type }}
-                                @endif
-                            </td>
+                            <td>{{ $result->treasury_type }}</td>
+                            <td>{{ $result->supplierName }}</td>
                             <td>{{ $result->amount_money }}</td>
-                            <td>
-                                @if ($result->treasury_type === 'رصيد اول خزنة' || $result->treasury_type === 'مصروف' || $result->treasury_type === 'تحويل بين خزنتين')
-                                    لاتوجد جهة
-                                @else
-                                    {{ $result->remaining_money }}
-                                @endif
-                            </td>
+                            <td>{{ $result->remaining_money }}</td>
                             <td>{{ $result->treasury_money_after }}</td>
-                            <td>{{ $result->user_name }}</td>
+                            <td>{{ $result->userName }}</td>
                             <td>{{ $result->notes }}</td>
                         </tr>
                     @endforeach

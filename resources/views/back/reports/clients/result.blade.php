@@ -25,12 +25,11 @@
                 "searching": true, // تفعيل البحث (اختياري)
                 "ordering": true, // تفعيل الترتيب (اختياري)
                 "info": false, // إخفاء معلومات الصفحة (اختياري)
-                "order": [[0, 'desc']]
+                "order": [[0, 'asc']]
             });
         });
     </script>
 @endsection
-
 
 
 @section('content')
@@ -43,8 +42,8 @@
 
         <div style="margin-bottom: 10px;">
             <div>
-                @if ($treasury_id)
-                    <span class="itemsSearch">خزينة الحركة: {{ $results[0]->treasury_name }}</span>
+                @if ($client_id)
+                    <span class="itemsSearch">عميل: {{ $results[0]->clientName }}</span>
                 @endif
                 @if ($treasury_type)
                     <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
@@ -64,12 +63,13 @@
                     <table class="table table-bordered table-hover text-center text-md-nowrap" id="example1">
                         <thead>
                             <tr>
-                                <th class="border-bottom-0">رقم الحركة</th>
+                                {{--<th class="border-bottom-0">رقم الحركة</th>--}}
                                 <th class="border-bottom-0" >تاريخ الحركة</th>
                                 <th class="border-bottom-0" >تاريخ اخر</th>
                                 <th class="border-bottom-0">خزينة الحركة</th>
                                 <th class="border-bottom-0">نوع الحركة</th>
                                 <th class="border-bottom-0">قيمة الحركة</th>
+                                <th class="border-bottom-0">الجهة</th>
                                 <th class="border-bottom-0">علي الجهة / لها</th>
                                 <th class="border-bottom-0">مبلغ الخزينة بعد</th>
                                 <th class="border-bottom-0" >مستخدم</th>
@@ -82,25 +82,18 @@
                                 @php
                                     $type = '';
 
-                                    if($result->treasury_type == 'مصروف'){
-                                        $type = '#FF748B';
-                                    }elseif($result->treasury_type == 'رصيد اول خزنة'){
-                                        $type = '#ccc';
-                                    }elseif($result->treasury_type == 'تحويل بين خزنتين'){
-                                        $type = '#b8e757';
-                                    }elseif($result->treasury_type == 'اذن توريد نقدية'){
+                                    if($result->treasury_type == 'اذن توريد نقدية'){
                                         $type = '#8ae3aa';
                                     }elseif($result->treasury_type == 'اذن صرف نقدية'){
                                         $type = '#de7df0';
-                                    }elseif($result->treasury_type == 'رصيد اول عميل' || $result->treasury_type == 'رصيد اول مورد'){
+                                    }elseif($result->treasury_type == 'رصيد اول عميل'){
                                         $type = '#fafafa';
                                     }
                                 @endphp
 
 
                                 <tr style="background: {{ $type }};">
-                                    <td>{{ $result->id }}</td>
-                                    {{--<td>{{ $result->num_order }}</td>--}}
+                                    {{--<td>{{ $result->id }}</td>--}}
                                     <td>
                                         {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
                                         <span style="margin: 0 5px;display: block;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
@@ -111,24 +104,12 @@
                                         @endif                                        
                                     </td>
                                     <td>{{ $result->treasury_name }}</td>
-                                    <td>
-                                        @if ($result->treasury_type === 'مصروف')
-                                            {{ $result->treasury_type }}
-                                            <p style="font-size: 10px;">- {{ $result->expensesTitle }}</p>
-                                        @else
-                                            {{ $result->treasury_type }}
-                                        @endif
-                                    </td>
+                                    <td>{{ $result->treasury_type }}</td>
                                     <td>{{ $result->amount_money }}</td>
-                                    <td>
-                                        @if ($result->treasury_type === 'رصيد اول خزنة' || $result->treasury_type === 'مصروف' || $result->treasury_type === 'تحويل بين خزنتين')
-                                            لاتوجد جهة
-                                        @else
-                                            {{ $result->remaining_money }}
-                                        @endif
-                                    </td>
+                                    <td>{{ $result->clientName }}</td>
+                                    <td>{{ $result->remaining_money }}</td>
                                     <td>{{ $result->treasury_money_after }}</td>
-                                    <td>{{ $result->user_name }}</td>
+                                    <td>{{ $result->userName }}</td>
                                     <td>{{ $result->notes }}</td>
                                 </tr>
                             @endforeach

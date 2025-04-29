@@ -59,6 +59,12 @@
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('clients') }}" class="slide-item text-primary">العملاء</a></li>
                             <li aria-haspopup="true"><a href="{{ url('suppliers') }}" class="slide-item text-primary">الموردين</a></li>
+
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('clients/report') }}" class="slide-item text-primary">تقرير عن حركة عميل</a></li>
+
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('suppliers/report') }}" class="slide-item text-primary">تقرير عن حركة مورد</a></li>                            
                         </ul>
                     </li>
                     
@@ -66,14 +72,20 @@
                         <ul class="sub-menu">                            
                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-primary">الخزائن المالية</a></li>
                             <li aria-haspopup="true"><a href="{{ url('transfer_between_storages') }}" class="slide-item text-primary">التحويل من خزنة لآخري</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-primary">مسحوبات شخصية</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('expenses') }}" class="slide-item text-primary">مصاريف عامة</a></li>
+                            
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('expenses') }}" class="slide-item text-primary">المصروفات</a></li>
+                            
+                            <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-primary">إغلاق وردية</a></li>
                             
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('treasury_bills') }}" class="slide-item text-primary">معاملات الخزينة المالية</a></li>
                             <li aria-haspopup="true"><a href="{{ url('treasury_bills/create') }}" class="slide-item text-primary">أجراء معاملة في الخزينة المالية</a></li>
                             
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('expenses/report') }}" class="slide-item text-primary">تقرير عن المصروفات</a></li>
+
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('treasury_bills/report') }}" class="slide-item text-primary">تقرير عن حركة الخزائن المالية</a></li>
                         </ul>

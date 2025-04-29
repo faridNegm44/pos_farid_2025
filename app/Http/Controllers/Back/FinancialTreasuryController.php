@@ -49,20 +49,19 @@ class FinancialTreasuryController extends Controller
                     'treasury_id' => $getId->id, 
                     'treasury_type' => 'رصيد اول خزنة', 
                     'bill_id' => 0, 
-                    'bill_type' => 'بدون', 
+                    'bill_type' => 'رصيد اول خزنة',
                     'client_supplier_id' => 0, 
-                    'money' => request('moneyFirstDuration'), 
-                    'value' => request('moneyFirstDuration'),
+                    'treasury_money_after' => request('moneyFirstDuration'), 
+                    'amount_money' => request('moneyFirstDuration'), 
+                    'remaining_money' => request('moneyFirstDuration'),
                     'transaction_from' => null, 
                     'transaction_to' => null, 
                     'notes' => request('notes'), 
-                    'user_id' => 1, 
+                    'user_id' => auth()->user()->id, 
                     'year_id' => $this->currentFinancialYear(),
                     'created_at' => now()
                 ]);
             });
-
-
         }
     }
 
@@ -128,7 +127,7 @@ class FinancialTreasuryController extends Controller
                                     $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
                                         ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
                                 })
-                                ->select('financial_treasuries.*', 'treasury_bill_dets.money')
+                                ->select('financial_treasuries.*', 'treasury_bill_dets.treasury_money_after')
                                 ->get();
 
         return DataTables::of($all)
@@ -136,10 +135,7 @@ class FinancialTreasuryController extends Controller
                 return '<strong class="text-primary">'.$res->name.'</strong>';
             })
             ->addColumn('moneyFirstDuration', function($res){
-                return number_format($res->moneyFirstDuration, 0, '', '.');
-            })
-            ->addColumn('money_now', function($res){
-                return '<strong style="font-size: 13px;color: red;">'.number_format($res->money, 0, '', '.').'</strong>';
+                return '<strong style="font-size: 13px;color: red;">'.$res->moneyFirstDuration.'</strong>';
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
@@ -164,7 +160,7 @@ class FinancialTreasuryController extends Controller
                         ';
                 }                    
             })
-            ->rawColumns(['name', 'moneyFirstDuration', 'money_now', 'created_at', 'status', 'action'])
+            ->rawColumns(['name', 'moneyFirstDuration', 'created_at', 'status', 'action'])
             ->toJson();
     }
 }

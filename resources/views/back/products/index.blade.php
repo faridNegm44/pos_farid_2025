@@ -19,6 +19,7 @@
             border-top: 2px solid #4d5276;
             margin: 32px 0px 24px;
         }
+        .ajs-warning{width: 400px !important;min-width: 400px !important;}
     </style>
 
 @endsection
@@ -52,7 +53,7 @@
 
         // focus first input when open modal
         $('.modal').on('shown.bs.modal', function(){
-            $('.dataInput:eq(2)').focus();                
+            $('.dataInput:eq(0)').focus();                
         });
 
         // remove all errors when close modal
@@ -84,12 +85,12 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
-                    {data: 'sellPrice', name: 'sellPrice'},
-                    {data: 'purchasePrice', name: 'purchasePrice'},
-                    {data: 'bigUnit', name: 'bigUnit'},
-                    {data: 'smallUnit', name: 'smallUnit'},
+                    {data: 'sell_price_small_unit', name: 'sell_price_small_unit'},
+                    {data: 'last_cost_price_small_unit', name: 'last_cost_price_small_unit'},
+                    {data: 'units', name: 'units'},
+                    {data: 'store_name', name: 'store_name'},
                     {data: 'category', name: 'category'},
-                    {data: 'quantity', name: 'quantity'},
+                    {data: 'current_qty_small_unit', name: 'current_qty_small_unit'},
                     {data: 'image', name: 'image'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false},
@@ -155,10 +156,10 @@
                             <th class="border-bottom-0" style="width: 30%;">اسم الصنف</th>
                             <th class="border-bottom-0">سعر البيع</th>
                             <th class="border-bottom-0">سعر الشراء</th>
-                            <th class="border-bottom-0">الوحدة ك</th>
-                            <th class="border-bottom-0">الوحدة ص</th>
+                            <th class="border-bottom-0">الوحدات</th>
+                            <th class="border-bottom-0" >المخزن</th>
                             <th class="border-bottom-0" >القسم</th>
-                            <th class="border-bottom-0" >ك الصنف</th>
+                            <th class="border-bottom-0" >كمية الصنف</th>
                             <th class="border-bottom-0" >صورة</th>
                             <th class="border-bottom-0" >الحالة</th>
                             <th class="border-bottom-0">التحكم</th>

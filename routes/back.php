@@ -152,6 +152,13 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::post('store_client_from_pos_page' , 'ClientsController@storeClientFromPosPage');
         Route::post('/import' , 'ClientsController@import');
         Route::get('datatable' , 'ClientsController@datatable');
+
+        //تقرير عن حركة عميل
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsClientsController@index');
+            Route::post('result' , 'ReportsClientsController@result');
+            Route::get('result/pdf' , 'ReportsClientsController@result_pdf');
+        });
     });
     
 
@@ -166,17 +173,21 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::post('store_client_from_pos_page' , 'SuppliersController@storeClientFromPosPage');
         Route::post('/import' , 'SuppliersController@import');
         Route::get('datatable' , 'SuppliersController@datatable');
+
+        //تقرير عن حركة مورد
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsSuppliersController@index');
+            Route::post('result' , 'ReportsSuppliersController@result');
+            Route::get('result/pdf' , 'ReportsSuppliersController@result_pdf');
+        });
     });
-    
     
 
     // treasury_bills Routes
     Route::group(['prefix' => 'treasury_bills'] , function (){
         Route::get('/' , 'TreasuryBillsController@index');
         Route::get('/create' , 'TreasuryBillsController@create');
-        Route::get('/getAllDataByBranch/{id}' , 'TreasuryBillsController@getAllDataByBranch');
-        Route::get('/getStatusTreasuries/{id}' , 'TreasuryBillsController@getStatusTreasuries');
-        Route::get('/getStatusPlaces/{id}' , 'TreasuryBillsController@getStatusPlaces');
+
         Route::post('/store' , 'TreasuryBillsController@store');
         Route::get('/edit/{id}' , 'TreasuryBillsController@edit');
         Route::post('/update/{id}' , 'TreasuryBillsController@update');
@@ -237,6 +248,13 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::post('/update/{id}' , 'ExpensesController@update');
         
         Route::get('datatable' , 'ExpensesController@datatable');
+
+        //تقرير عن المصروفات
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsExpensesController@index');
+            Route::post('result' , 'ReportsExpensesController@result');
+            Route::get('result/pdf' , 'ReportsExpensesController@result_pdf');
+        });
     });
 
     // transfer_between_storages
@@ -266,6 +284,15 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
     });
 
 
+    // Get Info Of client || supplier || treasury || store || product || transfer || expense
+    Route::group(['prefix' => 'get_info'] , function (){
+        Route::get('/client_or_supplier/{id}' , 'GetInfoController@client_or_supplier');
+        Route::get('/treasury/{id}' , 'GetInfoController@treasury');
+    });
+    // Get Info Of client || supplier || treasury || store || product || transfer || expense
+
+
+    
     // purchases Routes
     Route::group(['prefix' => 'purchases'] , function (){
         Route::get('/' , 'PurchaseBillController@index');
