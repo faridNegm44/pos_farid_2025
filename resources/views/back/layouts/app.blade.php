@@ -103,10 +103,10 @@
                     padding-top: 30px;
                 }
             }
-            .horizontalMenucontainer .side-header{
+            /*.horizontalMenucontainer .side-header{
                 background: #e0e7f8 !important;
                 box-shadow: 0 6px 15px 1px #c0c0c7;
-            }
+            }*/
         </style>
 	</head>
 
@@ -178,7 +178,6 @@
     <!-- Right-sidebar js -->
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-rtl.js"></script>
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-custom.js"></script>
-
 
     <!--Internal  Chart.bundle js -->
     <script src="{{ asset('back') }}/assets/plugins/chart.js/Chart.bundle.min.js"></script>

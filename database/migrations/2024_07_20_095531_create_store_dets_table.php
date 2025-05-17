@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('type');
             $table->integer('year_id');
-            $table->integer('bill_head_id');
-            $table->integer('bill_body_id');
+            $table->integer('bill_id');
             $table->integer('product_id');
             $table->integer('product_num_unit');
             $table->string('quantity');

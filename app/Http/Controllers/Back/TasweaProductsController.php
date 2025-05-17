@@ -58,8 +58,7 @@ class TasweaProductsController extends Controller
                 StoreDets::insert([
                     'type' => 'تسوية صنف',
                     'year_id' => $this->currentFinancialYear(),
-                    'bill_head_id' => $insertGetId->id,
-                    'bill_body_id' => 0,
+                    'bill_id' => $insertGetId->id,
                     'product_id' => request('product_id'),
                     'product_num_unit' => 0,
                     'quantity' => $find->quantity_all,
@@ -117,7 +116,7 @@ class TasweaProductsController extends Controller
 
     public function datatable()
     {
-        $all = TasweaProducts::leftJoin('store_dets', 'store_dets.bill_head_id', 'taswea_products.id')
+        $all = TasweaProducts::leftJoin('store_dets', 'store_dets.bill_id', 'taswea_products.id')
                             ->where('store_dets.type', 'تسوية صنف')
                             ->leftJoin('products', 'products.id', 'taswea_products.product_id')
                             ->leftJoin('taswea_reasons', 'taswea_reasons.id', 'taswea_products.reason_id')

@@ -90,7 +90,7 @@
                     {data: 'units', name: 'units'},
                     {data: 'store_name', name: 'store_name'},
                     {data: 'category', name: 'category'},
-                    {data: 'current_qty_small_unit', name: 'current_qty_small_unit'},
+                    {data: 'quantity_small_unit', name: 'quantity_small_unit'},
                     {data: 'image', name: 'image'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false},

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2025 at 09:41 AM
+-- Generation Time: May 17, 2025 at 03:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,34 +55,16 @@ CREATE TABLE `clients_and_suppliers` (
 --
 
 INSERT INTO `clients_and_suppliers` (`id`, `client_supplier_type`, `code`, `name`, `email`, `address`, `phone`, `image`, `type_payment`, `debit`, `debit_limit`, `status`, `commercial_register`, `tax_card`, `vat_registration_code`, `name_of_commissioner`, `phone_of_commissioner`, `note`, `created_at`, `updated_at`) VALUES
-(1, 3, 1, 'عميل اسماء', NULL, NULL, '0100', 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:48:03', NULL),
-(2, 3, 2, 'عميل هالة', NULL, NULL, NULL, 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:48:49', NULL),
-(3, 3, 3, 'عميل ايه', NULL, NULL, NULL, 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:49:32', NULL),
+(1, 3, 1, 'اسماء', NULL, ' مقطم شارع كريم بنونه د 9 شقه 109 \nmokatem', '0100', 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:48:03', NULL),
+(2, 3, 2, 'هالة', NULL, NULL, NULL, 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:48:49', NULL),
+(3, 3, 3, 'ايه', NULL, NULL, NULL, 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:49:32', NULL),
 (4, 1, 1, 'مورد امير', NULL, NULL, NULL, 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:52:11', NULL),
 (5, 1, 2, 'مورد رمضان', NULL, NULL, NULL, 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:52:21', NULL),
-(6, 1, 3, 'مورد سيد', NULL, NULL, NULL, 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:52:27', NULL),
-(7, 1, 4, 'مورد عشري', NULL, NULL, '01099', 'df_image.png', 'كاش', NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:53:11', '2025-04-12 07:55:24');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `clients_and_suppliers_dets`
---
-
-CREATE TABLE `clients_and_suppliers_dets` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `treasury_id` int(11) NOT NULL,
-  `bill_type` varchar(255) DEFAULT NULL,
-  `bill_id` int(11) NOT NULL,
-  `treasury_bill_head_id` int(11) NOT NULL,
-  `treasury_bill_body_id` int(11) NOT NULL,
-  `client_supplier_id` int(11) NOT NULL,
-  `money` varchar(255) DEFAULT NULL,
-  `year_id` int(11) NOT NULL,
-  `notes` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+(6, 1, 3, 'مورد سيد', NULL, 'برهمتوش barhamtosh', '0123654', 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:52:27', NULL),
+(7, 1, 4, 'مورد عشري', NULL, NULL, '01099', 'df_image.png', 'كاش', NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-12 07:53:11', '2025-04-12 07:55:24'),
+(8, 3, 4, 'عميل افتراضي', NULL, 'عميل افتراضي', '00000', 'df_image.png', 'كاش', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-05-16 14:23:45', NULL),
+(9, 3, 5, 'ehab اجل عليه 1000', NULL, NULL, '010023425', 'df_image.png', 'آجل', 'نعم', '2000', 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-05-17 09:10:41', NULL),
+(10, 3, 6, 'amgad له 300 اجل', NULL, NULL, NULL, 'df_image.png', 'آجل', 'نعم', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-05-17 09:11:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -358,7 +340,24 @@ INSERT INTO `products` (`id`, `shortCode`, `natCode`, `nameAr`, `nameEn`, `store
 (4, NULL, NULL, 'ثااااني صنف', 'second product', 3, 5, 7, 0.000, 0.000, '0', 0.000, 1, 2, 2.000, 0.000, '0', '1745522822.png', NULL, '', NULL, NULL, NULL, NULL, '2025-04-25 03:38:22'),
 (5, NULL, NULL, 'سيتال شراب', NULL, 3, 5, 7, 0.000, 0.000, '0', 15.000, 0, 1, 1.000, 0.000, '0', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, '2025-04-25 03:38:07'),
 (6, NULL, NULL, 'بروفين شراب 110ملnew', NULL, 3, 3, 5, 0.000, 7.000, '12', 4.000, 1, 3, 1.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, '2025-04-25 04:00:40'),
-(7, NULL, NULL, 'امباجليماكس 100', NULL, 3, 4, 4, 0.000, 17.000, '11', 40.000, 1, 2, 3.000, 90.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, '2025-04-25 03:19:07');
+(7, NULL, NULL, 'امباجليماكس 100', NULL, 3, 4, 4, 0.000, 17.000, '11', 40.000, 1, 2, 3.000, 90.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, '2025-04-25 03:19:07'),
+(8, NULL, NULL, 'كونجستال', 'congestal', 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 0, 2, 3.000, 0.000, '0', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(9, NULL, NULL, 'صنف الفنتيرن', 'alphinter product', 1, NULL, NULL, 0.000, 0.000, '0', 10.000, 1, 2, 5.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(10, NULL, NULL, 'كتافاست اكياس', 'catafast sach', 1, NULL, NULL, 0.000, 0.000, '0', 24.000, 1, 5, 12.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(11, NULL, NULL, 'فولتارين اقراص', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 1, 2, 2.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(12, NULL, NULL, 'كتافلام اقراص 50', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 1, 2, 2.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(13, NULL, NULL, 'كتافلام اقراص 25', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 1, 2, 2.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(14, NULL, NULL, 'فلاجيل شراب 250مل', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 0, 1, 1.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(15, NULL, NULL, 'فلاجيلاقراص 500جم', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 1, 2, 2.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(16, NULL, NULL, 'فلاجيلاقراص250 جم', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 1, 2, 2.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(17, NULL, NULL, 'روبالجين جيل', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 0, 1, 1.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(18, NULL, NULL, 'موف جييل', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 0, 1, 1.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, '2025-05-01 16:12:57'),
+(19, NULL, NULL, 'كونجستال شراب', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 0, 1, 1.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(20, NULL, NULL, 'انتينال شراب', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 0, 1, 1.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(21, NULL, NULL, 'دياكس شراب', NULL, 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 0, 1, 1.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(22, NULL, NULL, 'كيورام 1 جرام اقراص', 'curam 1gm tabs', 1, NULL, NULL, 0.000, 0.000, '0', 16.000, 1, 2, 4.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(23, NULL, NULL, 'كيبوركس اقراص 1جرام', 'cuprex 1gm tabs', 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 1, 2, 2.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL),
+(24, NULL, NULL, 'clavimox 1gm', 'clavimox 1gm', 1, NULL, NULL, 0.000, 0.000, '0', 0.000, 1, 2, 2.000, 0.000, '1', 'df_image.png', NULL, '', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -394,11 +393,12 @@ INSERT INTO `product_categoys` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `purchase_bills` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `type` enum('فاتورة شراء جديدة','مرتجع شراء') NOT NULL,
-  `num_order` int(11) NOT NULL,
-  `custom_bill_num` varchar(255) NOT NULL DEFAULT '',
+  `custom_bill_num` varchar(255) DEFAULT NULL,
   `supplier_id` int(11) NOT NULL,
   `treasury_id` int(11) DEFAULT NULL,
+  `bill_tax` decimal(10,3) DEFAULT NULL,
+  `bill_discount` decimal(10,3) DEFAULT NULL,
+  `count_items` decimal(10,3) NOT NULL,
   `custom_date` date DEFAULT NULL,
   `user_id` int(11) NOT NULL,
   `year_id` int(11) NOT NULL,
@@ -410,21 +410,22 @@ CREATE TABLE `purchase_bills` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchase_bill_dets`
+-- Table structure for table `sale_bills`
 --
 
-CREATE TABLE `purchase_bill_dets` (
+CREATE TABLE `sale_bills` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `purchase_bill_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `quantity` varchar(255) NOT NULL,
-  `return_quantity` varchar(255) NOT NULL DEFAULT '0',
-  `cost_price` varchar(255) NOT NULL,
-  `sale_price` varchar(255) NOT NULL DEFAULT '0',
-  `bonus` varchar(255) NOT NULL DEFAULT '0',
-  `discount` varchar(255) NOT NULL DEFAULT '0',
-  `tax` varchar(255) NOT NULL DEFAULT '0',
-  `vat` varchar(255) NOT NULL DEFAULT '0',
+  `custom_bill_num` varchar(255) DEFAULT NULL,
+  `client_id` int(11) NOT NULL,
+  `treasury_id` int(11) DEFAULT NULL,
+  `bill_tax` decimal(10,3) DEFAULT NULL,
+  `bill_discount` decimal(10,3) DEFAULT NULL,
+  `count_items` decimal(10,3) NOT NULL,
+  `total_bill_before` decimal(30,20) NOT NULL,
+  `total_bill_after` decimal(30,20) NOT NULL,
+  `custom_date` date DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `year_id` int(11) NOT NULL,
   `notes` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -446,7 +447,9 @@ CREATE TABLE `settings` (
   `phone1` varchar(255) DEFAULT NULL,
   `phone2` varchar(255) DEFAULT NULL,
   `logo` varchar(255) NOT NULL,
+  `policy` text DEFAULT NULL,
   `fav_icon` varchar(50) NOT NULL,
+  `cost_price` enum('1','2') NOT NULL DEFAULT '1',
   `mail_driver` varchar(255) DEFAULT NULL,
   `from` varchar(255) DEFAULT NULL,
   `to` varchar(255) DEFAULT NULL,
@@ -464,8 +467,8 @@ CREATE TABLE `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `app_name`, `description`, `footer_text`, `address`, `email`, `phone1`, `phone2`, `logo`, `fav_icon`, `mail_driver`, `from`, `to`, `host`, `port`, `encryption`, `username`, `password`, `maintenance_mode`, `created_at`, `updated_at`) VALUES
-(1, 'روزا ستور للمفروشات', 'روزا ستور للمفروشات وصف', 'جميع الحقوق محفوظه ( فريد نجم ) - 01012775704', 'الدقهلية المنصوره السنبلاوين قريه برهمتوش', 'decoration-house@decoration-house.com', '01016493611', '01117903055', 'logo.png', 'fav_icon.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-02-01 16:41:46');
+INSERT INTO `settings` (`id`, `app_name`, `description`, `footer_text`, `address`, `email`, `phone1`, `phone2`, `logo`, `policy`, `fav_icon`, `cost_price`, `mail_driver`, `from`, `to`, `host`, `port`, `encryption`, `username`, `password`, `maintenance_mode`, `created_at`, `updated_at`) VALUES
+(1, 'روزا ستور للمفروشات', 'روزا ستور للمفروشات وصف', 'روزا ستور للمفروشات .. اختيارك الأمثل دائما', 'الدقهلية المنصوره السنبلاوين قريه برهمتوش', 'decoration-house@decoration-house.com', '01016493611', '01117903055', 'logo.png', '- البضائع المباعة لا ترد ولا تستبدل بعد 14 يومًا من الشراء.  <br>\r\n-  يجب تقديم أصل الفاتورة عند أي استفسار.', 'fav_icon.jpg', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-05-16 08:31:00');
 
 -- --------------------------------------------------------
 
@@ -502,13 +505,19 @@ CREATE TABLE `store_dets` (
   `num_order` int(11) NOT NULL,
   `type` varchar(255) NOT NULL,
   `year_id` int(11) NOT NULL,
-  `bill_head_id` int(11) NOT NULL,
-  `bill_body_id` int(11) NOT NULL,
+  `bill_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `sell_price_small_unit` decimal(30,20) DEFAULT NULL,
   `last_cost_price_small_unit` decimal(30,20) DEFAULT NULL,
   `avg_cost_price_small_unit` decimal(30,20) DEFAULT NULL,
-  `current_qty_small_unit` decimal(10,3) NOT NULL DEFAULT 0.000,
+  `product_bill_quantity` decimal(10,3) DEFAULT NULL,
+  `quantity_small_unit` decimal(10,3) NOT NULL DEFAULT 0.000,
+  `tax` decimal(10,3) DEFAULT NULL,
+  `discount` decimal(10,3) DEFAULT NULL,
+  `bonus` decimal(10,3) DEFAULT NULL,
+  `total_before` decimal(30,20) NOT NULL,
+  `total_after` decimal(30,20) NOT NULL,
+  `return_quantity` decimal(10,3) NOT NULL,
   `transfer_from` int(5) DEFAULT NULL,
   `transfer_to` int(5) DEFAULT NULL,
   `transfer_quantity` decimal(10,3) DEFAULT NULL,
@@ -521,13 +530,33 @@ CREATE TABLE `store_dets` (
 -- Dumping data for table `store_dets`
 --
 
-INSERT INTO `store_dets` (`id`, `num_order`, `type`, `year_id`, `bill_head_id`, `bill_body_id`, `product_id`, `sell_price_small_unit`, `last_cost_price_small_unit`, `avg_cost_price_small_unit`, `current_qty_small_unit`, `transfer_from`, `transfer_to`, `transfer_quantity`, `date`, `created_at`, `updated_at`) VALUES
-(1, 1, 'رصيد اول مدة للصنف', 1, 0, 0, 3, 130.00000000000000000000, 120.00000000000000000000, 120.00000000000000000000, 30.000, NULL, NULL, NULL, '2025-04-25', '2025-04-24 19:24:40', '2025-04-25 03:18:37'),
-(2, 2, 'رصيد اول مدة للصنف', 1, 0, 0, 4, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, '2025-04-25', '2025-04-24 19:27:02', '2025-04-25 03:38:22'),
-(3, 3, 'رصيد اول مدة للصنف', 1, 0, 0, 5, 30.00000000000000000000, NULL, NULL, 15.000, NULL, NULL, NULL, '2025-04-25', '2025-04-24 19:28:46', '2025-04-25 03:38:07'),
-(4, 4, 'رصيد اول مدة للصنف', 1, 0, 0, 6, 45.00000000000000000000, NULL, NULL, 4.000, NULL, NULL, NULL, '2025-04-24', '2025-04-24 19:29:17', NULL),
-(5, 4, 'رصيد اول مدة للصنف مكرر', 1, 0, 0, 6, 45.00000000000000000000, NULL, NULL, 8.000, NULL, NULL, NULL, '2025-04-24', '2025-04-24 19:29:17', NULL),
-(6, 5, 'رصيد اول مدة للصنف', 1, 0, 0, 7, 77.00000000000000000000, 66.00000000000000000000, 66.00000000000000000000, 40.000, NULL, NULL, NULL, '2025-04-25', '2025-04-24 20:03:18', '2025-04-25 03:19:07');
+INSERT INTO `store_dets` (`id`, `num_order`, `type`, `year_id`, `bill_id`, `product_id`, `sell_price_small_unit`, `last_cost_price_small_unit`, `avg_cost_price_small_unit`, `product_bill_quantity`, `quantity_small_unit`, `tax`, `discount`, `bonus`, `total_before`, `total_after`, `return_quantity`, `transfer_from`, `transfer_to`, `transfer_quantity`, `date`, `created_at`, `updated_at`) VALUES
+(1, 1, 'رصيد اول مدة للصنف', 1, 0, 3, 130.00000000000000000000, 120.00000000000000000000, 120.00000000000000000000, NULL, 30.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-04-25', '2025-04-24 19:24:40', '2025-04-25 03:18:37'),
+(2, 2, 'رصيد اول مدة للصنف', 1, 0, 4, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-04-25', '2025-04-24 19:27:02', '2025-04-25 03:38:22'),
+(3, 3, 'رصيد اول مدة للصنف', 1, 0, 5, 30.00000000000000000000, NULL, NULL, NULL, 15.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-04-25', '2025-04-24 19:28:46', '2025-04-25 03:38:07'),
+(4, 4, 'رصيد اول مدة للصنف', 1, 0, 6, 45.00000000000000000000, NULL, NULL, NULL, 4.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-04-24', '2025-04-24 19:29:17', NULL),
+(5, 4, 'رصيد اول مدة للصنف مكرر', 1, 0, 6, 45.00000000000000000000, NULL, NULL, NULL, 8.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-04-24', '2025-04-24 19:29:17', NULL),
+(6, 5, 'رصيد اول مدة للصنف', 1, 0, 7, 77.00000000000000000000, 66.00000000000000000000, 66.00000000000000000000, NULL, 40.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-04-25', '2025-04-24 20:03:18', '2025-04-25 03:19:07'),
+(7, 6, 'رصيد اول مدة للصنف', 1, 0, 8, 60.66000000000000000000, 50.55000000000000000000, 50.55000000000000000000, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-04-29', '2025-04-29 13:10:59', NULL),
+(8, 7, 'رصيد اول مدة للصنف', 1, 0, 9, NULL, NULL, NULL, NULL, 10.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 12:26:17', NULL),
+(9, 8, 'رصيد اول مدة للصنف', 1, 0, 10, NULL, NULL, NULL, NULL, 24.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:07:40', NULL),
+(10, 9, 'رصيد اول مدة للصنف', 1, 0, 11, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:09:41', NULL),
+(11, 10, 'رصيد اول مدة للصنف', 1, 0, 12, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:10:05', NULL),
+(12, 11, 'رصيد اول مدة للصنف', 1, 0, 13, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:10:09', NULL),
+(13, 12, 'رصيد اول مدة للصنف', 1, 0, 14, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:10:45', NULL),
+(14, 13, 'رصيد اول مدة للصنف', 1, 0, 15, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:11:03', NULL),
+(15, 14, 'رصيد اول مدة للصنف', 1, 0, 16, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:11:09', NULL),
+(16, 15, 'رصيد اول مدة للصنف', 1, 0, 17, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:11:28', NULL),
+(17, 16, 'رصيد اول مدة للصنف', 1, 0, 18, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:11:35', '2025-05-01 16:12:57'),
+(18, 17, 'رصيد اول مدة للصنف', 1, 0, 19, 32.00000000000000000000, 29.00000000000000000000, 29.00000000000000000000, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:12:07', NULL),
+(19, 18, 'رصيد اول مدة للصنف', 1, 0, 20, 25.00000000000000000000, 20.00000000000000000000, 20.00000000000000000000, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:12:17', NULL),
+(20, 19, 'رصيد اول مدة للصنف', 1, 0, 21, NULL, NULL, NULL, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-01', '2025-05-01 16:12:34', NULL),
+(79, 20, 'رصيد اول مدة للصنف', 1, 0, 22, 90.00000000000000000000, 80.00000000000000000000, 80.00000000000000000000, NULL, 16.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-08', '2025-05-08 08:47:53', NULL),
+(80, 21, 'رصيد اول مدة للصنف', 1, 0, 23, 70.00000000000000000000, 60.00000000000000000000, 60.00000000000000000000, NULL, 0.000, NULL, NULL, NULL, 0.00000000000000000000, 0.00000000000000000000, 0.000, NULL, NULL, NULL, '2025-05-08', '2025-05-08 08:52:37', NULL),
+(122, 1, 'اضافة فاتورة مشتريات', 1, 76, 11, 25.00000000000000000000, 20.00000000000000000000, 20.00000000000000000000, 2.000, 2.000, 0.000, 0.000, NULL, 40.00000000000000000000, 40.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-09 12:11:21', NULL),
+(123, 1, 'اضافة فاتورة مشتريات', 1, 76, 15, 35.00000000000000000000, 33.00000000000000000000, 33.00000000000000000000, 2.000, 2.000, 0.000, 0.000, NULL, 66.00000000000000000000, 66.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-09 12:11:21', NULL),
+(124, 1, 'اضافة فاتورة مشتريات', 1, 76, 23, 70.00000000000000000000, 60.00000000000000000000, 60.00000000000000000000, 7.000, 7.000, 0.000, 0.000, NULL, 420.00000000000000000000, 420.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-09 12:11:21', NULL),
+(172, 1, 'اضافة فاتورة مبيعات', 1, 38, 22, 500.00000000000000000000, 80.00000000000000000000, 80.00000000000000000000, 1.000, 15.000, 0.000, 0.000, NULL, 500.00000000000000000000, 500.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-17 11:20:55', NULL);
 
 -- --------------------------------------------------------
 
@@ -644,7 +673,14 @@ INSERT INTO `treasury_bill_dets` (`id`, `num_order`, `date`, `treasury_id`, `tre
 (19, 1, '2025-04-12', 1, 'تحويل بين خزنتين', 0, '0', 0, 92000.00, 999.50, 92000.00, 1.00, 2.00, 'اول عملية تحويل بين خزنتين', 1, 1, '2025-04-12 15:25:55', NULL),
 (20, 1, '2025-04-12', 2, 'تحويل بين خزنتين', 0, '0', 0, 999.50, 999.50, 999.50, 1.00, 2.00, 'اول عملية تحويل بين خزنتين', 1, 1, '2025-04-12 15:25:55', NULL),
 (21, 2, '2025-04-12', 2, 'تحويل بين خزنتين', 0, '0', 0, 899.50, 100.00, 899.50, 2.00, 3.00, NULL, 1, 1, '2025-04-12 15:35:06', NULL),
-(22, 2, '2025-04-12', 3, 'تحويل بين خزنتين', 0, '0', 0, 100.00, 100.00, 100.00, 2.00, 3.00, NULL, 1, 1, '2025-04-12 15:35:06', NULL);
+(22, 2, '2025-04-12', 3, 'تحويل بين خزنتين', 0, '0', 0, 100.00, 100.00, 100.00, 2.00, 3.00, NULL, 1, 1, '2025-04-12 15:35:06', NULL),
+(68, 1, '2025-05-09', 0, 'اضافة فاتورة مشتريات', 76, 'اضافة فاتورة مشتريات', 7, 0.00, NULL, -1076.00, NULL, NULL, NULL, 1, 1, '2025-05-09 12:11:21', NULL),
+(69, 3, '2025-05-09', 1, 'اذن توريد نقدية', 0, '0', 1, 93100.00, 1100.00, -1100.00, NULL, NULL, NULL, 1, 1, '2025-05-09 16:48:48', NULL),
+(70, 3, '2025-05-10', 1, 'تحويل بين خزنتين', 0, '0', 0, 93094.50, 5.50, 93094.50, 1.00, 2.00, NULL, 1, 1, '2025-05-10 08:41:48', NULL),
+(71, 3, '2025-05-10', 2, 'تحويل بين خزنتين', 0, '0', 0, 905.00, 5.50, 905.00, 1.00, 2.00, NULL, 1, 1, '2025-05-10 08:41:48', NULL),
+(72, 4, '2025-05-16', 0, 'رصيد اول عميل', 0, 'رصيد اول عميل', 8, 0.00, 0.00, 0.00, NULL, NULL, NULL, 1, 1, '2025-05-16 14:23:45', NULL),
+(97, 5, '2025-05-17', 0, 'رصيد اول عميل', 0, 'رصيد اول عميل', 9, 0.00, 1000.00, 1000.00, NULL, NULL, NULL, 1, 1, '2025-05-17 09:10:41', NULL),
+(98, 6, '2025-05-17', 0, 'رصيد اول عميل', 0, 'رصيد اول عميل', 10, 0.00, -300.00, -300.00, NULL, NULL, NULL, 1, 1, '2025-05-17 09:11:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -712,7 +748,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `login_barcode`, `phone`, `role`, `theme`, `address`, `nat_id`, `birth_date`, `image`, `gender`, `status`, `last_login_time`, `note`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-04-24 20:51:40', NULL, NULL, NULL, NULL, '2025-04-24 18:51:40'),
+(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-05-15 11:04:27', NULL, NULL, NULL, NULL, '2025-05-15 08:04:27'),
 (2, 'Asmaa Negm', 'asmaa@gmail.com', '$2y$10$4jTJP/oP3HUdRUS5hEmH6e94eu7LKeOfMWjXJZBLLkFHAw4fvi4QW', NULL, NULL, 1, 1, NULL, NULL, NULL, 'df_image.png', 'انثي', 0, NULL, NULL, NULL, NULL, NULL, '2025-02-19 14:05:22');
 
 --
@@ -723,12 +759,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `login_barcode`, `phone`
 -- Indexes for table `clients_and_suppliers`
 --
 ALTER TABLE `clients_and_suppliers`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `clients_and_suppliers_dets`
---
-ALTER TABLE `clients_and_suppliers_dets`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -821,10 +851,11 @@ ALTER TABLE `purchase_bills`
   ADD UNIQUE KEY `purchase_bills_custom_bill_num_unique` (`custom_bill_num`);
 
 --
--- Indexes for table `purchase_bill_dets`
+-- Indexes for table `sale_bills`
 --
-ALTER TABLE `purchase_bill_dets`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `sale_bills`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `purchase_bills_custom_bill_num_unique` (`custom_bill_num`);
 
 --
 -- Indexes for table `settings`
@@ -887,13 +918,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `clients_and_suppliers`
 --
 ALTER TABLE `clients_and_suppliers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `clients_and_suppliers_dets`
---
-ALTER TABLE `clients_and_suppliers_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `clients_and_suppliers_types`
@@ -953,7 +978,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `product_categoys`
@@ -965,13 +990,13 @@ ALTER TABLE `product_categoys`
 -- AUTO_INCREMENT for table `purchase_bills`
 --
 ALTER TABLE `purchase_bills`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
--- AUTO_INCREMENT for table `purchase_bill_dets`
+-- AUTO_INCREMENT for table `sale_bills`
 --
-ALTER TABLE `purchase_bill_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sale_bills`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -989,7 +1014,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `store_dets`
 --
 ALTER TABLE `store_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
 
 --
 -- AUTO_INCREMENT for table `taswea_products`
@@ -1007,7 +1032,7 @@ ALTER TABLE `taswea_reasons`
 -- AUTO_INCREMENT for table `treasury_bill_dets`
 --
 ALTER TABLE `treasury_bill_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- AUTO_INCREMENT for table `units`

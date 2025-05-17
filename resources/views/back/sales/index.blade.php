@@ -42,7 +42,7 @@
     <script>
         $(document).on('click', '.print', function(e) {
             const res_id = $(this).attr("res_id");
-            let printUrl = `{{ url('purchases/report/result/pdf') }}/${res_id}`;
+            let printUrl = `{{ url('sales/report/result/pdf') }}/${res_id}`;
 
             window.open(printUrl);
         });
@@ -84,7 +84,7 @@
     </script>
 
     {{-- add, edit, delete => script --}}
-    @include('back.purchases.show')
+    @include('back.sales.show')
 @endsection
 
 
@@ -103,13 +103,13 @@
             </div>
             <div class="d-flex my-xl-auto right-content">
                 <div class="pr-1 mb-xl-0">
-                    <a href="{{ url('purchases/create') }}" type="button" class="btn btn-danger btn-icon ml-2 add"><i class="mdi mdi-plus"></i></a>
+                    <a href="{{ url('sales/create') }}" type="button" class="btn btn-danger btn-icon ml-2 add"><i class="mdi mdi-plus"></i></a>
                 </div>
             </div>
         </div>
         <!-- breadcrumb -->
 
-        @include('back.purchases.show_form')
+        @include('back.sales.show_form')
 
         <div class="card">
             <div class="card-body">

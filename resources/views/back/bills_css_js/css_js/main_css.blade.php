@@ -27,10 +27,6 @@
             overflow: hidden;
         }*/
         
-        .btn:not(:disabled):not(.disabled){
-            font-size: 10px !important;
-        }
-
         .product-selection{
             border: 2px solid #ccc;
         }
@@ -102,11 +98,26 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
-    .footer-btn-group {
+    
+    #page_purchases .footer-btn-group {
         background-color: #e3bfc6;
         position: fixed;
         bottom: 0;
-        right: 0;
+        right: 12px;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 3px 15px !important;
+    }
+    
+    #page_sales .footer-btn-group {
+        background-color: #70a584;
+        position: fixed;
+        bottom: 0;
+        right: 12px;
         left: 0;
         width: 100%;
         z-index: 1000;
@@ -164,7 +175,11 @@
         height: 24px;
     }
 
-    input[type="number"]{
+    .reqInputAddClass{
+        border: 2px solid red !important;
+    }
+    
+    .inputs_table{
         max-width: 70px;
         height: 20px !important;
         font-weight: bold;
@@ -173,6 +188,19 @@
         display: block;
         background: transparent;
         border-radius: 2px;
+    }
+    table select{
+        max-width: 70% !important;
+        width: 70% !important;
+        height: 20px !important;
+        font-weight: bold;
+        border: 1px solid #ccc;
+        margin: auto;
+    }
+    table select option{
+        padding: 0px !important;
+        font-size: 10px !important;
+        text-align: center;
     }
 
     input[type="number"]::-webkit-inner-spin-button,
@@ -332,4 +360,7 @@
         cursor: pointer;
     }
 
+    .hor-toggle{
+        display: none;
+    }
 </style>

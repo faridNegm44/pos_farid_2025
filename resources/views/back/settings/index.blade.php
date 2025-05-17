@@ -17,11 +17,11 @@
 
     <script>       
         // cancel enter button 
-        $(document).keypress(function (e) {
-            if(e.which == 13){
-                e.preventDefault();  
-            }
-        });
+        //$(document).keypress(function (e) {
+        //    if(e.which == 13){
+        //        e.preventDefault();  
+        //    }
+        //});
         
         $(document).ready(function () {
             $('#example1').DataTable({

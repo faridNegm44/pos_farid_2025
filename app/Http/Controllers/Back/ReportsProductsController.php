@@ -45,7 +45,7 @@ class ReportsProductsController extends Controller
         
         $query = DB::table('store_dets')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
-                    ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_head_id')
+                    ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_id')
                     ->leftJoin('users', 'users.id', 'taswea_products.user_id')
                     ->select(
                         'store_dets.*', 
@@ -93,7 +93,7 @@ class ReportsProductsController extends Controller
 
         $query = DB::table('store_dets')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
-                    ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_head_id')
+                    ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_id')
                     ->leftJoin('users', 'users.id', 'taswea_products.user_id')
                     ->select(
                         'store_dets.*', 

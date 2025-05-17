@@ -1,6 +1,6 @@
 <!-- main-header -->
 <div class="main-header nav nav-item hor-header">
-    <div class="container-fluid">
+    <div class="container-fluid" style="width: 100% !important;">
         <div class="main-header-left ">
             <a class="animated-arrow hor-toggle horizontal-navtoggle"><span></span></a>
             <a class="header-brand" href="{{ url('') }}">
@@ -34,19 +34,21 @@
                                                     <div class="col-megamenu">
                                                         <p class="col_heading">تعريفات</p>
                                                         <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">المخازن</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">السنوات المالية</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('suppliers') }}" class="slide-item active">الخزائن المالية</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('stores') }}" class="slide-item active">المخازن</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('financialYears') }}" class="slide-item active">السنوات المالية</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('financial_treasury') }}" class="slide-item active">الخزائن المالية</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             
                                                 <div class="col-lg-2 col-6">
                                                     <div class="col-megamenu">
-                                                        <p class="col_heading">أذون الخزينة</p>
+                                                        <p class="col_heading">الخزينة</p>
                                                         <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('products') }}" class="slide-item active">جميع اذون الخزينة</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">إضافة اذن للخزانة</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('treasury_bills') }}" class="slide-item active">معاملات الخزينة المالية</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('treasury_bills/create') }}" class="slide-item active">أجراء معاملة في الخزينة المالية</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('transfer_between_storages') }}" class="slide-item active">التحويل من خزنة لأخري</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('expenses') }}" class="slide-item active">المصروفات</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -55,9 +57,9 @@
                                                     <div class="col-megamenu">
                                                         <p class="col_heading">الأشخاص</p>
                                                         <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('products') }}" class="slide-item active">العملاء</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">الموردين</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">مستخدمين النظام</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">العملاء</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('suppliers') }}" class="slide-item active">الموردين</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('users') }}" class="slide-item active">مستخدمين النظام</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -67,30 +69,31 @@
                                                         <p class="col_heading">الأصناف</p>
                                                         <ul class="list-unstyled">
                                                             <li aria-haspopup="true" class="active"><a href="{{ url('products') }}" class="slide-item active">قائمة الأصناف</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">أقسام الأصناف</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">وحدات الأصناف</a></li>
                                                             <li aria-haspopup="true" class="active"><a href="{{ url('products/report/stock_alert') }}" class="slide-item active">كشكول النواقص</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('productsCategories') }}" class="slide-item active">أقسام الأصناف</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('units') }}" class="slide-item active">وحدات الأصناف</a></li>
                                                         </ul>
                                                     </div>
-                                                </div>
+                                                </div>                                            
                                             
                                                 <div class="col-lg-2 col-6">
                                                     <div class="col-megamenu">
                                                         <p class="col_heading">المبيعات</p>
                                                         <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('products') }}" class="slide-item active">قائمة المبيعات</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">نقطة البيع</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">قائمة مرتجعات البيع</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('sales') }}" class="slide-item active">قائمة المبيعات</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('sales/create') }}" class="slide-item active">فاتورة مبيعات جديدة</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('sales/return') }}" class="slide-item active">قائمة مرتجعات البيع</a></li>
                                                         </ul>
                                                     </div>
-                                                </div>
+                                                </div>   
                                             
                                                 <div class="col-lg-2 col-6">
                                                     <div class="col-megamenu">
                                                         <p class="col_heading">المشتريات</p>
                                                         <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('products') }}" class="slide-item active">قائمة المشتريات</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">قائمة مرتجعات الشراء</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('purchases') }}" class="slide-item active">قائمة المشتريات</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('purchases/create') }}" class="slide-item active">فاتورة مشتريات جديدة</a></li>
+                                                            <li aria-haspopup="true" class="active"><a href="{{ url('purchases/return') }}" class="slide-item active">قائمة مرتجعات الشراء</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>   
@@ -156,25 +159,25 @@
         <div class="main-header-right">
             {{-- d-none d-md-flex d-lg-flex --}}
             <div>
-                <a type="button" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="% الالة الحاسبة" data-effect="effect-scale" data-toggle="modal" href=".calc">
+                <a type="button" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="الالة الحاسبة" data-effect="effect-scale" data-toggle="modal" href=".calc">
                     <i class="mdi mdi-calculator bg-dark text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
                 </a>
                 
-                <a href="{{ url('/') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="فاتورة بيع">
-                    <i class="mdi mdi-cart-outline bg-danger-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
+                <a href="{{ url('sales/create') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="فاتورة بيع جديدة">
+                    <i class="mdi mdi-cart-outline bg-success-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
                 </a>
 
-                <a href="{{ url('/') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="فاتورة شراء">
-                    <i class="mdi mdi-file-chart bg-success-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
+                <a href="{{ url('purchases/create') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="فاتورة شراء جديدة">
+                    <i class="mdi mdi-cart-plus bg-danger-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
                 </a>
 
-                <a href="{{ url('/treasury_bills/create') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="اضافة اذن">
-                    <i class="mdi mdi-cash bg-primary-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
+                <a href="{{ url('treasury_bills/create') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="أجراء معاملة في الخزينة المالية">
+                    <i class="mdi mdi-cash-multiple bg-primary-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
                 </a>
 
-                <a class="" href="{{ url('/') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="مرتجع شراء">
+                {{--<a class="" href="{{ url('/') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="مرتجع شراء">
                     <i class="mdi mdi-currency-usd-off bg-warning-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
-                </a>
+                </a>--}}
                 
             </div>
 
@@ -230,7 +233,7 @@
 
 
 
-                <div class="dropdown nav-item main-header-message d-none d-md-flex d-lg-flex">
+                {{--<div class="dropdown nav-item main-header-message d-none d-md-flex d-lg-flex">
                     <a class="new nav-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><span class=" pulse-danger"></span></a>
                     <div class="dropdown-menu">
                         <div class="menu-header-content bg-primary text-right">
@@ -398,7 +401,7 @@
                             <a href="#">VIEW ALL</a>
                         </div>
                     </div>
-                </div>
+                </div>--}}
 
                 <div class="nav-item full-screen fullscreen-button">
                     <a class="new nav-link full-screen-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>

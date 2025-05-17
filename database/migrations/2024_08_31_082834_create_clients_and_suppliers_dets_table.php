@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('clients_and_suppliers_dets', function (Blueprint $table) {
             $table->id();
             $table->integer('treasury_id');
-            $table->integer('treasury_bill_head_id');
+            $table->integer('treasury_bill_id');
             $table->integer('treasury_bill_body_id');
             $table->integer('client_supplier_id');
             $table->string('money');

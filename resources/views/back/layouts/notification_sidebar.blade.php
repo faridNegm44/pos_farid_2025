@@ -1,7 +1,7 @@
 <div class="sidebar sidebar-left sidebar-animate">
     <div class="panel panel-primary card mb-0 box-shadow">
         <div class="tab-menu-heading border-0 p-3">
-            <div class="card-title mb-0">Notifications</div>
+            <div class="card-title mb-0">تقارير + أخر فواتير</div>
             <div class="card-options mr-auto">
                 <a href="#" class="sidebar-remove"><i class="fe fe-x"></i></a>
             </div>
@@ -10,389 +10,159 @@
             <div class="tabs-menu ">
                 <!-- Tabs -->
                 <ul class="nav panel-tabs">
-                    <li class=""><a href="#side1" class="active" data-toggle="tab"><i class="ion ion-md-chatboxes tx-18 ml-2"></i> Chat</a></li>
-                    <li><a href="#side2" data-toggle="tab"><i class="ion ion-md-notifications tx-18  ml-2"></i> Notifications</a></li>
-                    <li><a href="#side3" data-toggle="tab"><i class="ion ion-md-contacts tx-18 ml-2"></i> Friends</a></li>
+                    <li class=""><a href="#side1" class="active" data-toggle="tab"><i class="fa fa-shopping-basket tx-18 ml-2"></i> أخر فواتير بيع</a></li>
+                    <li><a href="#side2" data-toggle="tab"><i class="fas fa-cart-plus tx-18  ml-2"></i> أخر فواتير شراء</a></li>
+                    <li><a href="#side3" data-toggle="tab"><i class="fas fa-receipt tx-18 ml-2"></i> تقارير عامة</a></li>
                 </ul>
             </div>
             <div class="tab-content">
-                <div class="tab-pane active " id="side1">
-                    <div class="list d-flex align-items-center border-bottom p-3">
-                        <div class="">
-                            <span class="avatar bg-primary brround avatar-md">CH</span>
-                        </div>
-                        <a class="wrapper w-100 mr-3" href="#" >
-                            <p class="mb-0 d-flex ">
-                                <b>New Websites is Created</b>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="mdi mdi-clock text-muted ml-1"></i>
-                                    <small class="text-muted ml-auto">30 mins ago</small>
-                                    <p class="mb-0"></p>
+                
+                {{-- start tab 1 --}}
+                <div class="tab-pane active" id="side1">
+                    <h5 class="text-center" style="text-decoration: underline;">
+                        أخر فواتير بيع
+                        <a href="{{ url('sales') }}" target="_blank" class="btn btn-sm rounded btn-success-gradient">الكل</a>
+                    </h5>
+
+                    @foreach (getLastSaleBills() as $item)    
+                        <div class="list d-flex align-items-center border-bottom p-1">
+                            <a href="{{ url('sales/report/print_receipt/'.$item->id) }}" target="_blank" class="wrapper w-100 mr-3" href="#" >
+                                <p class="mb-0 d-flex ">
+                                    ( {{ $item->id }} ) <b>{{ $item->clientName }}</b>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class=" align-items-center">                                    
+                                        <small class="text-danger d-block ml-auto">
+                                            <i class="fa fa-money-bill-alt text-muted ml-1"></i>
+                                            اجمالي الفاتورة: {{ display_number($item->total_bill_before) }}
+                                        </small>
+                                        <small class="text-dark d-block ml-auto">
+                                            <i class="mdi mdi-clock text-muted ml-1"></i>
+                                            {{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }} 
+                                            <span class='p-2'>{{ \Carbon\Carbon::parse($item->created_at)->format('h:i:s a') }}</span>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom p-3">
-                        <div class="">
-                            <span class="avatar bg-danger brround avatar-md">N</span>
+                            </a>
                         </div>
-                        <a class="wrapper w-100 mr-3" href="#" >
-                            <p class="mb-0 d-flex ">
-                                <b>Prepare For the Next Project</b>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="mdi mdi-clock text-muted ml-1"></i>
-                                    <small class="text-muted ml-auto">2 hours ago</small>
-                                    <p class="mb-0"></p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom p-3">
-                        <div class="">
-                            <span class="avatar bg-info brround avatar-md">S</span>
-                        </div>
-                        <a class="wrapper w-100 mr-3" href="#" >
-                            <p class="mb-0 d-flex ">
-                                <b>Decide the live Discussion</b>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="mdi mdi-clock text-muted ml-1"></i>
-                                    <small class="text-muted ml-auto">3 hours ago</small>
-                                    <p class="mb-0"></p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom p-3">
-                        <div class="">
-                            <span class="avatar bg-warning brround avatar-md">K</span>
-                        </div>
-                        <a class="wrapper w-100 mr-3" href="#" >
-                            <p class="mb-0 d-flex ">
-                                <b>Meeting at 3:00 pm</b>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="mdi mdi-clock text-muted ml-1"></i>
-                                    <small class="text-muted ml-auto">4 hours ago</small>
-                                    <p class="mb-0"></p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom p-3">
-                        <div class="">
-                            <span class="avatar bg-success brround avatar-md">R</span>
-                        </div>
-                        <a class="wrapper w-100 mr-3" href="#" >
-                            <p class="mb-0 d-flex ">
-                                <b>Prepare for Presentation</b>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="mdi mdi-clock text-muted ml-1"></i>
-                                    <small class="text-muted ml-auto">1 days ago</small>
-                                    <p class="mb-0"></p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom p-3">
-                        <div class="">
-                            <span class="avatar bg-pink brround avatar-md">MS</span>
-                        </div>
-                        <a class="wrapper w-100 mr-3" href="#" >
-                            <p class="mb-0 d-flex ">
-                                <b>Prepare for Presentation</b>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="mdi mdi-clock text-muted ml-1"></i>
-                                    <small class="text-muted ml-auto">1 days ago</small>
-                                    <p class="mb-0"></p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom p-3">
-                        <div class="">
-                            <span class="avatar bg-purple brround avatar-md">L</span>
-                        </div>
-                        <a class="wrapper w-100 mr-3" href="#" >
-                            <p class="mb-0 d-flex ">
-                                <b>Prepare for Presentation</b>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="mdi mdi-clock text-muted ml-1"></i>
-                                    <small class="text-muted ml-auto">45 mintues ago</small>
-                                    <p class="mb-0"></p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="list d-flex align-items-center p-3">
-                        <div class="">
-                            <span class="avatar bg-blue brround avatar-md">U</span>
-                        </div>
-                        <a class="wrapper w-100 mr-3" href="#" >
-                            <p class="mb-0 d-flex ">
-                                <b>Prepare for Presentation</b>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="mdi mdi-clock text-muted ml-1"></i>
-                                    <small class="text-muted ml-auto">2 days ago</small>
-                                    <p class="mb-0"></p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    @endforeach
                 </div>
+                {{-- end tab 1 --}}
+
+
+                {{-- start tab 2 --}}
                 <div class="tab-pane  " id="side2">
-                    <div class="list-group list-group-flush ">
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-3">
-                                <span class="avatar avatar-lg brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/12.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div>
-                                <strong>Madeleine</strong> Hey! there I' am available....
-                                <div class="small text-muted">
-                                    3 hours ago
+                    <h5 class="text-center" style="text-decoration: underline;">
+                        أخر فواتير شراء
+                        <a href="{{ url('purchases') }}" target="_blank" class="btn btn-sm rounded btn-danger-gradient">الكل</a>
+                    </h5>
+
+                    @foreach (getLastPurchaseBills() as $item)    
+                        <div class="list d-flex align-items-center border-bottom p-1">
+                            <a href="{{ url('purchases/report/result/pdf/76') }}" target="_blank" class="wrapper w-100 mr-3" href="#" >
+                                <p class="mb-0 d-flex ">
+                                    ( {{ $item->id }} ) <b>{{ $item->supplierName }}</b>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class=" align-items-center">                                    
+                                        <small class="text-danger d-block ml-auto">
+                                            <i class="fa fa-money-bill-alt text-muted ml-1"></i>
+                                            اجمالي الفاتورة: 2,000
+                                        </small>
+                                        <small class="text-dark d-block ml-auto">
+                                            <i class="mdi mdi-clock text-muted ml-1"></i>
+                                            {{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }} 
+                                            <span class='p-2'>{{ \Carbon\Carbon::parse($item->created_at)->format('h:i:s a') }}</span>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-3">
-                                <span class="avatar avatar-lg brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/1.jpg"></span>
-                            </div>
-                            <div>
-                                <strong>Anthony</strong> New product Launching...
-                                <div class="small text-muted">
-                                    5 hour ago
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-3">
-                                <span class="avatar avatar-lg brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/2.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div>
-                                <strong>Olivia</strong> New Schedule Realease......
-                                <div class="small text-muted">
-                                    45 mintues ago
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-3">
-                                <span class="avatar avatar-lg brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/8.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div>
-                                <strong>Madeleine</strong> Hey! there I' am available....
-                                <div class="small text-muted">
-                                    3 hours ago
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-3">
-                                <span class="avatar avatar-lg brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/11.jpg"></span>
-                            </div>
-                            <div>
-                                <strong>Anthony</strong> New product Launching...
-                                <div class="small text-muted">
-                                    5 hour ago
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-3">
-                                <span class="avatar avatar-lg brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/6.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div>
-                                <strong>Olivia</strong> New Schedule Realease......
-                                <div class="small text-muted">
-                                    45 mintues ago
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-3">
-                                <span class="avatar avatar-lg brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/9.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div>
-                                <strong>Olivia</strong> Hey! there I' am available....
-                                <div class="small text-muted">
-                                    12 mintues ago
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
+                    
                 </div>
+                {{-- end tab 2 --}}
+
+
+                {{-- start tab 3 --}}
                 <div class="tab-pane  " id="side3">
+                    <h5 class="text-center" style="text-decoration: underline;">تقارير</h5>
                     <div class="list-group list-group-flush ">
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/9.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Mozelle Belt</div>
-                            </div>
-                            <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/11.jpg"></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Florinda Carasco</div>
+                        {{-- تقرير عن حركة مورد --}}
+                        <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
+                            <div>
+                                <div class="font-weight-semibold">
+                                    <a href="{{ url('suppliers/report') }}" target="_blank" class="text-dark">تقرير عن حركة مورد</a>
+                                </div>
                             </div>
                             <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
+                                <a href="{{ url('suppliers/report') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
                             </div>
                         </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/10.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Alina Bernier</div>
+                        
+                        {{-- تقرير عن حركة عميل --}}
+                        <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
+                            <div>
+                                <div class="font-weight-semibold">
+                                    <a href="{{ url('clients/report') }}" target="_blank" class="text-dark">تقرير عن حركة عميل</a>
+                                </div>
                             </div>
                             <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
+                                <a href="{{ url('clients/report') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
                             </div>
                         </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/2.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Zula Mclaughin</div>
+                        
+                        {{-- تقرير عن المصروفات --}}
+                        <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
+                            <div>
+                                <div class="font-weight-semibold">
+                                    <a href="{{ url('expenses/report') }}" target="_blank" class="text-dark">تقرير عن المصروفات</a>
+                                </div>
                             </div>
                             <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
+                                <a href="{{ url('expenses/report') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
                             </div>
                         </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/13.jpg"></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Isidro Heide</div>
+                        
+                        {{-- تقرير عن حركة الخزائن المالية --}}
+                        <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
+                            <div>
+                                <div class="font-weight-semibold">
+                                    <a href="{{ url('treasury_bills/report') }}" target="_blank" class="text-dark">تقرير عن حركة الخزائن المالية</a>
+                                </div>
                             </div>
                             <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
+                                <a href="{{ url('treasury_bills/report') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
                             </div>
                         </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/12.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Mozelle Belt</div>
+                        
+                        {{-- تقرير عن حركة صنف --}}
+                        <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
+                            <div>
+                                <div class="font-weight-semibold">
+                                    <a href="{{ url('products/report') }}" target="_blank" class="text-dark">تقرير عن حركة صنف</a>
+                                </div>
                             </div>
                             <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
+                                <a href="{{ url('products/report') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
                             </div>
                         </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/4.jpg"></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Florinda Carasco</div>
+                        
+                        {{-- كشكول النواقص --}}
+                        <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
+                            <div>
+                                <div class="font-weight-semibold">
+                                    <a href="{{ url('products/report/stock_alert') }}" target="_blank" class="text-dark">كشكول النواقص</a>
+                                </div>
                             </div>
                             <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
+                                <a href="{{ url('products/report/stock_alert') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
                             </div>
                         </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/7.jpg"></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Alina Bernier</div>
-                            </div>
-                            <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/2.jpg"></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Zula Mclaughin</div>
-                            </div>
-                            <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/14.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Isidro Heide</div>
-                            </div>
-                            <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/11.jpg"></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Florinda Carasco</div>
-                            </div>
-                            <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/9.jpg"></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Alina Bernier</div>
-                            </div>
-                            <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/15.jpg"><span class="avatar-status bg-success"></span></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Zula Mclaughin</div>
-                            </div>
-                            <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex  align-items-center">
-                            <div class="ml-2">
-                                <span class="avatar avatar-md brround cover-image" data-image-src="{{ asset('back') }}/assets/img/faces/4.jpg"></span>
-                            </div>
-                            <div class="">
-                                <div class="font-weight-semibold" data-toggle="modal" data-target="#chatmodel">Isidro Heide</div>
-                            </div>
-                            <div class="mr-auto">
-                                <a href="#" class="btn btn-sm btn-light" data-toggle="modal" data-target="#chatmodel" ><i class="fab fa-facebook-messenger"></i></a>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
+                {{-- end tab 3 --}}
             </div>
         </div>
     </div>

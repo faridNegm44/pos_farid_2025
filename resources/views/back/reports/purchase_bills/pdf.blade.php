@@ -107,6 +107,7 @@
         </div>
 
         @include('back.layouts.footer_report')
+
         <script> window.print(); </script>
     </div>
 </body>

@@ -25,7 +25,7 @@
 
         <!--  Right-sidemenu css -->
         <link href="{{ asset('back') }}/assets/plugins/sidebar/sidebar.css" rel="stylesheet">
-    
+
         {{-- alertify --}}
         <link href="{{ asset('back/assets/css-rtl/alertify.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
         <link href="{{ asset('back/assets/css-rtl/default.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
@@ -38,14 +38,6 @@
 
         <!-- Animations css -->
         <link href="{{ asset('back') }}/assets/css-rtl/animate.css" rel="stylesheet">
-
-        {{--<link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Cairo:slnt,wght@11,200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">--}}
-
 
         {{-- custom css --}}
         <link href="{{ asset('back/assets/custom.css') }}" rel="stylesheet">
@@ -84,10 +76,6 @@
                 color: #030303 !important;
             }
 
-            #amount_paid{
-                display: none;
-            }
-
             .form-control:disabled, .form-control[readonly] {
                 border: 0px solid !important;
                 background: transparent !important;
@@ -95,68 +83,62 @@
             .dark_theme{
                 display: none;
             }
+            /*#amount_paid{
+                display: none;
+            }*/
         </style>
 	</head>
 
     @include('back.bills_css_js.css_js.main_css')
 
-<body style="height: 100vh !important;overflow: auto;background: #ffe8ed !important;">
+<body style="height: 100vh !important;overflow: auto;background: #b0ddc4 !important;">
 
     <div id="overlay_page"></div>
 
     
     {{--@include('back.layouts.navbar')--}}
     
-    <div class="page" id="page_purchases">        
+    <div class="page" id="page_sales">        
         @include('back.layouts.header')
 
         @include('back.layouts.calc')
     
-        {{--@include('back.purchases.modal_search_product')--}}
-        {{--@include('back.purchases.modal_dismissal_notices')--}}
+        {{--@include('back.sales.modal_search_product')--}}
+        {{--@include('back.sales.modal_dismissal_notices')--}}
     
         
         
         <form>
             @csrf
-            @include('back.purchases.modal_save_bill')
+            @include('back.sales.modal_save_bill')
             
 
             <div class="container-fluid">
     
-                {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
-                {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- start top العملاء وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- start top العملاء وبحث عن صنف --------------------------------------------------}}
                 <div id="top_section" style="padding: 7px 10px 0;">
                     <div class="row">
-                        <div class="col-lg-4" style="margin-bottom: 8px;">
-                            <select class="selectize" name="supplier_id" id="supplier" style="border: 1px solid #5c5c5c !important;">
-                                <option value="" selected>الموردين</option>     
-                                @foreach ($suppliers as $supplier)
-                                    <option value="{{ $supplier->id }}">
-                                        @if ($supplier->phone)
-                                            {{ $supplier->phone }} - 
-                                        @endif
-                                        كود ({{ $supplier->id }}) - 
-                                        {{ $supplier->name }}
-                                    </option>
-                                @endforeach                         
+                        <div class="col-lg-5" style="margin-bottom: 8px;">
+                            <select class="" name="client_id" id="clients" style="border: 1px solid #5c5c5c !important;">
+                                <option value="" selected>إبحث عن عميل</option>         
                             </select>
-                            <bold class="text-danger" id="errors-supplier" style="display: none;"></bold>
+                            <bold class="text-danger" id="errors-client_id" style="display: none;"></bold>
                         </div>
                         
                         <div class="col-lg-1" style="margin-bottom: 8px;">
                             <input type="text" class="form-control" id="custom_bill_num" name="custom_bill_num" placeholder="رقم فاتورة مخصص" value="">
                         </div>
                         
-                        <div class="col-lg-7" style="margin-bottom: 8px;">
+                        <div class="col-lg-6" style="margin-bottom: 8px;">
                             <select class="" id="products_selectize" style="border: 1px solid #5c5c5c !important;">
                                 <option value="" selected>إبحث عن صنف</option>         
                             </select>
                         </div>
                     </div>
                 </div>
-                {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
-                {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- end top العملاء وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- end top العملاء وبحث عن صنف --------------------------------------------------}}
                 
     
     
@@ -167,8 +149,8 @@
                 <div class="" id="main_content" style="padding: 18px;margin-bottom: 60px;">
                     <div class="row"> 
     
-                        <div class="col-lg-4 product-selection p-3 total_info" style="background: #e3bfc6;">
-                            <div class="text-center" style="font-weight: bold;text-decoration: underline;background: rgb(195, 6, 6);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                        <div class="col-lg-4 product-selection p-3 total_info" style="background: #70a584;">
+                            <div class="text-center" style="font-weight: bold;text-decoration: underline;background: rgb(66 112 81);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
                                 {{ $pageNameAr }}
                                 <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ ($lastBillNum+1) }}</span>
                             </div>
@@ -176,25 +158,19 @@
                             <div class="text-center" id="date_time" style="font-weight: bold;font-size: 25px !important;margin-top: 10px;">
                                 <span class="badge badge-light" id="date"></span>
                                 <span class="badge badge-danger mx-2" id="time"></span>
-                                {{--  <button class="btn btn-dark btn-sm ml-2"><i class="fas fa-sign-out-alt"></i> Sign Out</button>  --}}
                             </div>
         
                             <br>
         
-                            <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #ddd; ">
+                            <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #cccccc;background-color: #ededed;">
                                 <div class="row">
-                                    
-                                    {{--<p class="col-lg-4 col-12">
-                                        <label for="">ضريبة قيمة مضافة</label>
-                                        <input type="text" class="form-control numValid text-center" id="tax_bill" name="tax_bill" placeholder="ضريبة قيمة مضافة" style="font-size: 12px;" />
-                                    </p>--}}
-                                    
+                                                                        
                                     <p class="col-lg-6 col-12">
                                         <label for="">
-                                            خصم نسبة %
+                                            ضريبة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا."></i>
                                         </label>
-                                        <input type="text" class="form-control focus_input numValid text-center" id="discount_bill" name="discount_bill" placeholder="خصم نسبة %" style="font-size: 12px;" />
+                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" name="tax_bill" placeholder="ضريبة" style="font-size: 12px;" />
                                     </p>
         
                                     <p class="col-lg-6 col-12">
@@ -211,13 +187,13 @@
                                     </p>
                                     <p class="col-6" style="font-size: 13px;font-weight: bold;font-size: 14px;">
                                         م الفرعي: 
-                                        <span style="font-size: 16px;" id="subtotal">0</span>
+                                        <span style="font-size: 16px;" class="subtotal">0</span>
                                     </p>
 
                                     <p class="col-lg-12">
-                                        <div style="width: 97%;background: #f3b805;color: black;padding: 7px;text-align: center;margin: auto;">
+                                        <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
                                             <span style="font-size: 12px;">الإجمالي: </span>
-                                            <span style="font-size: 24px;" id="total">0.00</span>
+                                            <span style="font-size: 24px;" class="total_bill_after">0.00</span>
                                         </div>
                                     </p>
                                 </div>
@@ -232,19 +208,17 @@
                                     <tr>
                                         <th>#</th>
                                         <th>حذف</th>
-                                        <th style="width: 20%;">الصنف</th>
-                                        <th style="width: 10%;">الوحدة ص</th>
-                                        <th style="width: 8%;">ك المخزن</th>
-                                        <th style="width: 8%;">
-                                            ك جديدة
-                                            <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى التأكد من إدخال الكمية الجديدة للمنتج باستخدام نفس الوحدة المحددة، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
+                                        <th style="width: 25%;">الصنف</th>
+                                        <th style="width: 10%;">الوحدة</th>
+                                        <th style="width: 10%;">ك المخزن</th>
+                                        <th style="width: 10%;">
+                                            ك مباعة
+                                            <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى التأكد من إدخال الكمية المباعة للمنتج باستخدام نفس الوحدة المحددة، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
                                         </th>
-                                        <th style="width: 10%;">س التكلفة</th>
                                         <th style="width: 10%;">س بيع</th>
-                                        <th style="width: 8%;">خصم%</th>
-                                        <th style="width: 8%;">ضريبة %</th>
-                                        {{--<th style="width: 8%;">بونص</th>--}}
-                                        <th style="width: 10%;">الإجمالي</th>
+                                        <th style="width: 10%;">خصم%</th>
+                                        <th style="width: 10%;">ضريبة%</th>
+                                        <th style="width: 15%;">الإجمالي</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center"></tbody>
@@ -274,13 +248,10 @@
                         <i class="fas fa-pause"></i> 
                         <span class="d-none d-lg-inline">تعليق الفاتورة</span>
                     </button>--}}
-        
-                    {{--<button class="col-lg-2 col-12 btn btn-info-gradient btn-rounded mb-2"  data-placement="top" data-toggle="tooltip" title="عميل جديد">
-                        <i class="fas fa-user-plus"></i> 
-                        <span class="d-none d-lg-inline">مورد جديد</span>
-                    </button>--}}
-                    
-                    <button class="col-lg-2 col-12 btn btn-success-gradient btn-rounded mb-2" data-placement="top" id="save_bill" data-effect="effect-scale" data-toggle="modal" href="#modal_save_bill" data-toggle="tooltip" title="حفظ الفاتورة" style="display: none;">
+                            
+
+                    {{-- style="display: none;" --}}
+                    <button class="col-lg-2 col-12 btn btn-light-gradient btn-rounded mb-2" data-placement="top" id="save_bill" data-effect="effect-scale" data-toggle="modal" href="#modal_save_bill" data-toggle="tooltip" title="حفظ الفاتورة">
                         <i class="fas fa-check-double"></i> 
                         <span class="d-none d-lg-inline">حفظ الفاتورة</span>
                     </button>
@@ -289,22 +260,16 @@
                         <i class="fas fa-trash-alt"></i> 
                         <span class="d-none d-lg-inline">الغاء  الفاتورة</span>
                     </button>
-        
-        
-                    {{--<button class="col-lg-2 col-12 btn btn-primary-gradient btn-rounded mb-2"  data-placement="top" data-toggle="tooltip" title="مصروفات الإذن" id="dismissal_notices" data-effect="effect-scale" data-toggle="modal" href="#modal_dismissal_notices">
-                        <i class="fas fa-money-bill"></i> 
-                        <span class="d-none d-lg-inline">مصروفات الإذن</span>
-                    </button>--}}
                 </div>
                 {{-------------------------------------------------- end footer --------------------------------------------------}}
                 {{-------------------------------------------------- end footer --------------------------------------------------}}
     
             </div>
         </form>
-
+        
         @include('back.layouts.notification_sidebar')
     </div>
-
+    
 
     <!-- JQuery min js -->
     <script src="{{ asset('back') }}/assets/plugins/jquery/jquery.min.js"></script>
@@ -322,12 +287,12 @@
     {{-- bootstrap.bundle --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     
+    <!-- alertify -->
+    <script src="{{ asset('back/assets/js/alertify.min.js') }}"></script>
+
     <!-- Right-sidebar js -->
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-rtl.js"></script>
     <script src="{{ asset('back') }}/assets/plugins/sidebar/sidebar-custom.js"></script>
-    
-    <!-- alertify -->
-    <script src="{{ asset('back/assets/js/alertify.min.js') }}"></script>
 
     <!-- selectize -->
     <script src="{{ asset('back/assets/selectize.min.js') }}"></script>
@@ -373,10 +338,86 @@
 
 
 
+    {{--  start search clients by selectize #client --}}
+    <script>
+        $(document).ready(function() {
+            // بدايه الجزء الخاص بالبحث وعرض العملاء في selectize
+            $('#clients').selectize({
+                valueField: 'id',  // القيمة المخزنة عند الاختيار
+                labelField: 'name', // النص الظاهر للمستخدم
+                searchField: ['id', 'name', 'phone', 'address'], // البحث في كل الحقول
+                loadThrottle: 300, // تقليل عدد الطلبات عند البحث
+                maxItems: 1, // اختيار عنصر واحد فقط
+                create: false, // منع إضافة عناصر جديدة
+                preload: 'focus', // تحميل البيانات عند التركيز على الحقل
+                render: {
+                    option: function(item, escape) {
+                        return `<option>
+                                    كود: ${escape(item.id)} - 
+                                    الاسم: ${escape(item.name)} - 
+                                    تليفون: ${escape(item.phone ?? '')} -                                 
+                                    عنوان: ${escape(item.address  ?? '' )} -                           
+                                    الفلوس: ${escape(item.remaining_money >= 0 ? 'علية '+ item.remaining_money : 'لة '+ item.remaining_money )}                           
+                                </option>`;
+                    },
+                    item: function(item, escape) {
+                        return `<div>
+                                    كود: ${escape(item.id)} - 
+                                    الاسم: ${escape(item.name)} - 
+                                    تليفون: ${escape(item.phone ?? '')} -   
+                                    عنوان: ${escape(item.address  ?? '' )} -                              
+                                    الفلوس: ${escape(item.remaining_money >= 0 ? 'علية '+ item.remaining_money : 'لة '+ item.remaining_money )}                      
+                                </div>`;
+                    }
+                },
+                load: function(query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: `{{ url('search_clients_by_selectize') }}`, // رابط البحث
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { data_input_search: query },
+                        success: function(response) {
+                            if (response.clients && Array.isArray(response.clients)) {
+                                callback(response.clients);
+                            } else {
+                                console.error("البيانات غير صحيحة:", response);
+                                callback([]);
+                            }
+                        },
+                        error: function(error) {
+                            console.error("خطأ في جلب البيانات:", error);
+                            callback([]);
+                        }
+                    });
+                },
+                onChange: function(value) {
+                    let selected = this.options[value];
+                    if (selected) {
+                        $('#accountType').text(selected.type_payment);
+                        $('#client_name').text(selected.name);
+                        $('#on_him').text(selected.remaining_money >= 0 ? display_number_js(selected.remaining_money) : '');
+                        $('#for_him').text(selected.remaining_money < 0 ? display_number_js(selected.remaining_money) : '');
+
+                        alertify.set('notifier', 'position', 'bottom-center');
+                        alertify.set('notifier', 'delay', 3);
+                        alertify.success("تم استدعاء بيانات العميل بنجاح");
+                    }
+                }
+            });
+            // نهاية الجزء الخاص بالبحث وعرض العملاء في selectize
+        });
+    </script>
+    {{--  end search clients by selectize #client --}}
+    
+    
+
+
+
     {{--  start search products by selectize #products_selectize --}}
     <script>
         $(document).ready(function() {
-            // بدايه الجزء الخاص بالبحث وعرض الاصناف في selectize
+            // بدايه الجزء الخاص بالبحث وعرض العملاء في selectize
             $('#products_selectize').selectize({
                 valueField: 'id',  // القيمة المخزنة عند الاختيار
                 labelField: 'nameAr', // النص الظاهر للمستخدم
@@ -387,20 +428,24 @@
                 preload: 'focus', // تحميل البيانات عند التركيز على الحقل
                 render: {
                     option: function(item, escape) {
-                        return `<option>
-                                    الصنف: ${escape(item.nameAr)} - 
+                        const quantity = escape(item.quantity_small_unit);
+                        const disabled = quantity == 0 ? 'style="background:#f8d7da; color:#721c24; cursor: not-allowed;" disabled' : '';                        
+
+                        return `<option ${disabled}>
                                     كود: ${escape(item.id)} - 
-                                    س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } - 
-                                    س شراء: ${ display_number_js( escape(item.last_cost_price_small_unit) ) }
-                                
+                                    الصنف: ${escape(item.nameAr)} - 
+                                    س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } -                                 
+                                    كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
+                                    ${ escape(item.quantity_small_unit) == 0 ? '' : ' - كمية ك: ' + display_number_js( escape(item.quantity_small_unit) / escape(item.small_unit_numbers) ) + ' ' + escape(item.bigUnitName) }
                                 </option>`;
                     },
                     item: function(item, escape) {
                         return `<div>
-                                    الصنف: ${escape(item.nameAr)} - 
                                     كود: ${escape(item.id)} - 
+                                    الصنف: ${escape(item.nameAr)} - 
                                     س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } - 
-                                    س شراء: ${ display_number_js( escape(item.last_cost_price_small_unit) ) }
+                                    كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
+                                    ${ escape(item.quantity_small_unit) == 0 ? '' : ' - كمية ك: ' + display_number_js( escape(item.quantity_small_unit) / escape(item.small_unit_numbers) ) + ' ' + escape(item.bigUnitName) }
                                 </div>`;
                     }
                 },
@@ -426,12 +471,13 @@
                     });
                 }
             });
-            // نهاية الجزء الخاص بالبحث وعرض الاصناف في selectize
+            // نهاية الجزء الخاص بالبحث وعرض العملاء في selectize
 
 
 
-            // بدايه اختيار صنف من selectize واضافته في في جدول الاصناف
+            // بدايه اختيار صنف من selectize واضافته في في جدول العملاء
             $('#products_selectize').change(function() {
+                
                 var productId = $(this).val();
                 var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
                 var selectedItem = selectizeInstance.getItem(productId); // الحصول على العنصر المحدد
@@ -453,11 +499,23 @@
                     
                     var quantity_all = display_number_js(productData.quantity_small_unit); // كميه المخزن
 
+
+                    // التاكد من ان كميه النتج في المخزن اكبر من 0
+                    if (quantity_all == 0) {
+                        alertify.set('notifier', 'position', 'bottom-center');
+                        alertify.set('notifier', 'delay', 3);
+                        alertify.error("لا يمكن اختيار منتج غير متوفر في المخزن");
+                        selectizeInstance.clear();
+                        return;
+                    }
+                    // التاكد من ان كميه النتج في المخزن اكبر من 0
+
+
                     let bigAndSmallUnit = '';
                     if(bigUnit == 0){
                         bigAndSmallUnit = `
                             <span>${smallUnitName}</span>
-                            <input type="hidden" value="${smallUnit}" name='prod_units[]'/>
+                            <input type="hidden" class='prod_units' value="${smallUnit}" name='prod_units[]'/>
                         `;
                     }else{
                         bigAndSmallUnit = `
@@ -467,6 +525,7 @@
                             </select>
                         `;
                     }
+
                     function appendToProductsTable() {
                         //const bigAndSmallUnit = ``;
 
@@ -489,15 +548,12 @@
                                 <td>
                                     <input type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="${quantity_all}">                    
                                 </td>
-                                <td><input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput product_new_qty" name="product_new_qty[]" value="1"></td>
+                                <td><input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity[]" value="1"></td>                                
                                 <td>
-                                    <input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput purchasePrice" name="purchasePrice[]" value="${purchasePrice}">
-
-                                    <input type='hidden' class="last_cost_price_small_unit[]" value="${purchasePrice}" />
-                                    <input type='hidden' class="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">                                    
+                                    <input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">  
+                                    
+                                    <input type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
+                                    <input type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
                                 </td>
                                 <td><input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="0"></td>
                                 <td><input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="0"></td>
@@ -522,11 +578,11 @@
                             alertify.set('notifier', 'delay', 3);
                             alertify.error("تم إضافة المنتج من قبل لأصناف الفاتورة");
 
-                            const product_new_qty = $(`#products_table tbody #tr_${productId} .product_new_qty`);
-                            const currentQty = parseInt(product_new_qty.val());
-                            product_new_qty.val(currentQty + 1);
+                            const sale_quantity = $(`#products_table tbody #tr_${productId} .sale_quantity`);
+                            const currentQty = parseInt(sale_quantity.val());
+                            sale_quantity.val(currentQty + 1);
 
-                            backgroundRedToSelectError(product_new_qty);
+                            backgroundRedToSelectError(sale_quantity);
                             calcTotal();
 
                         } else {
@@ -539,10 +595,11 @@
                     selectizeInstance.clear();
                 }
             });
-            // نهاية اختيار صنف من selectize واضافته في في جدول الاصناف
+            // نهاية اختيار صنف من selectize واضافته في في جدول العملاء
         });
     </script>
     {{--  end search products by selectize #products_selectize --}}
+
 
 
     
@@ -555,18 +612,15 @@
             $('#products_table tbody tr').each(function() {
                 let row = $(this).closest('tr');
 
-                let purchasePrice = parseFloat(row.find('.purchasePrice').val()) || 0;  // سعر القطعة
-                let product_new_qty = parseInt(row.find('.product_new_qty').val()) || 0;  // الكمية المشتراة
+                let sellPrice = parseFloat(row.find('.sellPrice').val()) || 0;  // سعر القطعة
+                let sale_quantity = parseInt(row.find('.sale_quantity').val()) || 0;  // الكمية المشتراة
                 let discount = parseFloat(row.find('.prod_discount').val()) || 0; // نسبة الخصم (%)
                 let tax = parseFloat(row.find('.prod_tax').val()) || 0; // نسبة الضريبة (%)
-                let bonus = parseInt(row.find('.prod_bonus').val()) || 0; // عدد البونص
-                let tax_bill = $("#tax_bill").val();
-                let discount_bill = $("#discount_bill").val(); 
 
 
 
                 // 1. حساب إجمالي السعر قبل الخصم والضريبة
-                let totalBeforeDiscount = purchasePrice * product_new_qty;
+                let totalBeforeDiscount = sellPrice * sale_quantity;
 
                 // 2. حساب الخصم
                 let discountAmount = (totalBeforeDiscount * discount) / 100;
@@ -575,72 +629,60 @@
                 // 3. حساب الضريبة
                 let taxAmount = (totalAfterDiscount * tax) / 100;
                 let totalAfterTax = totalAfterDiscount + taxAmount;
-
-                // 4. حساب سعر الوحدة بعد توزيع البونص
-                //let totalUnits = product_new_qty + bonus;
-                //let unitPriceAfterBonus = totalAfterTax / totalUnits;
-
+                
                 // 5. تحديث إجمالي الصف
                 row.find('.prod_total').val( display_number_js(totalAfterTax.toFixed(2)) );
 
-                if(discount_bill > 0){
-                    let discountBill = totalAfterTax - discount_bill;
-                    total += discountBill;
-
-                }else{
-                    total += totalAfterTax;
-                    
-                }
+                total += totalAfterTax;
                 subTotal += totalBeforeDiscount;
 
             });
 
+            let tax_bill = $("#tax_bill").val();
+            let static_discount_bill = $("#static_discount_bill").val(); 
+            
+            let totalAfterDiscountBill = total - static_discount_bill;
+            
+            if(static_discount_bill > total){
+                alert('❌ لا يمكن أن يكون خصم الفاتورة أكبر من إجمالي الأصناف بعد الخصومات.');
+                $("#static_discount_bill").val(0);
+                totalAfterDiscountBill = total;
+            }
+
+            let totalAfterTaxBill = (totalAfterDiscountBill + ( totalAfterDiscountBill * tax_bill ) / 100);
+
             // عرض الإجمالي الكلي في الـ div
-            $('#subtotal').text( display_number_js(subTotal.toFixed(2)) );
-            $('#total').text( display_number_js(total.toFixed(2)) );
+            $('.subtotal').text( display_number_js(subTotal.toFixed(2)) + ' جنية');
+            $('.total_bill_after').text( display_number_js(totalAfterTaxBill.toFixed(2)) + ' جنية');
+            $('#remaining').text( display_number_js(totalAfterTaxBill.toFixed(2)) + ' جنية');
         }
     </script>
     {{-- end function calcTotal --}}
 
     
+    
 
-
-    {{-- start when change sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .tax --}}
+    {{-- start when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
     <script>
         $(document).ready(function () {
-            $(document).on('input', '.sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .prod_tax, #discount_bill', function () {
-
+            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #static_discount_bill, #tax_bill', function () {
                 calcTotal();
-
-                const sellPrice = $(this).closest('tr').find('.sellPrice').val();
-                const purchasePrice = $(this).closest('tr').find('.purchasePrice').val();
-                
-                if (+purchasePrice > +sellPrice) {
-                    alertify.set('notifier', 'position', 'bottom-center');
-                    alertify.set('notifier', 'delay', 3);
-                    alertify.error("خطأ: سعر البيع أقل من سعر التكلفة");
-
-                    $(this).closest('tr').css('background', 'orange');
-                    setTimeout(() => {
-                        $(this).closest('tr').css('background', 'transparent');
-                    }, 1500);
-                }
             });
         });
     </script>
-    {{-- end when change sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .tax --}}
+    {{-- end when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
 
 
 
     {{-- start when change clients or suppliers --}}
-    <script>
+    {{--<script>
         $(document).on('input', '#supplier', function() {      
-            const supplier_id = $(this)[0].selectize.getValue();
+            const client_id = $(thclients)[0].selectize.getValue();
 
             $.ajax({
                 type: "GET",
-                url: `{{ url('get_info/supplierInfo') }}/${supplier_id}`,
-                beforeSend: function(){
+                url: `{{ url('get_info/supplierInfo') }}/${client_id}`,
+        clients: function(){
                     $("#on_him").text(0);
                     $("#for_him").text(0);
                 },
@@ -657,7 +699,7 @@
                 }
             });                        
         });
-    </script>
+    </script>--}}
     {{--end when change clients or suppliers --}}
 
 
@@ -683,7 +725,7 @@
                 function(){
                     
                     $.ajax({
-                        url: `{{ url('purchases/store') }}`,
+                        url: `{{ url('sales/store') }}`,
                         type: 'post',
                         processData: false,
                         contentType: false,
@@ -692,7 +734,6 @@
                             $('form [id^=errors]').text('');
                             $("#products_table tbody input, select").css('border', '');
                             $(".tooltip-msg").remove();
-
                         },
                         error: function(res){
                             console.log(res.responseJSON.errors);
@@ -718,23 +759,29 @@
                         },
                         success: function(res){
 
-                            alertify.confirm(
-                                'رائع <i class="fas fa-check-double text-success" style="margin: 0px 3px;"></i>', 
-                                `<span class="text-center">
-                                    <span class="text-danger">تمت اضافة فاتورة المشتريات بنجاح</span>
-                                    <strong class="d-block">هل تريد اضافه فاتورة مشتريات أخري</strong>
-                                </span>`, 
-                            function(){                                
-                                location.reload();
+                            if(res.errorClientPayment){
+                                alert(res.errorClientPayment);
+                            }else{
+                                alertify.confirm(
+                                    'رائع <i class="fas fa-check-double text-success" style="margin: 0px 3px;"></i>', 
+                                    `<span class="text-center">
+                                        <span class="text-danger">تمت اضافة فاتورة المبيعات بنجاح</span>
+                                        <strong class="d-block">هل تريد اضافه فاتورة مبيعات أخري</strong>
+                                    </span>`, 
+                                function(){                                
+                                    location.reload();
+    
+                                }, function(){ 
+                                    window.location.href = "{{ url('purchases') }}";
+                                }).set({
+                                    labels:{
+                                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                                        cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                                    }
+                                });
+                            }
 
-                            }, function(){ 
-                                window.location.href = "{{ url('purchases') }}";
-                            }).set({
-                                labels:{
-                                    ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
-                                    cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
-                                }
-                            });
+
                         }
                     });
 
@@ -755,9 +802,9 @@
     {{-- start general scripts --}}
     <script>
 
-        // start show div amount paid after select supplier and treasury
-        $(document).on('input', '#treasuries, #supplier', function(){
-            if( $('#treasuries').val() && $('#supplier').val() ){
+        // start show div amount paid after select clients and treasury
+        $(document).on('input', '#treasuries, #clients', function(){
+            if( $('#treasuries').val() && $('#clients').val() ){
                 $("#amount_paid").fadeIn();
 
             }else{            
@@ -765,17 +812,33 @@
             }
         });
         
-        $(document).on('input', '#supplier', function(){
+        $(document).on('input', '#clients', function(){
             if( $(this).val() ){
-                $("#supplier_div").fadeIn();
                 $("#modal_save_bill_footer").fadeIn();
 
             }else{            
-                $("#supplier_div").fadeOut();
                 $("#modal_save_bill_footer").fadeOut();
             }
         });
-        //  end show div amount paid after select supplier and treasury
+        //  end show div amount paid after select clients and treasury
+
+
+        // start when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
+        $(document).on('input', '.sale_quantity', function(){
+            const row = $(this).closest('tr');
+            const sale_quantity = row.find('.sale_quantity');
+            const quantity_all = row.find('.quantity_all');
+            
+            if(sale_quantity.val() > quantity_all.val()){
+                sale_quantity.val(1);
+                backgroundRedToSelectError(sale_quantity);
+
+                alertify.set('notifier','position', 'bottom-center');
+                alertify.set('notifier','delay', 3);
+                alertify.error("كمية المنتج المباعة أكبر من المتوفرة  في المخزن");
+            }
+        });
+        // end when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
 
     </script>
     {{-- end general scripts --}}

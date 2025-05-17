@@ -286,7 +286,8 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
     // Get Info Of client || supplier || treasury || store || product || transfer || expense
     Route::group(['prefix' => 'get_info'] , function (){
-        Route::get('/client_or_supplier/{id}' , 'GetInfoController@client_or_supplier');
+        Route::get('/supplierInfo/{id}' , 'GetInfoController@supplierInfo');
+        Route::get('/clientInfo/{id}' , 'GetInfoController@clientInfo');
         Route::get('/treasury/{id}' , 'GetInfoController@treasury');
     });
     // Get Info Of client || supplier || treasury || store || product || transfer || expense
@@ -299,19 +300,60 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/create' , 'PurchaseBillController@create');
         Route::post('/store' , 'PurchaseBillController@store');
         Route::get('/edit/{id}' , 'PurchaseBillController@edit');
+        Route::get('/show/{id}' , 'PurchaseBillController@show');
         Route::post('/update/{id}' , 'PurchaseBillController@update');
         Route::get('/destroy/{id}' , 'PurchaseBillController@destroy');
         
         Route::get('datatable' , 'PurchaseBillController@datatable');
+
+        //تقرير عن فواتير مشتريات  
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsPurchaseBillsController@index');
+            Route::post('result' , 'ReportsPurchaseBillsController@result');
+            Route::get('result/pdf' , 'ReportsPurchaseBillsController@result_pdf');
+            Route::get('result/pdf/{id}' , 'ReportsPurchaseBillsController@result_pdf_internal');
+        });
+    });
+
+    
+    // sales Routes
+    Route::group(['prefix' => 'sales'] , function (){
+        Route::get('/' , 'SaleBillController@index');
+        Route::get('/create' , 'SaleBillController@create');
+       
+        Route::post('/store' , 'SaleBillController@store');
+       
+        Route::get('/edit/{id}' , 'SaleBillController@edit');
+        Route::get('/show/{id}' , 'SaleBillController@show');
+        Route::post('/update/{id}' , 'SaleBillController@update');
+        Route::get('/destroy/{id}' , 'SaleBillController@destroy');
+        
+        Route::get('datatable' , 'SaleBillController@datatable');
+        
+        //تقرير عن فواتير مبيعات  
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsSaleBillsController@index');
+            Route::post('result' , 'ReportsSaleBillsController@result');
+            Route::get('result/pdf' , 'ReportsSaleBillsController@result_pdf');
+            Route::get('result/pdf/{id}' , 'ReportsSaleBillsController@result_pdf_internal');
+            
+            Route::get('print_receipt/{id}', 'SaleBillController@print_receipt'); // طباعة ريسيت فاتورة البيع
+        });
     });
     
     
     
     // search_products Routes
     Route::group(['prefix' => 'search_products'] , function (){
-        Route::get('/{data}' , 'SearchProducts@search_products');
+        Route::get('/{data}' , 'SearchController@search_products');
     });
-    Route::get('search_products_by_selectize' , 'SearchProducts@search_products_by_selectize');
+
+
+
+    // start get all products contains char this search
+    Route::get('search_products_by_selectize' , 'SearchController@search_products_by_selectize');
+    Route::get('search_clients_by_selectize' , 'SearchController@search_clients_by_selectize');
+    // end get all products contains char this search
 
 
 
@@ -453,30 +495,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
     //     Route::post('/update/{id}/{internal_code}' , 'ProductsController@update');
     //     // Route::get('/destroy/{id}' , 'ProductsController@destroy');
     // });
-
-
-    // Purchases
-    //Route::group(['prefix' => 'purchases'] , function (){
-    //    Route::get('/', 'PurchasesController@index');
-    //    Route::get('/list', 'PurchasesController@list');
-    //    Route::get('/getPurchaseBillsByBranchAndDates/{id}/{from?}/{to?}' , 'PurchasesController@getPurchaseBillsByBranchAndDates');
-
-    //    Route::get('/edit/{id}', 'PurchasesController@edit');
-    //    Route::post('/update/{id}', 'PurchasesController@update');
-
-    //    Route::get('/view/{id}', 'PurchasesController@view');
-    //    Route::get('/print/{id}', 'PurchasesController@print');
-
-    //    Route::get('/get_all_data_by_branch/{id}' , 'PurchasesController@getAllDataByBranch');
-    //    Route::post('/store' , 'PurchasesController@store');
-
-    //    Route::get('/getStatusTreasuries/{id}' , 'PurchasesController@getStatusTreasuries');
-    //    Route::get('/getStatusPlaces/{id}' , 'PurchasesController@getStatusPlaces');
-
-        // Route::get('/edit/{id}' , 'ProductCategoryController@edit');
-        // Route::post('/update/{id}' , 'ProductCategoryController@update');
-        // Route::get('/destroy/{id}' , 'ProductCategoryController@destroy');
-    //});
 
     // pos
     //Route::group(['prefix' => 'sales'] , function (){

@@ -140,13 +140,12 @@ class ProductController extends Controller
                     'num_order' => ($lastNumId+1), 
                     'type' => 'رصيد اول مدة للصنف',
                     'year_id' => $this->currentFinancialYear(),
-                    'bill_head_id' => 0,
-                    'bill_body_id' => 0,
+                    'bill_id' => 0,
                     'product_id' => $getProductId,
                     'sell_price_small_unit' => request('sell_price_small_unit'),
                     'last_cost_price_small_unit' => request('last_cost_price_small_unit'),
                     'avg_cost_price_small_unit' => request('last_cost_price_small_unit'),
-                    'current_qty_small_unit' => request('firstPeriodCount') ?? 0,
+                    'quantity_small_unit' => request('firstPeriodCount') ?? 0,
                     'transfer_from' => null,
                     'transfer_to' => null,
                     'transfer_quantity' => null,
@@ -346,7 +345,7 @@ class ProductController extends Controller
                         'sell_price_small_unit' => request('sell_price_small_unit'),
                         'last_cost_price_small_unit' => request('last_cost_price_small_unit'),
                         'avg_cost_price_small_unit' => request('last_cost_price_small_unit'),
-                        'current_qty_small_unit' => request('firstPeriodCount') ?? 0,
+                        'quantity_small_unit' => request('firstPeriodCount') ?? 0,
                         'transfer_quantity' => null,
                         'date' => request('date') === null ? date('Y-m-d') : request('date'),
                         'updated_at' => now()
@@ -432,8 +431,8 @@ class ProductController extends Controller
             ->addColumn('category', function($res){
                 return $res->category_name;
             })
-            ->addColumn('current_qty_small_unit', function($res){
-                return '<strong>'.display_number($res->current_qty_small_unit).'</strong>';
+            ->addColumn('quantity_small_unit', function($res){
+                return '<strong>'.display_number($res->quantity_small_unit).'</strong>';
             })
             ->addColumn('image', function($res){
                 return '
@@ -460,7 +459,7 @@ class ProductController extends Controller
                     //    <i class="fa fa-trash"></i>
                     //</button>
             })
-            ->rawColumns(['id', 'name', 'sell_price_small_unit', 'last_cost_price_small_unit', 'units', 'category', 'current_qty_small_unit', 'image', 'status', 'action'])
+            ->rawColumns(['id', 'name', 'sell_price_small_unit', 'last_cost_price_small_unit', 'units', 'category', 'quantity_small_unit', 'image', 'status', 'action'])
             ->toJson();
     }
 }

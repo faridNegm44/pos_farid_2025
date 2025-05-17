@@ -95,6 +95,35 @@
                               </div>
                             </div>
                           </div>
+                          
+                          
+                          
+                          
+                          <br>
+                          <h5 style="text-decoration: underline;font-weight: bold;">معلومات أخري</h5>
+                          <div class="col-lg-12">
+                            <label for="policy" class="main-content-label tx-11 tx-medium tx-gray-600">سياسة مكتوبة بالريسيت</label>
+                            <textarea name="policy" class="form-control" placeholder="سياسة مكتوبة بالريسيت" style="min-height: 100px;">{!! $find['policy'] !!}</textarea>
+                            <div>
+                              <bold class="text-danger" id="errors-policy" style="display: none;"></bold>
+                            </div>
+                          </div>
+                          
+                          {{--<h5 style="text-decoration: underline;font-weight: bold;">معلومات أخري</h5>
+                          <div class="row row-xs">
+                            <div class="col-lg-3">
+                              <label for="cost_price" class="main-content-label tx-11 tx-medium tx-gray-600">طريقه حساب التكلفة</label>
+
+                              <select class="form-control" placeholder="طريقه حساب التكلفة" id="cost_price" name="cost_price">
+                                <option value="1" {{ $find['cost_price'] == 1 ? 'selected' : '' }}>أخر سعر تكلفة</option>
+                                <option value="2" {{ $find['cost_price'] == 2 ? 'selected' : '' }}>متوسط سعر تكلفة</option>
+                              </select>
+                              <div>
+                                <bold class="text-danger" id="errors-cost_price" style="display: none;"></bold>
+                              </div>
+                            </div>
+                            
+                          </div>--}}
                         </div>
 
 
