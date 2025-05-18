@@ -150,7 +150,7 @@
       font-size: 8px;
       border-top: 2px solid #000;
       border-bottom: 1px solid #ccc;
-      padding: 4px 0 7px;
+      padding: 4px 0;
     }
 
     .table_info thead th {
@@ -166,6 +166,15 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
+
+      @page {
+        margin: 5px;
+      }
+
+    body {
+      margin: 5px !important;
+      padding: 5px !important;
+    }
 
       .table_info thead th {
         background-color: #a5a5a5 !important;
