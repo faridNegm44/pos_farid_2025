@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 17, 2025 at 03:09 PM
+-- Generation Time: May 18, 2025 at 11:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -420,6 +420,7 @@ CREATE TABLE `sale_bills` (
   `treasury_id` int(11) DEFAULT NULL,
   `bill_tax` decimal(10,3) DEFAULT NULL,
   `bill_discount` decimal(10,3) DEFAULT NULL,
+  `extra_money` decimal(10,3) DEFAULT NULL,
   `count_items` decimal(10,3) NOT NULL,
   `total_bill_before` decimal(30,20) NOT NULL,
   `total_bill_after` decimal(30,20) NOT NULL,
@@ -430,6 +431,17 @@ CREATE TABLE `sale_bills` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sale_bills`
+--
+
+INSERT INTO `sale_bills` (`id`, `custom_bill_num`, `client_id`, `treasury_id`, `bill_tax`, `bill_discount`, `extra_money`, `count_items`, `total_bill_before`, `total_bill_after`, `custom_date`, `user_id`, `year_id`, `notes`, `created_at`, `updated_at`) VALUES
+(61, NULL, 9, 3, NULL, NULL, NULL, 1.000, 200.00000000000000000000, 200.00000000000000000000, NULL, 1, 1, NULL, '2025-05-18 07:21:43', NULL),
+(63, NULL, 9, NULL, NULL, NULL, NULL, 1.000, 300.00000000000000000000, 300.00000000000000000000, NULL, 1, 1, NULL, '2025-05-18 07:22:52', NULL),
+(64, NULL, 9, NULL, NULL, NULL, NULL, 1.000, 210.00000000000000000000, 200.00000000000000000000, NULL, 1, 1, NULL, '2025-05-18 07:23:40', NULL),
+(65, NULL, 8, 3, NULL, NULL, 50.000, 1.000, 500.00000000000000000000, 550.00000000000000000000, NULL, 1, 1, '50 عربيه شحن من السنبلاوين', '2025-05-18 07:26:12', NULL),
+(66, NULL, 8, 3, NULL, NULL, NULL, 3.000, 175.00000000000000000000, 175.00000000000000000000, NULL, 1, 1, NULL, '2025-05-18 08:00:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -556,7 +568,13 @@ INSERT INTO `store_dets` (`id`, `num_order`, `type`, `year_id`, `bill_id`, `prod
 (122, 1, 'اضافة فاتورة مشتريات', 1, 76, 11, 25.00000000000000000000, 20.00000000000000000000, 20.00000000000000000000, 2.000, 2.000, 0.000, 0.000, NULL, 40.00000000000000000000, 40.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-09 12:11:21', NULL),
 (123, 1, 'اضافة فاتورة مشتريات', 1, 76, 15, 35.00000000000000000000, 33.00000000000000000000, 33.00000000000000000000, 2.000, 2.000, 0.000, 0.000, NULL, 66.00000000000000000000, 66.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-09 12:11:21', NULL),
 (124, 1, 'اضافة فاتورة مشتريات', 1, 76, 23, 70.00000000000000000000, 60.00000000000000000000, 60.00000000000000000000, 7.000, 7.000, 0.000, 0.000, NULL, 420.00000000000000000000, 420.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-09 12:11:21', NULL),
-(172, 1, 'اضافة فاتورة مبيعات', 1, 38, 22, 500.00000000000000000000, 80.00000000000000000000, 80.00000000000000000000, 1.000, 15.000, 0.000, 0.000, NULL, 500.00000000000000000000, 500.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-17 11:20:55', NULL);
+(195, 1, 'اضافة فاتورة مبيعات', 1, 61, 22, 100.00000000000000000000, 80.00000000000000000000, 80.00000000000000000000, 2.000, 14.000, 0.000, 0.000, NULL, 200.00000000000000000000, 200.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-18 07:21:43', NULL),
+(197, 2, 'اضافة فاتورة مبيعات', 1, 63, 22, 100.00000000000000000000, 80.00000000000000000000, 80.00000000000000000000, 3.000, 11.000, 0.000, 0.000, NULL, 300.00000000000000000000, 300.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-18 07:22:52', NULL),
+(198, 3, 'اضافة فاتورة مبيعات', 1, 64, 23, 70.00000000000000000000, 60.00000000000000000000, 60.00000000000000000000, 3.000, 4.000, 0.000, 0.000, NULL, 210.00000000000000000000, 210.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-18 07:23:40', NULL),
+(199, 4, 'اضافة فاتورة مبيعات', 1, 65, 22, 100.00000000000000000000, 80.00000000000000000000, 80.00000000000000000000, 5.000, 6.000, 0.000, 0.000, NULL, 500.00000000000000000000, 500.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-18 07:26:12', NULL),
+(200, 5, 'اضافة فاتورة مبيعات', 1, 66, 5, 30.00000000000000000000, NULL, NULL, 1.000, 14.000, 0.000, 0.000, NULL, 30.00000000000000000000, 30.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-18 08:00:22', NULL),
+(201, 5, 'اضافة فاتورة مبيعات', 1, 66, 6, 45.00000000000000000000, NULL, NULL, 1.000, 7.000, 0.000, 0.000, NULL, 45.00000000000000000000, 45.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-18 08:00:22', NULL),
+(202, 5, 'اضافة فاتورة مبيعات', 1, 66, 22, 100.00000000000000000000, 80.00000000000000000000, 80.00000000000000000000, 1.000, 5.000, 0.000, 0.000, NULL, 100.00000000000000000000, 100.00000000000000000000, 0.000, NULL, NULL, 0.000, NULL, '2025-05-18 08:00:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -680,7 +698,11 @@ INSERT INTO `treasury_bill_dets` (`id`, `num_order`, `date`, `treasury_id`, `tre
 (71, 3, '2025-05-10', 2, 'تحويل بين خزنتين', 0, '0', 0, 905.00, 5.50, 905.00, 1.00, 2.00, NULL, 1, 1, '2025-05-10 08:41:48', NULL),
 (72, 4, '2025-05-16', 0, 'رصيد اول عميل', 0, 'رصيد اول عميل', 8, 0.00, 0.00, 0.00, NULL, NULL, NULL, 1, 1, '2025-05-16 14:23:45', NULL),
 (97, 5, '2025-05-17', 0, 'رصيد اول عميل', 0, 'رصيد اول عميل', 9, 0.00, 1000.00, 1000.00, NULL, NULL, NULL, 1, 1, '2025-05-17 09:10:41', NULL),
-(98, 6, '2025-05-17', 0, 'رصيد اول عميل', 0, 'رصيد اول عميل', 10, 0.00, -300.00, -300.00, NULL, NULL, NULL, 1, 1, '2025-05-17 09:11:06', NULL);
+(116, 4, '2025-05-18', 3, 'اذن توريد نقدية', 61, 'اضافة فاتورة مبيعات', 9, 1600.00, 1500.00, -300.00, NULL, NULL, NULL, 1, 1, '2025-05-18 07:21:43', NULL),
+(117, 1, '2025-05-18', 0, 'اضافة فاتورة مبيعات', 63, 'اضافة فاتورة مبيعات', 9, 0.00, NULL, 0.00, NULL, NULL, NULL, 1, 1, '2025-05-18 07:22:52', NULL),
+(118, 2, '2025-05-18', 0, 'اضافة فاتورة مبيعات', 64, 'اضافة فاتورة مبيعات', 9, 0.00, NULL, 200.00, NULL, NULL, NULL, 1, 1, '2025-05-18 07:23:40', NULL),
+(119, 5, '2025-05-18', 3, 'اذن توريد نقدية', 65, 'اضافة فاتورة مبيعات', 8, 2150.00, 550.00, 0.00, NULL, NULL, '50 عربيه شحن من السنبلاوين', 1, 1, '2025-05-18 07:26:12', NULL),
+(120, 6, '2025-05-18', 3, 'اذن توريد نقدية', 66, 'اضافة فاتورة مبيعات', 8, 2325.00, 175.00, 0.00, NULL, NULL, NULL, 1, 1, '2025-05-18 08:00:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -748,7 +770,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `login_barcode`, `phone`, `role`, `theme`, `address`, `nat_id`, `birth_date`, `image`, `gender`, `status`, `last_login_time`, `note`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-05-15 11:04:27', NULL, NULL, NULL, NULL, '2025-05-15 08:04:27'),
+(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-05-17 16:16:04', NULL, NULL, NULL, NULL, '2025-05-17 13:16:04'),
 (2, 'Asmaa Negm', 'asmaa@gmail.com', '$2y$10$4jTJP/oP3HUdRUS5hEmH6e94eu7LKeOfMWjXJZBLLkFHAw4fvi4QW', NULL, NULL, 1, 1, NULL, NULL, NULL, 'df_image.png', 'انثي', 0, NULL, NULL, NULL, NULL, NULL, '2025-02-19 14:05:22');
 
 --
@@ -996,7 +1018,7 @@ ALTER TABLE `purchase_bills`
 -- AUTO_INCREMENT for table `sale_bills`
 --
 ALTER TABLE `sale_bills`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -1014,7 +1036,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `store_dets`
 --
 ALTER TABLE `store_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=203;
 
 --
 -- AUTO_INCREMENT for table `taswea_products`
@@ -1032,7 +1054,7 @@ ALTER TABLE `taswea_reasons`
 -- AUTO_INCREMENT for table `treasury_bill_dets`
 --
 ALTER TABLE `treasury_bill_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT for table `units`

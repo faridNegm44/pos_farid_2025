@@ -27,6 +27,7 @@ class SearchController extends Controller
                         ->leftJoin('units as smallUnit', 'smallUnit.id', 'products.smallUnit')
                         ->leftJoin('units as bigUnit', 'bigUnit.id', 'products.bigUnit')
                         ->orderBy('nameAr', 'asc')
+                        //->where('store_dets.type', 'اضافة فاتورة مشتريات')
                         ->orderBy('store_dets.id', 'desc')
                         ->limit(50)
                         ->get([

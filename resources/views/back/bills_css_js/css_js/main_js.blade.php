@@ -292,8 +292,8 @@
         const sellPrice = $(this).closest('tr').find('.sellPrice');
         
         
-        $(this).closest('tr').find('.sale_quantity').val('');
-        $(this).closest('tr').find('.product_new_qty').val('');
+        //$(this).closest('tr').find('.sale_quantity').val('');
+        //$(this).closest('tr').find('.product_new_qty').val('');
         
         // check if class selected == big_or_small class
         if(selectedClass == 'big_unit_class'){

@@ -53,6 +53,7 @@ class SaleBillController extends Controller
             //    'custom_bill_num' => 'nullable|string',
             //    'custom_date' => 'nullable|date',
             //    'static_discount_bill' => 'nullable|numeric|min:0',
+            //    'extra_money' => 'nullable|numeric|min:0',
             //    'tax_bill' => 'nullable|numeric|min:0',
             
             //    'sale_quantity' => 'array',
@@ -85,6 +86,7 @@ class SaleBillController extends Controller
             //    'custom_bill_num' => 'رقم الفاتورة المخصص',
             //    'custom_date' => 'تاريخ الفاتورة',
             //    'static_discount_bill' => 'الخصم العام على الفاتورة',
+            //    'extra_money' => 'مصاريف إضافية',
             //    'tax_bill' => 'ضريبة الفاتورة',
             //    'sale_quantity' => 'كميات المنتجات',
             //    'sale_quantity.*' => 'الكمية لكل منتج',
@@ -99,306 +101,101 @@ class SaleBillController extends Controller
             //]);            
 
 
-            // بداية حساب نوع الخصم قيمه ام نسبة ام غير موجود وتوزيع الخصم بالتساوي علي اصناف الفاتوره
-                //$totalBillBeforeDiscount = 0;
-                //$percentageDiscountRequest = request('discount_bill');
-                //$staticDiscountRequest = request('static_discount_bill');
-                
-                //foreach( request('prod_name')  as $index => $product_id ){
-                //    $sale_quantity = (float) request('sale_quantity')[$index];
-                //    $purchasePrice = (float) request('purchasePrice')[$index];
-                    
-                //    $totalBillBeforeDiscount += ($sale_quantity * $purchasePrice);                
-                //}
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // بدايه العمليات الحسابيه الخاصه بكل منتج سواء سعر بيعه او عدد البيع او الضريبه وكذاله اجمالي سعر المنتجات كلها قبل وبعد الخصم
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-                //$percentageDiscountValue = $totalBillBeforeDiscount * ($percentageDiscountRequest / 100);
-                
-                //if($percentageDiscountRequest > 0 && $staticDiscountRequest > 0){
-                //    $totalBillAfterDiscount = $totalBillBeforeDiscount - $percentageDiscountValue;
-                    
-                //}else if($percentageDiscountRequest > 0){
-                //    $totalBillAfterDiscount = $totalBillBeforeDiscount - $percentageDiscountValue;
-                    
-                //}else if($staticDiscountRequest > 0){
-                //    $totalBillAfterDiscount = $totalBillBeforeDiscount - $staticDiscountRequest;
-                    
-                //}else{
-                //    $totalBillAfterDiscount = $totalBillBeforeDiscount;
-                    
-                //}
-            // نهاية حساب نوع الخصم قيمه ام نسبة ام غير موجود وتوزيع الخصم بالتساوي علي اصناف الفاتوره
-
-
-
-
-
-
-
-
+            $calcTotalProductsBefore = 0; // مخصص لتجميع سعر كل منتج قبل الخصم والضريبه ودمج كل الاسعار في سعر واحد 
+            $calcTotalProductsAfterBeforeFinal = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد قبل خصم الفاتوره ومصاريف اضافيه للفاتوره وضريبه الفاتورة
+            $calcTotalProductsAfter = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد 
             
+            $static_discount_bill = request('static_discount_bill'); // مخصص لخصم قيمه علي الفاتوره كلها
+            $tax_bill = request('tax_bill'); // مخصص لضريبه القيمه المضافه علي الفاتوره كلها
+            $extra_money = request('extra_money'); // مخصص للمصاريف الإضافيه
             
-            // start new sum totalBillBefore And After
-                $calcTotalProductsBefore = 0; // مخصص لتجميع سعر كل منتج قبل الخصم والضريبه ودمج كل الاسعار في سعر واحد 
-                $calcTotalProductsAfter = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد 
-                
-                foreach( request('prod_name')  as $index => $product_id ){
-                    $lastProductQuantity = DB::table('store_dets')
-                                ->where('product_id', $product_id)
-                                ->orderBy('id', 'desc')
-                                ->value('quantity_small_unit');
-                                
-                    $lastProductInfo = DB::table('store_dets')
-                                ->where('product_id', $product_id)
-                                ->orderBy('id', 'desc')
-                                ->first();
-                                
-                    $sale_quantity = (float) request('sale_quantity')[$index];
-                    //$purchasePrice = (float) request('purchasePrice')[$index];
-                    $sellPrice = (float) request('sellPrice')[$index];
-                    $discount = (float) request('prod_discount')[$index];
-                    $tax = (float) request('prod_tax')[$index];                    
-
-                    
-                    // بدايه معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري /////////////////////////////////////////////////////////////////
-                    $productInfo = DB::table('products')->where('id', $product_id)->first();
-                    $unit = (float) request('prod_units')[$index]; // مخصص لمعرفة نوع الوحده المستخدمه لكل صنف في عملية الشراء
-                    
-                    if ($unit == $productInfo->smallUnit && $sale_quantity <= $lastProductQuantity) { // التاكد من ان الكميه المباعه اقل من او تساوي الموجوده في المخزن
-                        $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
-                        $onlyQuantityThisBill = $sale_quantity;
-
-                        $calcTotalProductsBefore += $onlyQuantityThisBill * $sellPrice; // مخصص لتجميع  المنتجات كلها قبل تطبيق اي خصومات او ضرائب
-
-                        $sell_price_small_unit = $sellPrice; // سعر البيع الي جاي من فاتوره البيع 
-                        $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
-                        $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
-                        
-                        $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
-                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
-                        
-                        $calcTotalProductsAfter += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
-                                                        
-                    } else { // لو وحده المنتج المختاره في الفاتوره كبري
-                                                
-                        $product_total = ( $sale_quantity * $purchasePrice );    // اجمالي الصنف قبل سعر تكلفه
-                        $product_total_sell_price = ( $sale_quantity * $sellPrice );    // اجمالي الصنف قبل سعر بيعه
-
-                        $onlyQuantityThisBill = $sale_quantity * $productInfo->small_unit_numbers;
-                        
-                        $calcTotalProductsBefore += $onlyQuantityThisBill * $sellPrice; // مخصص لتجميع  المنتجات كلها قبل تطبيق اي خصومات او ضرائب
-
-                        $last_cost_price_small_unit = ( $product_total / $onlyQuantityThisBill );
-                        $sell_price_small_unit = ( $product_total_sell_price / $onlyQuantityThisBill );
-                        
-                        $totalQuantity = $lastProductQuantity + $onlyQuantityThisBill;
-
-                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
-
-                        $calcTotalProductsAfter += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
-
-                    }
-                    // نهاية معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري
-                }
-                
-                $getClientTypePayment = DB::table('clients_and_suppliers')->where('id', request('client_id'))->first();
-                
-                //dd($getClientTypePayment->type_payment);
-                
-                // بدايه التاكد من ان حاله العميل كاش او اجل
-                if($getClientTypePayment->type_payment == 'كاش')   // لو العميل كاش
-                {
-                    if(!request('amount_paid') || request('amount_paid') < $calcTotalProductsAfter || request('amount_paid') > $calcTotalProductsAfter){
-                        return response()->json(['errorClientPayment' => ' هذا العميل غير مصرح لة بالشراء الآجل. يجب أن يكون المبلغ المدفوع مساوي للرقم المستحق دفعة في الفاتورة']);
-                    }else{
-                        DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
-                            $lastNumId = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->max('num_order');
-            
-                            $saleBillId = DB::table('sale_bills')->insertGetId([
-                                'custom_bill_num' => request('custom_bill_num'),
-                                'client_id' => request('client_id'),
-                                'treasury_id' => request('treasury_id'),
-                                'bill_tax' => request('bill_tax'),
-                                'bill_discount' => request('static_discount_bill'),
-                                'count_items' => count(request('prod_name')),
-                                'total_bill_before' => $calcTotalProductsBefore,
-                                'total_bill_after' => $calcTotalProductsAfter,
-                                'custom_date' => request('custom_date'),
-                                'user_id' => auth()->user()->id,
-                                'year_id' => $this->currentFinancialYear(),
-                                'notes' => request('notes'),
-                                'created_at' => now()
-                            ]);
+            foreach( request('prod_name')  as $index => $product_id ){
+                $lastProductQuantity = DB::table('store_dets')
+                            ->where('product_id', $product_id)
+                            ->orderBy('id', 'desc')
+                            ->value('quantity_small_unit');
                             
-            
-                            //$calcTotalProductsAfter = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد 
-                            foreach( request('prod_name')  as $index => $product_id ){
-                                $lastProductQuantity = DB::table('store_dets')
-                                            ->where('product_id', $product_id)
-                                            ->orderBy('id', 'desc')
-                                            ->value('quantity_small_unit');
-                                            
-                                $lastProductInfo = DB::table('store_dets')
-                                            ->where('product_id', $product_id)
-                                            ->orderBy('id', 'desc')
-                                            ->first();
-                                            
-                                $sale_quantity = (float) request('sale_quantity')[$index];
-                                ////$purchasePrice = (float) request('purchasePrice')[$index];
-                                $sellPrice = (float) request('sellPrice')[$index];
-                                $discount = (float) request('prod_discount')[$index];
-                                $tax = (float) request('prod_tax')[$index];                    
-            
-                                
-                                //// بدايه معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري /////////////////////////////////////////////////////////////////
-                                $productInfo = DB::table('products')->where('id', $product_id)->first();
-                                $unit = (float) request('prod_units')[$index]; // مخصص لمعرفة نوع الوحده المستخدمه لكل صنف في عملية الشراء
-                                
-                                if ($unit == $productInfo->smallUnit && $sale_quantity <= $lastProductQuantity) { // التاكد من ان الكميه المباعه اقل من او تساوي الموجوده في المخزن
-                                    $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
-                                    $onlyQuantityThisBill = $sale_quantity;
-            
-                                    $sell_price_small_unit = $sellPrice; // سعر البيع الي جاي من فاتوره البيع 
-                                    $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
-                                    $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
-                                    
-                                    $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
-                                    $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                                    $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
-                                                  
-                                } else { // لو وحده المنتج المختاره في الفاتوره كبري
-                                                            
-                                    $product_total = ( $sale_quantity * $purchasePrice );    // اجمالي الصنف قبل سعر تكلفه
-                                    $product_total_sell_price = ( $sale_quantity * $sellPrice );    // اجمالي الصنف قبل سعر بيعه
-            
-                                    $onlyQuantityThisBill = $sale_quantity * $productInfo->small_unit_numbers;
-                                    
-                                    $last_cost_price_small_unit = ( $product_total / $onlyQuantityThisBill );
-                                    $sell_price_small_unit = ( $product_total_sell_price / $onlyQuantityThisBill );
-                                    
-                                    $totalQuantity = $lastProductQuantity + $onlyQuantityThisBill;
-            
-                                    $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                                    $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
-                                }
-                                //// نهاية معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري
-            
-            
-                                DB::table('store_dets')->insert([
-                                    'num_order' => ($lastNumId + 1),
-                                    'type' => 'اضافة فاتورة مبيعات',
-                                    'year_id' => $this->currentFinancialYear(),
-                                    'bill_id' => $saleBillId,
-                                    'product_id' => $product_id,
-                                    'sell_price_small_unit' => $sell_price_small_unit,                                            
-                                    'last_cost_price_small_unit' => $last_cost_price_small_unit,
-                                    'avg_cost_price_small_unit' => $avg_cost_price_small_unit, 
-                                    'product_bill_quantity' => $onlyQuantityThisBill,
-                                    'quantity_small_unit' => $totalQuantity,
-                                    'tax' => request('prod_tax')[$index],
-                                    'discount' => request('prod_discount')[$index],
-                                    'total_before' => $product_total,
-                                    'total_after' => $after_tax,
-                                    'return_quantity' => 0,
-                                    'transfer_from' => null,
-                                    'transfer_to' => null,
-                                    'transfer_quantity' => 0,
-                                    'date' => request('custom_date'),
-                                    'created_at' => now()
-                                ]);
-                                
-                            } // End foreach to request('prod_name')         
-            
-                            // لو العميل الاجل دفع فلوس واختار خزنة 
-                                if( request('treasury_id') && request('amount_paid')){
-                                    $lastAmountOfTreasury = DB::table('treasury_bill_dets')
-                                                    ->where('treasury_id', request('treasury_id'))
-                                                    ->orderBy('id', 'desc')
-                                                    ->value('treasury_money_after');
-            
-                                    $amount_paid = (float) request('amount_paid');
-                                
-                                    $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اذن توريد نقدية')->max('num_order');
-                                    
-                                    $lastRecordClient = DB::table('treasury_bill_dets')
-                                                            ->where('client_supplier_id', request('client_id'))
-                                                            ->orderBy('id', 'desc')
-                                                            ->first();
-                                                    
-                                    if($lastRecordClient->remaining_money >= 0){
-                                        $minusTotalBillAfterFromAmountPaid = $calcTotalProductsAfter - $amount_paid;
-                                        $userValue = $minusTotalBillAfterFromAmountPaid;                                    
-                                    }else{
-                                        $minusTotalBillAfterFromAmountPaid = $calcTotalProductsAfter - $amount_paid;                                    
-                                        $userValue = ( $lastRecordClient->remaining_money + $minusTotalBillAfterFromAmountPaid );
-                                    }
-                                                                            
-                                    DB::table('treasury_bill_dets')->insert([
-                                        'num_order' => ($lastNumIdTreasuryDets+1), 
-                                        'date' => Carbon::now(),
-                                        'treasury_id' => request('treasury_id'), 
-                                        'treasury_type' => 'اذن توريد نقدية', 
-                                        'bill_id' => $saleBillId, 
-                                        'bill_type' => 'اضافة فاتورة مبيعات', 
-                                        'client_supplier_id' => request('client_id'), 
-                                        'treasury_money_after' => ($lastAmountOfTreasury + $amount_paid), 
-                                        'amount_money' => 0, 
-                                        'remaining_money' => $userValue, 
-                                        'transaction_from' => null, 
-                                        'transaction_to' => null, 
-                                        'notes' => request('notes'), 
-                                        'user_id' => auth()->user()->id, 
-                                        'year_id' => $this->currentFinancialYear(),
-                                        'created_at' => now()
-                                    ]);
-                                    
-                                }elseif(!request('treasury_id') && !request('amount_paid')){ //  لو العميل اجل مدفعش فلوس ول يقم باختيار خزينة 
-                                    $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اضافة فاتورة مبيعات')->max('num_order'); 
-                                    $lastRecordClient = DB::table('treasury_bill_dets')
-                                                            ->where('client_supplier_id', request('client_id'))
-                                                            ->orderBy('id', 'desc')
-                                                            ->first();
-                                                    
-                                    if($lastRecordClient->remaining_money >= 0){
-                                        $userValue = $calcTotalProductsAfter + $lastRecordClient->remaining_money;                                    
-                                    }else{                                   
-                                        $userValue = ( $lastRecordClient->remaining_money + $calcTotalProductsAfter );
-                                    }
-                                                                            
-                                    DB::table('treasury_bill_dets')->insert([
-                                        'num_order' => ($lastNumIdTreasuryDets+1), 
-                                        'date' => Carbon::now(),
-                                        'treasury_id' => 0, 
-                                        'treasury_type' => 'اضافة فاتورة مبيعات', 
-                                        'bill_id' => $saleBillId, 
-                                        'bill_type' => 'اضافة فاتورة مبيعات', 
-                                        'client_supplier_id' => request('client_id'), 
-                                        'remaining_money' => $userValue, 
-                                        'notes' => request('notes'), 
-                                        'user_id' => auth()->user()->id, 
-                                        'year_id' => $this->currentFinancialYear(),
-                                        'created_at' => now()
-                                    ]);
-                                }
-                            // end check if paied money of this bill or not لو دفعت فلوس للعميل هخصمها 
-                        });
-                    }
+                $lastProductInfo = DB::table('store_dets')
+                            ->where('product_id', $product_id)
+                            ->orderBy('id', 'desc')
+                            ->first();
+                            
+                $sale_quantity = (float) request('sale_quantity')[$index];
+                $sellPrice = (float) request('sellPrice')[$index];
+                $discount = (float) request('prod_discount')[$index];
+                $tax = (float) request('prod_tax')[$index];                    
+
+                
+                $productInfo = DB::table('products')->where('id', $product_id)->first();
+                if ($sale_quantity <= $lastProductQuantity) { // التاكد من ان الكميه المباعه اقل من او تساوي الموجوده في المخزن
+                    $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
+                    $onlyQuantityThisBill = $sale_quantity;
+
+                    $calcTotalProductsBefore += $onlyQuantityThisBill * $sellPrice; // مخصص لتجميع  المنتجات كلها قبل تطبيق اي خصومات او ضرائب
+
+                    $sell_price_small_unit = $sellPrice; // سعر البيع الي جاي من فاتوره البيع 
+                    $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
+                    $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
                     
-                    ///////////////////////////////////////////////////////////////////////////////  لو العميل اجل
-                    ///////////////////////////////////////////////////////////////////////////////  لو العميل اجل
-                }elseif($getClientTypePayment->type_payment == 'آجل'){  // لو العميل اجل
+                    $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
+                    $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
+                    $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+
                     
+                    $calcTotalProductsAfterBeforeFinal += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
+                    
+                    $afterMinusStaticDiscount = $calcTotalProductsAfterBeforeFinal - $static_discount_bill ;
+                    $afterPlusExtraMoney = $afterMinusStaticDiscount + $extra_money ;
+                    $afterPlusTaxBill = $afterPlusExtraMoney + ($afterPlusExtraMoney * $tax_bill / 100) ;
+                    $calcTotalProductsAfter = $afterPlusTaxBill;    //  اجمالي سعر المنتجات بعد الخصم والضريبة لكل منتج + خصم ومصاريف اضافيه وضريبه الفاتوره كامله
+                                                    
+                }elseif($sale_quantity > $lastProductQuantity){
+                    $sale_quantity_big_than_stock = sprintf(
+                        '(%s) كمية المنتج المباعة أكبر من الكمية المتوفرة في المخزن كميه المخزن (%s) بينما الكمية المباعة (%s)',
+                        $productInfo->nameAr,
+                        display_number($lastProductQuantity),
+                        $sale_quantity
+                    );
+                    return response()->json(['sale_quantity_big_than_stock' => $sale_quantity_big_than_stock]);
+                }
+
+            }
+            //dd($calcTotalProductsAfter);
+            //dd(floatval(request('amount_paid')));
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // نهاية العمليات الحسابيه الخاصه بكل منتج سواء سعر بيعه او عدد البيع او الضريبه وكذاله اجمالي سعر المنتجات كلها قبل وبعد الخصم
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+            
+
+
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // بدايه التاكد من ان حاله العميل كاش او اجل
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            $getClientTypePayment = DB::table('clients_and_suppliers')->where('id', request('client_id'))->first();                
+            if($getClientTypePayment->type_payment == 'كاش'){
+                ///////////////////////////////////////////////////////////////////////////////  لو العميل كاش
+                ///////////////////////////////////////////////////////////////////////////////  لو العميل كاش
+
+                if(request('amount_paid') === null || floatval(request('amount_paid')) !== $calcTotalProductsAfter){
+                    return response()->json(['errorClientPayment' => ' هذا العميل غير مصرح لة بالشراء الآجل. يجب أن يكون المبلغ المدفوع مساوي للرقم المستحق دفعة في الفاتورة']);
+                }else{
                     DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
                         $lastNumId = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->max('num_order');
-        
                         $saleBillId = DB::table('sale_bills')->insertGetId([
                             'custom_bill_num' => request('custom_bill_num'),
                             'client_id' => request('client_id'),
                             'treasury_id' => request('treasury_id'),
                             'bill_tax' => request('bill_tax'),
                             'bill_discount' => request('static_discount_bill'),
+                            'extra_money' => request('extra_money'),
                             'count_items' => count(request('prod_name')),
                             'total_bill_before' => $calcTotalProductsBefore,
                             'total_bill_after' => $calcTotalProductsAfter,
@@ -410,7 +207,6 @@ class SaleBillController extends Controller
                         ]);
                         
         
-                        //$calcTotalProductsAfter = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد 
                         foreach( request('prod_name')  as $index => $product_id ){
                             $lastProductQuantity = DB::table('store_dets')
                                         ->where('product_id', $product_id)
@@ -423,46 +219,23 @@ class SaleBillController extends Controller
                                         ->first();
                                         
                             $sale_quantity = (float) request('sale_quantity')[$index];
-                            ////$purchasePrice = (float) request('purchasePrice')[$index];
                             $sellPrice = (float) request('sellPrice')[$index];
                             $discount = (float) request('prod_discount')[$index];
                             $tax = (float) request('prod_tax')[$index];                    
         
+                            // بدايه حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
+                            $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
+                            $onlyQuantityThisBill = $sale_quantity;
+    
+                            $sell_price_small_unit = $sellPrice; // سعر البيع الي جاي من فاتوره البيع 
+                            $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
+                            $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
                             
-                            //// بدايه معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري /////////////////////////////////////////////////////////////////
-                            $productInfo = DB::table('products')->where('id', $product_id)->first();
-                            $unit = (float) request('prod_units')[$index]; // مخصص لمعرفة نوع الوحده المستخدمه لكل صنف في عملية الشراء
+                            $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
+                            $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
+                            $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                            // نهاية حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
                             
-                            if ($unit == $productInfo->smallUnit && $sale_quantity <= $lastProductQuantity) { // التاكد من ان الكميه المباعه اقل من او تساوي الموجوده في المخزن
-                                $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
-                                $onlyQuantityThisBill = $sale_quantity;
-        
-                                $sell_price_small_unit = $sellPrice; // سعر البيع الي جاي من فاتوره البيع 
-                                $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
-                                $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
-                                
-                                $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
-                                $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                                $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
-                                              
-                            } else { // لو وحده المنتج المختاره في الفاتوره كبري
-                                                        
-                                $product_total = ( $sale_quantity * $purchasePrice );    // اجمالي الصنف قبل سعر تكلفه
-                                $product_total_sell_price = ( $sale_quantity * $sellPrice );    // اجمالي الصنف قبل سعر بيعه
-        
-                                $onlyQuantityThisBill = $sale_quantity * $productInfo->small_unit_numbers;
-                                
-                                $last_cost_price_small_unit = ( $product_total / $onlyQuantityThisBill );
-                                $sell_price_small_unit = ( $product_total_sell_price / $onlyQuantityThisBill );
-                                
-                                $totalQuantity = $lastProductQuantity + $onlyQuantityThisBill;
-        
-                                $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                                $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
-                            }
-                            //// نهاية معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري
-        
-        
                             DB::table('store_dets')->insert([
                                 'num_order' => ($lastNumId + 1),
                                 'type' => 'اضافة فاتورة مبيعات',
@@ -488,81 +261,180 @@ class SaleBillController extends Controller
                             
                         } // End foreach to request('prod_name')         
         
-                        // لو العميل الاجل دفع فلوس واختار خزنة 
-                            if( request('treasury_id') && request('amount_paid')){
-                                $lastAmountOfTreasury = DB::table('treasury_bill_dets')
-                                                ->where('treasury_id', request('treasury_id'))
+                        $lastAmountOfTreasury = DB::table('treasury_bill_dets')
+                                        ->where('treasury_id', request('treasury_id'))
+                                        ->orderBy('id', 'desc')
+                                        ->value('treasury_money_after');
+
+                        $amount_paid = (float) request('amount_paid');
+                    
+                        $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اذن توريد نقدية')->max('num_order');
+                        
+                        $lastRecordClient = DB::table('treasury_bill_dets')
+                                                ->where('client_supplier_id', request('client_id'))
                                                 ->orderBy('id', 'desc')
-                                                ->value('treasury_money_after');
-        
-                                $amount_paid = (float) request('amount_paid');
-                            
-                                $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اذن توريد نقدية')->max('num_order');
-                                
-                                $lastRecordClient = DB::table('treasury_bill_dets')
-                                                        ->where('client_supplier_id', request('client_id'))
-                                                        ->orderBy('id', 'desc')
-                                                        ->first();
-                                                
-                                if($lastRecordClient->remaining_money >= 0){
-                                    $sumTotalBillAfterWithRemainingMoney = $calcTotalProductsAfter + $lastRecordClient->remaining_money;
-                                    $userValue = $sumTotalBillAfterWithRemainingMoney - $amount_paid;                                    
-                                }else{
-                                    $sumTotalBillAfterWithRemainingMoney = $calcTotalProductsAfter + $lastRecordClient->remaining_money;
-                                    $userValue = $sumTotalBillAfterWithRemainingMoney - $amount_paid;                                    
-                                }
-                                                                        
-                                DB::table('treasury_bill_dets')->insert([
-                                    'num_order' => ($lastNumIdTreasuryDets+1), 
-                                    'date' => Carbon::now(),
-                                    'treasury_id' => request('treasury_id'), 
-                                    'treasury_type' => 'اذن توريد نقدية', 
-                                    'bill_id' => $saleBillId, 
-                                    'bill_type' => 'اضافة فاتورة مبيعات', 
-                                    'client_supplier_id' => request('client_id'), 
-                                    'treasury_money_after' => ($lastAmountOfTreasury + $amount_paid), 
-                                    'amount_money' => 0, 
-                                    'remaining_money' => $userValue, 
-                                    'transaction_from' => null, 
-                                    'transaction_to' => null, 
-                                    'notes' => request('notes'), 
-                                    'user_id' => auth()->user()->id, 
-                                    'year_id' => $this->currentFinancialYear(),
-                                    'created_at' => now()
-                                ]);
-                                
-                            }elseif(!request('treasury_id') && !request('amount_paid')){ //  لو العميل اجل مدفعش فلوس ول يقم باختيار خزينة 
-                                $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اضافة فاتورة مبيعات')->max('num_order'); 
-                                $lastRecordClient = DB::table('treasury_bill_dets')
-                                                        ->where('client_supplier_id', request('client_id'))
-                                                        ->orderBy('id', 'desc')
-                                                        ->first();
-                                                
-                                if($lastRecordClient->remaining_money >= 0){
-                                    $userValue = $calcTotalProductsAfter + $lastRecordClient->remaining_money;                                    
-                                }else{                                   
-                                    $userValue = ( $lastRecordClient->remaining_money + $calcTotalProductsAfter );
-                                }
-                                                                        
-                                DB::table('treasury_bill_dets')->insert([
-                                    'num_order' => ($lastNumIdTreasuryDets+1), 
-                                    'date' => Carbon::now(),
-                                    'treasury_id' => 0, 
-                                    'treasury_type' => 'اضافة فاتورة مبيعات', 
-                                    'bill_id' => $saleBillId, 
-                                    'bill_type' => 'اضافة فاتورة مبيعات', 
-                                    'client_supplier_id' => request('client_id'), 
-                                    'remaining_money' => $userValue, 
-                                    'notes' => request('notes'), 
-                                    'user_id' => auth()->user()->id, 
-                                    'year_id' => $this->currentFinancialYear(),
-                                    'created_at' => now()
-                                ]);
-                            }
-                        // end check if paied money of this bill or not لو دفعت فلوس للعميل هخصمها 
+                                                ->first();
+                                                                
+                        // عمل اذن توريد نقدية للعميل الكاش
+                        DB::table('treasury_bill_dets')->insert([
+                            'num_order' => ($lastNumIdTreasuryDets+1), 
+                            'date' => Carbon::now(),
+                            'treasury_id' => request('treasury_id'), 
+                            'treasury_type' => 'اذن توريد نقدية', 
+                            'bill_id' => $saleBillId, 
+                            'bill_type' => 'اضافة فاتورة مبيعات', 
+                            'client_supplier_id' => request('client_id'), 
+                            'treasury_money_after' => ($lastAmountOfTreasury + $amount_paid), 
+                            'amount_money' => $amount_paid, 
+                            'remaining_money' => $calcTotalProductsAfter - $amount_paid, 
+                            'transaction_from' => null, 
+                            'transaction_to' => null, 
+                            'notes' => request('notes'), 
+                            'user_id' => auth()->user()->id, 
+                            'year_id' => $this->currentFinancialYear(),
+                            'created_at' => now()
+                        ]);
+                        
                     });
-                }      
-            // end new sum totalBillBefore And After         
+                }
+                
+
+            }elseif($getClientTypePayment->type_payment == 'آجل'){
+                ///////////////////////////////////////////////////////////////////////////////  لو العميل اجل
+                ///////////////////////////////////////////////////////////////////////////////  لو العميل اجل
+                
+                DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
+                    $lastNumId = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->max('num_order');
+    
+                    $saleBillId = DB::table('sale_bills')->insertGetId([
+                        'custom_bill_num' => request('custom_bill_num'),
+                        'client_id' => request('client_id'),
+                        'treasury_id' => request('treasury_id'),
+                        'bill_tax' => request('bill_tax'),
+                        'extra_money' => request('extra_money'),
+                        'count_items' => count(request('prod_name')),
+                        'total_bill_before' => $calcTotalProductsBefore,
+                        'total_bill_after' => $calcTotalProductsAfter,
+                        'custom_date' => request('custom_date'),
+                        'user_id' => auth()->user()->id,
+                        'year_id' => $this->currentFinancialYear(),
+                        'notes' => request('notes'),
+                        'created_at' => now()
+                    ]);
+                    
+                    foreach( request('prod_name')  as $index => $product_id ){
+                        $lastProductQuantity = DB::table('store_dets')
+                                    ->where('product_id', $product_id)
+                                    ->orderBy('id', 'desc')
+                                    ->value('quantity_small_unit');
+                                    
+                        $lastProductInfo = DB::table('store_dets')
+                                    ->where('product_id', $product_id)
+                                    ->orderBy('id', 'desc')
+                                    ->first();
+                                    
+                        $sale_quantity = (float) request('sale_quantity')[$index];
+                        $sellPrice = (float) request('sellPrice')[$index];
+                        $discount = (float) request('prod_discount')[$index];
+                        $tax = (float) request('prod_tax')[$index];                    
+    
+                        // بدايه حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
+                        $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
+                        $onlyQuantityThisBill = $sale_quantity;
+
+                        $sell_price_small_unit = $sellPrice; // سعر البيع الي جاي من فاتوره البيع 
+                        $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
+                        $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
+                        
+                        $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
+                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
+                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                        // نهاية حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
+
+                        
+                        DB::table('store_dets')->insert([
+                            'num_order' => ($lastNumId + 1),
+                            'type' => 'اضافة فاتورة مبيعات',
+                            'year_id' => $this->currentFinancialYear(),
+                            'bill_id' => $saleBillId,
+                            'product_id' => $product_id,
+                            'sell_price_small_unit' => $sell_price_small_unit,                                            
+                            'last_cost_price_small_unit' => $last_cost_price_small_unit,
+                            'avg_cost_price_small_unit' => $avg_cost_price_small_unit, 
+                            'product_bill_quantity' => $onlyQuantityThisBill,
+                            'quantity_small_unit' => $totalQuantity,
+                            'tax' => request('prod_tax')[$index],
+                            'discount' => request('prod_discount')[$index],
+                            'total_before' => $product_total,
+                            'total_after' => $after_tax,
+                            'return_quantity' => 0,
+                            'transfer_from' => null,
+                            'transfer_to' => null,
+                            'transfer_quantity' => 0,
+                            'date' => request('custom_date'),
+                            'created_at' => now()
+                        ]);
+                        
+                    } // End foreach to request('prod_name')         
+    
+                    // لو العميل الاجل دفع فلوس واختار خزنة 
+                        if( request('treasury_id') && request('amount_paid')){
+                            $lastAmountOfTreasury = DB::table('treasury_bill_dets')->where('treasury_id', request('treasury_id'))->orderBy('id', 'desc')->value('treasury_money_after');
+    
+                            $amount_paid = (float) request('amount_paid');
+                            $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اذن توريد نقدية')->max('num_order');
+                            $lastRecordClient = DB::table('treasury_bill_dets')->where('client_supplier_id', request('client_id'))->orderBy('id', 'desc')->first();
+                                            
+                            $sumTotalBillAfterWithRemainingMoney = $calcTotalProductsAfter + $lastRecordClient->remaining_money;
+                            $userValue = $sumTotalBillAfterWithRemainingMoney - $amount_paid;                                    
+                                      
+                            DB::table('treasury_bill_dets')->insert([
+                                'num_order' => ($lastNumIdTreasuryDets+1), 
+                                'date' => Carbon::now(),
+                                'treasury_id' => request('treasury_id'), 
+                                'treasury_type' => 'اذن توريد نقدية', 
+                                'bill_id' => $saleBillId, 
+                                'bill_type' => 'اضافة فاتورة مبيعات', 
+                                'client_supplier_id' => request('client_id'), 
+                                'treasury_money_after' => ($lastAmountOfTreasury + $amount_paid), 
+                                'amount_money' => $amount_paid, 
+                                'remaining_money' => $userValue, 
+                                'transaction_from' => null, 
+                                'transaction_to' => null, 
+                                'notes' => request('notes'), 
+                                'user_id' => auth()->user()->id, 
+                                'year_id' => $this->currentFinancialYear(),
+                                'created_at' => now()
+                            ]);
+                            
+                        }elseif(!request('treasury_id') && !request('amount_paid')){ //  لو العميل اجل مدفعش فلوس ول يقم باختيار خزينة                            
+                            $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اضافة فاتورة مبيعات')->max('num_order'); 
+                            $lastRecordClient = DB::table('treasury_bill_dets')->where('client_supplier_id', request('client_id'))->orderBy('id', 'desc')->first();
+                                            
+                            $userValue = $calcTotalProductsAfter + $lastRecordClient->remaining_money;                                    
+                                                                        
+                            DB::table('treasury_bill_dets')->insert([
+                                'num_order' => ($lastNumIdTreasuryDets+1), 
+                                'date' => Carbon::now(),
+                                'treasury_id' => 0, 
+                                'treasury_type' => 'اضافة فاتورة مبيعات', 
+                                'bill_id' => $saleBillId, 
+                                'bill_type' => 'اضافة فاتورة مبيعات', 
+                                'client_supplier_id' => request('client_id'), 
+                                'remaining_money' => $userValue, 
+                                'notes' => request('notes'), 
+                                'user_id' => auth()->user()->id, 
+                                'year_id' => $this->currentFinancialYear(),
+                                'created_at' => now()
+                            ]);
+                        }
+                    // end check if paied money of this bill or not لو دفعت فلوس للعميل هخصمها 
+                });
+            }    
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // نهاية التاكد من ان حاله العميل كاش او اجل
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         }
     }
 
@@ -731,33 +603,36 @@ class SaleBillController extends Controller
     public function print_receipt($id)
     {
         //$settings = Setting::first();
-        $pageNameAr = 'تفاصيل فاتورة بيع رقم: ';
+        $pageNameAr = 'بيان بيع ';
         $pageNameEn = 'sales';
-        //$SalesHeader = SalesHeader::where('id', $id)
-        //                            ->with('SalesHeaderRelSalesContent', 'BranchRelSalesHeader', 'ClientRelSalesHeader')
-        //                            ->first();
+        
+        $saleBill = DB::table('sale_bills')->where('sale_bills.id', $id)
+                                            ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
+                                            ->leftJoin('products', 'products.id', 'store_dets.product_id')
+                                            ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                                            ->leftJoin('units', 'units.id', 'products.smallUnit')
+                                            ->select(
+                                                'store_dets.product_id', 'store_dets.sell_price_small_unit', 'store_dets.product_bill_quantity', 'store_dets.total_before as productTotalBefore', 'store_dets.total_after as productTotalAfter', 'store_dets.product_id', 'store_dets.product_id',  
 
-        //$SalesContent = SalesContent::where('id', $id)->first();
-        //$SalesContentGet = SalesContent::where('sales_bill_id', $id)->get();
-        //$SalesContentCount = SalesContent::where('sales_bill_id', $id)->count();
+                                                'sale_bills.id', 'sale_bills.created_at', 'sale_bills.bill_tax', 'sale_bills.bill_discount', 'sale_bills.extra_money', 'sale_bills.count_items', 'sale_bills.total_bill_before', 'sale_bills.total_bill_after', 'sale_bills.count_items',  
 
-        //$TotalVatBefore = 0;
-        //$TotalBefore = 0;
-        //$TotalVatAfter = 0;
-        //$TotalAfter = 0;
+                                                'products.nameAr as productName', 
+                                                'products.nameAr as productName', 
 
-        //foreach ($SalesContentGet as $row) {
-        //    $TotalVatBefore += ( ($row->quantity * $row->sales_price * $row->vat) / 100 );
-        //    $TotalBefore += $row->quantity * $row->sales_price;
+                                                'clients_and_suppliers.name as clientName', 
+                                                'clients_and_suppliers.address as clientAddress', 
+                                                'clients_and_suppliers.phone as clientPhone', 
 
-        //    $TotalVatAfter += ( ($row->quantity * $row->price_after * $row->vat) / 100 );
-        //    $TotalAfter += $row->quantity * $row->price_after;
+                                                'units.name as unitName', 
+                                            )
+                                            ->get();
 
-        //}
-
-
-        // , 'SalesHeader', 'SalesContent', 'SalesContentCount', 'TotalBefore', 'TotalAfter', 'TotalVatBefore', 'TotalVatAfter'
-        return view('back.sales.print_receipt', compact('pageNameAr', 'pageNameEn'));
+                                            //return $saleBill;
+        if(count($saleBill) > 0){
+            return view('back.sales.print_receipt', compact('pageNameAr', 'pageNameEn', 'saleBill'));
+        }else{
+            return redirect('/');
+        }
 
     }
     // end print /////////////////////////////

@@ -165,20 +165,28 @@
                             <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #cccccc;background-color: #ededed;">
                                 <div class="row">
                                                                         
-                                    <p class="col-lg-6 col-12">
+                                    <p class="col-lg-4 col-12">
                                         <label for="">
-                                            ضريبة
+                                            ضريبة ق م (%)
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا."></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" name="tax_bill" placeholder="ضريبة" style="font-size: 12px;" />
+                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" name="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
                                     </p>
         
-                                    <p class="col-lg-6 col-12">
+                                    <p class="col-lg-4 col-12">
                                         <label for="">
                                             خصم قيمة
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 او 50 وهكذا."></i>
+                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
                                         </label>
                                         <input type="text" class="form-control focus_input numValid text-center" id="static_discount_bill" name="static_discount_bill" placeholder="خصم قيمة" style="font-size: 12px;" />
+                                    </p>
+                                    
+                                    <p class="col-lg-4 col-12">
+                                        <label for="">
+                                            مصاريف إضافية
+                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
+                                        </label>
+                                        <input type="text" class="form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" />
                                     </p>
                                 
                                     <p class="col-6" id="countTableTr" style="font-size: 13px;font-weight: bold;">
@@ -208,17 +216,17 @@
                                     <tr>
                                         <th>#</th>
                                         <th>حذف</th>
-                                        <th style="width: 25%;">الصنف</th>
+                                        <th style="width: 25%;max-width: 100%;">الصنف</th>
                                         <th style="width: 10%;">الوحدة</th>
-                                        <th style="width: 10%;">ك المخزن</th>
                                         <th style="width: 10%;">
                                             ك مباعة
                                             <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى التأكد من إدخال الكمية المباعة للمنتج باستخدام نفس الوحدة المحددة، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
                                         </th>
+                                        <th style="width: 10%;">ك المخزن</th>
                                         <th style="width: 10%;">س بيع</th>
                                         <th style="width: 10%;">خصم%</th>
                                         <th style="width: 10%;">ضريبة%</th>
-                                        <th style="width: 15%;">الإجمالي</th>
+                                        <th style="width: 15%;max-width: 100%;">الإجمالي</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center"></tbody>
@@ -396,8 +404,8 @@
                     if (selected) {
                         $('#accountType').text(selected.type_payment);
                         $('#client_name').text(selected.name);
-                        $('#on_him').text(selected.remaining_money >= 0 ? display_number_js(selected.remaining_money) : '');
-                        $('#for_him').text(selected.remaining_money < 0 ? display_number_js(selected.remaining_money) : '');
+                        $('#on_him').text(selected.remaining_money >= 0 ? selected.remaining_money : '');
+                        $('#for_him').text(selected.remaining_money < 0 ? selected.remaining_money : '');
 
                         alertify.set('notifier', 'position', 'bottom-center');
                         alertify.set('notifier', 'delay', 3);
@@ -511,23 +519,22 @@
                     // التاكد من ان كميه النتج في المخزن اكبر من 0
 
 
-                    let bigAndSmallUnit = '';
-                    if(bigUnit == 0){
-                        bigAndSmallUnit = `
-                            <span>${smallUnitName}</span>
-                            <input type="hidden" class='prod_units' value="${smallUnit}" name='prod_units[]'/>
-                        `;
-                    }else{
-                        bigAndSmallUnit = `
-                            <select class='prod_units' name='prod_units[]'>
-                                <option class='small_unit_class' value='${smallUnit}'>${smallUnitName}</option>    
-                                <option class='big_unit_class' value='${bigUnit}'>${bigUnitName}</option>    
-                            </select>
-                        `;
-                    }
+                    //let bigAndSmallUnit = '';
+                    //if(bigUnit == 0){
+                    //    bigAndSmallUnit = `
+                    //        <span>${smallUnitName}</span>
+                    //        <input type="hidden" class='prod_units' value="${smallUnit}" name='prod_units[]'/>
+                    //    `;
+                    //}else{
+                    //    bigAndSmallUnit = `
+                    //        <select class='prod_units' name='prod_units[]'>
+                    //            <option class='small_unit_class' value='${smallUnit}'>${smallUnitName}</option>    
+                    //            <option class='big_unit_class' value='${bigUnit}'>${bigUnitName}</option>    
+                    //        </select>
+                    //    `;
+                    //}
 
                     function appendToProductsTable() {
-                        //const bigAndSmallUnit = ``;
 
                         $('#products_table tbody').append(`
                             <tr id="tr_${productId}">
@@ -542,13 +549,13 @@
                                     <input type='hidden' name="prod_name[]" value="${productId}" />
                                 </td>
                                 <td class="">
-                                    ${bigAndSmallUnit}
+                                    ${smallUnitName}
                                     <input type='hidden' class='small_unit_numbers' value='${small_unit_numbers}' />      
                                 </td>
+                                <td><input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity[]" value="1"></td>                                
                                 <td>
                                     <input type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="${quantity_all}">                    
                                 </td>
-                                <td><input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity[]" value="1"></td>                                
                                 <td>
                                     <input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">  
                                     
@@ -631,7 +638,7 @@
                 let totalAfterTax = totalAfterDiscount + taxAmount;
                 
                 // 5. تحديث إجمالي الصف
-                row.find('.prod_total').val( display_number_js(totalAfterTax.toFixed(2)) );
+                row.find('.prod_total').val( totalAfterTax );
 
                 total += totalAfterTax;
                 subTotal += totalBeforeDiscount;
@@ -640,21 +647,26 @@
 
             let tax_bill = $("#tax_bill").val();
             let static_discount_bill = $("#static_discount_bill").val(); 
-            
-            let totalAfterDiscountBill = total - static_discount_bill;
-            
-            if(static_discount_bill > total){
-                alert('❌ لا يمكن أن يكون خصم الفاتورة أكبر من إجمالي الأصناف بعد الخصومات.');
-                $("#static_discount_bill").val(0);
-                totalAfterDiscountBill = total;
-            }
+            let extra_money = $("#extra_money").val(); 
 
-            let totalAfterTaxBill = (totalAfterDiscountBill + ( totalAfterDiscountBill * tax_bill ) / 100);
+            
+            let afterDiscountBill = total - static_discount_bill;    
+            let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money);    
+            
+            let afterTaxBill = (afterExtraMoney + ( afterExtraMoney * Number(tax_bill) ) / 100);
+
 
             // عرض الإجمالي الكلي في الـ div
-            $('.subtotal').text( display_number_js(subTotal.toFixed(2)) + ' جنية');
-            $('.total_bill_after').text( display_number_js(totalAfterTaxBill.toFixed(2)) + ' جنية');
-            $('#remaining').text( display_number_js(totalAfterTaxBill.toFixed(2)) + ' جنية');
+            $('.subtotal').text( subTotal + ' جنية');
+            $('.total_bill_after').text( afterTaxBill + ' جنية');
+            $('#remaining').text( afterTaxBill + ' جنية');
+
+
+            //if(static_discount_bill > total){
+            //    alert('❌ لا يمكن أن يكون خصم الفاتورة أكبر من إجمالي الأصناف بعد الخصومات.');
+            //    $("#static_discount_bill").val(0);
+            //    afterDiscountBill = total;
+            //}
         }
     </script>
     {{-- end function calcTotal --}}
@@ -665,7 +677,7 @@
     {{-- start when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
     <script>
         $(document).ready(function () {
-            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #static_discount_bill, #tax_bill', function () {
+            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #static_discount_bill, #tax_bill, #extra_money', function () {
                 calcTotal();
             });
         });
@@ -759,8 +771,12 @@
                         },
                         success: function(res){
 
-                            if(res.errorClientPayment){
+                            if(res.errorClientPayment){  // لمعرفه نوع التعامل مع العميل سواء كاش او اجل
                                 alert(res.errorClientPayment);
+
+                            }else if(res.sale_quantity_big_than_stock){ // لو كميه المنتج المباعه اكبر من المتوفره ف المخزن
+                                alert(res.sale_quantity_big_than_stock)
+                            
                             }else{
                                 alertify.confirm(
                                     'رائع <i class="fas fa-check-double text-success" style="margin: 0px 3px;"></i>', 
@@ -772,7 +788,7 @@
                                     location.reload();
     
                                 }, function(){ 
-                                    window.location.href = "{{ url('purchases') }}";
+                                    window.location.href = "{{ url('sales') }}";
                                 }).set({
                                     labels:{
                                         ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
@@ -824,20 +840,20 @@
 
 
         // start when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
-        $(document).on('input', '.sale_quantity', function(){
-            const row = $(this).closest('tr');
-            const sale_quantity = row.find('.sale_quantity');
-            const quantity_all = row.find('.quantity_all');
+        //$(document).on('input', '.sale_quantity', function(){
+        //    const row = $(this).closest('tr');
+        //    const sale_quantity = row.find('.sale_quantity');
+        //    const quantity_all = row.find('.quantity_all');
             
-            if(sale_quantity.val() > quantity_all.val()){
-                sale_quantity.val(1);
-                backgroundRedToSelectError(sale_quantity);
+        //    if(sale_quantity.val() > quantity_all.val()){
+        //        sale_quantity.val(1);
+        //        backgroundRedToSelectError(sale_quantity);
 
-                alertify.set('notifier','position', 'bottom-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("كمية المنتج المباعة أكبر من المتوفرة  في المخزن");
-            }
-        });
+        //        alertify.set('notifier','position', 'bottom-center');
+        //        alertify.set('notifier','delay', 3);
+        //        alertify.error("كمية المنتج المباعة أكبر من المتوفرة  في المخزن");
+        //    }
+        //});
         // end when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
 
     </script>

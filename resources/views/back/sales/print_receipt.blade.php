@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>فاتورة</title>
+  <title>{{ $pageNameAr }} {{ $saleBill[0]->id }} - {{ $saleBill[0]->clientName }} - {{ $saleBill[0]->created_at }}</title>
   <style>
     body {
       /*font-family: 'Tahoma', sans-serif;*/
@@ -199,18 +199,18 @@
 
   <!-- Customer Info -->
   <div class="customer_info">
-    <span>اسم العميل: أحمد محمد</span>
+    <span>اسم العميل: {{ $saleBill[0]->clientName }}</span>
     <br />
-    <span>عنوان العميل: الجيزة - شارع النيل</span>
+    <span>عنوان العميل: {{ $saleBill[0]->clientAddress }}</span>
     <br />
-    <span>تليفون العميل: 0100-555-6666 | 0100-777-8888</span>
+    <span>تليفون العميل: {{ $saleBill[0]->clientPhone }}</span>
     <br />
   </div>
 
   <!-- Invoice Info -->
   <div class="invoice_info">
-    <div>رقم الفاتورة: 1023</div>
-    <div>عدد الأصناف: 15</div>
+    <div>رقم الفاتورة: {{ $saleBill[0]->id }}</div>
+    <div>عدد الأصناف: {{ display_number( $saleBill[0]->count_items ) }}</div>
   </div>
 
   <!-- Table -->
@@ -226,21 +226,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>عبوة زيت نباتي نقية ممتازة</td><td>علبة</td><td>2</td><td>120</td><td>240</td></tr>
-          <tr><td>كرتونة مسحوق غسيل مركز فعال</td><td>كرتونة</td><td>1</td><td>180</td><td>180</td></tr>
-          <tr><td>زجاجة عصير طبيعي بدون مواد حافظة</td><td>كرتونة</td><td>1</td><td>70</td><td>70</td></tr>
-          <tr><td>علبة بسكويت بالشوكولاتة للأطفال</td><td>علبة</td><td>5</td><td>30</td><td>150.00</td></tr>
-          <tr><td>كيس مكرونة إيطالية عالية الجودة</td><td>علبة</td><td>1</td><td>45</td><td>45</td></tr>
-          <tr><td>كرتونة لبن بودرة كامل الدسم</td><td>كرتونة</td><td>2</td><td>90.00</td><td>180</td></tr>
-          <tr><td>علبة شاي أخضر طبيعي للتخسيس</td><td>علبة</td><td>3</td><td>40</td><td>120</td></tr>
-          <tr><td>كرتونة مياه معدنية نقية باردة</td><td>كرتونة</td><td>4</td><td>65</td><td>260</td></tr>
-          <tr><td>كرتونة عصير تفاح طبيعي مركز</td><td>كرتونة</td><td>2</td><td>45</td><td>90</td></tr>
-          <tr><td>علبة تمر فاخر معبأ يدويًا</td><td>علبة</td><td>6</td><td>35</td><td>210</td></tr>
-          <tr><td>كرتونة صابون طبي معطر للبشرة</td><td>كرتونة</td><td>1</td><td>55</td><td>55</td></tr>
-          <tr><td>علبة كاكاو ناعم للتحلية الساخنة</td><td>علبة</td><td>2</td><td>30</td><td>60</td></tr>
-          <tr><td>كرتونة دقيق أبيض نقي مخبوز</td><td>كرتونة</td><td>3</td><td>40</td><td>120</td></tr>
-          <tr><td>علبة فول سوداني مملح محمص</td><td>علبة</td><td>2</td><td>45</td><td>90</td></tr>
-          <tr><td>كرتونة عسل نحل طبيعي أصلي</td><td>كرتونة</td><td>1</td><td>50</td><td>50</td></tr>
+          @foreach ($saleBill as $product)
+            <tr>
+              <td>{{ $product->productName }}</td>
+              <td>{{ $product->unitName }}</td>
+              <td>{{ display_number( $product->product_bill_quantity ) }}</td>
+              <td>{{ display_number( $product->sell_price_small_unit ) }}</td>
+              <td>{{ display_number( $product->productTotalAfter ) }}</td>
+            </tr>  
+          @endforeach
+          
         </tbody>
       </table>      
   </div>
@@ -249,27 +244,37 @@
   <div class="totals_section">
     <table>
       <tr>
-        <td class="label">الإجمالي قبل الخصم</td>
-        <td class="value">1,320</td>
+        <td class="label">الإجمالي قبل</td>
+        <td class="value">{{ display_number( $saleBill[0]->total_bill_before ) }}</td>
       </tr>
+      @if ($saleBill[0]->extra_money)
+        <tr>
+          <td class="label">مصاريف اضافية</td>
+          <td class="value">{{ display_number( $saleBill[0]->extra_money ) }}</td>
+        </tr>
+      @endif
+      @if ($saleBill[0]->bill_discount)
+        <tr>
+          <td class="label">قيمة الخصم</td>
+          <td class="value">{{ display_number( $saleBill[0]->bill_discount ) }}</td>
+        </tr>
+      @endif
+      @if ($saleBill[0]->bill_discount)
+        <tr>
+          <td class="label">الضريبة</td>
+          <td class="value">{{ display_number( $saleBill[0]->bill_discount ) }}</td>
+        </tr>
+      @endif
       <tr>
-        <td class="label">قيمة الخصم</td>
-        <td class="value">100</td>
-      </tr>
-      <tr>
-        <td class="label">الضريبة</td>
-        <td class="value">122</td>
-      </tr>
-      <tr>
-        <td class="label final_total" style="font-size: 14px;">الإجمالي بعد الخصم والضريبة</td>
-        <td class="value" style="font-size: 18px;font-weight: bold;">50,000</td>
+        <td class="label final_total" style="font-size: 14px;">الإجمالي بعد</td>
+        <td class="value" style="font-size: 18px;font-weight: bold;">{{ display_number( $saleBill[0]->total_bill_after ) }}</td>
       </tr>
     </table>
   </div>
 
   <div class="date_info">
-    <div>تاريخ الفاتورة: {{ date('Y-m-d h:m:s a') }}</div>
-    <div>تاريخ الطباعة: {{ date('Y-m-d h:m:s a') }}</div>
+    <div>تاريخ الفاتورة: {{ \Carbon\Carbon::parse($saleBill[0]->created_at)->format('Y-m-d h:i:s a') }}</div>
+    <div>تاريخ الطباعة: {{ date('Y-m-d h:i:s a') }}</div>
   </div>
 
   <!-- Policy -->

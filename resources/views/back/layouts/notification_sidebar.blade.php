@@ -27,14 +27,14 @@
                     @foreach (getLastSaleBills() as $item)    
                         <div class="list d-flex align-items-center border-bottom p-1">
                             <a href="{{ url('sales/report/print_receipt/'.$item->id) }}" target="_blank" class="wrapper w-100 mr-3" href="#" >
-                                <p class="mb-0 d-flex ">
+                                <p class="mb-0 d-flex" style="font-size: 11px;">
                                     ( {{ $item->id }} ) <b>{{ $item->clientName }}</b>
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div class=" align-items-center">                                    
+                                    <div class=" align-items-center" style="font-size: 12px;">                                    
                                         <small class="text-danger d-block ml-auto">
                                             <i class="fa fa-money-bill-alt text-muted ml-1"></i>
-                                            اجمالي الفاتورة: {{ display_number($item->total_bill_before) }}
+                                            اجمالي الفاتورة: <strong style="font-size: 11px;">{{ display_number($item->total_bill_after) }}</strong>
                                         </small>
                                         <small class="text-dark d-block ml-auto">
                                             <i class="mdi mdi-clock text-muted ml-1"></i>
