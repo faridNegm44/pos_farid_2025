@@ -260,52 +260,26 @@
 									<th class="wd-lg-10p">#</th>
 									<th class="wd-lg-15p">ت الفاتورة</th>
 									<th class="wd-lg-25p">العميل</th>
-									<th class="wd-lg-20p ">إجمالي الفاتورة</th>
-									<th class="wd-lg-20p ">الضريبة</th>
+									<th class="wd-lg-20p ">ع الأصناف</th>
+									<th class="wd-lg-20p ">إجمالي</th>
 									<th class="wd-lg-10p">عرض</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>2023-001</td>
-									<td>05 أبريل 2025</td>
-									<td><a href="#" class="tx-primary">أحمد محمد</a></td>
-									<td class=" tx-medium tx-inverse">1,245</td>
-									<td class=" tx-medium tx-danger">-124.50</td>
-									<td><button class="btn btn-sm btn-primary">عرض</button></td>
-								</tr>
-								<tr>
-									<td>2023-002</td>
-									<td>06 أبريل 2025</td>
-									<td><a href="#" class="tx-primary" onclick="showCustomerInvoices('سارة عبدالله')">سارة عبدالله</a></td>
-									<td class=" tx-medium tx-inverse">987</td>
-									<td class=" tx-medium tx-danger">-98.70</td>
-									<td><button class="btn btn-sm btn-primary" onclick="viewInvoice('2023-002')">عرض</button></td>
-								</tr>
-								<tr>
-									<td>2023-003</td>
-									<td>07 أبريل 2025</td>
-									<td><a href="#" class="tx-primary" onclick="showCustomerInvoices('خالد علي')">خالد علي</a></td>
-									<td class=" tx-medium tx-inverse">1,856</td>
-									<td class=" tx-medium tx-danger">-185.60</td>
-									<td><button class="btn btn-sm btn-primary" onclick="viewInvoice('2023-003')">عرض</button></td>
-								</tr>
-								<tr>
-									<td>2023-004</td>
-									<td>08 أبريل 2025</td>
-									<td><a href="#" class="tx-primary" onclick="showCustomerInvoices('نورة الفهد')">نورة الفهد</a></td>
-									<td class=" tx-medium tx-inverse">732</td>
-									<td class=" tx-medium tx-danger">-73.20</td>
-									<td><button class="btn btn-sm btn-primary" onclick="viewInvoice('2023-004')">عرض</button></td>
-								</tr>
-								<tr>
-									<td>2023-005</td>
-									<td>09 أبريل 2025</td>
-									<td><a href="#" class="tx-primary" onclick="showCustomerInvoices('فيصل الرشيد')">فيصل الرشيد</a></td>
-									<td class=" tx-medium tx-inverse">2,689</td>
-									<td class=" tx-medium tx-danger">-268.90</td>
-									<td><button class="btn btn-sm btn-primary" onclick="viewInvoice('2023-005')">عرض</button></td>
-								</tr>
+								@foreach (getLastSaleBills() as $item)
+									<tr>
+										<td>{{ $item->id }}</td>
+										<td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y h:i:s a') }}</td>
+										<td><a href="{{ url('sales/report/print_receipt/'.$item->id) }}" class="tx-primary">{{ $item->clientName }}</a></td>
+										<td class="tx-medium tx-danger">{{ display_number( $item->count_items ) }}</td>
+										<td class="tx-medium tx-inverse">
+											قبل: {{ display_number( $item->total_bill_before ) }}
+											<br>
+											بعد: {{ display_number( $item->total_bill_after ) }}
+										</td>
+										<td><a target="_blank" class="btn btn-sm btn-primary" href="{{ url('sales/report/print_receipt/'.$item->id) }}">عرض</a></td>
+									</tr>
+								@endforeach
 							</tbody>
 						</table>
 					</div>
