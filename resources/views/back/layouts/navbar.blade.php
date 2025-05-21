@@ -36,7 +36,7 @@
                     </li> --}}
 
                   
-                    <li aria-haspopup="true"><a href="{{ url('products') }}" class="sub-icon text-light">الأصناف/المخازن<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="{{ url('products') }}" class="sub-icon text-light">الأصناف / المخازن<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('products') }}" class="slide-item text-dark">الأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('productsCategories') }}" class="slide-item text-dark">أقسام الأصناف</a></li>
@@ -54,7 +54,7 @@
                         </ul>
                     </li>
 
-                    <li aria-haspopup="true"><a href="{{ url('clients') }}" class="sub-icon text-light">الأشخاص<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="{{ url('clients') }}" class="sub-icon text-light">العملاء / الموردين<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('clients') }}" class="slide-item text-dark">العملاء</a></li>
                             <li aria-haspopup="true"><a href="{{ url('suppliers') }}" class="slide-item text-dark">الموردين</a></li>
@@ -90,7 +90,7 @@
                         </ul>
                     </li>
 
-                    <li aria-haspopup="true"><a href="{{ url('sales/create') }}" class="sub-icon text-light">مبيعات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="{{ url('sales/create') }}" class="sub-icon text-light">المبيعات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">                                          
                             <li aria-haspopup="true"><a href="{{ url('/sales/create') }}" class="slide-item text-dark">إضافة فاتورة مبيعات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/sales') }}" class="slide-item text-dark">فواتير المبيعات</a></li>
@@ -112,7 +112,7 @@
                         </ul>
                     </li>
 
-                    <li aria-haspopup="true"><a href="{{ url('purchases/create') }}" class="sub-icon text-light">مشتريات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                    <li aria-haspopup="true"><a href="{{ url('purchases/create') }}" class="sub-icon text-light">المشتريات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('/purchases/create') }}" class="slide-item text-dark">إضافة فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/purchases') }}" class="slide-item text-dark">فواتير المشتريات</a></li>

@@ -18,10 +18,9 @@
                 });
                 
                 $(`.modal form #code`).val(res.code);
-                
                 $("#debtor_value").css('display', 'none');
                 $("#creditor_value").css('display', 'none');
-        
+                $("#hide_cash").toggle(res.type_payment === 'آجل');
 
                 $(`#image_preview_form`).attr('src', `{{ url('back/images/clients') }}/${res.image}`);
                 document.querySelector("#image_preview_form").src = `{{ url('back/images/clients') }}/${res.image}`;
@@ -71,18 +70,22 @@
                 alertify.error("هناك شيئ ما خطأ");
             },
             success: function(res){
-                $('#example1').DataTable().ajax.reload( null, false );
-                $(".modal form bold[class=text-danger]").css('display', 'none');
-        
-                $(".dataInput").val('');
-                $(".modal").modal('hide');
-
                 document.querySelector('.modal #update').disabled = false;
                 document.querySelector('.spinner_request2').style.display = 'none';
 
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 3);
-                alertify.success("تم التعديل بنجاح");
+                if(res.errorChangeTypePayment){
+                    alert(res.errorChangeTypePayment);
+                }else{
+                    $('#example1').DataTable().ajax.reload( null, false );
+                    $(".modal form bold[class=text-danger]").css('display', 'none');
+            
+                    $(".dataInput").val('');
+                    $(".modal").modal('hide');
+    
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 3);
+                    alertify.success("تم التعديل بنجاح");
+                }
             }
         });
     });

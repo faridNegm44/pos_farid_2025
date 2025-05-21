@@ -358,6 +358,7 @@
                 $('#totalBeforeTreasury').text(0);
                 $('#totalBeforeTreasuryInput').val(0);
                 $('#totalAfterTreasury').text(0);
+                $('#userStatus').text('');
                 $('.clients')[0].selectize.setValue('');
                 $('.suppliers')[0].selectize.setValue('');
             });
@@ -390,7 +391,6 @@
                 // start function get cleint or supplier info
                 function getClientOrSupplierInfo(id){
                     const url = `{{ url('get_info/client_or_supplier') }}/${id}`;
-
                     $.ajax({
                         type: "GET",
                         url: url,
@@ -400,45 +400,64 @@
                             $("#userStatus").css('display', 'none');
                         },
                         success: function(res){
-                            if(res.remaining_money){
+                            console.log(res);
 
+                            if(res && res != null){
                                 alertify.set('notifier','position', 'top-center');
                                 alertify.set('notifier','delay', 3);
                                 alertify.success("تم استدعاء الموقف المالي للجهة بنجاح");
                                 
-                                if(res.remaining_money < 0){
-                                    $("#totalBeforeUser").text(parseFloat(res.remaining_money));          
-                                    $("#userStatus").css('display', 'inline').text(`دائن (له): ${parseFloat(res.remaining_money).toLocaleString()}`);
+                                if(res < 0){
+                                    $("#totalBeforeUser").text(parseFloat(res));          
+                                    $("#userStatus").css('display', 'inline').text(`دائن (له): ${parseFloat(res).toLocaleString()}`);
                                 }else{
-                                    $("#totalBeforeUser").text(parseFloat(res.remaining_money));
-                                    $("#userStatus").css('display', 'inline').text(`مدين (عليه): ${parseFloat(res.remaining_money).toLocaleString()}`);
+                                    $("#totalBeforeUser").text(parseFloat(res));
+                                    $("#userStatus").css('display', 'inline').text(`مدين (عليه): ${parseFloat(res).toLocaleString()}`);
                                 }
-                            }                        
+                            }else if(res == null){
+                                alert('s');
+                            }                    
                         }
                     });             
                 }
                 // end function get cleint or supplier info
 
                 clientsSelectize.on('change', function(value) {
-                    //resetDefault();
-                    $('#value').val('');
-                    $('#totalAfterTreasury').text(0);
-
-                    $("#overlay_page").fadeIn();
-                    getClientOrSupplierInfo($('.clients').val());
-                    $("#overlay_page").fadeOut();
-                    checKifFoundCliendAndSupplierVal();
+                    let clientVal = $('.clients').val();
+                    
+                    if(clientVal){
+                        $('#value').val('');
+                        $('#totalAfterTreasury').text(0);
+    
+                        $("#overlay_page").fadeIn();
+                        getClientOrSupplierInfo(clientVal);
+                        $("#overlay_page").fadeOut();
+                        checKifFoundCliendAndSupplierVal();
+                    }else{
+                        $('#value').val('');
+                        $('#totalBeforeUser').text(0);
+                        $('#totalAfterUser').text(0);
+                        $('#userStatus').css('display', 'none').text('');
+                    }
                 });
                 
                 suppliersSelectize.on('change', function(value) {
-                    //resetDefault();
-                    $('#value').val('');
-                    $('#totalAfterTreasury').text(0);
+                    let supplierVal = $('.suppliers').val();
 
-                    $("#overlay_page").fadeIn();
-                    getClientOrSupplierInfo($('.suppliers').val());
-                    $("#overlay_page").fadeOut();
-                    checKifFoundCliendAndSupplierVal();
+                    if(supplierVal){
+                        $('#value').val('');
+                        $('#totalAfterTreasury').text(0);
+    
+                        $("#overlay_page").fadeIn();
+                        getClientOrSupplierInfo(supplierVal);
+                        $("#overlay_page").fadeOut();
+                        checKifFoundCliendAndSupplierVal();
+                    }else{
+                        $('#value').val('');
+                        $('#totalBeforeUser').text(0);
+                        $('#totalAfterUser').text(0);
+                        $('#userStatus').css('display', 'none').text('');
+                    }
                 });
             });
         // end when change clients or suppliers
@@ -639,7 +658,7 @@
                                 },
                                 success: function(res){
                                     $("#overlay_page").fadeOut();                                    
-                                    alert('تم أجراء المعاملة بنجاح');
+                                    alert('تم تنفيذ المعاملة بنجاح ✅');
                                     
                                     location.reload();
                                 }

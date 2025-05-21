@@ -47,58 +47,58 @@ class SaleBillController extends Controller
     public function store(Request $request)
     {
         if (request()->ajax()){
-            //$this->validate($request, [
-            //    'client_id' => 'required|integer|exists:clients_and_suppliers,id',
-            //    'financial_treasuries' => 'nullable|integer|exists:financial_treasuries,id',
-            //    'custom_bill_num' => 'nullable|string',
-            //    'custom_date' => 'nullable|date',
-            //    'static_discount_bill' => 'nullable|numeric|min:0',
-            //    'extra_money' => 'nullable|numeric|min:0',
-            //    'tax_bill' => 'nullable|numeric|min:0',
+            $this->validate($request, [
+                'client_id' => 'required|integer|exists:clients_and_suppliers,id',
+                'financial_treasuries' => 'nullable|integer|exists:financial_treasuries,id',
+                'custom_bill_num' => 'nullable|string',
+                'custom_date' => 'nullable|date',
+                'static_discount_bill' => 'nullable|numeric|min:0',
+                'extra_money' => 'nullable|numeric|min:0',
+                'tax_bill' => 'nullable|numeric|min:0',
             
-            //    'sale_quantity' => 'array',
-            //    'sale_quantity.*' => 'integer|min:1',
+                'sale_quantity' => 'array',
+                'sale_quantity.*' => 'integer|min:1',
             
-            //    'purchasePrice' => 'array',
-            //    'purchasePrice.*' => 'numeric|min:1',
+                'purchasePrice' => 'array',
+                'purchasePrice.*' => 'numeric|min:1',
             
-            //    'sellPrice' => 'array',
-            //    'sellPrice.*' => 'numeric|min:1',
+                'sellPrice' => 'array',
+                'sellPrice.*' => 'numeric|min:1',
             
-            //    'prod_tax' => 'array',
-            //    'prod_tax.*' => 'nullable|numeric|min:0',
+                'prod_tax' => 'array',
+                'prod_tax.*' => 'nullable|numeric|min:0',
             
-            //    'prod_discount' => 'array',
-            //    'prod_discount.*' => 'nullable|numeric|min:0',
+                'prod_discount' => 'array',
+                'prod_discount.*' => 'nullable|numeric|min:0',
             
-            //    ], [
-            //    'required' => 'يجب تعبئة حقل :attribute، لا يمكن تركه فارغًا.',
-            //    'string' => 'يجب أن يكون حقل :attribute عبارة عن نص.',
-            //    'unique' => 'حقل :attribute مُستخدم مسبقًا، الرجاء اختيار قيمة مختلفة.',
-            //    'integer' => 'يجب أن يكون حقل :attribute رقمًا صحيحًا (بدون كسور).',
-            //    'numeric' => 'يجب أن يحتوي حقل :attribute على رقم صحيح أو عشري.',
-            //    'min' => 'يجب ألا تكون قيمة :attribute أقل من :min.',
-            //    'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
-            //    'array' => 'يجب أن يكون حقل :attribute عبارة عن مجموعة عناصر.',
-            //    ], [
-            //    'client_id' => 'اسم العميل',
-            //    'financial_treasuries' => 'اسم الخزينة المالية',
-            //    'custom_bill_num' => 'رقم الفاتورة المخصص',
-            //    'custom_date' => 'تاريخ الفاتورة',
-            //    'static_discount_bill' => 'الخصم العام على الفاتورة',
-            //    'extra_money' => 'مصاريف إضافية',
-            //    'tax_bill' => 'ضريبة الفاتورة',
-            //    'sale_quantity' => 'كميات المنتجات',
-            //    'sale_quantity.*' => 'الكمية لكل منتج',
-            //    'purchasePrice' => 'أسعار الشراء',
-            //    'purchasePrice.*' => 'سعر الشراء لكل منتج',
-            //    'sellPrice' => 'أسعار البيع',
-            //    'sellPrice.*' => 'سعر البيع لكل منتج',
-            //    'prod_tax' => 'ضرائب المنتجات',
-            //    'prod_tax.*' => 'نسبة الضريبة على المنتج',
-            //    'prod_discount' => 'خصومات المنتجات',
-            //    'prod_discount.*' => 'قيمة الخصم على المنتج',
-            //]);            
+                ], [
+                'required' => 'يجب تعبئة حقل :attribute، لا يمكن تركه فارغًا.',
+                'string' => 'يجب أن يكون حقل :attribute عبارة عن نص.',
+                'unique' => 'حقل :attribute مُستخدم مسبقًا، الرجاء اختيار قيمة مختلفة.',
+                'integer' => 'يجب أن يكون حقل :attribute رقمًا صحيحًا (بدون كسور).',
+                'numeric' => 'يجب أن يحتوي حقل :attribute على رقم صحيح أو عشري.',
+                'min' => 'يجب ألا تكون قيمة :attribute أقل من :min.',
+                'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
+                'array' => 'يجب أن يكون حقل :attribute عبارة عن مجموعة عناصر.',
+                ], [
+                'client_id' => 'اسم العميل',
+                'financial_treasuries' => 'اسم الخزينة المالية',
+                'custom_bill_num' => 'رقم الفاتورة المخصص',
+                'custom_date' => 'تاريخ الفاتورة',
+                'static_discount_bill' => 'الخصم العام على الفاتورة',
+                'extra_money' => 'مصاريف إضافية',
+                'tax_bill' => 'ضريبة الفاتورة',
+                'sale_quantity' => 'كميات المنتجات',
+                'sale_quantity.*' => 'الكمية لكل منتج',
+                'purchasePrice' => 'أسعار الشراء',
+                'purchasePrice.*' => 'سعر الشراء لكل منتج',
+                'sellPrice' => 'أسعار البيع',
+                'sellPrice.*' => 'سعر البيع لكل منتج',
+                'prod_tax' => 'ضرائب المنتجات',
+                'prod_tax.*' => 'نسبة الضريبة على المنتج',
+                'prod_discount' => 'خصومات المنتجات',
+                'prod_discount.*' => 'قيمة الخصم على المنتج',
+            ]);            
 
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +193,7 @@ class SaleBillController extends Controller
                             'custom_bill_num' => request('custom_bill_num'),
                             'client_id' => request('client_id'),
                             'treasury_id' => request('treasury_id'),
-                            'bill_tax' => request('bill_tax'),
+                            'bill_tax' => request('tax_bill'),
                             'bill_discount' => request('static_discount_bill'),
                             'extra_money' => request('extra_money'),
                             'count_items' => count(request('prod_name')),
@@ -478,12 +478,14 @@ class SaleBillController extends Controller
                         'products.small_unit_numbers',
                         'small_unit.name as smallUnitName',
                         'big_unit.name as bigUnitName',
-                        'clients_and_suppliers.name as supplierName',
+                        'clients_and_suppliers.name as clientName',
                         'financial_treasuries.name as treasuryName',
                         'financial_years.name as financialName',
                         'users.name as userName',
                     )
                     ->get();
+
+                    //dd($find);
                             
         return response()->json($find);
     }
@@ -530,7 +532,7 @@ class SaleBillController extends Controller
                     ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
                     ->select(
                         'sale_bills.*',
-                        'clients_and_suppliers.name as supplierName',
+                        'clients_and_suppliers.name as clientName',
                         'financial_treasuries.name as treasuryName',
                         'financial_years.name as financialName',
                         'users.name as userName',
@@ -547,8 +549,8 @@ class SaleBillController extends Controller
                 
                 return $id;
             })
-            ->addColumn('supplierName', function($res){
-                return $res->supplierName;
+            ->addColumn('clientName', function($res){
+                return $res->clientName;
             })
             ->addColumn('treasuryName', function($res){
                 return $res->treasuryName;
@@ -585,13 +587,18 @@ class SaleBillController extends Controller
                         <button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
                             <i class="fas fa-print"></i>
                         </button>
-                        
+
+                        <button type="button" class="btn btn-sm btn-dark upload" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="تحميل الفاتورة على المنصة الإلكترونية" res_id="'.$res->id.'">
+                            <i class="fas fa-file-upload"></i>
+                        </button>
+
+
                         <button type="button" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
                             <i class="fas fa-reply"></i>
                         </button>
                 ';
             })
-            ->rawColumns(['id', 'supplierName', 'treasuryName', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])
+            ->rawColumns(['id', 'clientName', 'treasuryName', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])
             ->toJson();
     }
 

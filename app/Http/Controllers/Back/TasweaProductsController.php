@@ -44,32 +44,39 @@ class TasweaProductsController extends Controller
             ]);
 
             $find = StoreDets::where('product_id', request('product_id'))->orderBy('id', 'desc')->first();
+            $lastNumId = DB::table('store_dets')->where('type', 'تسوية صنف')->max('num_order');
             
-            DB::transaction(function() use($find){  // start db::transaction
-        
+            // start db::transaction
+            DB::transaction(function() use($find, $lastNumId){
+
                 $insertGetId = TasweaProducts::create([
                     'product_id' => request('product_id'),
+                    'old_quantity' => $find->quantity_small_unit,
                     'quantity' => request('quantity'),
                     'reason_id' => request('reason_id'),
                     'user_id' => auth()->user()->id,
                     'notes' => request('notes'),
+                    'year_id' => $this->currentFinancialYear(),
                 ]);
 
-                StoreDets::insert([
+                DB::table('store_dets')->insert([
+                    'num_order' => ($lastNumId+1), 
                     'type' => 'تسوية صنف',
                     'year_id' => $this->currentFinancialYear(),
                     'bill_id' => $insertGetId->id,
                     'product_id' => request('product_id'),
-                    'product_num_unit' => 0,
-                    'quantity' => $find->quantity_all,
-                    'quantity_all' => request('quantity'),
-                    'product_sellPrice' => $find->product_sellPrice,
-                    'product_purchasePrice' => $find->product_purchasePrice,
-                    'product_avg' => 0,
-                    'date' => date('Y-m-d'),
+                    'sell_price_small_unit' => $find->sell_price_small_unit,
+                    'last_cost_price_small_unit' => $find->last_cost_price_small_unit,
+                    'avg_cost_price_small_unit' => $find->avg_cost_price_small_unit,
+                    'product_bill_quantity' => 0,
+                    'quantity_small_unit' => request('quantity'),
+                    'return_quantity' => 0,
+                    'transfer_from' => null,
+                    'transfer_to' => null,
+                    'transfer_quantity' => 0,
+                    'date' => request('custom_date'),
                     'created_at' => now()
                 ]);
-
             }); // end db::transaction 
 
         }
@@ -121,57 +128,56 @@ class TasweaProductsController extends Controller
                             ->leftJoin('products', 'products.id', 'taswea_products.product_id')
                             ->leftJoin('taswea_reasons', 'taswea_reasons.id', 'taswea_products.reason_id')
                             ->leftJoin('users', 'users.id', 'taswea_products.user_id')
+                            ->leftJoin('financial_years', 'financial_years.id', 'taswea_products.year_id')
                             ->select(
-                                'products.id as productId', 'products.nameAr as productName',
-                                'taswea_products.id as tasweaId', 'taswea_products.notes as tasweaNotes', 'taswea_products.created_at as tasweaCreatedAt',
-                                'taswea_reasons.name as reasonName',
-                                'store_dets.quantity as quantityBefore', 'store_dets.quantity_all as quantityAfter',
-                                'users.name as userName',
-                                
+                                'taswea_products.*',
+                                'products.nameAr as productName',
+                                'users.name as userName',                                
+                                'financial_years.name as financialName',
                             )
                             ->orderBy('taswea_products.id', 'desc')
                             ->get();
 
         return DataTables::of($all)
-            ->addColumn('productId', function($res){
-                return $res->productId;
-            })
             ->addColumn('productName', function($res){
                 return $res->productName;
             })
             ->addColumn('quantityBefore', function($res){
-                return "<strong style='font-size: 12px !important;'>".$res->quantityBefore."</strong>";
+                return "<strong style='font-size: 12px !important;'>".$res->old_quantity."</strong>";
             })
             ->addColumn('quantityAfter', function($res){
-                return "<strong style='font-size: 14px !important;color: red;'>".$res->quantityAfter."</strong>";
+                return "<strong style='font-size: 14px !important;color: red;'>".$res->quantity."</strong>";
             })
             ->addColumn('reasonName', function($res){
                 return $res->reasonName;
             })
             ->addColumn('tasweaCreatedAt', function($res){
-                return Carbon::parse($res->tasweaCreatedAt)->format('d-m-Y')
-                            .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->tasweaCreatedAt)->format('h:i:s a').'</span>';
+                return Carbon::parse($res->created_at)->format('d-m-Y')
+                            .' <p style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</p>';
             })
             ->addColumn('status', function($res){
-                if($res->quantityAfter  > $res->quantityBefore){
+                if($res->quantity  > $res->old_quantity){
                     return '<span class="badge badge-success" style="font-size: 10px !important;width: 60px;">
-                        <i class="fa fa-plus"></i> زيادة '.$res->quantityAfter - $res->quantityBefore.'
+                        <i class="fa fa-plus"></i> زيادة '.$res->quantity - $res->old_quantity.'
                     </span>';
                 }else{
                     return '<span class="badge badge-danger" style="font-size: 10px !important;width: 60px;">
-                        <i class="fa fa-minus"></i> عجز '.$res->quantityBefore - $res->quantityAfter.'
+                        <i class="fa fa-minus"></i> عجز '.$res->old_quantity - $res->quantity.'
                     </span>';
                 }
             })
             ->addColumn('tasweaNotes', function($res){
-                return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->tasweaNotes.'">
-                            '.Str::limit($res->tasweaNotes, 20).'
+                return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->notes.'">
+                            '.Str::limit($res->notes, 20).'
                         </span>';
+            })
+            ->addColumn('financialName', function($res){
+                return $res->financialName;
             })
             ->addColumn('userName', function($res){
                 return $res->userName;
             })
-            ->rawColumns(['productId', 'productName', 'quantityBefore', 'quantityAfter', 'quantityAfter', 'reasonName', 'status', 'tasweaCreatedAt', 'userName', 'tasweaNotes'])
+            ->rawColumns(['productName', 'quantityBefore', 'quantityAfter', 'quantityAfter', 'reasonName', 'status', 'tasweaCreatedAt', 'userName', 'tasweaNotes', 'financialName'])
             ->toJson();
     }
 }

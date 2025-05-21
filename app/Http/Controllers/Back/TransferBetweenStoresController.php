@@ -27,11 +27,43 @@ class TransferBetweenStoresController extends Controller
         if(request()->ajax()){
             $products = DB::table('products')
                                     ->where('store', $transfer_from)
+                                    ->leftJoin('store_dets', function($join) {
+                                        $join->on('store_dets.product_id', '=', 'products.id')
+                                             ->whereRaw('store_dets.id = (
+                                                 SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
+                                             )');
+                                    })
+                                    ->leftJoin('units', 'units.id', 'products.smallUnit')
+                                    ->orderBy('products.nameAr', 'asc')
+                                    //->orderBy('store_dets.quantity_small_unit', 'desc')
+                                    ->select('products.*', 'store_dets.quantity_small_unit', 'units.name as unitName')
                                     ->get();
 
+                                    //dd($products);
+            return response()->json($products);            
+        }
+        return view('back.welcome');
+    }
+    
+    
+    public function get_product_stores($product)
+    {
+        if(request()->ajax()){
+            $products = DB::table('products')
+                                    ->where('store', $product)
+                                    ->leftJoin('store_dets', function($join) {
+                                        $join->on('store_dets.product_id', '=', 'products.id')
+                                             ->whereRaw('store_dets.id = (
+                                                 SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
+                                             )');
+                                    })
+                                    ->leftJoin('units', 'units.id', 'products.smallUnit')
+                                    ->orderBy('products.nameAr', 'asc')
+                                    //->orderBy('store_dets.quantity_small_unit', 'desc')
+                                    ->select('products.*', 'store_dets.quantity_small_unit', 'units.name as unitName')
+                                    ->get();
 
-//dd($products);
-
+                                    //dd($products);
             return response()->json($products);            
         }
         return view('back.welcome');

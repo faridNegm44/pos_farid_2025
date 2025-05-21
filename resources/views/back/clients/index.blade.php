@@ -25,9 +25,9 @@
             }
         }
         .ajs-warning, .ajs-error{
-            width: 400px !important;
-            max-width: 400px !important;
-            min-width: 400px !important;
+            width: 600px !important;
+            max-width: 600px !important;
+            min-width: 600px !important;
         }
 
     </style>
@@ -41,6 +41,7 @@
     <script src="{{ asset('back/assets/file-upload-with-preview.min.js') }}"></script>
     <script> new FileUploadWithPreview('file_upload') </script>
 
+    
 
     <script>
         // open modal when click button (insert)
@@ -56,11 +57,39 @@
     </script>
     
     <script>
+        // start hide all data like #hide_cash when change type_patment to كاش
+        $('#type_payment').on('input', function(){
+            const thisVal = $(this).val();
+            
+            if(thisVal === 'كاش'){
+                $('#hide_cash').hide();
+                $('input[name="debit_limit"], input[name="money_on_him"], input[name="money_for_him"]').val('');
+            }else if(thisVal === 'آجل'){
+                $('#hide_cash').show();
+            }
+        });
+        // end hide all data like #hide_cash when change type_patment to كاش
+
+
         // remove all errors and inputs data when close modal
         $('.modal').on('hidden.bs.modal', function(){
             $('form [id^=errors]').text('');
             $(this).find("input").not("[name='_token']").val('');
         });
+
+        // start reset value to 0
+        $("#money_on_him").on('input', function(){
+            if($(this).val() !== ''){
+                $('#money_for_him').val('');
+            }
+        });
+
+        $("#money_for_him").on('input', function(){
+            if($(this).val() !== ''){
+                $('#money_on_him').val('');
+            }
+        });
+        // end reset value to 0
     </script>
 
     <script>
@@ -90,10 +119,8 @@
                     {data: 'name', name: 'name'},
                     {data: 'type_name', name: 'type_name'},
                     {data: 'phone', name: 'phone'},
+                    {data: 'type_payment', name: 'type_payment'},
                     {data: 'address', name: 'address'},
-                    {data: 'opening_creditor', name: 'opening_creditor'},
-                    {data: 'opening_debtor', name: 'opening_debtor'},
-                    {data: 'max_limit', name: 'max_limit'},
                     {data: 'notes', name: 'notes'},
                     {data: 'created_at', name: 'created_at'},
                 ],
@@ -111,39 +138,6 @@
             $('.modal').on('shown.bs.modal', function(){
                 $('.dataInput:eq(0)').focus();                
             });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () { 
-
-            // start close debtor_max and debtor_value when change debit to لاء
-            $('.debit input[type="radio"]').change(function() {
-                const thisVal = $(this).val();    
-                if(thisVal == 'لاء'){
-                    $('#debtor_max input').val('').attr('disabled', true);
-                    $('#debtor_value input').val('').attr('disabled', true);
-                }else{
-                    $('#debtor_max input').attr('disabled', false);
-                    $('#debtor_value input').attr('disabled', false);
-                }
-            });
-            // end close debtor_max and debtor_value when change debit to لاء
-
-
-            // start reset value to 0
-            $("#money_on_him").on('input', function(){
-                if($(this).val() !== ''){
-                    $('#money_for_him').val('');
-                }
-            });
-
-            $("#money_for_him").on('input', function(){
-                if($(this).val() !== ''){
-                    $('#money_on_him').val('');
-                }
-            });
-            // end reset value to 0
         });
     </script>
 
@@ -181,15 +175,16 @@
                                 <th class="border-bottom-0">#</th>
                                 <th class="border-bottom-0">التحكم</th>
                                 <th class="border-bottom-0">الحالة</th>
-                                <th class="border-bottom-0">الإسم</th>
+                                <th class="border-bottom-0" style="width: 15%;max-width: 15%;">الإسم</th>
                                 <th class="border-bottom-0">نوع العميل</th>
                                 <th class="border-bottom-0">موبايل</th>
-                                <th class="border-bottom-0">العنوان</th>
-                                <th class="border-bottom-0">افتتاحي دائن</th>
+                                <th class="border-bottom-0">طريقة التعامل</th>
+                                <th class="border-bottom-0" style="width: 10%;max-width: 10%;">العنوان</th>
+                                <th class="border-bottom-0" style="width: 10%;max-width: 10%;">ملاحظات</th>
+                                <th class="border-bottom-0" style="width: 15%;max-width: 15%;">تاريخ الإنشاء</th>
+                                {{--<th class="border-bottom-0">افتتاحي دائن</th>
                                 <th class="border-bottom-0">افتتاحي مدين</th>
-                                <th class="border-bottom-0">أقصي قيمة للمسحوبات</th>
-                                <th class="border-bottom-0">ملاحظات</th>
-                                <th class="border-bottom-0">تاريخ الإنشاء</th>
+                                <th class="border-bottom-0">أقصي قيمة للمسحوبات</th>--}}
                             </tr>
                         </thead>
                         

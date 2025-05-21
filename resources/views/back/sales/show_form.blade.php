@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">عرض أصناف الفاتورة</h5>
+          <h5 class="modal-title" id="exampleModalLongTitle">عرض أصناف فاتورة بيع</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -27,10 +27,10 @@
 
                   <div class="col-md-6 col-12">
                     <ul class="invoice-info">
-                      <li><span>المورد:</span> <span class='header_span' id="supplierName"></span></li>
+                      <li><span>العميل:</span> <span class='header_span' id="clientName"></span></li>
                       <li><span>الخزينة:</span> <span class='header_span' id="treasuryName"></span></li>
                       <li><span>مبلغ مدفوع:</span> <span class='header_span' id="amount_money"></span></li>
-                      <li><span>رصيد المورد بعد:</span> <span class='header_span' id="remaining_money"></span></li>
+                      <li><span>رصيد العميل بعد:</span> <span class='header_span' id="remaining_money"></span></li>
                       <li><span>رصيد الخزينة بعد:</span> <span class='header_span' id="treasury_money_after"></span></li>
                       <li><span>تاريخ الإنشاء:</span> <span class='header_span' id="created_at"></span></li>
                       <li><span>تاريخ آخر:</span> <span class='header_span' id="custom_date"></span></li>
@@ -51,8 +51,8 @@
                       <th>كمية بالوحدة ص</th>
                       <th>سعر التكلفة</th>
                       <th>سعر البيع</th>
-                      <th>الضريبة</th>
                       <th>الخصم</th>
+                      <th>الضريبة</th>
                       <th>إجمالي الصنف قبل</th>
                       <th>إجمالي الصنف بعد</th>
                     </tr>

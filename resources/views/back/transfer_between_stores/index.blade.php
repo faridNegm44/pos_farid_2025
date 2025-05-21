@@ -19,6 +19,7 @@
         #stores_quantity{
             border: 2px solid #888;
             padding: 5px 0;
+            display: none;
         }
 
         #stores_quantity b{
@@ -31,44 +32,43 @@
 
 @section('footer') 
     <script>
-        $(document).ready(function(){
-            const transfer_from = $("#transfer_from");
-            const transfer_to = $("#transfer_to");
-            const value = $("#value");
-
+        $(document).ready(function(){            
             // start check if باختيار نفس المخزن في عملية التحويل
-            $(transfer_from).add(transfer_to).on("input", function(){
-                if(transfer_from.val() == transfer_to.val()){
-                    alertify.set('notifier','position', 'top-center');
-                    alertify.set('notifier','delay', 7);
-                    alertify.warning(`غير مسموح باختيار نفس المخزن في عملية التحويل من وإلى. يُرجى تحديد مخزن مختلف للتحويل`);
-
-                    transfer_from.val('');
-                    transfer_to.val('');
-                    value.val('');
-
-                    $("#products option").remove();
-                }
-
-                value.val('');
+                const transfer_from = $("#transfer_from");
+                const transfer_to = $("#transfer_to");
+                const value = $("#value");
                 
+                $(transfer_from).add(transfer_to).on("input", function(){
+                    if(transfer_from.val() == transfer_to.val()){
+                        alertify.set('notifier','position', 'top-center');
+                        alertify.set('notifier','delay', 7);
+                        alertify.warning(`غير مسموح باختيار نفس المخزن في عملية التحويل من وإلى. يُرجى تحديد مخزن مختلف للتحويل`);
 
-            });
+                        transfer_from.val('');
+                        transfer_to.val('');
+                        value.val('');
+
+                        $("#products option").remove();
+                    }
+
+                    value.val('');
+                });
             // end check if باختيار نفس المخزن في عملية التحويل
 
 
 
-            // start get products when change transfer_from
+            // start get products when change transfer_from جلب الاصناف عند اختيار مخزن محول من
             $(transfer_from).on("input", function(){
                 const url = `{{ url($pageNameEn) }}/get_products/${transfer_from.val()}`;
                 $.ajax({
                     type: "GET",
                     url: url,
                     beforeSend:function () {
-                        $("#products option").remove();
+                        var selectizeInstance = $('#products')[0].selectize;
+                        selectizeInstance.clearOptions();
                     },
                     success: function(res){
-                        console.log(res);
+                    
 
                         if(res.length > 0){
                             alertify.set('notifier','position', 'top-center');
@@ -76,19 +76,22 @@
                             alertify.success(`تم استدعاء أصناف المخزن بنجاح`);
                         }
 
+                        var selectizeInstance = $('#products')[0].selectize;
+                        selectizeInstance.clearOptions();
                         
-                        $.each(res, function (index, value) { 
-                            $("#products").append(`
-                                <option value="${value.id}">${value.nameAr}</option>
-                            `);
+                        $.each(res, function(index, value) {
+                            var quantity = display_number_js(value.quantity_small_unit) ?? 0;
+
+                            selectizeInstance.addOption({
+                                value: value.id,
+                                text: `( ${value.id} ) - المنتج: ( ${value.nameAr} ) - الكمية: ( ${quantity} ${value.unitName} )`,
+                                disabled: quantity == 0
+                            });
                         });
-
-
                     }
                 })
             });
-            
-            // end get products when change transfer_from
+            // end get products when change transfer_from جلب الاصناف عند اختيار مخزن محول من
 
 
 
@@ -141,8 +144,11 @@
             // end when change مبلغ التحويل
 
 
+            // start selectize 
+            $('.selectize').selectize();
         });
     </script>
+
 
     <script>       
         // open modal when click button (insert)
@@ -195,7 +201,45 @@
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
             });
         });
-        
+    </script>
+
+    <script>
+        // start when change products selecize جلب المخازن المتعلقه بالصنف عند تغيير الصنف
+        $(document).on('input', '#products', function() {
+            let thisVal = $(this).val();
+            let selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
+            let selectedItem = selectizeInstance.getItem(thisVal);
+            
+            if(thisVal){
+                const url = `{{ url($pageNameEn) }}/get_product_stores/${thisVal}`;
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    beforeSend:function () {
+                        
+                    },
+                    success: function(res){
+                    
+    
+                        if(res.length > 0){
+                            alertify.set('notifier','position', 'top-center');
+                            alertify.set('notifier','delay', 4);
+                            alertify.success(`تم استدعاء مخازن الصنف بنجاح`);
+                        }
+    
+                        $.each(res, function(index, value) {
+                            $('#stores_quantity').append(`
+                                <div class="col-lg-2">
+                                    <label for="products">حدايد وبويات</label>
+                                    <b>10</b>
+                                </div>
+                            `);
+                        });
+                    }
+                })
+            }  
+        });
+        // end when change products selecize جلب المخازن المتعلقه بالصنف عند تغيير الصنف
     </script>
 
     {{-- add, edit, delete => script --}}

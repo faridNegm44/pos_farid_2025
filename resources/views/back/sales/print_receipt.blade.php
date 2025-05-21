@@ -268,10 +268,10 @@
           <td class="value">{{ display_number( $saleBill[0]->bill_discount ) }}</td>
         </tr>
       @endif
-      @if ($saleBill[0]->bill_discount)
+      @if ($saleBill[0]->bill_tax)
         <tr>
           <td class="label">الضريبة</td>
-          <td class="value">{{ display_number( $saleBill[0]->bill_discount ) }}</td>
+          <td class="value">{{ display_number( $saleBill[0]->bill_tax ) }}</td>
         </tr>
       @endif
       <tr>

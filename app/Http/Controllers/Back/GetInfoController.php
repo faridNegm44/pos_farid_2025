@@ -8,25 +8,25 @@ use Illuminate\Support\Facades\DB;
 
 class GetInfoController extends Controller
 {
-    public function supplierInfo($id){
-        $supplierInfo = DB::table('treasury_bill_dets')
+    public function client_or_supplier($id){
+        $userInfo = DB::table('treasury_bill_dets')
                                     ->where('client_supplier_id', $id)
                                     ->orderBy('id', 'desc')
                                     ->value('remaining_money');
-                    //dd($supplierInfo);
-    
-        return response()->json($supplierInfo);
+
+                                    //dd($userInfo);                                        
+        return response()->json($userInfo);
     }
     
-    public function clientInfo($id){
-        $clientInfo = DB::table('treasury_bill_dets')
-                                    ->where('client_supplier_id', $id)
-                                    ->orderBy('id', 'desc')
-                                    ->value('remaining_money');
-                    //dd($clientInfo);
+    //public function clientInfo($id){
+    //    $clientInfo = DB::table('treasury_bill_dets')
+    //                                ->where('client_supplier_id', $id)
+    //                                ->orderBy('id', 'desc')
+    //                                ->value('remaining_money');
+    //                //dd($clientInfo);
         
-        return response()->json($clientInfo);
-    }
+    //    return response()->json($clientInfo);
+    //}
     
     public function treasury($id){
         

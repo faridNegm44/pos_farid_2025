@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class ExpensesController extends Controller
 {
     public function index()
-    {                        
+    {                      
         $pageNameAr = 'المصروفات';
         $pageNameEn = 'expenses';
         $treasuries = FinancialTreasury::where('status', 1)
@@ -68,7 +68,6 @@ class ExpensesController extends Controller
                     $getId = Expense::create(request()->all());
 
                     $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'مصروف')->max('num_order');
-                    
                     DB::table('treasury_bill_dets')->insert([
                         'num_order' => ($lastNumId+1), 
                         'date' => Carbon::now(),
@@ -92,59 +91,63 @@ class ExpensesController extends Controller
         }
     }
 
-    public function edit($id)
-    {
-        if(request()->ajax()){
-            $find = Expense::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return view('back.welcome');
-    }
-
-    public function update(Request $request, $id)
-    {
-        if (request()->ajax()){
-            $find = Expense::where('id', $id)->first();
-
-            $this->validate($request , [
-                'name' => 'required|string|unique:financial_treasuries,name,'.$id,
-                //'moneyFirstDuration' => 'min:0|numeric',
-                'notes' => 'nullable|string|max:255',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-                'min' => 'حقل :attribute أقل قيمة له هي 0 حرف.',
-                'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
-                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-            ],[
-                'name' => 'إسم الخزنة',                
-                'moneyFirstDuration' => 'رصيد أول المدة',                
-                'notes' => 'ملاحظات',                
-            ]);
-
-            $data = $request->all();
-            unset($data['moneyFirstDuration']);
-
-            $find->update($data);
-        }   
-    }
-
      
-    //public function destroy($id)
-    //{
-    //    $find = Expense::where('id', $id)->get();
-    //    $find_relation = DB::table('treasury_bills_head')->where('expenses_id', $id)->get();
+    public function destroy($id)
+    {
+        $findExpenseTreasuryBillDets = DB::table('treasury_bill_dets')
+                                        ->where('treasury_type', 'مصروف')
+                                        ->where('bill_id', $id)
+                                        ->first();
 
-    //    if(count($find_relation) > 0){
-    //        return response()->json('');
-    //    }else{
-    //        DB::transaction(function($find, $find_relation){
-    //            $find->delete();
-    //            $find_relation->delete();
-    //        });
-    //    }
-    //}
+        $lastMoneyOfTreasury = Db::table('treasury_bill_dets')
+                                ->where('treasury_id', $findExpenseTreasuryBillDets->treasury_id)
+                                ->orderBy('id', 'desc')
+                                ->value('treasury_money_after');
+
+        $lastNumId = DB::table('treasury_bill_dets')
+                        ->where('treasury_type', 'مرتجع مصروف')
+                        ->max('num_order');
+
+        //dd($lastMoneyOfTreasury);
+
+        DB::transaction(function() use($id, $findExpenseTreasuryBillDets, $lastNumId, $lastMoneyOfTreasury){
+            // start make new row in treasury_bill_dets باسم مريجع مصروف 
+                DB::table('treasury_bill_dets')->insert([
+                    'num_order' => ($lastNumId+1), 
+                    'date' => Carbon::now(),
+                    'treasury_id' => $findExpenseTreasuryBillDets->treasury_id, 
+                    'treasury_type' => 'مرتجع مصروف', 
+                    'bill_id' => $findExpenseTreasuryBillDets->bill_id, 
+                    'bill_type' => 0,
+                    'client_supplier_id' => 0,
+                    'treasury_money_after' => ($lastMoneyOfTreasury + $findExpenseTreasuryBillDets->amount_money), 
+                    'amount_money' => $findExpenseTreasuryBillDets->amount_money, 
+                    'remaining_money' => ($lastMoneyOfTreasury + $findExpenseTreasuryBillDets->amount_money), 
+                    'transaction_from' => null, 
+                    'transaction_to' => null, 
+                    'notes' => 'مرتجع مصروف من فاتورة رقم '.$findExpenseTreasuryBillDets->bill_id.'', 
+                    'user_id' => auth()->user()->id, 
+                    'year_id' => $this->currentFinancialYear(),
+                    'created_at' => now()
+                ]);
+            // end make new row in treasury_bill_dets باسم مريجع مصروف 
+
+
+            // start remove data in old row of treasury_bill_dets
+                DB::table('treasury_bill_dets')->where('treasury_type', 'مصروف')->where('bill_id', $id)->update([
+                    'amount_money' => 0, 
+                    'remaining_money' => 0, 
+                ]);
+            // end remove data in old row of treasury_bill_dets
+
+
+            // start change status in expenses table from اضافه to مرتجع
+                DB::table('expenses')->where('id', $id)->update([
+                    'status' => 'حذف', 
+                ]);
+            // end change status in expenses table from اضافه to مرتجع
+        });
+    }
 
 
     public function datatable()
@@ -156,7 +159,9 @@ class ExpensesController extends Controller
                         ->select(
                             'treasury_bill_dets.*', 
                             'expenses.id as expenses_id',
+                            'expenses.status as expenses_status',
                             'expenses.title',
+                            'expenses.amount',
                             'financial_treasuries.name as treasuryName',
                             'users.name as userName',
                         )
@@ -180,7 +185,14 @@ class ExpensesController extends Controller
                         </span>';
             })
             ->addColumn('amount_money', function($res){
-                return $res->amount_money;
+                if($res->expenses_status == 'اضافة'){
+                    return '<span class="" style="font-size: 12px;">قبل: '.display_number($res->amount_money).'</span>';
+                }else{
+                    return '
+                                <span class="text-danger" style="margin: 3px;font-size: 12px;">قبل: '.display_number($res->amount).'</span>
+                                <span style="margin: 3px;font-size: 12px;">بعد: 0</span>
+                            ';
+                }
             })
             ->addColumn('treasury_money_after', function($res){
                 return '<strong style="color: red;font-size: 15px;">'.$res->treasury_money_after.'</strong>';
@@ -188,7 +200,7 @@ class ExpensesController extends Controller
             ->addColumn('created_at', function($res){
                 if($res->created_at){
                     return Carbon::parse($res->created_at)->format('d-m-Y')
-                            .' <p style="font-weight: bold;margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</p>';
+                            .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
                 }
             })
             ->addColumn('notes', function($res){
@@ -196,14 +208,26 @@ class ExpensesController extends Controller
                             '.Str::limit($res->notes, 20).'
                         </span>';
             })
-            ->addColumn('action', function($res){
-                return '
-                        <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                            <i class="fas fa-marker"></i>
-                        </button>
-                    ';
+            ->addColumn('status', function($res){
+                if($res->expenses_status == 'اضافة'){
+                    return '<span class="badge badge-success" style="width: 40px;">اضافة</span>';
+                }
+                else{
+                    return '<span class="badge badge-danger" style="width: 40px;">حذف</span>';
+                }
             })
-            ->rawColumns(['user', 'treasury', 'title', 'amount_money', 'treasury_money_after', 'created_at', 'notes', 'action'])
+            ->addColumn('action', function($res){
+                if($res->expenses_status == 'اضافة'){
+                    return '
+                                <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->expenses_id.'" res_title="'.$res->title.'">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            ';
+                }else{
+                    return '';
+                }
+            })
+            ->rawColumns(['user', 'treasury', 'title', 'amount_money', 'treasury_money_after', 'status', 'created_at', 'notes', 'action'])
             ->toJson();
     }
 }

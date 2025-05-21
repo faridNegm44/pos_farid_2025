@@ -42,7 +42,7 @@
     <script>
         $(document).on('click', '.print', function(e) {
             const res_id = $(this).attr("res_id");
-            let printUrl = `{{ url('sales/report/result/pdf') }}/${res_id}`;
+            let printUrl = `{{ url('sales/report/print_receipt') }}/${res_id}`;
 
             window.open(printUrl);
         });
@@ -66,7 +66,7 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'supplierName', name: 'supplierName'},
+                    {data: 'clientName', name: 'clientName'},
                     {data: 'treasuryName', name: 'treasuryName'},
                     {data: 'count_items', name: 'count_items'},
                     {data: 'date', name: 'date'},
@@ -78,7 +78,7 @@
                 "bDestroy": true,
                 order: [[0, 'desc']],
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
-                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
+                lengthMenu: [[50, 100, 200, -1], [50, 100, 200, "الكل"]]
             });
         });
     </script>
@@ -118,7 +118,7 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0" >مورد</th>
+                                <th class="border-bottom-0" >عميل</th>
                                 <th class="border-bottom-0" >خزينة</th>
                                 <th class="border-bottom-0" >ع الأصناف</th>
                                 <th class="border-bottom-0" >تاريخ</th>

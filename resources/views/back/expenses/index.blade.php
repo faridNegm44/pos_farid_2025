@@ -62,7 +62,8 @@
                     {data: 'treasury', name: 'treasury'},
                     {data: 'title', name: 'title'},
                     {data: 'amount_money', name: 'amount_money'},
-                    {data: 'treasury_money_after', name: 'treasury_money_after'},
+                    //{data: 'treasury_money_after', name: 'treasury_money_after'},
+                    {data: 'status', name: 'status'},
                     {data: 'notes', name: 'notes'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'user', name: 'user'},
@@ -117,7 +118,8 @@
                                 <th class="border-bottom-0">الخزينة</th>
                                 <th class="border-bottom-0" style="width: 20%;">وصف المصروف</th>
                                 <th class="border-bottom-0">م المصروف</th>
-                                <th class="border-bottom-0">مبلغ خزينة بعد المصروف</th>
+                                {{--<th class="border-bottom-0">مبلغ خزينة بعد المصروف</th>--}}
+                                <th class="border-bottom-0">الحالة</th>
                                 <th class="border-bottom-0">ملاحظات</th>
                                 <th class="border-bottom-0">تاريخ</th>
                                 <th class="border-bottom-0">مستخدم</th>

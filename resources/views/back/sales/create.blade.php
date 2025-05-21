@@ -220,7 +220,7 @@
                                         <th style="width: 10%;">الوحدة</th>
                                         <th style="width: 10%;">
                                             ك مباعة
-                                            <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى التأكد من إدخال الكمية المباعة للمنتج باستخدام نفس الوحدة المحددة، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
+                                            <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى إتمام عملية البيع باستخدام الوحدة الصغرى للمنتج، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
                                         </th>
                                         <th style="width: 10%;">ك المخزن</th>
                                         <th style="width: 10%;">س بيع</th>
@@ -679,6 +679,8 @@
         $(document).ready(function () {
             $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #static_discount_bill, #tax_bill, #extra_money', function () {
                 calcTotal();
+                //$("#overlay_page").fadeIn();
+                //$("#overlay_page").fadeOut();
             });
         });
     </script>
@@ -796,11 +798,8 @@
                                     }
                                 });
                             }
-
-
                         }
                     });
-
 
                 }, function(){
 
@@ -837,25 +836,6 @@
             }
         });
         //  end show div amount paid after select clients and treasury
-
-
-        // start when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
-        //$(document).on('input', '.sale_quantity', function(){
-        //    const row = $(this).closest('tr');
-        //    const sale_quantity = row.find('.sale_quantity');
-        //    const quantity_all = row.find('.quantity_all');
-            
-        //    if(sale_quantity.val() > quantity_all.val()){
-        //        sale_quantity.val(1);
-        //        backgroundRedToSelectError(sale_quantity);
-
-        //        alertify.set('notifier','position', 'bottom-center');
-        //        alertify.set('notifier','delay', 3);
-        //        alertify.error("كمية المنتج المباعة أكبر من المتوفرة  في المخزن");
-        //    }
-        //});
-        // end when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
-
     </script>
     {{-- end general scripts --}}
 

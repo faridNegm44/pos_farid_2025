@@ -9,24 +9,24 @@
     alertify.confirm(
         'تحذير <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>', 
         `<span class="text-center">
-            <span class="text-danger">هل انت متأكد من حذف</span>
+            <span class="text-danger">هل انت متأكد من حذف مصروف</span>
             <strong class="d-block">${res_title}</strong>
         </span>`, 
     function(){
-          $.ajax({
+        $.ajax({
               url: `{{ url($pageNameEn.'/destroy/${res_id}') }}`,
               type: "get",
-              success: function(){
+              success: function(res){
                   $('#example1').DataTable().ajax.reload( null, false );
-
-                  alertify.set('notifier','position', 'bottom-right');
+                  
+                  alertify.set('notifier','position', 'top-center');
                   alertify.set('notifier','delay', 4);
-                  alertify.error("تم الحذف بنجاح");
-              },
-              error: function(){
+                  alertify.success(`تم حذف المصروف بنجاح وارجاع مبلغ المصروف الي الخزينة`);
+            },
+            error: function(){
 
-              }
-          });
+            }
+        });
 
       }, function(){ 
 

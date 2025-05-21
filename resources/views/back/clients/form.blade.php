@@ -64,9 +64,13 @@
                         </div>
 
                         <div class="col-lg-2 col-md-12">
-                            <label for="type_payment">طريقة الدفع</label>
+                            <label for="type_payment">
+                                طريقة التعامل
+                                <i class="fas fa-info-circle text-danger" data-bs-toggle="tooltip" title="⚠️ عند اختيارك لطريقة التعامل بالآجل، سيكون العميل قادراً على استلام الأصناف دون سداد قيمتها في الوقت الحالي. يُرجى التأكد من أهلية العميل لهذا النوع من التعامل."></i>
+                            </label>
                             <div>
                                 <select id="type_payment" name="type_payment" class="form-control">
+                                    <option value="" selected disabled>اختر طريقة تعامل</option>
                                     <option value="كاش">كاش</option>
                                     <option value="آجل">آجل</option>
                                 </select>
@@ -102,44 +106,39 @@
                         </div>
                     </div>
                     
+                    
                     <hr>
-
-                    <div class="row row-xs">                        
-                        <div class="col-lg-3 col-md-12 col-sm-12 text-center" id="is_debtor">
-                            <label class="text-danger" for="debit" style="text-align: center;">هل يجوز للعميل ان يكون مدين (عليه)</label>
-                            <div style="text-align: center;"> 
-
-                                <label class="debit" style="display: inline;">
-                                    <input checked="" name="debit" value="نعم" type="radio"> <span>نعم</span>
-                                </label>
-                                
-                                <label class="debit" style="display: inline;margin: 0 10px;">
-                                    <input name="debit" value="لاء" type="radio"> <span>لاء</span>
-                                </label>
-                            </div>
-                            <bold class="text-danger" id="errors-debit" style="display: none;"></bold>
-                        </div>
+                    <div class="row row-xs justify-content-center" id="hide_cash" style="display: none;">                        
 
                         <div class="col-lg-3 col-md-6 col-sm-12" id="debtor_max">
-                            <label for="debit_limit">الحد الآقصي لـ مدين (عليه)</label>
+                            <label for="debit_limit">
+                                الحد الآقصي لـ مدين (عليه)
+                                <i class="fas fa-info-circle text-danger" data-bs-toggle="tooltip" title="⚠️ الحد الأقصى المسموح به لمديونية العميل مقابل مسحوباته يُرجى مراجعة حد المديونية المسموح به قبل إتمام عملية الحفظ."></i>
+                            </label>
                             <div>    
-                                <input type="text" class="form-control dataInput numValid focused" placeholder="الحد الآقصي لـ مدين (عليه)" id="debit_limit" name="debit_limit">
+                                <input type="text" class="form-control dataInput numValid focused hide_cash" placeholder="الحد الآقصي لـ مدين (عليه)" id="debit_limit" name="debit_limit">
                             </div>
                             <bold class="text-danger" id="errors-debit_limit" style="display: none;"></bold>
                         </div>
                         
                         <div class="col-lg-3 col-md-6 col-sm-12"  id="debtor_value">
-                            <label for="money_on_him">مدين (عليه)</label>
+                            <label for="money_on_him">مدين (عليه)
+                                <i class="fas fa-info-circle text-danger" data-bs-toggle="tooltip" title="💳 هذا الحقل مخصّص لإدخال الرصيد الافتتاحي للعميل في حال كان عليه مبلغ مالي مستحق (مدين) لصالحك. مثال: إذا كان على العميل 300 جنيه، أدخل:"></i>
+
+                            </label>
                             <div>    
-                                <input type="text" class="form-control dataInput numValid focused" placeholder="مدين (عليه)" id="money_on_him" name="money_on_him">
+                                <input type="text" class="form-control dataInput numValid focused hide_cash" placeholder="مدين (عليه)" id="money_on_him" name="money_on_him">
                             </div>
                             <bold class="text-danger" id="errors-money_on_him" style="display: none;"></bold>
                         </div>
                         
                         <div class="col-lg-3 col-md-12" id="creditor_value">
-                            <label for="money_for_him">دائن (له)</label>
+                            <label for="money_for_him">دائن (له)
+                                <i class="fas fa-info-circle text-danger" data-bs-toggle="tooltip" title="💰 هذا الحقل مخصّص لإدخال الرصيد الافتتاحي للعميل في حال كان له مبلغ مالي مستحق (دائن) عندك. مثال: إذا كان للعميل 500 جنيه، أدخل: 500"></i>
+
+                            </label>
                             <div>    
-                                <input type="text" class="form-control dataInput numValid focused" placeholder="دائن (له)" id="money_for_him" name="money_for_him">
+                                <input type="text" class="form-control dataInput numValid focused hide_cash" placeholder="دائن (له)" id="money_for_him" name="money_for_him">
                             </div>
                             <bold class="text-danger" id="errors-money_for_him" style="display: none;"></bold>
                         </div>

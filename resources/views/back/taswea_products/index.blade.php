@@ -6,29 +6,15 @@
 @endsection
 
 @section('header')
-
+    <style>
+        .ajs-success, .ajs-error{
+            min-width: 450px !important;
+        }
+    </style>
 @endsection
 
 @section('footer')
     <script>
-        // open modal when click button (insert)
-        document.addEventListener('keydown', function(event){
-            if( event.which === 45 ){
-                $('.modal').modal('show');
-                document.querySelector('.modal .modal-header .modal-title').innerText = 'إضافة';
-                document.querySelector('.modal .modal-footer #save').setAttribute('style', 'display: inline;');
-                document.querySelector('.modal .modal-footer #update').setAttribute('style', 'display: none;');
-                $('.dataInput').val('');
-            }
-        });
-
-
-        // selectize
-        $('.selectize').selectize({
-            hideSelected: true
-        });
-
-
         // focus first input when open modal
         $('.modal').on('shown.bs.modal', function(){
             $('.dataInput:first').focus();
@@ -46,23 +32,17 @@
             }
         }); 
 
+        
+        // start check if new quantity > 0 and not null
+        $(document).on('input', '#quantity', function(){
+            const thisVal = $(this);
+            if(!thisVal.val() || thisVal.val() < 0 ){
+                thisVal.val('');
+            }
+        })
+        // end check if new quantity > 0 and not null
 
-        // when change product_id
-        $("#product_id").on('input', function(){
-            const thisVal = $(this).val();
-            
-            $.ajax({
-                type: 'GET',
-                beforeSend: function (){
-                    $('#current_quantity').val('');
-                    $('form [id^=errors]').text('');
-                },
-                url: `{{ url($pageNameEn) }}/getCurrentProductQuantity/${thisVal}`,
-                success: function(res){
-                    $('#current_quantity').val(res.quantity_all);
-                }
-            });
-        });
+
 
 
         // start check if new quantity big than current quantity
@@ -88,8 +68,8 @@
                 ajax: `{{ url($pageNameEn.'/datatable') }}`,
                 dataType: 'json',
                 columns: [
-                    {data: 'tasweaId', name: 'id'},
-                    {data: 'productId', name: 'productId'},
+                    {data: 'id', name: 'id'},
+                    {data: 'product_id', name: 'product_id'},
                     {data: 'productName', name: 'productName'},
                     {data: 'quantityBefore', name: 'quantityBefore'},
                     {data: 'quantityAfter', name: 'quantityAfter'},
@@ -98,6 +78,7 @@
                     {data: 'tasweaCreatedAt', name: 'tasweaCreatedAt'},
                     {data: 'userName', name: 'userName'},
                     {data: 'tasweaNotes', name: 'tasweaNotes'},
+                    {data: 'financialName', name: 'financialName'},
                 ],
                 "bDestroy": true,
                 order: [[0, 'desc']],
@@ -106,6 +87,91 @@
             });
         });
     </script>
+
+
+
+    {{--  start search products by selectize #products_selectize --}}
+    <script>
+        $(document).ready(function() {
+            // بدايه الجزء الخاص بالبحث وعرض العملاء في selectize
+            $('#products_selectize').selectize({
+                valueField: 'id',  // القيمة المخزنة عند الاختيار
+                labelField: 'nameAr', // النص الظاهر للمستخدم
+                searchField: ['id', 'nameAr', 'nameEn'], // البحث في كل الحقول
+                loadThrottle: 300, // تقليل عدد الطلبات عند البحث
+                maxItems: 1, // اختيار عنصر واحد فقط
+                create: false, // منع إضافة عناصر جديدة
+                preload: 'focus', // تحميل البيانات عند التركيز على الحقل
+                render: {
+                    option: function(item, escape) {
+                        const quantity = escape(item.quantity_small_unit);
+                        const disabled = quantity == 0 ? 'style="background:#f8d7da; color:#721c24;"' : '';                        
+
+                        return `<option ${disabled}>
+                                    كود: ${escape(item.id)} - 
+                                    الصنف: ${escape(item.nameAr)} - 
+                                    كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
+                                </option>`;
+                    },
+                    item: function(item, escape) {
+                        return `<div>
+                                    كود: ${escape(item.id)} - 
+                                    الصنف: ${escape(item.nameAr)} - 
+                                    كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
+                                </div>`;
+                    }
+                },
+                load: function(query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: `{{ url('search_products_by_selectize') }}`, // رابط البحث
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { data_input_search: query },
+                        success: function(response) {
+                            if (response.items && Array.isArray(response.items)) {
+                                callback(response.items);
+                            } else {
+                                console.error("البيانات غير صحيحة:", response);
+                                callback([]);
+                            }
+                        },
+                        error: function(error) {
+                            console.error("خطأ في جلب البيانات:", error);
+                            callback([]);
+                        }
+                    });
+                }
+            });
+            // نهاية الجزء الخاص بالبحث وعرض العملاء في selectize
+
+
+
+            // بدايه اختيار صنف من selectize واضافته في في جدول العملاء
+            $('#products_selectize').change(function() {
+                
+                var productId = $(this).val();
+                var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
+
+                if (productId) {
+                    var productData = selectizeInstance.options[productId]; // بيانات العنصر المحدد
+                    var quantity_all = display_number_js(productData.quantity_small_unit); // كميه المخزن
+
+
+                    $("#current_quantity").val(quantity_all);
+                    $("#quantity").val('');
+
+                    alertify.set('notifier', 'position', 'top-center');
+                    alertify.set('notifier', 'delay', 3);
+                    alertify.success("تم استدعاء الرصيد الحالي للمنتج بنجاح. في انتظار التسوية");
+                }else{
+                    $("#current_quantity, #quantity").val('');
+                }
+            });
+            // نهاية اختيار صنف من selectize واضافته في في جدول العملاء
+        });
+    </script>
+    {{--  end search products by selectize #products_selectize --}}
 
     {{-- add, edit, delete => script --}}
     @include('back.taswea_products.add')
@@ -153,6 +219,7 @@
                                         <th class="border-bottom-0">تاريخ التسوية</th>
                                         <th class="border-bottom-0">مستخدم</th>
                                         <th class="border-bottom-0">ملاحظات</th>
+                                        <th class="border-bottom-0" >السنة</th>
                                     </tr>
                                 </thead>
                             </table>

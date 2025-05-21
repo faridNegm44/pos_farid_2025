@@ -146,42 +146,6 @@
     });
     // end check if founded val in discount_bill_percentage and static_discount_bill
     
-    
-    // start check Purchase Price not big than sell price && purchase or sell price not = 0 or null
-    //$(document).on('input' , 'tbody tr .purchasePrice, tbody tr .sellPrice' , function () {
-    //    const purchasePrice = parseFloat($(this).closest('tr').find('.purchasePrice').val());
-    //    const sellPrice = parseFloat($(this).closest('tr').find('.sellPrice').val());
-
-    //    if(!purchasePrice || purchasePrice < 1){
-    //        $(this).closest('tr').find('.purchasePrice').addClass('reqInputAddClass');
-
-    //    }else if(!sellPrice || sellPrice < 1){
-    //        $(this).closest('tr').find('.sellPrice').addClass('reqInputAddClass');
-
-    //    }else if(purchasePrice > sellPrice){
-    //        $(this).closest('tr').find('.purchasePrice').addClass('reqInputAddClass');
-    //        $(this).closest('tr').find('.sellPrice').addClass('reqInputAddClass');
-
-    //    }
-    //    else{
-    //        $(this).closest('tr').find('.purchasePrice').removeClass('reqInputAddClass');
-    //        $(this).closest('tr').find('.sellPrice').removeClass('reqInputAddClass');
-    //    }
-
-    //    if($(".reqInputAddClass").length > 0){
-    //        $('#finally_save_bill_btn').fadeOut();
-    //        $('#finally_save_bill_and_print_btn').fadeOut();
-    //        $('#modal_save_bill_footer h3').show();
-    //    }else{
-    //        $('#finally_save_bill_btn').fadeIn();
-    //        $('#finally_save_bill_and_print_btn').fadeIn();
-    //        $('#modal_save_bill_footer h3').hide();
-    //    }
-    //});
-    // end check Purchase Price not big than sell price && purchase or sell price not = 0 or null
-
-
-
 
     // start open modal calc when click button when click ctrl+/
     $(document).bind('keydown', function(event) {
@@ -224,10 +188,8 @@
     // end function to add style to inputs error 
     
 
-
-
-    // start when change sell price check if sell price not small than cost or avg price
-    $(document).on('blur', '#page_sales .sellPrice', function(){
+    // start when change سعر البيع وربطه بسعر التكلفة
+    $(document).on('blur', '.sellPrice', function(){
         const row = $(this).closest('tr');
         const sellPrice = row.find('.sellPrice');
         const last_cost_price = parseFloat( row.find('.last_cost_price_small_unit').val() );
@@ -236,39 +198,36 @@
         if(sellPrice.val() < last_cost_price){        
             alertify.set('notifier', 'position', 'bottom-center');
             alertify.set('notifier', 'delay', 4);
-            alertify.error("خطأ: سعر البيع أكبر من سعر التكلفة");
+            alertify.error("خطأ: سعر بيع المنتج أقل من سعر التكلفة");
             
             backgroundRedToSelectError2(sellPrice);
         }else{
             sellPrice.css('background', 'transparent');
         }
     });
-    // end when change sell price check if sell price not small than cost or avg price
+    // end when change سعر البيع وربطه بسعر التكلفة
 
 
-    // start when change كميه مباعه في صفخه المبيعات
-    $(document).on('blur', '#page_sales .sellPrice', function(){
-        const row = $(this).closest('tr');
-        const sellPrice = row.find('.sellPrice');
-        const last_cost_price = parseFloat( row.find('.last_cost_price_small_unit').val() );
-        const avg_cost_price = parseFloat( row.find('.avg_cost_price_small_unit').val() );
-
-        if(sellPrice.val() < last_cost_price){        
-            alertify.set('notifier', 'position', 'bottom-center');
-            alertify.set('notifier', 'delay', 4);
-            alertify.error("خطأ: سعر البيع أكبر من سعر التكلفة");
+     // start when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
+     $(document).on('input', '#page_sales .sale_quantity', function(){
+            const row = $(this).closest('tr');
+            const sale_quantity = row.find('.sale_quantity');
+            const quantity_all = row.find('.quantity_all');
             
-            backgroundRedToSelectError2(sellPrice);
-        }else{
-            sellPrice.css('background', 'transparent');
-        }
-    });
-    // end when change كميه مباعه في صفخه المبيعات
+            if(sale_quantity.val() > quantity_all.val()){
+                sale_quantity.val(1);
+                backgroundRedToSelectError(sale_quantity);
 
+                alertify.set('notifier','position', 'bottom-center');
+                alertify.set('notifier','delay', 3);
+                alertify.error("كمية المنتج المباعة أكبر من المتوفرة  في المخزن");
+            }
+        });
+        // end when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
 
 
     // start when change amount_paid
-    $('.amount_paid').on('input', function(){
+    $('#page_sales .amount_paid').on('input', function(){
         const total_bill_after  = parseFloat($('.total_bill_after').text());
         const amount_paid  = parseFloat($(this).val());
 
@@ -318,4 +277,39 @@
         e.preventDefault();
     });
     // end cancel enter form
+
+
+    // start check Purchase Price not big than sell price && purchase or sell price not = 0 or null
+    //$(document).on('input' , 'tbody tr .purchasePrice, tbody tr .sellPrice' , function () {
+    //    const purchasePrice = parseFloat($(this).closest('tr').find('.purchasePrice').val());
+    //    const sellPrice = parseFloat($(this).closest('tr').find('.sellPrice').val());
+
+    //    if(!purchasePrice || purchasePrice < 1){
+    //        $(this).closest('tr').find('.purchasePrice').addClass('reqInputAddClass');
+
+    //    }else if(!sellPrice || sellPrice < 1){
+    //        $(this).closest('tr').find('.sellPrice').addClass('reqInputAddClass');
+
+    //    }else if(purchasePrice > sellPrice){
+    //        $(this).closest('tr').find('.purchasePrice').addClass('reqInputAddClass');
+    //        $(this).closest('tr').find('.sellPrice').addClass('reqInputAddClass');
+
+    //    }
+    //    else{
+    //        $(this).closest('tr').find('.purchasePrice').removeClass('reqInputAddClass');
+    //        $(this).closest('tr').find('.sellPrice').removeClass('reqInputAddClass');
+    //    }
+
+    //    if($(".reqInputAddClass").length > 0){
+    //        $('#finally_save_bill_btn').fadeOut();
+    //        $('#finally_save_bill_and_print_btn').fadeOut();
+    //        $('#modal_save_bill_footer h3').show();
+    //    }else{
+    //        $('#finally_save_bill_btn').fadeIn();
+    //        $('#finally_save_bill_and_print_btn').fadeIn();
+    //        $('#modal_save_bill_footer h3').hide();
+    //    }
+    //});
+    // end check Purchase Price not big than sell price && purchase or sell price not = 0 or null
+
 </script>

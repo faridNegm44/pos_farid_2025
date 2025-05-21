@@ -246,9 +246,9 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::post('/store' , 'ExpensesController@store');
         Route::get('/edit/{id}' , 'ExpensesController@edit');
         Route::post('/update/{id}' , 'ExpensesController@update');
+        Route::get('/destroy/{id}' , 'ExpensesController@destroy');
         
         Route::get('datatable' , 'ExpensesController@datatable');
-
         //تقرير عن المصروفات
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsExpensesController@index');
@@ -279,6 +279,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/show/{id}' , 'TransferBetweenStoresController@show');
         
         Route::get('/get_products/{transfer_from}' , 'TransferBetweenStoresController@get_products');
+        Route::get('/get_product_stores/{product}' , 'TransferBetweenStoresController@get_product_stores');
         
         Route::get('datatable' , 'TransferBetweenStoresController@datatable');
     });
@@ -286,8 +287,9 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
     // Get Info Of client || supplier || treasury || store || product || transfer || expense
     Route::group(['prefix' => 'get_info'] , function (){
-        Route::get('/supplierInfo/{id}' , 'GetInfoController@supplierInfo');
-        Route::get('/clientInfo/{id}' , 'GetInfoController@clientInfo');
+        Route::get('/client_or_supplier/{id}' , 'GetInfoController@client_or_supplier');
+        //Route::get('/client_or_supplier/{id}' , 'GetInfoController@clientInfo');
+
         Route::get('/treasury/{id}' , 'GetInfoController@treasury');
     });
     // Get Info Of client || supplier || treasury || store || product || transfer || expense

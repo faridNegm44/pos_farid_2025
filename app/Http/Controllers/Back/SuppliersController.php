@@ -31,6 +31,7 @@ class SuppliersController extends Controller
         if (request()->ajax()){
             $this->validate($request , [
                 'name' => 'required|string|unique:clients_and_suppliers,name|max:255',
+                'type_payment' => 'required|in:كاش,آجل',
                 'address' => 'nullable|string|max:255',
                 'phone' => 'nullable|numeric',
                 'money' => 'nullable|numeric',
@@ -47,10 +48,12 @@ class SuppliersController extends Controller
                 'unique' => 'حقل :attribute مستخدم من قبل.',
                 'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
                 'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                'in' => 'القيمة المختارة في :attribute غير مسموح بها. يُرجى اختيار قيمة من الخيارات المتاحة فقط.',
 
             ],[
                 'name' => 'إسم المورد',                
-                'address' => 'عنوان المورد',                
+                'address' => 'عنوان المورد',     
+                'type_payment' => 'طريقة التعامل',                           
                 'phone' => 'تلفون المورد',                
                 'money' => 'الفلوس',                
                 'debit_limit' => 'الحد الآقصي لـ مدين',                
@@ -139,6 +142,7 @@ class SuppliersController extends Controller
         if (request()->ajax()){
             $this->validate($request , [
                 'name' => 'required|string|max:255|unique:clients_and_suppliers,name,'.$id,
+                'type_payment' => 'required|in:كاش,آجل',
                 'address' => 'nullable|string|max:255',
                 'phone' => 'nullable|numeric',
                 'money' => 'nullable|numeric',
@@ -155,10 +159,12 @@ class SuppliersController extends Controller
                 'unique' => 'حقل :attribute مستخدم من قبل.',
                 'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
                 'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                'in' => 'القيمة المختارة في :attribute غير مسموح بها. يُرجى اختيار قيمة من الخيارات المتاحة فقط.',
 
             ],[
                 'name' => 'إسم المورد',                
-                'address' => 'عنوان المورد',                
+                'address' => 'عنوان المورد', 
+                'type_payment' => 'طريقة التعامل',                               
                 'phone' => 'تلفون المورد',                
                 'money' => 'الفلوس',                
                 'debit_limit' => 'الحد الآقصي لـ مدين',                
@@ -208,17 +214,33 @@ class SuppliersController extends Controller
         } 
     }
 
+    public function destroy($id)
+    {
+        $find = ClientsAndSuppliers::where('id', $id)->first();
+        $supplierTreasuryBillDets = DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->get();
+
+        if(count($supplierTreasuryBillDets) > 1){
+            return response()->json(['cannot_delete' => $find->name]);
+
+        }elseif(count($supplierTreasuryBillDets) == 1){
+            if($find->image != "df_image.png"){
+                File::delete(public_path('back/images/suppliers/'.$find->image));
+            }
+            
+            $find->delete();
+            DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->delete();
+            return response()->json(['success_delete' => $find->name]);
+        }
+    }
+
     public function datatable()
     {
         $all = ClientsAndSuppliers::where('client_supplier_type', 1)
                                     ->orWhere('client_supplier_type', 2)
                                     ->leftJoin('clients_and_suppliers_types', 'clients_and_suppliers_types.id', 'clients_and_suppliers.client_supplier_type')
-                                    ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.client_supplier_id', 'clients_and_suppliers.id')
                                     ->select(
                                         'clients_and_suppliers.*', 
                                         'clients_and_suppliers_types.name as type_name',
-                                        'treasury_bill_dets.amount_money',
-                                        'treasury_bill_dets.year_id',
                                     )
                                     ->orderBy('id', 'desc')
                                     ->get();
@@ -240,27 +262,27 @@ class SuppliersController extends Controller
                             '.Str::limit($res->address, 20).'
                         </span>';
             })
-            ->addColumn('opening_creditor', function($res){
-                if($res->amount_money < 0){
-                    return '<span style="color: red;font-size: 15px;">'.$res->amount_money.'</span>';
-                }else{
-                    return 0;
-                }
-            })
-            ->addColumn('opening_debtor', function($res){
-                if($res->amount_money > 0){
-                    return '<span style="font-size: 15px;">'.$res->amount_money.'</span>';
-                }else{
-                    return 0;
-                }
-            })
-            ->addColumn('max_limit', function($res){
-                if($res->debit_limit){
-                    return '<span class="text-danger">'.$res->debit_limit.'</span>';
-                }else{
-                    return 0;
-                }
-            })
+            //->addColumn('opening_creditor', function($res){
+            //    if($res->amount_money < 0){
+            //        return '<span style="color: red;font-size: 15px;">'.$res->amount_money.'</span>';
+            //    }else{
+            //        return 0;
+            //    }
+            //})
+            //->addColumn('opening_debtor', function($res){
+            //    if($res->amount_money > 0){
+            //        return '<span style="font-size: 15px;">'.$res->amount_money.'</span>';
+            //    }else{
+            //        return 0;
+            //    }
+            //})
+            //->addColumn('max_limit', function($res){
+            //    if($res->debit_limit){
+            //        return '<span class="text-danger">'.$res->debit_limit.'</span>';
+            //    }else{
+            //        return 0;
+            //    }
+            //})
             ->addColumn('notes', function($res){
                 return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->note.'">
                             '.Str::limit($res->note, 20).'
@@ -286,7 +308,11 @@ class SuppliersController extends Controller
                 return '
                         <button class="btn btn-sm btn-rounded btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
                             <i class="fas fa-marker"></i>
-                        </button>                        
+                        </button>           
+                    
+                        <button class="btn btn-sm btn-rounded btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" res_title="'.$res->name.'">
+                            <i class="fa fa-trash"></i>
+                        </button>
                         ';
             })
             ->rawColumns(['code', 'name', 'type_name', 'phone', 'address', 'status', 'opening_creditor', 'opening_debtor', 'max_limit', 'notes', 'created_at', 'action'])

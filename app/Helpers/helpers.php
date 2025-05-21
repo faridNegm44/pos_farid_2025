@@ -32,11 +32,19 @@ use Illuminate\Support\Facades\DB;
 
 // start show الارقام العشريه
 if (!function_exists('display_number')) {
-    function display_number($value) {
-        return rtrim(rtrim(strval($value), '0'), '.');
+    function display_number($number) {
+        if (strpos($number, '.') !== false) {
+            // فقط إذا كانت .00 أو أصفار بعد الفاصلة
+            if (preg_match('/\.0+$/', $number)) {
+                return (int)$number;
+            }
+            return rtrim(rtrim($number, '0'), '.');
+        }
+        return $number;
     }
 }
 // end show الارقام العشريه
+
 
 
 

@@ -33,6 +33,7 @@ class ClientsController extends Controller
         if (request()->ajax()){
             $this->validate($request , [
                 'name' => 'required|string|unique:clients_and_suppliers,name|max:255',
+                'type_payment' => 'required|in:كاش,آجل',
                 'address' => 'nullable|string|max:255',
                 'phone' => 'nullable|numeric',
                 'money' => 'nullable|numeric',
@@ -49,12 +50,14 @@ class ClientsController extends Controller
                 'unique' => 'حقل :attribute مستخدم من قبل.',
                 'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
                 'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                'in' => 'القيمة المختارة في :attribute غير مسموح بها. يُرجى اختيار قيمة من الخيارات المتاحة فقط.',
 
             ],[
                 'name' => 'إسم العميل',                
                 'address' => 'عنوان العميل',                
                 'phone' => 'تلفون العميل',                
                 'money' => 'الفلوس',                
+                'type_payment' => 'طريقة التعامل',                
                 'debit_limit' => 'الحد الآقصي لـ مدين',                
                 'commercial_register' => 'ك السجل التجاري',                
                 'tax_card' => 'ك البطاقة الضريبية',                
@@ -75,13 +78,11 @@ class ClientsController extends Controller
                     $name = time() . '.' .$file->getClientOriginalExtension();
                     $path = public_path('back/images/clients');
                     $file->move($path , $name);
-                }
+                } 
 
                 $moneyOnHim = request('money_on_him');
                 $moneyForHim = request('money_for_him');
-                $lastNumId = DB::table('treasury_bill_dets')
-                                ->where('treasury_type', 'رصيد اول عميل')
-                                ->max('num_order');
+                $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'رصيد اول عميل')->max('num_order');
 
                 $getId = DB::table('clients_and_suppliers')->insertGetId([
                     'client_supplier_type' => request('client_supplier_type'),
@@ -92,8 +93,7 @@ class ClientsController extends Controller
                     'address' => request('address'),
                     'image' => $name,
                     'type_payment' => request('type_payment'),
-                    'debit' => request('debit'),
-                    'debit_limit' => request('debit_limit'), 
+                    'debit_limit' => request('type_payment') === 'آجل' ? request('debit_limit') : null, 
                     'status' => request('status'),
                     'commercial_register' => request('commercial_register'),
                     'tax_card' => request('tax_card'),
@@ -137,11 +137,10 @@ class ClientsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $client = ClientsAndSuppliers::where('id', $id)->first();
-        
         if (request()->ajax()){
             $this->validate($request , [
                 'name' => 'required|string|max:255|unique:clients_and_suppliers,name,'.$id,
+                'type_payment' => 'required|in:كاش,آجل',
                 'address' => 'nullable|string|max:255',
                 'phone' => 'nullable|numeric',
                 'money' => 'nullable|numeric',
@@ -158,10 +157,12 @@ class ClientsController extends Controller
                 'unique' => 'حقل :attribute مستخدم من قبل.',
                 'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
                 'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                'in' => 'القيمة المختارة في :attribute غير مسموح بها. يُرجى اختيار قيمة من الخيارات المتاحة فقط.',
 
             ],[
                 'name' => 'إسم العميل',                
-                'address' => 'عنوان العميل',                
+                'address' => 'عنوان العميل',        
+                'type_payment' => 'طريقة التعامل',                
                 'phone' => 'تلفون العميل',                
                 'money' => 'الفلوس',                
                 'debit_limit' => 'الحد الآقصي لـ مدين',                
@@ -175,6 +176,15 @@ class ClientsController extends Controller
                 'image' => 'الصورة',                
             ]);
 
+            
+            //DB::transaction(function() use($id){
+                
+            //!= $client->type_payment && $lastRowTreasuryBillDets->remaining_money != 0
+            //});
+
+
+            $client = ClientsAndSuppliers::where('id', $id)->first();
+            $lastRowTreasuryBillDets = DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->orderBy('id', 'desc')->first();
 
             if(request('image') == ''){
                 $name = request("image_hidden");
@@ -188,49 +198,75 @@ class ClientsController extends Controller
                     File::delete(public_path('back/images/clients/'.$client->image));
                 }
             }
+            
+            if(request('type_payment') != $client->type_payment){
+                if($lastRowTreasuryBillDets->remaining_money != 0){
+                    return response()->json(['errorChangeTypePayment' => '⚠️ لا يمكن تغيير طريقة الدفع حالياً، توجد مديونيات قائمة في الوقت الحالي (له أو عليه) . يُرجى تسوية الحسابات أولاً قبل تعديل طريقة الدفع.']);
 
-            $client->update([
-                'client_supplier_type' => request('client_supplier_type'),
-                'name' => request('name'),
-                'email' => request('email'),
-                'phone' => request('phone'),
-                'address' => request('address'),
-                'image' => $name,
-                'type_payment' => request('type_payment'),
-                'debit' => request('debit'),
-                'debit_limit' => request('debit_limit'),
-                'status' => request('status'),
-                'commercial_register' => request('commercial_register'),
-                'tax_card' => request('tax_card'),
-                'vat_registration_code' => request('vat_registration_code'),
-                'name_of_commissioner' => request('name_of_commissioner'),
-                'phone_of_commissioner' => request('phone_of_commissioner'),
-                'note' => request('note'),
-                'updated_at' => now()
-            ]);
+                }else{
+                    $client->update([
+                        'client_supplier_type' => request('client_supplier_type'),
+                        'name' => request('name'),
+                        'email' => request('email'),
+                        'phone' => request('phone'),
+                        'address' => request('address'),
+                        'image' => $name,
+                        'type_payment' => request('type_payment'),
+                        'debit' => request('debit'),
+                        'debit_limit' => request('debit_limit'),
+                        'status' => request('status'),
+                        'commercial_register' => request('commercial_register'),
+                        'tax_card' => request('tax_card'),
+                        'vat_registration_code' => request('vat_registration_code'),
+                        'name_of_commissioner' => request('name_of_commissioner'),
+                        'phone_of_commissioner' => request('phone_of_commissioner'),
+                        'note' => request('note'),
+                        'updated_at' => now()
+                    ]);
+                }
+
+            }else{
+                $client->update([
+                    'client_supplier_type' => request('client_supplier_type'),
+                    'name' => request('name'),
+                    'email' => request('email'),
+                    'phone' => request('phone'),
+                    'address' => request('address'),
+                    'image' => $name,
+                    'type_payment' => request('type_payment'),
+                    'debit' => request('debit'),
+                    'debit_limit' => request('debit_limit'),
+                    'status' => request('status'),
+                    'commercial_register' => request('commercial_register'),
+                    'tax_card' => request('tax_card'),
+                    'vat_registration_code' => request('vat_registration_code'),
+                    'name_of_commissioner' => request('name_of_commissioner'),
+                    'phone_of_commissioner' => request('phone_of_commissioner'),
+                    'note' => request('note'),
+                    'updated_at' => now()
+                ]);
+            }
         } 
     }
+ 
+    public function destroy($id)
+    {
+        $find = ClientsAndSuppliers::where('id', $id)->first();
+        $clientTreasuryBillDets = DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->get();
 
-     
-    //public function destroy($id)
-    //{
-    //    $find = ClientsAndSuppliers::where('id', $id)->first();
-    //    $find_clients_and_suppliers_dets = DB::table('clients_and_suppliers_dets')->where('client_supplier_id', $id)->get();
+        if(count($clientTreasuryBillDets) > 1){
+            return response()->json(['cannot_delete' => $find->name]);
 
-    //    if(count($find_clients_and_suppliers_dets) > 1){
-    //        return response()->json(['cannot_delete' => $find->name]);
+        }elseif(count($clientTreasuryBillDets) == 1){
+            if($find->image != "df_image.png"){
+                File::delete(public_path('back/images/clients/'.$find->image));
+            }
 
-    //    }elseif(count($find_clients_and_suppliers_dets) == 1){
-    //        $find->delete();
-    //        DB::table('clients_and_suppliers_dets')->where('client_supplier_id', $id)->delete();
-            
-    //        $latestId = $this->latestId;
-    //        return response()->json([
-    //            'success_delete' => $find->name, 
-    //            'latestId' => ($latestId+1)
-    //        ]);
-    //    }
-    //}
+            $find->delete();
+            DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->delete();
+            return response()->json(['success_delete' => $find->name]);
+        }
+    }
 
 
     public function datatable()
@@ -238,13 +274,9 @@ class ClientsController extends Controller
         $all = ClientsAndSuppliers::where('client_supplier_type', 3)
                                     ->orWhere('client_supplier_type', 4)
                                     ->leftJoin('clients_and_suppliers_types', 'clients_and_suppliers_types.id', 'clients_and_suppliers.client_supplier_type')
-                                    
-                                    ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.client_supplier_id', 'clients_and_suppliers.id')
                                     ->select(
                                         'clients_and_suppliers.*', 
                                         'clients_and_suppliers_types.name as type_name',
-                                        'treasury_bill_dets.amount_money',
-                                        'treasury_bill_dets.year_id',
                                     )
                                     ->orderBy('id', 'desc')
                                     ->get();
@@ -256,37 +288,37 @@ class ClientsController extends Controller
                 return  "<strong>#".$res->code."</strong>";
             })
             ->addColumn('name', function($res){
-                return  "<strong>".$res->name."</strong>";
+                return  "<strong class='text-primary'>".$res->name."</strong>";
             })
             ->addColumn('type_name', function($res){
                 return $res->type_name;
             })
             ->addColumn('address', function($res){
-                return '<span class="text-primary" data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->address.'">
+                return '<span class="" data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->address.'">
                             '.Str::limit($res->address, 20).'
                         </span>';
             })
-            ->addColumn('opening_creditor', function($res){
-                if($res->amount_money < 0){
-                    return '<span style="color: red;font-size: 15px;">'.$res->amount_money.'</span>';
-                }else{
-                    return 0;
-                }
-            })
-            ->addColumn('opening_debtor', function($res){
-                if($res->amount_money > 0){
-                    return '<span style="font-size: 15px;">'.$res->amount_money.'</span>';
-                }else{
-                    return 0;
-                }
-            })
-            ->addColumn('max_limit', function($res){
-                if($res->debit_limit){
-                    return '<span class="text-danger">'.$res->debit_limit.'</span>';
-                }else{
-                    return 0;
-                }
-            })
+            //->addColumn('opening_creditor', function($res){
+            //    if($res->amount_money < 0){
+            //        return '<span style="color: red;font-size: 15px;">'.$res->amount_money.'</span>';
+            //    }else{
+            //        return 0;
+            //    }
+            //})
+            //->addColumn('opening_debtor', function($res){
+            //    if($res->amount_money > 0){
+            //        return '<span style="font-size: 15px;">'.$res->amount_money.'</span>';
+            //    }else{
+            //        return 0;
+            //    }
+            //})
+            //->addColumn('max_limit', function($res){
+            //    if($res->debit_limit){
+            //        return '<span class="text-danger">'.$res->debit_limit.'</span>';
+            //    }else{
+            //        return 0;
+            //    }
+            //})
             ->addColumn('notes', function($res){
                 return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->note.'">
                             '.Str::limit($res->note, 20).'
@@ -310,13 +342,14 @@ class ClientsController extends Controller
                 // if (auth()->user()->role_relation->users_update == 1 ){
                 // }
                 return '
-                        <button class="btn btn-sm btn-rounded btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                            <i class="fas fa-marker"></i>
-                        </button>
+                            <button class="btn btn-sm btn-rounded btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                                <i class="fas fa-marker"></i>
+                            </button>
+                            
+                            <button class="btn btn-sm btn-rounded btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" res_title="'.$res->name.'">
+                                <i class="fa fa-trash"></i>
+                            </button>
                         ';
-                            //<button class="btn btn-sm btn-rounded btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" res_title="'.$res->name.'">
-                            //    <i class="fa fa-trash"></i>
-                            //</button>
             })
             ->rawColumns(['code', 'name', 'type_name', 'phone', 'address', 'status', 'opening_creditor', 'opening_debtor', 'max_limit', 'notes', 'created_at', 'action'])
             ->toJson();

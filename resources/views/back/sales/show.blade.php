@@ -15,6 +15,9 @@
             success: function(res){
                 $('#showProductsModal .modal-body').slideDown();
 
+
+                //console.log(display_number_js( res[0].total_bill_after ));
+
                 $.each(res[0] , function(index, value){                    
                     $(`#showProductsModal #header #${index}`).text(value);
                 });
@@ -23,15 +26,19 @@
                 $(`#showProductsModal .print`).attr('res_id', res[0].id);
                 
                 $(`#showProductsModal #header #remaining_money`).text(  
-                    res[0].remaining_money > 0 ? 
+                    res[0].remaining_money >= 0 ? 
                         'علية ' + display_number_js(res[0].remaining_money) : 
                         'لة ' + display_number_js(res[0].remaining_money) 
                 );
+
+                $(`#showProductsModal #header #bill_discount`).text(display_number_js( res[0].bill_discount ));
+                $(`#showProductsModal #header #total_bill_before`).text(display_number_js( res[0].total_bill_before ));
+                $(`#showProductsModal #header #total_bill_after`).text(display_number_js( res[0].total_bill_after ));
+                $(`#showProductsModal #header #amount_money`).text(display_number_js( res[0].amount_money ));
+                $(`#showProductsModal #header #treasury_money_after`).text(display_number_js( res[0].treasury_money_after ));
                 
 
                 // start loop to bill products
-                let totalBillBefore = 0;
-                let totalBillAfter = 0;
                 $.each(res, function(index2, value2){
                     $('#showProductsModal #content tbody').append(`
                         <tr>
@@ -44,19 +51,13 @@
                             <td>${display_number_js( value2.product_bill_quantity )} ${value2.smallUnitName}</td>
                             <td>${display_number_js( value2.last_cost_price_small_unit )}</td>
                             <td>${display_number_js( value2.sell_price_small_unit )}</td>
-                            <td>${display_number_js( value2.tax )}</td>
                             <td>${display_number_js( value2.discount )}</td>
+                            <td>${display_number_js( value2.tax )}</td>
                             <td>${display_number_js( value2.total_before )}</td>
                             <td>${display_number_js( value2.total_after )}</td>
                         </tr>
                     `);
-
-                    totalBillBefore += parseFloat(value2.total_before);
-                    totalBillAfter += parseFloat(value2.total_after);
                 });
-
-                $(`#showProductsModal #header #total_bill_before`).text( display_number_js(totalBillBefore) );
-                $(`#showProductsModal #header #total_bill_after`).text( display_number_js(totalBillAfter) );
                 // end loop to bill products
 
                 

@@ -24,13 +24,13 @@
 
                     alertify.set('notifier','position', 'top-center');
                     alertify.set('notifier','delay', 4);
-                    alertify.error(`تم حذف المورد ( ${res.success_delete} ) بنجاح`);
+                    alertify.success(`تم حذف المورد ( ${res.success_delete} ) بنجاح`);
                 }
 
                 if(res.cannot_delete){
                     alertify.set('notifier','position', 'top-center');
                     alertify.set('notifier','delay', 6);
-                    alertify.warning(`تحذير: لايمكن حذف المورد ( ${res.cannot_delete} ) لأن المورد تم عليه حركات`);
+                    alertify.warning(`تحذير: لايمكن حذف المورد ( ${res.cannot_delete} ) لأن المورد تمت عليه حركات من قبل`);
                 }
 
             },

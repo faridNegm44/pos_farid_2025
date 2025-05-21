@@ -10,6 +10,6 @@ class Expense extends Model
     use HasFactory;
     protected $table = 'expenses';
     protected $fillable = [
-        'treasury', 'title', 'amount', 'notes'
+        'treasury', 'title', 'amount', 'status', 'notes'
     ];
 }

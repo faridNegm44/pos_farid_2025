@@ -24,13 +24,13 @@
 
                     alertify.set('notifier','position', 'top-center');
                     alertify.set('notifier','delay', 4);
-                    alertify.error(`تم حذف العميل ( ${res.success_delete} ) بنجاح`);
+                    alertify.success(`تم حذف العميل ( ${res.success_delete} ) بنجاح`);
                 }
 
                 if(res.cannot_delete){
                     alertify.set('notifier','position', 'top-center');
                     alertify.set('notifier','delay', 6);
-                    alertify.warning(`تحذير: لايمكن حذف العميل ( ${res.cannot_delete} ) لأن العميل تم عليه حركات`);
+                    alertify.warning(`خطأ: لايمكن حذف العميل ( ${res.cannot_delete} ) لأن العميل تمت عليه حركات من قبل`);
                 }
 
             },

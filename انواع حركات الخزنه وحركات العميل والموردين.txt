@@ -21,6 +21,8 @@
     
     مصروف -> relation with ( bill_id ) in ( treasury_bill_dets )
 
+    مرتجع مصروف -> relation with ( bill_id ) in ( treasury_bill_dets )
+
 
 
 

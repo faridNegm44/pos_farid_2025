@@ -1,5 +1,5 @@
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLongTitle"></h5>
@@ -19,33 +19,35 @@
                             <label for="product_id">الأصناف</label>
                             <i class="fas fa-star require_input"></i>
                             <div>
-                                <select  name="product_id" class="product_id selectize" id="product_id">
-                                  <option value="" selected>اختر صنف</option>                              
-                                  @foreach ($products as $product)
+                                <select name="product_id" class="product_id selectize" id="products_selectize">
+                                  {{--@foreach ($products as $product)
                                     <option value="{{ $product->id }}">{{ $product->nameAr }}</option>                              
-                                  @endforeach
+                                  @endforeach--}}
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-product_id" style="display: none;"></bold>
                         </div> 
                         
-                        <div class="col-lg-6 col-12">
-                          <label for="current_quantity">كمية المخزن الحالية</label>
+                        <div class="col-lg-4 col-12">
+                          <label for="current_quantity">كمية المنتج الحالية</label>
                           <div>
                               <input type="number" disabled class="form-control dataInput text-center" placeholder="كمية المخزن الحالية" id="current_quantity" name="current_quantity" value="0" style="font-size: 20px;">
                           </div>
                           <bold class="text-danger" id="errors-current_quantity" style="display: none;"></bold>
                         </div>  
                         
-                        <div class="col-lg-6 col-12">
-                          <label for="quantity">الكمية الجديدة</label>
+                        <div class="col-lg-4 col-12">
+                          <label for="quantity">الكمية الجديدة
+                            <i class="fas fa-info-circle text-danger" data-bs-toggle="tooltip" title="تنبيه: الكمية الجديدة بعد التسوية يتم احتسابها بناءً على عدد وحدات المنتج الصغرى.
+                             مثال: إذا كانت الكمية القديمة 20،وهناك عجز 2 فيتم كتابة الكميه بعد التسوية 18. وكذالك في حالة الزيادة"></i>
+                          </label>
                           <div>
                               <input type="number" class="form-control dataInput text-center" placeholder="الكمية الجديدة" id="quantity" name="quantity" style="font-size: 20px;" />
                           </div>
                           <bold class="text-danger" id="errors-quantity" style="display: none;"></bold>
                         </div>  
                         
-                        <div class="col-12">
+                        <div class="col-lg-4 col-12">
                           <label for="reason_id	">أسباب التسوية</label>
                           <div>
                               <select name="reason_id" class="form-control reason_id" id="reason_id">
@@ -69,16 +71,11 @@
                 </div>
 
                 <div class="modal-footer">                                               
-                    <button type="button" id="save" class="btn btn-primary btn-rounded" style="display: none;">
+                    <button type="button" id="save" class="btn btn-primary btn-rounded">
                       حفظ
                       <span class="spinner-border spinner-border-sm spinner_request" role="status" aria-hidden="true"></span>
                     </button>
 
-                    <button type="button" id="update" class="btn btn-success btn-rounded" style="display: none;">
-                      تعديل
-                      <span class="spinner-border spinner-border-sm spinner_request2" role="status" aria-hidden="true"></span>
-                    </button>
-                    
                     <button id="closeModal" type="button" class="btn btn-outline-secondary btn-rounded" data-dismiss="modal">اغلاق</button>
                 </div> 
 

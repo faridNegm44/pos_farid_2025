@@ -234,7 +234,7 @@
     @include('back.layouts.general_scripts')
 
     {{-- bootstrap.bundle --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    {{--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>--}}
     
     <!-- selectize -->
     <script src="{{ asset('back/assets/selectize.min.js') }}"></script>
