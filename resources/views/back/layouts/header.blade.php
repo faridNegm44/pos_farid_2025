@@ -8,147 +8,107 @@
                 <img src="{{ asset('back') }}/assets/img/brand/logo.png" class="desktop-logo">
                 <img src="{{ asset('back') }}/assets/img/brand/favicon.png" class="desktop-logo-1">
                 <img src="{{ asset('back') }}/assets/img/brand/favicon.png" class="desktop-logo-dark">
-            </a>
+            </a>         
 
-
-
-            <div class="horizontal-main header-layout d-none d-md-flex d-lg-flex" style="margin-right: 50px;">
-                <div class="horizontal-mainwrapper container clearfix">
-                    <nav class="horizontalMenu clearfix"><div class="horizontal-overlapbg"></div>
-                        <ul class="horizontalMenu-list">
-                        
-                            <li aria-haspopup="true" class="nav-item dropdown has-megamenu">
-                                <span class="horizontalMenu-click"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span>
-                                
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" >
-                                <i class="mdi mdi-box-shadow" style="font-size: 17px !important;color: gray;position: relative;top: 2px;"></i>
-                                إختصارات <i class="fe fe-chevron-down horizontal-icon"></i></a>
-                                
-                                <div class="dropdown-menu megamenu card card-primary" role="menu">
-                                    <div class="row g-3">
-                                        
-                                        <div class="col-md-10 col-12">
-                                            <div class="row">
-
-                                                <div class="col-lg-2 col-6">
-                                                    <div class="col-megamenu">
-                                                        <p class="col_heading">تعريفات</p>
-                                                        <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('stores') }}" class="slide-item active">المخازن</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('financialYears') }}" class="slide-item active">السنوات المالية</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('financial_treasury') }}" class="slide-item active">الخزائن المالية</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            
-                                                <div class="col-lg-2 col-6">
-                                                    <div class="col-megamenu">
-                                                        <p class="col_heading">الخزينة</p>
-                                                        <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('treasury_bills') }}" class="slide-item active">معاملات الخزينة المالية</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('treasury_bills/create') }}" class="slide-item active">أجراء معاملة في الخزينة المالية</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('transfer_between_storages') }}" class="slide-item active">التحويل من خزنة لأخري</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('expenses') }}" class="slide-item active">المصروفات</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            
-                                                <div class="col-lg-2 col-6">
-                                                    <div class="col-megamenu">
-                                                        <p class="col_heading">الأشخاص</p>
-                                                        <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('clients') }}" class="slide-item active">العملاء</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('suppliers') }}" class="slide-item active">الموردين</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('users') }}" class="slide-item active">مستخدمين النظام</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            
-                                                <div class="col-lg-2 col-6">
-                                                    <div class="col-megamenu">
-                                                        <p class="col_heading">الأصناف</p>
-                                                        <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('products') }}" class="slide-item active">قائمة الأصناف</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('products/report/stock_alert') }}" class="slide-item active">كشكول النواقص</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('productsCategories') }}" class="slide-item active">أقسام الأصناف</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('units') }}" class="slide-item active">وحدات الأصناف</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>                                            
-                                            
-                                                <div class="col-lg-2 col-6">
-                                                    <div class="col-megamenu">
-                                                        <p class="col_heading">المبيعات</p>
-                                                        <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('sales') }}" class="slide-item active">قائمة المبيعات</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('sales/create') }}" class="slide-item active">فاتورة مبيعات جديدة</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('sales/return') }}" class="slide-item active">قائمة مرتجعات البيع</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>   
-                                            
-                                                <div class="col-lg-2 col-6">
-                                                    <div class="col-megamenu">
-                                                        <p class="col_heading">المشتريات</p>
-                                                        <ul class="list-unstyled">
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('purchases') }}" class="slide-item active">قائمة المشتريات</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('purchases/create') }}" class="slide-item active">فاتورة مشتريات جديدة</a></li>
-                                                            <li aria-haspopup="true" class="active"><a href="{{ url('purchases/return') }}" class="slide-item active">قائمة مرتجعات الشراء</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>   
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-md-2 col-12">
-                                            <div class="">
-                                                <div class="col-megamenu">
-                                                    <p class="col_heading">تقارير</p>
-                                                    <ul class="list-unstyled">
-                                                        <li aria-haspopup="true" class="active"><a href="{{ url('suppliers/report') }}" class="slide-item active">تقرير عن حركة مورد</a></li>
-                                                        <li aria-haspopup="true" class="active"><a href="{{ url('clients/report') }}" class="slide-item active">تقرير عن حركة عميل</a></li>
-                                                        <li aria-haspopup="true" class="active"><a href="{{ url('expenses/report') }}" class="slide-item active">تقرير عن المصروفات</a></li>
-                                                        <li aria-haspopup="true" class="active"><a href="{{ url('treasury_bills/report') }}" class="slide-item active">تقرير عن حركة الخزائن المالية</a></li>
-                                                        <li aria-haspopup="true" class="active"><a href="{{ url('products/report') }}" class="slide-item active">تقرير عن حركة صنف</a></li>
-                                                        <li aria-haspopup="true" class="active"><a href="{{ url('products/report/stock_alert') }}" class="slide-item active">تقرير عن كشكول النواقص</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </li>
-
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-           
-
-
-
-            {{--<div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">
+            <div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">
                 <div class="horizontal-mainwrapper container clearfix">
                     <nav class="horizontalMenu clearfix"><div class="horizontal-overlapbg"></div>
                         <ul class="horizontalMenu-list">
                             <li aria-haspopup="true"><span class="horizontalMenu-click"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span>
-                                <a class="sub-icon">
+                                <a class="sub-icon" href="#">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                                 
-                                إختصارات 
-                                <i class="fe fe-chevron-down horizontal-icon"></i></a>
-
+                                إختصارات <i class="fe fe-chevron-down horizontal-icon"></i></a>
                                 <ul class="sub-menu">
-                                    <li aria-haspopup="true"><a href="http://localhost/edustage_system_2024/public/time_table" class="slide-item">جدول الحصص</a></li>
-                                    <li aria-haspopup="true"><a href="http://localhost/edustage_system_2024/public/time_table" class="slide-item">تقيمات الطلاب</a></li>                                   
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="">تعريفات</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('stores') }}" class="slide-item">المخازن</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('financialYears') }}" class="slide-item">السنوات المالية</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">الخزائن المالية</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="{{ url('treasury_bills/create') }}">الحسابات</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('treasury_bills') }}" class="slide-item">معاملات الخزينة المالية</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('treasury_bills/create') }}" class="slide-item">أجراء معاملة في الخزينة المالية</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('transfer_between_storages') }}" class="slide-item">التحويل من خزنة لأخري</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('expenses') }}" class="slide-item">المصروفات</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('expenses/report') }}" class="slide-item">تقرير عن المصروفات</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('treasury_bills/report') }}" class="slide-item">تقرير عن حركة الخزائن المالية</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="{{ url('clients') }}">العملاء</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('clients') }}" class="slide-item">العملاء</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('clients/report') }}" class="slide-item">تقرير عن حركة عميل</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="{{ url('suppliers') }}">الموردين</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('suppliers') }}" class="slide-item">الموردين</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('suppliers/report') }}" class="slide-item">تقرير عن حركة مورد</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="{{ url('products') }}">الأصناف</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('products') }}" class="slide-item">قائمة الأصناف</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('products/report/stock_alert') }}" class="slide-item">كشكول النواقص</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('productsCategories') }}" class="slide-item">أقسام الأصناف</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('units') }}" class="slide-item">وحدات الأصناف</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item">تسوية كميات الأصناف</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="{{ url('sales/create') }}">المبيعات</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('sales') }}" class="slide-item">قائمة المبيعات</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('sales/create') }}" class="slide-item">فاتورة مبيعات جديدة</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('sales/return') }}" class="slide-item">قائمة مرتجعات البيع</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="{{ url('purchases/create') }}">المشتريات</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('purchases') }}" class="slide-item">قائمة المشتريات</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('purchases/create') }}" class="slide-item">فاتورة مشتريات جديدة</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('purchases/return') }}" class="slide-item">قائمة مرتجعات الشراء</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="">تقارير</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('suppliers/report') }}" class="slide-item">تقرير عن حركة مورد</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('clients/report') }}" class="slide-item">تقرير عن حركة عميل</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('expenses/report') }}" class="slide-item">تقرير عن المصروفات</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('treasury_bills/report') }}" class="slide-item">تقرير عن حركة الخزائن المالية</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('products/report') }}" class="slide-item">تقرير عن حركة صنف</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('products/report/stock_alert') }}" class="slide-item">تقرير عن كشكول النواقص</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="{{ url('users') }}">مستخدمين النظام</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('users') }}" class="slide-item">مستخدمين النظام</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="{{ url('settings') }}">الإعدادات العامة</a>
+                                        <ul class="sub-menu">
+                                            <li aria-haspopup="true"><a href="{{ url('settings') }}" class="slide-item">الإعدادات العامة</a></li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
                     </nav>
                 </div>
-            </div>--}}
-
+            </div>
+            
             
             {{-- <div class="main-header-center  mr-4">
                 <input class="form-control" placeholder="Search for anything..." type="search"><button class="btn"><i class="fe fe-search"></i></button>

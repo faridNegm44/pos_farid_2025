@@ -47,7 +47,7 @@
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('transfer_between_stores') }}" class="slide-item text-dark">تحويلات الأصناف بين المخازن</a></li>
                             <hr class="navbar_hr"/>
-                            <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item text-dark">الهالك / تسوية أصناف</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item text-dark">تسوية كميات الأصناف</a></li>
                             {{--<li aria-haspopup="true"><a href="chart-echart.html" class="slide-item text-dark">المواد الخام</a></li>--}}
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('products/report') }}" class="slide-item text-dark">تقرير عن حركة صنف</a></li>
