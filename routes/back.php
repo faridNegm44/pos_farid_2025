@@ -354,6 +354,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
     // start get all products contains char this search
     Route::get('search_products_by_selectize' , 'SearchController@search_products_by_selectize');
+    Route::get('search_suppliers_by_selectize' , 'SearchController@search_suppliers_by_selectize');
     Route::get('search_clients_by_selectize' , 'SearchController@search_clients_by_selectize');
     // end get all products contains char this search
 

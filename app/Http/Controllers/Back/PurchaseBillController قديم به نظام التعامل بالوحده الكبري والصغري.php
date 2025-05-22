@@ -151,7 +151,7 @@ class PurchaseBillController extends Controller
                 $calcTotalProductsAfter = $afterPlusTaxBill;    //  اجمالي سعر المنتجات بعد الخصم والضريبة لكل منتج + خصم ومصاريف اضافيه وضريبه الفاتوره كامله
             }
 
-            //dd($calcTotalProductsAfter);
+            //dd($calcTotalProductsBefore);
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // نهاية العمليات الحسابيه الخاصه بكل منتج سواء سعر بيعه او عدد البيع او الضريبه وكذاله اجمالي سعر المنتجات كلها قبل وبعد الخصم
@@ -195,59 +195,110 @@ class PurchaseBillController extends Controller
                     $tax = (float) request('prod_tax')[$index];
                     //$bonus = (float) request('prod_bonus')[$index];
                     
-                                        
-                    $totalQuantity = $lastProductQuantity + $quantity;
                     
-                    $last_cost_price_small_unit = $purchasePrice;
-                    $sell_price_small_unit = $sellPrice;
+                    // بدايه معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري /////////////////////////////////////////////////////////////////
+                    $productInfo = DB::table('products')->where('id', $product_id)->first();
+                    $unit = (float) request('prod_units')[$index]; // مخصص لمعرفة نوع الوحده المستخدمه لكل صنف في عملية الشراء
                     
-                    $product_total = (  $quantity * $purchasePrice );    // اجمالي الصنف قبل
-                    $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                    $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
-                                        
-                    // حساب متوسط التكلفه ///////////////////////////////////////////////////////////////////////////
-                        //✅ الإجمالي الحالي في المخزون:
-                        //    من (2) الدفعة الأولى بسعر 100 = 2 × 100 = 200
-                        //    من (7) الدفعة الثانية بسعر 120 = 7 × 120 = 840
-                        //    المجموع الكلي = 200 + 840 = 1040 جنيه
-                        //    إجمالي الكمية = 2 + 7 = 9 قطع
+                    if ($unit == $productInfo->smallUnit) {
+                        $totalQuantity = $lastProductQuantity + $quantity;
+                        $onlyQuantityThisBill = $quantity;
 
-                        //    ✅ المتوسط المرجح:
-                        //    متوسط التكلفة
-                        //    =
-                        //    إجمالي تكلفةالبضاعةالمتبقية
-                        //      ___________________
-                        //    إجمالي الكمية
-                        //    =
-                        //    1040
-                        //     ______
-                        //    9
-                        //    ≈
-                        //    115.56
-                    
-                        $getLatestPriceFromStoreDets = DB::table('store_dets')
-                                                        ->where('type', 'اضافة فاتورة مشتريات')
-                                                        ->orWhere('type', 'رصيد اول مدة للصنف')
-                                                        ->where('product_id', $product_id)
-                                                        ->orderBy('id', 'desc')
-                                                        ->first();
+                        $last_cost_price_small_unit = $purchasePrice;
+                        $sell_price_small_unit = $sellPrice;
                         
-                        $getLatestRowToProduct = DB::table('store_dets')
-                                                        ->where('product_id', $product_id)
-                                                        ->orderBy('id', 'desc')
-                                                        ->first();
+                        $product_total = ( $onlyQuantityThisBill * $purchasePrice );    // اجمالي الصنف قبل
+                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
+                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
                         
-                        $firstCalcOfAvg =   (
-                                                ($getLatestPriceFromStoreDets->avg_cost_price_small_unit ?? $purchasePrice) * 
-                                                $getLatestRowToProduct->quantity_small_unit
-                                            ); // اجمالي تكلفة البضاعة المتبقية
-                                                                                        
-                        $secondCalcOfAvg =   $after_tax; // اجمالي تكلفة البضاعة الجديدة
-                                                                                
-                        $clacAvgCostPrice = ($firstCalcOfAvg + $secondCalcOfAvg) / ($getLatestRowToProduct->quantity_small_unit +  $quantity); // المتوسط المرجح
+                        $calcTotalProductsAfter += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
+                        
+                        // حساب متوسط التكلفه ///////////////////////////////////////////////////////////////////////////
+                            //✅ الإجمالي الحالي في المخزون:
+                            //    من (2) الدفعة الأولى بسعر 100 = 2 × 100 = 200
+                            //    من (7) الدفعة الثانية بسعر 120 = 7 × 120 = 840
+                            //    المجموع الكلي = 200 + 840 = 1040 جنيه
+                            //    إجمالي الكمية = 2 + 7 = 9 قطع
 
-                    //  حساب متوسط التكلفه ////////////////////////////////////////////////////////
-                
+                            //    ✅ المتوسط المرجح:
+                            //    متوسط التكلفة
+                            //    =
+                            //    إجمالي تكلفةالبضاعةالمتبقية
+                            //      ___________________
+                            //    إجمالي الكمية
+                            //    =
+                            //    1040
+                            //     ______
+                            //    9
+                            //    ≈
+                            //    115.56
+                        
+                            $getLatestPriceFromStoreDets = DB::table('store_dets')
+                                                            ->where('type', 'اضافة فاتورة مشتريات')
+                                                            ->orWhere('type', 'رصيد اول مدة للصنف')
+                                                            ->where('product_id', $product_id)
+                                                            ->orderBy('id', 'desc')
+                                                            ->first();
+                            
+                            $getLatestRowToProduct = DB::table('store_dets')
+                                                            ->where('product_id', $product_id)
+                                                            ->orderBy('id', 'desc')
+                                                            ->first();
+                            
+                            $firstCalcOfAvg =   (
+                                                    ($getLatestPriceFromStoreDets->avg_cost_price_small_unit ?? $purchasePrice) * 
+                                                    $getLatestRowToProduct->quantity_small_unit
+                                                ); // اجمالي تكلفة البضاعة المتبقية
+                                                                                            
+                            $secondCalcOfAvg =   $after_tax; // اجمالي تكلفة البضاعة الجديدة
+                                                                                    
+                            $clacAvgCostPrice = ($firstCalcOfAvg + $secondCalcOfAvg) / ($getLatestRowToProduct->quantity_small_unit + $onlyQuantityThisBill); // المتوسط المرجح
+
+                        //  حساب متوسط التكلفه ////////////////////////////////////////////////////////
+                                
+                    } else { // لو وحده المنتج المختاره في الفاتوره كبري
+                                                
+                        $product_total = ( $quantity * $purchasePrice );    // اجمالي الصنف قبل سعر تكلفه
+                        $product_total_sell_price = ( $quantity * $sellPrice );    // اجمالي الصنف قبل سعر بيعه
+
+                        $onlyQuantityThisBill = $quantity * $productInfo->small_unit_numbers;
+                        
+                        $last_cost_price_small_unit = ( $product_total / $onlyQuantityThisBill );
+                        $sell_price_small_unit = ( $product_total_sell_price / $onlyQuantityThisBill );
+                        
+                        $totalQuantity = $lastProductQuantity + $onlyQuantityThisBill;
+
+                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
+                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+
+                        $calcTotalProductsAfter += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
+
+                        //  حساب متوسط التكلفه ///////////////////////////////////////////////////////////////////////////
+                            $getLatestPriceFromStoreDets = DB::table('store_dets')
+                                                            ->where('type', 'اضافة فاتورة مشتريات')
+                                                            ->orWhere('type', 'رصيد اول مدة للصنف')
+                                                            ->where('product_id', $product_id)
+                                                            ->orderBy('id', 'desc')
+                                                            ->first();
+                            
+                            $getLatestRowToProduct = DB::table('store_dets')
+                                                            ->where('product_id', $product_id)
+                                                            ->orderBy('id', 'desc')
+                                                            ->first();
+                            
+                            $firstCalcOfAvg =   (
+                                                    ($getLatestPriceFromStoreDets->avg_cost_price_small_unit ?? $purchasePrice) * 
+                                                    $getLatestRowToProduct->quantity_small_unit
+                                                ); // اجمالي تكلفة البضاعة المتبقية
+                                                                                            
+                            $secondCalcOfAvg =   $after_tax; // اجمالي تكلفة البضاعة الجديدة
+                                                                                    
+                            $clacAvgCostPrice = ($firstCalcOfAvg + $secondCalcOfAvg) / ($getLatestRowToProduct->quantity_small_unit + $onlyQuantityThisBill); // المتوسط المرجح
+
+                        //  حساب متوسط التكلفه ///////////////////////////////////////////////////////////////////////////
+                    }
+                    // نهاية معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري
+
 
                     DB::table('store_dets')->insert([
                         'num_order' => ($lastNumId + 1),
@@ -258,10 +309,11 @@ class PurchaseBillController extends Controller
                         'sell_price_small_unit' => $sell_price_small_unit,                                            
                         'last_cost_price_small_unit' => $last_cost_price_small_unit,
                         'avg_cost_price_small_unit' => $clacAvgCostPrice, 
-                        'product_bill_quantity' =>  $quantity,
+                        'product_bill_quantity' => $onlyQuantityThisBill,
                         'quantity_small_unit' => $totalQuantity,
                         'tax' => request('prod_tax')[$index],
                         'discount' => request('prod_discount')[$index],
+                        //'bonus' => request('prod_bonus')[$index],
                         'total_before' => $product_total,
                         'total_after' => $after_tax,
                         'return_quantity' => 0,
@@ -272,6 +324,37 @@ class PurchaseBillController extends Controller
                         'created_at' => now()
                     ]);
                 }
+
+                
+                // بدايه عمل حركه للمورد نوعها اضافة فاتورة مشتريات لتسجيل اجمالي الفاتورة له حتي لو لم يتفع دفع له فلوس
+                    $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اضافة فاتورة مشتريات')->max('num_order'); 
+                    $lastRecordSupplier = DB::table('treasury_bill_dets')
+                                            ->where('client_supplier_id', request('supplier_id'))
+                                            ->orderBy('id', 'desc')
+                                            ->first();
+                                        
+                    if($lastRecordSupplier->remaining_money >= 0){
+                        $userValue = ( $lastRecordSupplier->remaining_money - $calcTotalProductsAfter );
+                    }else{
+                        $userValue = ( $lastRecordSupplier->remaining_money - $calcTotalProductsAfter );
+                    }
+                                        
+                    DB::table('treasury_bill_dets')->insert([
+                        'num_order' => ($lastNumIdTreasuryDets+1), 
+                        'date' => now(),
+                        'treasury_id' => 0, 
+                        'treasury_type' => 'اضافة فاتورة مشتريات', 
+                        'bill_id' => $purchaseBillId, 
+                        'bill_type' => 'اضافة فاتورة مشتريات', 
+                        'client_supplier_id' => request('supplier_id'), 
+                        'remaining_money' => $userValue, 
+                        'notes' => request('notes'), 
+                        'user_id' => auth()->user()->id, 
+                        'year_id' => $this->currentFinancialYear(),
+                        'created_at' => now()
+                    ]);
+                // نهاية عمل حركه للمورد نوعها اضافة فاتورة مشتريات لتسجيل اجمالي الفاتورة له حتي لو لم يتفع دفع له فلوس
+
 
 
                 // start check if paied money of this bill or not لو دفعت فلوس للمورد هخصمها 
@@ -294,8 +377,11 @@ class PurchaseBillController extends Controller
                                                     ->orderBy('id', 'desc')
                                                     ->first();
                                                 
-                            $userValueBefore = ( $lastRecordSupplier->remaining_money - $calcTotalProductsAfter );
-                            $userValueAfter = ( $userValueBefore + $amount_paid );
+                            if($lastRecordSupplier->remaining_money >= 0){
+                                $userValue = ( $lastRecordSupplier->remaining_money + $amount_paid );
+                            }else{
+                                $userValue = ( $lastRecordSupplier->remaining_money + $amount_paid );
+                            }
                                                                     
                             DB::table('treasury_bill_dets')->insert([
                                 'num_order' => ($lastNumIdTreasuryDets+1), 
@@ -307,7 +393,7 @@ class PurchaseBillController extends Controller
                                 'client_supplier_id' => request('supplier_id'), 
                                 'treasury_money_after' => ($lastAmountOfTreasury - $amount_paid), 
                                 'amount_money' => $amount_paid, 
-                                'remaining_money' => $userValueAfter, 
+                                'remaining_money' => $userValue, 
                                 'transaction_from' => null, 
                                 'transaction_to' => null, 
                                 'notes' => request('notes'), 
@@ -316,30 +402,6 @@ class PurchaseBillController extends Controller
                                 'created_at' => now()
                             ]);
                         }
-                        
-                    }else{ // لو مدفعتش فلوووس للمورد
-                        $lastNumIdTreasuryDets = DB::table('treasury_bill_dets')->where('treasury_type', 'اضافة فاتورة مشتريات')->max('num_order'); 
-                        $lastRecordSupplier = DB::table('treasury_bill_dets')
-                                                ->where('client_supplier_id', request('supplier_id'))
-                                                ->orderBy('id', 'desc')
-                                                ->first();
-                                            
-                        $userValue = ( $lastRecordSupplier->remaining_money - $calcTotalProductsAfter );
-                                        
-                        DB::table('treasury_bill_dets')->insert([
-                            'num_order' => ($lastNumIdTreasuryDets+1), 
-                            'date' => now(),
-                            'treasury_id' => 0, 
-                            'treasury_type' => 'اضافة فاتورة مشتريات', 
-                            'bill_id' => $purchaseBillId, 
-                            'bill_type' => 'اضافة فاتورة مشتريات', 
-                            'client_supplier_id' => request('supplier_id'), 
-                            'remaining_money' => $userValue, 
-                            'notes' => request('notes'), 
-                            'user_id' => auth()->user()->id, 
-                            'year_id' => $this->currentFinancialYear(),
-                            'created_at' => now()
-                        ]);
                     }
                 // end check if paied money of this bill or not لو دفعت فلوس للمورد هخصمها 
             });

@@ -23,9 +23,10 @@
                                     
                                     <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="">تعريفات</a>
                                         <ul class="sub-menu">
-                                            <li aria-haspopup="true"><a href="{{ url('stores') }}" class="slide-item">المخازن</a></li>
                                             <li aria-haspopup="true"><a href="{{ url('financialYears') }}" class="slide-item">السنوات المالية</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('stores') }}" class="slide-item">المخازن</a></li>
                                             <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item">الخزائن المالية</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('units') }}" class="slide-item">وحدات الأصناف</a></li>
                                         </ul>
                                     </li>
                                     

@@ -1,5 +1,5 @@
 <div class="modal fade" id="modal_save_bill" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
 
             <!-- Modal Header -->
@@ -16,7 +16,7 @@
             <!-- Modal Body -->
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="">
                             <label for="treasuries">خزائن النظام</label>
                             <div>    
@@ -55,10 +55,14 @@
                         </div>
                     </div>
                     
-                    <div class="col-lg-6">    
-                        <div class="text-center" id="supplier_div" style="margin-bottom: 10px;display: none;">
+                    <div class="col-lg-4">    
+                        <div style="border: 1px solid;padding: 30px 15px;border-radius: 10px;text-align: center;">
 
-                            <table class="table table-striped table-bordered">
+                            <table class="table table-bordered table-striped text-center" id="supplier_table_info">
+                                <p class="text-start fs-5">
+                                    بيانات المورد: 
+                                    <span style="margin: 0 3px;display: inline;font-size: 15px;" class="text-danger" id="supplier_name"></span>
+                                </p>
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>دائن (له)</th>
@@ -76,18 +80,30 @@
                         </div>
                     </div>
 
-                    <div class="col-12" style="margin-top: 25px;" id="modal_save_bill_footer">
+                    <div class="col-lg-4" style="margin-top: 11px;">    
+                        <ul class="list-unstyled" style=" padding: 0 !important;">
+                            <li class="alert alert-outline-info p-2 mb-2 rounded" style="color: #000;padding-bottom: 3px !important;">
+                                <span style="width: 130px;"> إجمالي الفاتورة قبل:</span> <span style="margin: 0 10px;font-size: 15px;position: relative;top: -4px;text-decoration: line-through;" class="subtotal">0</span>
+                            </li>
+                            
+                            <li class="bg-danger-gradient p-2 mb-2 rounded" style="color: #000;padding-bottom: 3px !important;">
+                                <span style="width: 130px;">إجمالي الفاتورة بعد:</span> <span style="margin: 0 10px;font-size: 20px;position: relative;top: -4px;" class="total_bill_after">0</span>
+                            </li>                            
+                        </ul>
+                    </div>            
+
+                    <div class="col-12" style="margin-top: 25px;display: none;" id="modal_save_bill_footer">
                         <h3 class="alert-danger text-center" style="padding: 10px 20px;margin: 5px auto;display: none;">يجب اصلاح جميع أخطاء الفاتورة قبل الحفظ</h3>
                         <div class="row justify-content-center">
-                            <button class="col-lg-6 col-12 btn btn-success" id="finally_save_bill_btn" style="font-size: 14px;color: #000;">
+                            <button class="col-lg-4 col-12 btn btn-success-gradient btn-rounded" id="finally_save_bill_btn" style="font-size: 14px;color: #000;">
                                 حفظ الفاتورة                            
                             </button>
             
-                            <button class="col-lg-6 col-12 btn btn-primary" id="finally_save_bill_and_print_btn" style="font-size: 14px;">
+                            <button class="col-lg-4 col-12 btn btn-primary-gradient btn-rounded" id="finally_save_bill_and_print_btn" style="font-size: 14px;color: #000;">
                                 حفظ وطباعة
                             </button>
 
-                            <button class="col-12 btn btn-secondary-gradient" style='margin-top: 10px;font-size: 16px;color: #000;' data-dismiss="modal">
+                            <button class="col-lg-4 btn btn-secondary-gradient btn-rounded" style='font-size: 14px;color: #000;' data-dismiss="modal">
                                 إغلاق
                             </button>
                         </div>

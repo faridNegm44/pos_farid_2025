@@ -98,7 +98,6 @@
                             <li class="bg-danger-gradient p-2 mb-2 rounded" style="color: #000;padding-bottom: 3px !important;">
                                 <span style="width: 110px;">المتبقي:</span> <span id="remaining" style="margin: 0 10px;font-size: 15px;position: relative;top: -4px;">0</span>
                             </li>
-                            
                         </ul>
                     </div>                
 

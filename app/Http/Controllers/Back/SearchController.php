@@ -21,8 +21,8 @@ class SearchController extends Controller
 
         $items = Product::where('nameAr', 'like', "%$query%")
                         ->orWhere('nameEn', 'like', "%$query%")
-                        ->orWhere('shortCode', 'like', "%$query%")
                         ->orWhere('natCode', 'like', "%$query%")
+                        ->orWhere('shortCode', 'like', "%$query%")
                         ->leftJoin('store_dets', 'store_dets.product_id', 'products.id')
                         ->leftJoin('units as smallUnit', 'smallUnit.id', 'products.smallUnit')
                         ->leftJoin('units as bigUnit', 'bigUnit.id', 'products.bigUnit')
@@ -54,6 +54,41 @@ class SearchController extends Controller
 
                         //return $items;
         return response()->json(['items' => $items]);        
+    
+    }
+    
+    
+    public function search_suppliers_by_selectize(Request $request)
+    {
+        $query = $request->get('data_input_search');
+
+        $suppliers = DB::table('clients_and_suppliers')
+                    ->leftJoin('treasury_bill_dets', function ($join) {
+                        $join->on('treasury_bill_dets.client_supplier_id', '=', 'clients_and_suppliers.id')
+                            ->whereRaw('treasury_bill_dets.id = (
+                                SELECT MAX(id) FROM treasury_bill_dets 
+                                WHERE client_supplier_id = clients_and_suppliers.id
+                            )');
+                    })
+                    ->where(function ($q) use ($query) {
+                        $q->where('clients_and_suppliers.name', 'like', "%$query%")
+                        ->orWhere('clients_and_suppliers.phone', 'like', "%$query%")
+                        ->orWhere('clients_and_suppliers.address', 'like', "%$query%");
+                    })
+                    ->whereIn('clients_and_suppliers.client_supplier_type', [1, 2])
+                    ->orderBy('clients_and_suppliers.name', 'asc')
+                    ->limit(50)
+                    ->get([
+                        'clients_and_suppliers.id',
+                        'clients_and_suppliers.name',
+                        'clients_and_suppliers.phone',
+                        'clients_and_suppliers.address',
+                        'clients_and_suppliers.type_payment',
+                        'treasury_bill_dets.remaining_money',
+                    ]);
+
+                    //dd($suppliers);
+        return response()->json(['suppliers' => $suppliers]);        
     
     }
     

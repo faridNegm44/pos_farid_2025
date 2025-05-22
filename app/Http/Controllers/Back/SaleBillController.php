@@ -81,8 +81,8 @@ class SaleBillController extends Controller
                 'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
                 'array' => 'يجب أن يكون حقل :attribute عبارة عن مجموعة عناصر.',
                 ], [
-                'client_id' => 'اسم العميل',
-                'financial_treasuries' => 'اسم الخزينة المالية',
+                'client_id' => 'العميل',
+                'financial_treasuries' => 'الخزينة المالية',
                 'custom_bill_num' => 'رقم الفاتورة المخصص',
                 'custom_date' => 'تاريخ الفاتورة',
                 'static_discount_bill' => 'الخصم العام على الفاتورة',
@@ -206,7 +206,6 @@ class SaleBillController extends Controller
                             'created_at' => now()
                         ]);
                         
-        
                         foreach( request('prod_name')  as $index => $product_id ){
                             $lastProductQuantity = DB::table('store_dets')
                                         ->where('product_id', $product_id)

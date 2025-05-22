@@ -84,6 +84,7 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'action', name: 'action', orderable: false},
                     {data: 'name', name: 'name'},
                     {data: 'sell_price_small_unit', name: 'sell_price_small_unit'},
                     {data: 'last_cost_price_small_unit', name: 'last_cost_price_small_unit'},
@@ -93,7 +94,6 @@
                     {data: 'quantity_small_unit', name: 'quantity_small_unit'},
                     {data: 'image', name: 'image'},
                     {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action', orderable: false},
                 ],
                 order: [[ 0, 'desc' ]],
                 fixedColumns: {
@@ -153,6 +153,7 @@
                     <thead>
                         <tr>
                             <th class="border-bottom-0">كود</th>
+                            <th class="border-bottom-0">التحكم</th>
                             <th class="border-bottom-0" style="width: 30%;">اسم الصنف</th>
                             <th class="border-bottom-0">سعر البيع</th>
                             <th class="border-bottom-0">سعر الشراء</th>
@@ -162,7 +163,6 @@
                             <th class="border-bottom-0" >كمية الصنف</th>
                             <th class="border-bottom-0" >صورة</th>
                             <th class="border-bottom-0" >الحالة</th>
-                            <th class="border-bottom-0">التحكم</th>
                         </tr>
                     </thead>                                
                 </table>

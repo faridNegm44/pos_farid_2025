@@ -100,7 +100,7 @@
     }
     
     #page_purchases .footer-btn-group {
-        background-color: #e3bfc6;
+        background-color: #bda17e;
         position: fixed;
         bottom: 0;
         right: 12px;
