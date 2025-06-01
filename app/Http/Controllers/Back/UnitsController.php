@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 use App\Models\Back\Units;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class UnitsController extends Controller
@@ -63,9 +64,17 @@ class UnitsController extends Controller
     }
 
      
-    public function destroy($id)
-    {
-        
+    public function destroy($id){
+        $unit = DB::table('products')->where('bigUnit', $id)->orWhere('smallUnit', $id)->first();
+
+        if ($unit) {
+            return response()->json(['cannot_delete' => 'cannot_delete']);
+        }
+
+        if (!$unit) {
+            DB::table('units')->where('id', $id)->delete();
+            return response()->json(['success_delete' => 'success_delete']);
+        }
     }
 
 
@@ -82,11 +91,12 @@ class UnitsController extends Controller
                         <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
                             <i class="fas fa-marker"></i>
                         </button>
+
+                        <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" unit_name="'.$res->name.'">
+                            <i class="fa fa-trash"></i>
+                        </button>
                     ';
     
-                        //<button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'">
-                        //    <i class="fa fa-trash"></i>
-                        //</button>
             })
             ->rawColumns(['name', 'action'])
             ->toJson();

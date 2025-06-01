@@ -15,13 +15,15 @@
                     <ul class="invoice-info">
                       <li><span>رقم فاتورة:</span> <span class='header_span' id="id"></span></li>
                       <li><span>رقم فاتورة مخصص:</span> <span class='header_span' id="custom_bill_num"></span></li>
-                      <li><span>نوع الإذن:</span> <span class='header_span' id="treasury_type"></span></li>
+                      <li><span>اذن الخزينة:</span> <span class='header_span' id="treasury_type"></span></li>
+                      <li><span>اذن الفاتورة:</span> <span class='header_span' id="bill_type"></span></li>
                       <li><span>عدد أصناف الفاتورة:</span> <span class='header_span' id="count_items"></span></li>
                       <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span></li>                      
-                      <li><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before"></span></li>
-                      <li><span>إجمالي فاتورة بعد:</span> <span class='header_span' id="total_bill_after"></span></li>
-                      <li><span>مستخدم الإضافة:</span> <span class='header_span' id="userName"></span></li>
-                      <li><span>ملاحظات:</span> <span class='header_span' id="notes"></span></li>
+                      <li><span>ضريبة الفاتورة:</span> <span class='header_span' id="bill_tax"></span></li>                      
+                      <li><span>مصاريف إضافية:</span> <span class='header_span' id="extra_money"></span></li>                      
+                      <li><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before" style=""></span></li>
+                      <li><span>إجمالي فاتورة بعد:</span> <span class='header_span' id="total_bill_after" style="border: 1px solid;padding: 2px 5px;"></span></li>
+                      
                     </ul>
                   </div>
 
@@ -34,6 +36,8 @@
                       <li><span>رصيد الخزينة بعد:</span> <span class='header_span' id="treasury_money_after"></span></li>
                       <li><span>تاريخ الإنشاء:</span> <span class='header_span' id="created_at"></span></li>
                       <li><span>تاريخ آخر:</span> <span class='header_span' id="custom_date"></span></li>
+                      <li><span>مستخدم الإضافة:</span> <span class='header_span' id="userName"></span></li>
+                      <li><span>ملاحظات:</span> <span class='header_span' id="notes"></span></li>
                     </ul>
                   </div>
                 </div>

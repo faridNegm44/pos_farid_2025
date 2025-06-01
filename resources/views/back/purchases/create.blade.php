@@ -95,6 +95,11 @@
             .dark_theme{
                 display: none;
             }
+            @media (max-width: 991px) {
+                #top_section {
+                    margin-top: 30px;
+                }
+            }
         </style>
 	</head>
 
@@ -175,7 +180,7 @@
                             <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #f3e5d3; ">
                                 <div class="row">
                                     
-                                    <p class="col-lg-4 col-12">
+                                    <p class="col-lg-6 col-12">
                                         <label for="">
                                             ضريبة ق م (%)
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا."></i>
@@ -183,7 +188,7 @@
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" name="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
                                     </p>
         
-                                    <p class="col-lg-4 col-12">
+                                    <p class="col-lg-6 col-12">
                                         <label for="">
                                             خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
@@ -191,13 +196,13 @@
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="discount_bill" name="discount_bill" placeholder="خصم قيمة" style="font-size: 12px;" />
                                     </p>
                                     
-                                    <p class="col-lg-4 col-12">
+                                    {{--<p class="col-lg-4 col-12">
                                         <label for="">
                                             مصاريف إضافية
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
                                         </label>
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" />
-                                    </p>
+                                    </p>--}}
                         
                                     <p class="col-6" id="countTableTr" style="font-size: 13px;font-weight: bold;">
                                         عدد العناصر:
@@ -450,7 +455,7 @@
             $('#products_selectize').selectize({
                 valueField: 'id',  // القيمة المخزنة عند الاختيار
                 labelField: 'nameAr', // النص الظاهر للمستخدم
-                searchField: ['id', 'nameAr', 'nameEn'], // البحث في كل الحقول
+                searchField: ['id', 'nameAr', 'nameEn', 'natCode', 'shortCode'], // البحث في كل الحقول
                 loadThrottle: 300, // تقليل عدد الطلبات عند البحث
                 maxItems: 1, // اختيار عنصر واحد فقط
                 create: false, // منع إضافة عناصر جديدة
@@ -528,37 +533,37 @@
                         //const bigAndSmallUnit = ``;
 
                         $('#products_table tbody').append(`
-                            <tr id="tr_${productId}">
-                                <th>${productId}</th>
-                                <td>
-                                    <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                <td class="prod_name">
-                                    ${productName}
-                                    <input autocomplete="off" type='hidden' name="prod_name[]" value="${productId}" />
-                                </td>
-                                <td class="">
-                                    <span>${smallUnitName}</span>
-                                    <input autocomplete="off" type='hidden' class='small_unit_numbers' value='${small_unit_numbers}' />      
-                                </td>
-                                <td>
-                                    <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="${quantity_all}">                    
-                                </td>
-                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput product_new_qty" name="product_new_qty[]" value="1"></td>
-                                <td>
-                                    <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput purchasePrice" name="purchasePrice[]" value="${purchasePrice}">
+                                <tr id="tr_${productId}">
+                                    <th>${productId}</th>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </td>
+                                    <td class="prod_name">
+                                        ${productName}
+                                        <input autocomplete="off" type='hidden' name="prod_name[]" value="${productId}" />
+                                    </td>
+                                    <td class="">
+                                        <span>${smallUnitName}</span>
+                                        <input autocomplete="off" type='hidden' class='small_unit_numbers' value='${small_unit_numbers}' />      
+                                    </td>
+                                    <td>
+                                        <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="${quantity_all}">                    
+                                    </td>
+                                    <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput product_new_qty" name="product_new_qty[]" value="1"></td>
+                                    <td>
+                                        <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput purchasePrice" name="purchasePrice[]" value="${purchasePrice}">
 
-                                    <input autocomplete="off" type='hidden' class="last_cost_price_small_unit[]" value="${purchasePrice}" />
-                                    <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
-                                </td>
-                                <td>
-                                    <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">                                    
-                                </td>
-                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="0"></td>
-                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="0"></td>
-                                <td><input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total[]" value="0"></td>
+                                        <input autocomplete="off" type='hidden' class="last_cost_price_small_unit[]" value="${purchasePrice}" />
+                                        <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
+                                    </td>
+                                    <td>
+                                        <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">                                    
+                                    </td>
+                                    <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="0"></td>
+                                    <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="0"></td>
+                                    <td><input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total[]" value="0"></td>
                                 </tr>
                             `);
                                 //<td><input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_bonus" name="prod_bonus[]" value="0"></td>
@@ -647,7 +652,7 @@
             let extra_money = $("#extra_money").val(); 
 
             let afterDiscountBill = total - discount_bill;    
-            let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money);    
+            let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money ?? 0);    
             
             let afterTaxBill = (afterExtraMoney + ( afterExtraMoney * Number(tax_bill) ) / 100);
 

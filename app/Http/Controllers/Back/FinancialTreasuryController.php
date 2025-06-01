@@ -103,19 +103,18 @@ class FinancialTreasuryController extends Controller
         }   
     }
 
-     
+
     public function destroy($id)
     {
-        $find = FinancialTreasury::where('id', $id)->get();
-        $find_relation = DB::table('treasury_bills_head')->where('financial_treasury_id', $id)->get();
+        $treasuryBillDets = DB::table('treasury_bill_dets')->where('treasury_id', $id)->get();
 
-        if(count($find_relation) > 0){
-            return response()->json('');
-        }else{
-            DB::transaction(function($find, $find_relation){
-                $find->delete();
-                $find_relation->delete();
-            });
+        if(count($treasuryBillDets) > 1){
+            return response()->json(['cannot_delete' => 'cannot_delete']);
+
+        }elseif(count($treasuryBillDets) == 1){
+            DB::table('financial_treasuries')->where('id', $id)->delete();
+            DB::table('treasury_bill_dets')->where('treasury_id', $id)->delete();
+            return response()->json(['success_delete' => 'success_delete']);
         }
     }
 
@@ -156,6 +155,11 @@ class FinancialTreasuryController extends Controller
                     return '
                             <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
                                 <i class="fas fa-marker"></i>
+                            </button>
+
+                            
+                            <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" treasury_name="'.$res->name.'">
+                                <i class="fa fa-trash"></i>
                             </button>
                         ';
                 }                    

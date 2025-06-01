@@ -50,7 +50,6 @@
         });
 
 
-
         // focus first input when open modal
         $('.modal').on('shown.bs.modal', function(){
             $('.dataInput:eq(0)').focus();                
@@ -104,6 +103,38 @@
                 lengthMenu: [[50, 100, 200, -1], [50, 100, 200, "الكل"]]
             });
         });
+
+
+
+        // start when change main_category => get sub categories 
+        $("#category").on('change', function(){
+            const thisVal = $(this).val();
+
+            $.ajax({
+                url: `{{ url($pageNameEn) }}/get_sub_categories/${thisVal}`,
+                type: 'GET',
+                beforeSend:function(){
+                    $(`form #sub_category option`).remove();
+                },
+                success: function(res){  
+                    
+                    if(res){
+                        $(`form #sub_category`).append(`<option value="" selected>اختر قسم فرعي</option>`);
+                        $.each(res, function (index , value) {
+                            $(`form #sub_category`).append(`
+                                <option value="${value.id}">${value.name_sub_category}</option>
+                            `);
+                        });    
+
+                        alertify.set('notifier','position', 'top-center');
+                        alertify.set('notifier','delay', 3);
+                        alertify.success("تم استدعاء الأقسام الفرعية بنجاح");
+                    }
+                }
+            });
+        });
+        // end when change main_category => get sub categories 
+
     </script>
 
     {{-- add, edit, delete => script --}}

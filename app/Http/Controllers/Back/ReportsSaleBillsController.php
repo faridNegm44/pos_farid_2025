@@ -24,8 +24,8 @@ class ReportsSaleBillsController extends Controller
         $pageNameAr = 'تقرير عن فواتير مبيعات';      
 
         $treasury = request('treasury');
-        $from = request('from');
-        $to = request('to');
+        $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
+        $to = $request->to ? date('Y-m-d H:i:s', strtotime($request->to)) : null;
 
         $query = Expense::orderBy('id', 'desc')
                         ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'expenses.id')
@@ -68,21 +68,21 @@ class ReportsSaleBillsController extends Controller
     {           
         $pageNameAr = 'فاتورة مبيعات رقم: ';      
 
-        $find = DB::table('purchase_bills')
-                    ->leftJoin('store_dets', 'store_dets.bill_id', 'purchase_bills.id')
-                    ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'purchase_bills.id')
+        $find = DB::table('sale_bills')
+                    ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
+                    ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'sale_bills.id')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
                     ->leftJoin('units as small_unit', 'small_unit.id', 'products.smallUnit')
                     ->leftJoin('units as big_unit', 'big_unit.id', 'products.bigUnit')
-                    ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'purchase_bills.treasury_id')
-                    ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'purchase_bills.supplier_id')
-                    ->leftJoin('financial_years', 'financial_years.id', 'purchase_bills.year_id')
-                    ->leftJoin('users', 'users.id', 'purchase_bills.user_id')
-                    ->where('purchase_bills.id', $id)
+                    ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'sale_bills.treasury_id')
+                    ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.supplier_id')
+                    ->leftJoin('financial_years', 'financial_years.id', 'sale_bills.year_id')
+                    ->leftJoin('users', 'users.id', 'sale_bills.user_id')
+                    ->where('sale_bills.id', $id)
                     ->where('store_dets.type', 'اضافة فاتورة مبيعات')
                     ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
                     ->select(
-                        'purchase_bills.*',
+                        'sale_bills.*',
                         
                         'store_dets.product_id',
                         'store_dets.sell_price_small_unit',
@@ -94,7 +94,6 @@ class ReportsSaleBillsController extends Controller
                         'store_dets.bonus',
                         'store_dets.total_before',
                         'store_dets.total_after',
-                        'store_dets.return_quantity',
 
                         'treasury_bill_dets.treasury_type',
                         'treasury_bill_dets.bill_type',
@@ -117,7 +116,7 @@ class ReportsSaleBillsController extends Controller
         if(count($find) == 0){
             return redirect('/');
         }else{
-            return view('back.reports.purchase_bills.pdf_internal' , compact('pageNameAr', 'find'));
+            return view('back.reports.sale_bills.pdf_internal' , compact('pageNameAr', 'find'));
         }
 
     }

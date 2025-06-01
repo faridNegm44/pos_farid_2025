@@ -53,40 +53,34 @@
             @include('back.layouts.header_report')
         </div>
 
-        @php
-            $total_bill_before = 0;
-            $total_bill_after = 0;
-
-            foreach($find as $product){
-                $total_bill_before += floatval($product->total_before);
-                $total_bill_after += floatval($product->total_after);
-            }
-        @endphp
-
         <div style="display: flex; flex-wrap: wrap;border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;padding-top: 3px;">
             <ul class="invoice-info" style="flex: 1 1 33.33%; max-width: 33.33%;">
                 <li><span>رقم فاتورة:</span> <span class='header_span' id="id"></span>{{ $find[0]->id }}</li>
                 <li><span>رقم فاتورة مخصص:</span> <span class='header_span' id="custom_bill_num"></span>{{ $find[0]->custom_bill_num }}</li>
-                <li><span>نوع الإذن:</span> <span class='header_span' id="treasury_type"></span>{{ $find[0]->treasury_type }}</li>
+                <li><span>اذن الخزينة:</span> <span class='header_span' id="treasury_type"></span>{{ $find[0]->treasury_type != $find[0]->bill_type ? $find[0]->treasury_type :  'لم يتم صرف مستحقات' }}</li>
+                <li><span>اذن الفاتورة:</span> <span class='header_span' id="bill_type"></span>{{ $find[0]->bill_type }}</li>
                 <li><span>عدد أصناف الفاتورة:</span> <span class='header_span' id="count_items"></span>{{ display_number($find[0]->count_items) }}</li>
+                <li><span>مستخدم الإضافة:</span> <span class='header_span' id="userName"></span>{{ $find[0]->userName }}</li>
                 <li><span>ملاحظات:</span> <span class='header_span' id="notes"></span>{{ $find[0]->notes }}</li>
             </ul>
             
             <ul class="invoice-info" style="flex: 1 1 33.33%; max-width: 33.33%;">
-                <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span>{{ $find[0]->bill_discount }}</li>                      
-                <li><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before"></span>{{ display_number($total_bill_before) }}</li>
-                <li><span>إجمالي فاتورة بعد:</span> <span class='header_span' id="total_bill_after"></span>{{ display_number($total_bill_after) }}</li>
+                <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span>{{ display_number($find[0]->bill_discount) ?? 0 }}</li>                      
+                <li><span>ضريبة الفاتورة:</span> <span class='header_span' id="bill_discount"></span>{{ display_number($find[0]->bill_tax) ?? 0 }} %</li>                      
+                <li><span>مصاريف إضافية :</span> <span class='header_span' id="bill_discount"></span>{{ display_number($find[0]->extra_money) ?? 0 }}</li>                      
+                <li style="font-weight: bold;"><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before"></span>{{ display_number($find[0]->total_bill_before) }}</li>
+                <li style="font-weight: bold;"><span>إجمالي فاتورة بعد:</span> <span class='header_span' id="total_bill_after"></span>{{ display_number($find[0]->total_bill_after) }}</li>
                 <li><span>تاريخ الإنشاء:</span> <span class='header_span' id="created_at"></span>{{ Carbon\Carbon::parse($find[0]->created_at)->format('Y-m-d h:i:s a') }}</li>
-                <li><span>تاريخ آخر:</span> <span class='header_span' id="custom_date"></span>{{ $find[0]->custom_date }}</li>
+                
             </ul>
 
             <ul class="invoice-info" style="flex: 1 1 33.33%; max-width: 33.33%;">
                 <li><span>المورد:</span> <span class='header_span' id="supplierName"></span>{{ $find[0]->supplierName }}</li>
-                <li><span>الخزينة:</span> <span class='header_span' id="treasuryName"></span>{{ $find[0]->treasuryName }}</li>
-                <li><span>مبلغ مدفوع:</span> <span class='header_span' id="amount_money"></span>{{ $find[0]->amount_money }}</li>
-                <li><span>رصيد المورد بعد:</span> <span class='header_span' id="remaining_money"></span>{{ $find[0]->remaining_money > 0 ? 'علية '. $find[0]->remaining_money : 'لة '. $find[0]->remaining_money }}</li>
-                <li><span>رصيد الخزينة بعد:</span> <span class='header_span' id="treasury_money_after"></span>{{ $find[0]->treasury_money_after }}</li>
-                <li><span>مستخدم الإضافة:</span> <span class='header_span' id="userName"></span>{{ $find[0]->userName }}</li>
+                <li><span>الخزينة:</span> <span class='header_span' id="treasuryName"></span>{{ $find[0]->treasuryName ?? 'لم يتم صرف مستحقات' }}</li>
+                <li><span>مبلغ مدفوع:</span> <span class='header_span' id="amount_money"></span>{{ display_number($find[0]->amount_money) ?? 'لم يتم صرف مستحقات' }}</li>
+                <li><span>رصيد المورد بعد:</span> <span class='header_span' id="remaining_money"></span>{{ $find[0]->remaining_money > 0 ? 'علية '. display_number($find[0]->remaining_money) : 'لة '. display_number($find[0]->remaining_money) }}</li>
+                <li><span>رصيد الخزينة بعد:</span> <span class='header_span' id="treasury_money_after"></span>{{ display_number($find[0]->treasury_money_after) }}</li>
+                <li><span>تاريخ آخر:</span> <span class='header_span' id="custom_date"></span>{{ $find[0]->custom_date }}</li>
 
             </ul>
         </div>

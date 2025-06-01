@@ -124,15 +124,19 @@
 				<div class="card bg-purple-gradient text-white">
 					<div class="card-body">
 						<div class="row">
-							<div class="col-6">
+							<div class="col-3">
 								<div class="icon1 mt-2 text-center">
 									<i class="fe fe-pie-chart tx-40"></i>
 								</div>
 							</div>
-							<div class="col-6">
+							<div class="col-9">
 								<div class="mt-0 text-center">
-									<span class="text-white">Taxes</span>
-									<h2 class="text-white mb-0">876</h2>
+									<span style="font-size: 11px;">
+										<a class="text-white" href="{{ url('products/report/stock_alert') }}" target="_blank">أصناف وصلت للحد الأدنى</a>
+									</span>
+									<h2 class="text-white mb-0">
+										<a class="text-white" href="{{ url('products/report/stock_alert') }}" target="_blank">150</a>
+									</h2>
 								</div>
 							</div>
 						</div>

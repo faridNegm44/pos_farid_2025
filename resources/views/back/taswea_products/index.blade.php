@@ -97,7 +97,7 @@
             $('#products_selectize').selectize({
                 valueField: 'id',  // القيمة المخزنة عند الاختيار
                 labelField: 'nameAr', // النص الظاهر للمستخدم
-                searchField: ['id', 'nameAr', 'nameEn'], // البحث في كل الحقول
+                searchField: ['id', 'nameAr', 'nameEn', 'natCode', 'shortCode'], // البحث في كل الحقول
                 loadThrottle: 300, // تقليل عدد الطلبات عند البحث
                 maxItems: 1, // اختيار عنصر واحد فقط
                 create: false, // منع إضافة عناصر جديدة

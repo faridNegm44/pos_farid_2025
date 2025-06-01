@@ -250,7 +250,6 @@ class SaleBillController extends Controller
                                 'discount' => request('prod_discount')[$index],
                                 'total_before' => $product_total,
                                 'total_after' => $after_tax,
-                                'return_quantity' => 0,
                                 'transfer_from' => null,
                                 'transfer_to' => null,
                                 'transfer_quantity' => 0,
@@ -366,7 +365,6 @@ class SaleBillController extends Controller
                             'discount' => request('prod_discount')[$index],
                             'total_before' => $product_total,
                             'total_after' => $after_tax,
-                            'return_quantity' => 0,
                             'transfer_from' => null,
                             'transfer_to' => null,
                             'transfer_quantity' => 0,
@@ -452,6 +450,7 @@ class SaleBillController extends Controller
                     ->where('sale_bills.id', $id)
                     ->where('store_dets.type', 'اضافة فاتورة مبيعات')
                     ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
+                    ->orWhere('treasury_bill_dets.bill_type', 'اذن توريد نقدية')
                     ->select(
                         'sale_bills.*',
                         
@@ -465,7 +464,6 @@ class SaleBillController extends Controller
                         'store_dets.bonus',
                         'store_dets.total_before',
                         'store_dets.total_after',
-                        'store_dets.return_quantity',
 
                         'treasury_bill_dets.treasury_type',
                         'treasury_bill_dets.bill_type',
@@ -612,28 +610,54 @@ class SaleBillController extends Controller
         $pageNameAr = 'بيان بيع ';
         $pageNameEn = 'sales';
         
-        $saleBill = DB::table('sale_bills')->where('sale_bills.id', $id)
-                                            ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
-                                            ->leftJoin('products', 'products.id', 'store_dets.product_id')
-                                            ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
-                                            ->leftJoin('units', 'units.id', 'products.smallUnit')
-                                            ->select(
-                                                'store_dets.product_id', 'store_dets.sell_price_small_unit', 'store_dets.product_bill_quantity', 'store_dets.total_before as productTotalBefore', 'store_dets.total_after as productTotalAfter', 'store_dets.product_id', 'store_dets.product_id',  
+        $saleBill = DB::table('sale_bills')
+                    ->where('sale_bills.id', $id)
+                    ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
+                    ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'sale_bills.id')
+                    ->leftJoin('products', 'products.id', 'store_dets.product_id')
+                    ->leftJoin('units', 'units.id', 'products.smallUnit')
+                    ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'sale_bills.treasury_id')
+                    ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                    ->leftJoin('financial_years', 'financial_years.id', 'sale_bills.year_id')
+                    ->leftJoin('users', 'users.id', 'sale_bills.user_id')
+                    ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                    ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
+                    ->orWhere('treasury_bill_dets.bill_type', 'اذن توريد نقدية')
+                    ->select(
+                        'sale_bills.*',
+                        
+                        'store_dets.product_id', 
+                        'store_dets.sell_price_small_unit', 
+                        'store_dets.product_bill_quantity', 
+                        'store_dets.total_before as productTotalBefore', 
+                        'store_dets.total_after as productTotalAfter', 
+                        'store_dets.product_id', 
+                        'store_dets.product_id',  
 
-                                                'sale_bills.id', 'sale_bills.created_at', 'sale_bills.bill_tax', 'sale_bills.bill_discount', 'sale_bills.extra_money', 'sale_bills.count_items', 'sale_bills.total_bill_before', 'sale_bills.total_bill_after', 'sale_bills.count_items',  
+                        'treasury_bill_dets.treasury_type',
+                        'treasury_bill_dets.bill_type',
+                        'treasury_bill_dets.treasury_money_after',
+                        'treasury_bill_dets.amount_money',
+                        'treasury_bill_dets.remaining_money',
 
-                                                'products.nameAr as productName', 
-                                                'products.nameAr as productName', 
+                        'products.nameAr as productName',
+                        'products.small_unit_numbers',
+                        
+                        'clients_and_suppliers.name as clientName', 
+                        'clients_and_suppliers.address as clientAddress', 
+                        'clients_and_suppliers.phone as clientPhone', 
+                        
+                        'financial_treasuries.name as treasuryName',
+                        'financial_years.name as financialName',
 
-                                                'clients_and_suppliers.name as clientName', 
-                                                'clients_and_suppliers.address as clientAddress', 
-                                                'clients_and_suppliers.phone as clientPhone', 
+                        'units.name as unitName', 
 
-                                                'units.name as unitName', 
-                                            )
-                                            ->get();
+                        'users.name as userName',
+                    )
+                    ->get();
 
-                                            //return $saleBill;
+                    // return $saleBill;
+
         if(count($saleBill) > 0){
             return view('back.sales.print_receipt', compact('pageNameAr', 'pageNameEn', 'saleBill'));
         }else{

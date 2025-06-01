@@ -2,8 +2,8 @@
     $(document).ready(function () {
         $(".modal #save").click(function(e){
             e.preventDefault();
-            //document.querySelector('.modal #save').disabled = true;        
-            //document.querySelector('.spinner_request').setAttribute("style", "display: inline-block;");
+            document.querySelector('.modal #save').disabled = true;        
+            document.querySelector('.spinner_request').setAttribute("style", "display: inline-block;");
 
             
             $.ajax({

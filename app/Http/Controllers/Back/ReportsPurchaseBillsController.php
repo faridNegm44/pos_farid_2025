@@ -24,8 +24,8 @@ class ReportsPurchaseBillsController extends Controller
         $pageNameAr = 'تقرير عن فواتير مشتريات';      
 
         $treasury = request('treasury');
-        $from = request('from');
-        $to = request('to');
+        $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
+        $to = $request->to ? date('Y-m-d H:i:s', strtotime($request->to)) : null;
 
         $query = Expense::orderBy('id', 'desc')
                         ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'expenses.id')
@@ -94,7 +94,6 @@ class ReportsPurchaseBillsController extends Controller
                         'store_dets.bonus',
                         'store_dets.total_before',
                         'store_dets.total_after',
-                        'store_dets.return_quantity',
 
                         'treasury_bill_dets.treasury_type',
                         'treasury_bill_dets.bill_type',

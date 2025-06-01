@@ -88,27 +88,27 @@
                 <div class="tab-pane  " id="side3">
                     <h5 class="text-center" style="text-decoration: underline;">تقارير</h5>
                     <div class="list-group list-group-flush ">
-                        {{-- تقرير عن حركة مورد --}}
+                        {{-- كشف حساب عميل --}}
                         <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
                             <div>
                                 <div class="font-weight-semibold">
-                                    <a href="{{ url('suppliers/report') }}" target="_blank" class="text-dark">تقرير عن حركة مورد</a>
+                                    <a href="{{ url('clients/report/account_statement') }}" target="_blank" class="text-dark">كشف حساب عميل</a>
                                 </div>
                             </div>
                             <div class="mr-auto">
-                                <a href="{{ url('suppliers/report') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
+                                <a href="{{ url('clients/report/account_statement') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
                             </div>
                         </div>
                         
-                        {{-- تقرير عن حركة عميل --}}
+                        {{-- كشف حساب مورد --}}
                         <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
                             <div>
                                 <div class="font-weight-semibold">
-                                    <a href="{{ url('clients/report') }}" target="_blank" class="text-dark">تقرير عن حركة عميل</a>
+                                    <a href="{{ url('suppliers/report/account_statement') }}" target="_blank" class="text-dark">كشف حساب مورد</a>
                                 </div>
                             </div>
                             <div class="mr-auto">
-                                <a href="{{ url('clients/report') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
+                                <a href="{{ url('suppliers/report/account_statement') }}" target="_blank" class="btn btn-sm btn-primary-gradient">عرض</a>
                             </div>
                         </div>
                         

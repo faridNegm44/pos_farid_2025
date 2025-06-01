@@ -34,12 +34,12 @@
 
     <script>
         flatpickr(".datePicker", {
-            yearSelectorType: 'dropdown',
-            enableTime: false,
-            dateFormat: "Y-m-d",
+            enableTime: true,
+            dateFormat: "Y-m-d h:i:S K", 
+            time_24hr: false
         });
     </script>
-
+    
     <script>
         $("#store_id").on('input', function(){
             const thisVal = $(this).val();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 use App\Models\Back\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class CompanyController extends Controller
@@ -69,9 +70,17 @@ class CompanyController extends Controller
     }
 
      
-    public function destroy($id)
-    {
-        
+    public function destroy($id){
+        $unit = DB::table('products')->where('company', $id)->first();
+
+        if ($unit) {
+            return response()->json(['cannot_delete' => 'cannot_delete']);
+        }
+
+        if (!$unit) {
+            DB::table('companies')->where('id', $id)->delete();
+            return response()->json(['success_delete' => 'success_delete']);
+        }
     }
 
 
@@ -95,6 +104,10 @@ class CompanyController extends Controller
                 return '
                         <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
                             <i class="fas fa-marker"></i>
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'"  company_name="'.$res->name.'">
+                            <i class="fa fa-trash"></i>
                         </button>
                     ';
             })

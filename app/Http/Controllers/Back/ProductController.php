@@ -32,6 +32,15 @@ class ProductController extends Controller
         return view('back.products.index' , compact('pageNameAr' , 'pageNameEn', 'stores', 'units', 'companys', 'productCategoys'));
     }
 
+    public function get_sub_categories($id)
+    {
+        if(request()->ajax()){
+            $find = DB::table('product_sub_categories')->where('main_category', $id)->get();
+            return response()->json($find);
+        }
+        return view('back.welcome');
+    }
+
     public function store(Request $request)
     {
         if (request()->ajax()){
@@ -46,6 +55,7 @@ class ProductController extends Controller
                 'firstPeriodCount' => 'nullable|min:0|numeric',
                 'store' => 'required|integer|exists:stores,id',
                 'category' => 'nullable|integer|exists:product_categoys,id',
+                'sub_category' => 'nullable|integer|exists:product_sub_categories,id',
                 'company' => 'nullable|integer|exists:companies,id',
                 'bigUnit' => 'nullable|integer|exists:units,id',
                 'smallUnit' => 'required|integer|exists:units,id',
@@ -82,7 +92,8 @@ class ProductController extends Controller
                 'tax' => 'الضريبة',                
                 'firstPeriodCount' => 'رصيد أول مدة',                
                 'store' => 'المخزن',                
-                'category' => 'قسم الصنف',                
+                'category' => 'القسم الرئيسي للصنف',                
+                'sub_category' => 'القسم الفرعي للصنف',                
                 'company' => 'الشركة المصنعة',                
                 'small_unit_numbers' => 'عدد وحدات الصغري',                
                 'bigUnit' => 'الوحدة الكبري',                
@@ -119,6 +130,7 @@ class ProductController extends Controller
                     'status' => request('status') ?? 1,
                     'store' => request('store'),
                     'category' => request('category'),
+                    'sub_category' => request('sub_category'),
                     'company' => request('company'),
                     'firstPeriodCount' => request('firstPeriodCount') ?? 0,
                     'stockAlert' => request('stockAlert') == null ? 0 : request('stockAlert'),
@@ -358,6 +370,31 @@ class ProductController extends Controller
     }
 
 
+    public function destroy($id){
+        $product = DB::table('products')->where('id', $id)->first();
+
+        if (!$product) {
+            return response()->json(['error' => 'المنتج غير موجود']);
+        }
+
+        $storeDetsCount = DB::table('store_dets')->where('product_id', $id)->count();
+
+        if ($storeDetsCount > 1) {
+            return response()->json(['cannot_delete' => $product->nameAr]);
+        }
+
+        if ($storeDetsCount == 1) {
+            if ($product->image !== 'df_image.png') {
+                File::delete(public_path('back/images/products/' . $product->image));
+            }
+
+            DB::table('store_dets')->where('product_id', $id)->delete();
+            DB::table('products')->where('id', $id)->delete();
+
+            return response()->json(['success_delete' => $product->nameAr]);
+        }
+    }
+
     public function datatable()
     {
         $all = Product::leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
@@ -369,6 +406,7 @@ class ProductController extends Controller
                 })
                 ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
                 ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
+                ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
                 ->leftJoin('stores', 'stores.id', 'products.store')
                 ->select(
                     'products.*', 'products.id as productId',
@@ -376,6 +414,7 @@ class ProductController extends Controller
                     'big_units.name as big_unit_name',
                     'small_units.name as small_unit_name',
                     'product_categoys.name as category_name',
+                    'product_sub_categories.name_sub_category',
                     'stores.name as store_name'
                 )
                 ->get();
@@ -429,7 +468,10 @@ class ProductController extends Controller
                 return $units;
             })
             ->addColumn('category', function($res){
-                return $res->category_name;
+                return '
+                            <span>'.$res->category_name.'</span>
+                            <span class="text-muted" style="display: block;">'.$res->name_sub_category.'</span>
+                        ';
             })
             ->addColumn('quantity_small_unit', function($res){
                 return '<strong>'.display_number($res->quantity_small_unit).'</strong>';
@@ -454,10 +496,11 @@ class ProductController extends Controller
                         <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->productId.'">
                             <i class="fas fa-marker"></i>
                         </button>
+
+                        <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->productId.'" product_name="'.$res->nameAr.'">
+                            <i class="fa fa-trash"></i>
+                        </button>
                     ';
-                    //<button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->productId.'">
-                    //    <i class="fa fa-trash"></i>
-                    //</button>
             })
             ->rawColumns(['id', 'name', 'sell_price_small_unit', 'last_cost_price_small_unit', 'units', 'category', 'quantity_small_unit', 'image', 'status', 'action'])
             ->toJson();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 use App\Models\Back\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class StoreController extends Controller
@@ -63,6 +64,19 @@ class StoreController extends Controller
         }   
     }
 
+    public function destroy($id){
+        $store = DB::table('products')->where('store', $id)->first();
+
+        if ($store) {
+            return response()->json(['cannot_delete' => 'cannot_delete']);
+        }
+
+        if (!$store) {
+            DB::table('stores')->where('id', $id)->delete();
+            return response()->json(['success_delete' => 'success_delete']);
+        }
+    }
+    
     public function datatable()
     {
         $all = Store::orderBy('id', 'DESC')->get();
@@ -87,6 +101,10 @@ class StoreController extends Controller
                     return '
                         <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
                             <i class="fas fa-marker"></i>
+                        </button>
+                        
+                        <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" store_name="'.$res->name.'">
+                            <i class="fa fa-trash"></i>
                         </button>
                     ';
                 }

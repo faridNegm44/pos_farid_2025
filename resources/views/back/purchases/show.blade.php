@@ -19,19 +19,32 @@
                     $(`#showProductsModal #header #${index}`).text(value);
                 });
                 
-                $(`#showProductsModal #header #count_items`).text( display_number_js(res[0].count_items) );
                 $(`#showProductsModal .print`).attr('res_id', res[0].id);
                 
                 $(`#showProductsModal #header #remaining_money`).text(  
                     res[0].remaining_money > 0 ? 
-                        'علية ' + display_number_js(res[0].remaining_money) : 
-                        'لة ' + display_number_js(res[0].remaining_money) 
+                    'علية ' + display_number_js(res[0].remaining_money) : 
+                    'لة ' + display_number_js(res[0].remaining_money) 
                 );
                 
+                $(`#showProductsModal #header #treasury_type`).text( res[0].treasury_type != res[0].bill_type ? res[0].treasury_type : 'لم يتم صرف مستحقات' );
+                $(`#showProductsModal #header #bill_type`).text( res[0].bill_type );
+                $(`#showProductsModal #header #bill_discount`).text( res[0].bill_discount ? display_number_js(res[0].bill_discount) : 0 );
+                $(`#showProductsModal #header #bill_tax`).text( res[0].bill_tax ? display_number_js(res[0].bill_tax)+' %' : 0 );
+                $(`#showProductsModal #header #extra_money`).text( res[0].extra_money ? display_number_js(res[0].extra_money) : 0 );
+
+                $(`#showProductsModal #header #treasury_money_after`).text(display_number_js( res[0].treasury_money_after ));
+
+                $(`#showProductsModal #header #amount_money`).text( res[0].amount_money ?? 'لم يتم صرف مستحقات' );
+                $(`#showProductsModal #header #treasuryName`).text( res[0].treasuryName ?? 'لم يتم صرف مستحقات' );
+
+                $(`#showProductsModal #header #count_items`).text( display_number_js(res[0].count_items) );
+
+                $(`#showProductsModal #header #total_bill_before`).text( display_number_js(res[0].total_bill_before) );
+                $(`#showProductsModal #header #total_bill_after`).text( display_number_js(res[0].total_bill_after) );
+
 
                 // start loop to bill products
-                let totalBillBefore = 0;
-                let totalBillAfter = 0;
                 $.each(res, function(index2, value2){
                     $('#showProductsModal #content tbody').append(`
                         <tr>
@@ -50,13 +63,7 @@
                             <td>${display_number_js( value2.total_after )}</td>
                         </tr>
                     `);
-
-                    totalBillBefore += parseFloat(value2.total_before);
-                    totalBillAfter += parseFloat(value2.total_after);
                 });
-
-                $(`#showProductsModal #header #total_bill_before`).text( display_number_js(totalBillBefore) );
-                $(`#showProductsModal #header #total_bill_after`).text( display_number_js(totalBillAfter) );
                 // end loop to bill products
 
                 

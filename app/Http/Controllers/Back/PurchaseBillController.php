@@ -264,7 +264,6 @@ class PurchaseBillController extends Controller
                         'discount' => request('prod_discount')[$index],
                         'total_before' => $product_total,
                         'total_after' => $after_tax,
-                        'return_quantity' => 0,
                         'transfer_from' => null,
                         'transfer_to' => null,
                         'transfer_quantity' => 0,
@@ -374,7 +373,6 @@ class PurchaseBillController extends Controller
                         'store_dets.bonus',
                         'store_dets.total_before',
                         'store_dets.total_after',
-                        'store_dets.return_quantity',
 
                         'treasury_bill_dets.treasury_type',
                         'treasury_bill_dets.bill_type',
@@ -500,9 +498,9 @@ class PurchaseBillController extends Controller
                             <i class="fas fa-print"></i>
                         </button>
                         
-                        <button type="button" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
+                        <a type="button" href="'.url('purchases_return/'.$res->id).'" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
                             <i class="fas fa-reply"></i>
-                        </button>
+                        </a>
                 ';
             })
             ->rawColumns(['id', 'supplierName', 'treasuryName', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])

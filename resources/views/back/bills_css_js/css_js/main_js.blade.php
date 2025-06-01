@@ -208,22 +208,22 @@
     // end when change سعر البيع وربطه بسعر التكلفة
 
 
-     // start when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
-     $(document).on('input', '#page_sales .sale_quantity', function(){
-            const row = $(this).closest('tr');
-            const sale_quantity = row.find('.sale_quantity');
-            const quantity_all = row.find('.quantity_all');
-            
-            if(sale_quantity.val() > quantity_all.val()){
-                sale_quantity.val(1);
-                backgroundRedToSelectError(sale_quantity);
+    // start when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
+    // $(document).on('input', '#page_sales .sale_quantity', function(){
+    //    const row = $(this).closest('tr');
+    //    const sale_quantity = row.find('.sale_quantity');
+    //    const quantity_all = row.find('.quantity_all');
+        
+    //    if(sale_quantity.val() > quantity_all.val()){
+    //        sale_quantity.val(1);
+    //        backgroundRedToSelectError(sale_quantity);
 
-                alertify.set('notifier','position', 'bottom-center');
-                alertify.set('notifier','delay', 3);
-                alertify.error("كمية المنتج المباعة أكبر من المتوفرة  في المخزن");
-            }
-        });
-        // end when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
+    //        alertify.set('notifier','position', 'bottom-center');
+    //        alertify.set('notifier','delay', 3);
+    //        alertify.error("كمية المنتج المباعة أكبر من المتوفرة  في المخزن");
+    //    }
+    //});
+    // end when change sale quantity to check لو الكميه المباعه اكبر من الكميه الموجودة بالمخزن
 
 
     // start when change amount_paid

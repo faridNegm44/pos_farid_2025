@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('purchase_bill_id');
             $table->integer('product_id');
             $table->string('quantity');
-            $table->string('return_quantity')->default(0);
             $table->string('cost_price');
             $table->string('sale_price')->default(0);
             $table->string('bonus')->default(0);

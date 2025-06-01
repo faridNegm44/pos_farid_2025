@@ -51,11 +51,12 @@
 
     <script>
         flatpickr(".datePicker", {
-            yearSelectorType: 'dropdown',
-            enableTime: false,
-            dateFormat: "Y-m-d",
+            enableTime: true,
+            dateFormat: "Y-m-d h:i:S K", 
+            time_24hr: false
         });
     </script>
+
     
     {{-- start when click to button #print_report --}}
     <script>

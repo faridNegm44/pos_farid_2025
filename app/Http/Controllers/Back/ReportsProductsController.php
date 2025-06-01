@@ -39,8 +39,8 @@ class ReportsProductsController extends Controller
         $pageNameAr = 'تقرير عن حركة صنف';      
 
         $product = request('products');
-        $from = request('from');
-        $to = request('to');
+        $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
+        $to = $request->to ? date('Y-m-d H:i:s', strtotime($request->to)) : null;
         $type = request('type');
         
         $query = DB::table('store_dets')
@@ -87,8 +87,8 @@ class ReportsProductsController extends Controller
         $pageNameAr = 'تقرير عن حركة صنف';      
 
         $product = request('products');
-        $from = request('from');
-        $to = request('to');
+        $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
+        $to = $request->to ? date('Y-m-d H:i:s', strtotime($request->to)) : null;
         $type = request('type');
 
         $query = DB::table('store_dets')

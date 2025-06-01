@@ -10,7 +10,9 @@
                 <img src="{{ asset('back') }}/assets/img/brand/favicon.png" class="desktop-logo-dark">
             </a>         
 
-            <div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">
+            {{--<div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">--}}
+            <div class="horizontal-main header-layout d-none d-lg-flex d-xl-flex">
+
                 <div class="horizontal-mainwrapper container clearfix">
                     <nav class="horizontalMenu clearfix"><div class="horizontal-overlapbg"></div>
                         <ul class="horizontalMenu-list">
@@ -45,6 +47,8 @@
                                         <ul class="sub-menu">
                                             <li aria-haspopup="true"><a href="{{ url('clients') }}" class="slide-item">العملاء</a></li>
                                             <li aria-haspopup="true"><a href="{{ url('clients/report') }}" class="slide-item">تقرير عن حركة عميل</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('clients/report/account_statement') }}" class="slide-item">كشف حساب عميل</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('taswea_client_supplier') }}" class="slide-item">تسوية رصيد عميل</a></li>
                                         </ul>
                                     </li>
                                     
@@ -52,6 +56,8 @@
                                         <ul class="sub-menu">
                                             <li aria-haspopup="true"><a href="{{ url('suppliers') }}" class="slide-item">الموردين</a></li>
                                             <li aria-haspopup="true"><a href="{{ url('suppliers/report') }}" class="slide-item">تقرير عن حركة مورد</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('suppliers/report/account_statement') }}" class="slide-item">كشف حساب مورد</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('taswea_client_supplier') }}" class="slide-item">تسوية رصيد مورد</a></li>
                                         </ul>
                                     </li>
                                     
@@ -59,7 +65,8 @@
                                         <ul class="sub-menu">
                                             <li aria-haspopup="true"><a href="{{ url('products') }}" class="slide-item">قائمة الأصناف</a></li>
                                             <li aria-haspopup="true"><a href="{{ url('products/report/stock_alert') }}" class="slide-item">كشكول النواقص</a></li>
-                                            <li aria-haspopup="true"><a href="{{ url('productsCategories') }}" class="slide-item">أقسام الأصناف</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('productsCategories') }}" class="slide-item">الأقسام الرئيسية للأصناف</a></li>
+                                            <li aria-haspopup="true"><a href="{{ url('products_sub_category') }}" class="slide-item">الأقسام الفرعية للأصناف</a></li>
                                             <li aria-haspopup="true"><a href="{{ url('units') }}" class="slide-item">وحدات الأصناف</a></li>
                                             <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item">تسوية كميات الأصناف</a></li>
                                         </ul>

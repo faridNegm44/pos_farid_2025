@@ -27,8 +27,8 @@ class ReportsSuppliersController extends Controller
 
         $supplier_id = request('supplier_id');
         $treasury_type = request('treasury_type');
-        $from = request('from');
-        $to = request('to');
+        $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
+        $to = $request->to ? date('Y-m-d H:i:s', strtotime($request->to)) : null;
 
         $query = DB::table('treasury_bill_dets')
                         ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'treasury_bill_dets.treasury_id')
@@ -76,8 +76,8 @@ class ReportsSuppliersController extends Controller
 
         $supplier_id = request('supplier_id');
         $treasury_type = request('treasury_type');
-        $from = request('from');
-        $to = request('to');
+        $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
+        $to = $request->to ? date('Y-m-d H:i:s', strtotime($request->to)) : null;
 
         $query = DB::table('treasury_bill_dets')
                         ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'treasury_bill_dets.treasury_id')

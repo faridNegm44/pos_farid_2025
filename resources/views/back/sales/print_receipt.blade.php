@@ -254,29 +254,29 @@
     <table>
       <tr>
         <td class="label">الإجمالي قبل</td>
-        <td class="value">{{ display_number( $saleBill[0]->total_bill_before ) }}</td>
+        <td class="value">{{ display_number( $saleBill[0]->total_bill_before ) }} جنية</td>
       </tr>
       @if ($saleBill[0]->extra_money)
         <tr>
           <td class="label">مصاريف اضافية</td>
-          <td class="value">{{ display_number( $saleBill[0]->extra_money ) }}</td>
+          <td class="value">{{ display_number( $saleBill[0]->extra_money ) }} جنية</td>
         </tr>
       @endif
       @if ($saleBill[0]->bill_discount)
         <tr>
           <td class="label">قيمة الخصم</td>
-          <td class="value">{{ display_number( $saleBill[0]->bill_discount ) }}</td>
+          <td class="value">{{ display_number( $saleBill[0]->bill_discount ) }} جنية</td>
         </tr>
       @endif
       @if ($saleBill[0]->bill_tax)
         <tr>
           <td class="label">الضريبة</td>
-          <td class="value">{{ display_number( $saleBill[0]->bill_tax ) }}</td>
+          <td class="value">{{ display_number( $saleBill[0]->bill_tax ) }} %</td>
         </tr>
       @endif
       <tr>
         <td class="label final_total" style="font-size: 14px;">الإجمالي بعد</td>
-        <td class="value" style="font-size: 18px;font-weight: bold;">{{ display_number( $saleBill[0]->total_bill_after ) }}</td>
+        <td class="value" style="font-size: 18px;font-weight: bold;">{{ display_number( $saleBill[0]->total_bill_after ) }} جنية</td>
       </tr>
     </table>
   </div>

@@ -84,16 +84,24 @@
                     </div>                        
 
                     <div class="col-lg-2 col-md-6 col-12">
-                      <label for="category">قسم الصنف</label>
+                      <label for="category">اقسام الأصناف الرئيسية</label>
                       <div>    
-                          <select  name="category" class="category selectize" id="category">
-                            <option value="" selected>قسم الصنف</option>                              
+                          <select  name="category" class="category form-control" id="category">
+                            <option value="" selected>اقسام الأصناف الرئيسية</option>                              
                             @foreach ($productCategoys as $categoy)
                               <option value="{{ $categoy->id }}">{{ $categoy->name }}</option>                              
                             @endforeach
                           </select>
                       </div>
                       <bold class="text-danger" id="errors-category" style="display: none;"></bold>
+                    </div>                        
+
+                    <div class="col-lg-2 col-md-6 col-12">
+                      <label for="sub_category">اقسام الأصناف الفرعية</label>
+                      <div>    
+                          <select  name="sub_category" class="sub_category form-control" id="sub_category"></select>
+                      </div>
+                      <bold class="text-danger" id="errors-sub_category" style="display: none;"></bold>
                     </div>                        
 
                     <div class="col-lg-2 col-md-6 col-12">
@@ -117,7 +125,7 @@
                       <bold class="text-danger" id="errors-stockAlert" style="display: none;"></bold>
                     </div> 
 
-                    <div class="col-lg-4 col-md-6 col-12">
+                    <div class="col-lg-2 col-md-6 col-12">
                       <label for="desc">وصف الصنف</label>
                       <div>
                           <input type="text" class="form-control dataInput" placeholder="وصف المنتج" id="desc" name="desc" >

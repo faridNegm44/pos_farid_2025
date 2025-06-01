@@ -70,7 +70,6 @@ class TasweaProductsController extends Controller
                     'avg_cost_price_small_unit' => $find->avg_cost_price_small_unit,
                     'product_bill_quantity' => 0,
                     'quantity_small_unit' => request('quantity'),
-                    'return_quantity' => 0,
                     'transfer_from' => null,
                     'transfer_to' => null,
                     'transfer_quantity' => 0,
@@ -177,7 +176,7 @@ class TasweaProductsController extends Controller
             ->addColumn('userName', function($res){
                 return $res->userName;
             })
-            ->rawColumns(['productName', 'quantityBefore', 'quantityAfter', 'quantityAfter', 'reasonName', 'status', 'tasweaCreatedAt', 'userName', 'tasweaNotes', 'financialName'])
+            ->rawColumns(['productName', 'quantityBefore', 'quantityAfter', 'reasonName', 'status', 'tasweaCreatedAt', 'userName', 'tasweaNotes', 'financialName'])
             ->toJson();
     }
 }

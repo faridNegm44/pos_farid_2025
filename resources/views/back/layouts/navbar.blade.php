@@ -39,7 +39,8 @@
                     <li aria-haspopup="true"><a href="{{ url('products') }}" class="sub-icon text-light">الأصناف / المخازن<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('products') }}" class="slide-item text-dark">الأصناف</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('productsCategories') }}" class="slide-item text-dark">أقسام الأصناف</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('productsCategories') }}" class="slide-item text-dark">الأقسام الرئيسية للأصناف</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('products_sub_category') }}" class="slide-item text-dark">الأقسام الفرعية للأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('units') }}" class="slide-item text-dark">وحدات الأصناف</a></li>
                             <li aria-haspopup="true"><a href="{{ url('companies') }}" class="slide-item text-dark">شركات الأصناف</a></li>
                             <hr class="navbar_hr"/>
@@ -61,26 +62,31 @@
 
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('clients/report') }}" class="slide-item text-dark">تقرير عن حركة عميل</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('clients/report/account_statement') }}" class="slide-item text-dark">كشف حساب عميل</a></li>
 
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('suppliers/report') }}" class="slide-item text-dark">تقرير عن حركة مورد</a></li>                            
+                            <li aria-haspopup="true"><a href="{{ url('suppliers/report/account_statement') }}" class="slide-item text-dark">كشف حساب مورد</a></li>                            
+                            
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('taswea_client_supplier') }}" class="slide-item text-dark">تسوية رصيد عميل / مورد</a></li>                            
                         </ul>
                     </li>
                     
                     <li aria-haspopup="true"><a href="{{ url('treasury_bills/create') }}" class="sub-icon text-light">الحسابات<i class="fe fe-chevron-down horizontal-icon"></i></a>
-                        <ul class="sub-menu">                            
-                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-dark">الخزائن المالية</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('transfer_between_storages') }}" class="slide-item text-dark">التحويل من خزنة لآخري</a></li>
+                        <ul class="sub-menu">         
+                            <li aria-haspopup="true"><a href="{{ url('treasury_bills/create') }}" class="slide-item text-dark">أجراء معاملة في الخزينة المالية</a></li>                   
+                            <li aria-haspopup="true"><a href="{{ url('treasury_bills') }}" class="slide-item text-dark">معاملات الخزينة المالية</a></li>
                             
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('expenses') }}" class="slide-item text-dark">المصروفات</a></li>
                             
-                            <hr class="navbar_hr"/>
-                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-dark">إغلاق وردية</a></li>
+                            {{--<hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-dark">إغلاق وردية</a></li>--}}
                             
                             <hr class="navbar_hr"/>
-                            <li aria-haspopup="true"><a href="{{ url('treasury_bills') }}" class="slide-item text-dark">معاملات الخزينة المالية</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('treasury_bills/create') }}" class="slide-item text-dark">أجراء معاملة في الخزينة المالية</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('financial_treasury') }}" class="slide-item text-dark">الخزائن المالية</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('transfer_between_storages') }}" class="slide-item text-dark">التحويل من خزنة لآخري</a></li>
                             
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('expenses/report') }}" class="slide-item text-dark">تقرير عن المصروفات</a></li>
@@ -94,6 +100,9 @@
                         <ul class="sub-menu">                                          
                             <li aria-haspopup="true"><a href="{{ url('/sales/create') }}" class="slide-item text-dark">إضافة فاتورة مبيعات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/sales') }}" class="slide-item text-dark">فواتير المبيعات</a></li>
+
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('sales_return') }}" class="slide-item text-dark">فواتير مرتجع المبيعات</a></li>
                             {{--<li aria-haspopup="true"><a href="#" class="slide-item text-dark">تصدير العملاء إلي ملف إكسيل</a></li>
                             <li aria-haspopup="true"><a href="#" class="slide-item text-dark">إستيراد العملاء من ملف إكسيل</a></li>
                             <li aria-haspopup="true"><a href="#" class="slide-item text-dark">تصدير ديون العملاء إلي ملف إكسيل</a></li>--}}
@@ -116,6 +125,10 @@
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('/purchases/create') }}" class="slide-item text-dark">إضافة فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/purchases') }}" class="slide-item text-dark">فواتير المشتريات</a></li>
+                            
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('purchases_return') }}" class="slide-item text-dark">فواتير مرتجع المشتريات</a></li>
+
                             {{--<li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">تعديل فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">مرتجع فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">مرتجع مشتريات بدون فاتورة</a></li>
