@@ -93,6 +93,10 @@
             body{
                 /* font-family: Arial, Helvetica, sans-serif, serif; */
                 font-family: "4_F4", serif;        
+            }   
+
+            .nowrap_thead{
+                white-space: nowrap;
             }
             
 

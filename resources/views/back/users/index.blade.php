@@ -71,7 +71,7 @@
                     {data: 'email', name: 'email'},
                     {data: 'gender', name: 'gender'},
                     {data: 'phone', name: 'phone'},
-                    {data: 'role', name: 'role'},
+                    {data: 'role_name', name: 'role_name'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false},
                 ],

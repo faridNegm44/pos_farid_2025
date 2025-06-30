@@ -32,6 +32,11 @@
         .totals_bill_tr, .client_info_tr {
             background-color: #d0d0d0 !important;
         }
+
+        hr {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
         
         @media print {
             body {
@@ -61,8 +66,8 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
+<body  style="padding: 5px 10px;">
+    <div class="container" style="padding: 5px 10px;border: 1px solid #000;">
         <div class="">
             <div class="invoice-title">
                 <h4 class="text-center" style="font-weight: bold;">
@@ -112,7 +117,7 @@
                 {{----------------------------- start رصيد اول عميل  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}
                 @if ($bill->treasury_type === 'رصيد اول عميل')
-                    <div class="bill-container" style="padding: 10px;">
+                    <div class="bill-container" style="padding: 0 10px;">
                         <p style="font-weight: bold;font-size: 15px;">
                             رقم الحركة: {{ $bill->id }}
                             - ( {{ $bill->treasury_type }} )
@@ -123,6 +128,7 @@
                         </span>
                         <span style="margin: 3px 10px;"><strong>المبلغ:</strong> {{ display_number($bill->remaining_money) }}</span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end رصيد اول عميل  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}
@@ -149,6 +155,7 @@
                             <strong>المبلغ المدفوع</strong>: {{ display_number($bill->amount_money) }}
                         </span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end اذن توريد نقدية  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}          
@@ -176,6 +183,7 @@
                             <strong>المبلغ المصروف</strong>: {{ display_number($bill->amount_money) }}
                         </span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end اذن صرف نقدية  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}          
@@ -201,6 +209,7 @@
                             <strong>الرصيد بعد التسوية</strong>: {{ display_number($bill->remaining_money) }}
                         </span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end تسوية رصيد للجهة  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}          
@@ -227,6 +236,7 @@
                         </span>
                         <span style="margin: 3px 10px;"><strong>مستخدم الإضافة:</strong> {{ $bill->userName }}</span>
                         <span style="margin: 3px 10px;"><strong>السنة المالية:</strong> {{ $bill->financialYearName }}</span>
+                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
 
                         <table border="1" width="100%" style="border-collapse: collapse;margin-top: 10px;">
                             <thead>
@@ -288,6 +298,7 @@
                         
                         <span style="margin: 3px 10px;"><strong>مستخدم الإضافة:</strong> {{ $bill->userName }}</span>
                         <span style="margin: 3px 10px;"><strong>السنة المالية:</strong> {{ $bill->financialYearName }}</span>
+                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
 
                         <table border="1" width="100%" style="border-collapse: collapse;margin-top: 10px;">
                             <thead>
@@ -331,7 +342,7 @@
                     {{-----------------------------------------------------------------------------------------------}}  
                 @endif
                 
-                <p style="margin: 0 auto;text-align: center;border: 1px dotted #000;width: 30%;">
+                <p style="margin: 0 auto;text-align: center;border: 1px dotted #000;width: 35%;">
                     <strong>حالة العميل بعد الفاتورة:</strong> 
                     @if ($bill->remaining_money > 0)
                         عليه: {{ display_number( $bill->remaining_money ) }} 
@@ -369,7 +380,7 @@
         </div>
 
         @include('back.layouts.footer_report')
-        {{--<script> window.print(); </script>--}}
+        <script> window.print(); </script>
     </div>
 </body>
 </html>

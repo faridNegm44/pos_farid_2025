@@ -81,6 +81,18 @@
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false},
                 ],
+                dom: 'Blfrtip',
+                buttons: [
+                    { extend: 'copy', text: '📋 نسخ' },
+                    { extend: 'excel', text: '📊 Excel' },
+                    { extend: 'pdf', text: '📄 PDF' },
+                    { extend: 'print', text: '🖨️ طباعة' },
+                    {
+                        extend: 'colvis',
+                        text: '👁️ إظهار/إخفاء الأعمدة',
+                        className: 'buttons-collection buttons-colvis'
+                    }
+                ],
                 "bDestroy": true,
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]

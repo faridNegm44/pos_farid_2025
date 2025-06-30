@@ -12,85 +12,105 @@ use Yajra\DataTables\Facades\DataTables;
 class ProductSubCategoyController extends Controller
 {
     public function index()
-    {                               
-        $pageNameAr = 'الأقسام الفرعية للأصناف';
-        $pageNameEn = 'products_sub_category';
-        $main_categories = DB::table('product_categoys')->get();
-
-        return view('back.products_sub_category.index' , compact('pageNameAr' , 'pageNameEn', 'main_categories'));
-    }
-
-    public function create()
-    {
-        
+    {            
+        if((userPermissions()->products_sub_category_view)){
+            $pageNameAr = 'الأقسام الفرعية للأصناف';
+            $pageNameEn = 'products_sub_category';
+            $main_categories = DB::table('product_categoys')->get();
+    
+            return view('back.products_sub_category.index' , compact('pageNameAr' , 'pageNameEn', 'main_categories'));
+	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }                   
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'main_category' => 'required|integer|exists:product_categoys,id',
-                'name_sub_category' => 'required|string|unique:product_sub_categories,name_sub_category',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-                'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
+        if((userPermissions()->products_sub_category_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'main_category' => 'required|integer|exists:product_categoys,id',
+                    'name_sub_category' => 'required|string|unique:product_sub_categories,name_sub_category',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+                    'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
+    
+                ],[
+                    'main_category' => 'القسم الرئيسي للسلعة/خدمة',                
+                    'name_sub_category' => 'إسم القسم الفرعي',                
+                ]);
+    
+                DB::table('product_sub_categories')->insert([
+                    'main_category' => request('main_category'),
+                    'name_sub_category' => request('name_sub_category'),
+                ]);
+            }
 
-            ],[
-                'main_category' => 'القسم الرئيسي للصنف',                
-                'name_sub_category' => 'إسم القسم الفرعي',                
-            ]);
-
-            DB::table('product_sub_categories')->insert([
-                'main_category' => request('main_category'),
-                'name_sub_category' => request('name_sub_category'),
-            ]);
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
     }
 
     public function edit($id){
-        if(request()->ajax()){
-            $find = DB::table('product_sub_categories')->where('id', $id)->first();
-            return response()->json($find);
+        if((userPermissions()->products_sub_category_update)){
+            if(request()->ajax()){
+                $find = DB::table('product_sub_categories')->where('id', $id)->first();
+                return response()->json($find);
+            }
+
+            return view('back.welcome');
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
-        return view('back.welcome');
     }
 
-    public function update(Request $request, $id){
-        if (request()->ajax()){
-            $this->validate($request , [
-                'main_category' => 'required|integer|exists:product_categoys,id',
-                'name_sub_category' => 'required|string|unique:product_sub_categories,name_sub_category,'.$id,
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-                'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
+    public function update(Request $request, $id)
+    {
+        if((userPermissions()->products_sub_category_delete)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'main_category' => 'required|integer|exists:product_categoys,id',
+                    'name_sub_category' => 'required|string|unique:product_sub_categories,name_sub_category,'.$id,
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+                    'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
+    
+                ],[
+                    'main_category' => 'القسم الرئيسي للسلعة/خدمة',                
+                    'name_sub_category' => 'إسم القسم الفرعي',          
+                ]);
+    
+                DB::table('product_sub_categories')->where('id', $id)->update([
+                    'main_category' => request('main_category'),
+                    'name_sub_category' => request('name_sub_category'),
+                ]);
+            } 
 
-            ],[
-                'main_category' => 'القسم الرئيسي للصنف',                
-                'name_sub_category' => 'إسم القسم الفرعي',          
-            ]);
-
-            DB::table('product_sub_categories')->where('id', $id)->update([
-                'main_category' => request('main_category'),
-                'name_sub_category' => request('name_sub_category'),
-            ]);
-        }   
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }
     }
 
      
     public function destroy($id){
-        $category = DB::table('products')->where('sub_category', $id)->first();
-
-        if ($category) {
-            return response()->json(['cannot_delete' => 'cannot_delete']);
-        }
-
-        if (!$category) {
-            DB::table('product_sub_categories')->where('id', $id)->delete();
-            return response()->json(['success_delete' => 'success_delete']);
+        if((userPermissions()->products_sub_category_update)){
+            $category = DB::table('products')->where('sub_category', $id)->first();
+    
+            if ($category) {
+                return response()->json(['cannot_delete' => 'cannot_delete']);
+            }
+    
+            if (!$category) {
+                DB::table('product_sub_categories')->where('id', $id)->delete();
+                return response()->json(['success_delete' => 'success_delete']);
+            }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
     }
 

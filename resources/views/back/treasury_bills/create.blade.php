@@ -100,8 +100,8 @@
                                 <ol>
                                     <li>اختر نوع المعاملة أولاً، سواء كان إذن توريد نقدية، أو صرف نقدية، أو ارتجاع نقدية.</li>
                                     <li>بعد ذلك، حدد الخزينة التي سيتم تنفيذ الإذن عليها.</li>
-                                    <li>ثم، حدد الجهة المراد تنفيذ الإذن عليها، سواء كانت موردًا أو عميلًا.</li>
-                                    <li>يجب اختيار عميل أو مورد فقط، وليس كلاهما معًا.</li>
+                                    <li>ثم، حدد الجهة المراد تنفيذ الإذن عليها، سواء كانت موردًا أو عميلًا أو شريكا.</li>
+                                    <li>يجب اختيار جهة واحدة فقط.</li>
                                     <li>اكتب مبلغ الإذن.</li>
                                 </ol>
                             </ul>
@@ -139,13 +139,25 @@
                             <select class="form-control" id="treasury_id" name="treasury_id">
                                 <option value="" selected>اختر الخزينة المالية</option>                              
                                 @foreach ($treasuries as $treasury)
-                                    <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->treasury_money_after }}</option>                                
+                                    <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ display_number($treasury->treasury_money_after) }}</option>                                
                                 @endforeach
                             </select>
                             <bold id="errors-treasury_id" style="display: none;"></bold>
                         </div>
                         
-                        <div class="col-lg-3" id="clients">
+                        <div class="col-lg-2">
+                            <label for="user" class="text-dark">الجهة</label>
+                            <i class="fas fa-star require_input"></i>
+                            <select class="form-control" id="user">
+                                <option value="" selected disabled>الجهة</option>                              
+                                <option value="عميل">عميل</option>                                
+                                <option value="مورد">مورد</option>                                
+                                <option value="شريك">شريك</option>                                
+                            </select>
+                            <bold id="errors-user" style="display: none;"></bold>
+                        </div>
+                        
+                        <div class="col-lg-4" id="clients" style="display: none;">
                             <label for="" class="text-dark">العملاء</label>
                             <i class="fas fa-star require_input"></i>
                             <select class="selectize clients" name="client">
@@ -164,7 +176,7 @@
                             <bold id="errors-client_supplier_id" style="display: none;"></bold>
                         </div>
                         
-                        <div class="col-lg-3" id="suppliers">
+                        <div class="col-lg-4" id="suppliers" style="display: none;">
                             <label for="" class="text-dark">الموردين</label>
                             <i class="fas fa-star require_input"></i>
                             <select class="selectize suppliers" name="supplier">
@@ -181,6 +193,25 @@
                                 @endforeach       
                             </select>
                             <bold id="errors-client_supplier_id" style="display: none;"></bold>
+                        </div>    
+                        
+                        <div class="col-lg-4" id="partners"  style="display: none;">
+                            <label for="" class="text-dark">الشركاء</label>
+                            <i class="fas fa-star require_input"></i>
+                            <select class="selectize partners" name="partner">
+                                <option value="" disabled selected>الشركاء</option>                              
+                                @foreach ($partners as $partner)
+                                    <option value="{{ $partner->id }}">
+                                        ( {{ $partner->id }} ) - 
+                                        ( {{ $partner->name }} )
+    
+                                        @if ($partner->phone)
+                                            ( {{ $partner->phone }} )
+                                        @endif                                    
+                                    </option>
+                                @endforeach       
+                            </select>
+                            <bold id="errors-partners_id" style="display: none;"></bold>
                         </div>    
                     </div>
                     {{--  start نوع المعامل && العملاء && الموردين --}}
@@ -346,6 +377,7 @@
                 $('#totalAfterTreasury').text(0);
                 $('.clients')[0].selectize.setValue('');
                 $('.suppliers')[0].selectize.setValue('');
+                $('.partners')[0].selectize.setValue('');
             });
         // end when change نوع المعاملة
 
@@ -361,6 +393,7 @@
                 $('#userStatus').text('');
                 $('.clients')[0].selectize.setValue('');
                 $('.suppliers')[0].selectize.setValue('');
+                $('.partners')[0].selectize.setValue('');
             });
         // end when change الخزينة المالية
 
@@ -372,14 +405,16 @@
                 
                 const $clients = $(".clients").selectize();
                 const $suppliers = $(".suppliers").selectize();
+                const $partners = $(".partners").selectize();
 
                 const clientsSelectize = $clients[0].selectize;
                 const suppliersSelectize = $suppliers[0].selectize;
+                const partnersSelectize = $partners[0].selectize;
 
 
                 // start function check if checked client and supplier in same time
                 function checKifFoundCliendAndSupplierVal(){
-                    if($('.clients').val() && $('.suppliers').val() ){
+                    if($('.clients').val() && $('.suppliers').val() || $('.clients').val() && $('.partners').val() || $('.suppliers').val() && $('.partners').val()){
                         resetDefault();
                         location.reload();    
                     }
@@ -389,8 +424,8 @@
 
 
                 // start function get cleint or supplier info
-                function getClientOrSupplierInfo(id){
-                    const url = `{{ url('get_info/client_or_supplier') }}/${id}`;
+                function getClientOrSupplierOrPartnerInfo(id, type){
+                    const url = `{{ url('get_info/client_or_supplier') }}/${id}/${type}`;
                     $.ajax({
                         type: "GET",
                         url: url,
@@ -430,7 +465,7 @@
                         $('#totalAfterTreasury').text(0);
     
                         $("#overlay_page").fadeIn();
-                        getClientOrSupplierInfo(clientVal);
+                        getClientOrSupplierOrPartnerInfo(clientVal, 'عميل');
                         $("#overlay_page").fadeOut();
                         checKifFoundCliendAndSupplierVal();
                     }else{
@@ -449,7 +484,26 @@
                         $('#totalAfterTreasury').text(0);
     
                         $("#overlay_page").fadeIn();
-                        getClientOrSupplierInfo(supplierVal);
+                        getClientOrSupplierOrPartnerInfo(supplierVal, 'مورد');
+                        $("#overlay_page").fadeOut();
+                        checKifFoundCliendAndSupplierVal();
+                    }else{
+                        $('#value').val('');
+                        $('#totalBeforeUser').text(0);
+                        $('#totalAfterUser').text(0);
+                        $('#userStatus').css('display', 'none').text('');
+                    }
+                });
+                
+                partnersSelectize.on('change', function(value) {
+                    let partnerVal = $('.partners').val();
+
+                    if(partnerVal){
+                        $('#value').val('');
+                        $('#totalAfterTreasury').text(0);
+    
+                        $("#overlay_page").fadeIn();
+                        getClientOrSupplierOrPartnerInfo(partnerVal, 'شريك');
                         $("#overlay_page").fadeOut();
                         checKifFoundCliendAndSupplierVal();
                     }else{
@@ -499,6 +553,35 @@
 
 
 
+        // start when change user سواء عميل او مورد او شريك 
+        $('#user').on('change', function(){
+            const thisVal = $(this).val();
+
+            $("#overlay_page").fadeIn();
+            $("#clients, #suppliers, #partners").fadeOut();
+            
+            $('.clients')[0].selectize.setValue('');
+            $('.suppliers')[0].selectize.setValue('');
+            $('.partners')[0].selectize.setValue('');
+            
+            $("#overlay_page").fadeOut();
+
+            if(thisVal == 'عميل'){
+                $("#clients").fadeIn();
+                
+            }else if(thisVal == 'مورد'){
+                $("#suppliers").fadeIn();
+                
+            }else if(thisVal == 'شريك'){
+                $("#partners").fadeIn();
+
+            }
+        });
+        // end when change user سواء عميل او مورد او شريك 
+
+
+
+
         // start when change مبلغ المعاملة
             $("#value").on("input", function(){
                 //$("#overlay_page").fadeIn();
@@ -509,6 +592,7 @@
                 const treasury_type = $("#treasury_type").val();
                 const clients = $(".clients");
                 const suppliers = $(".suppliers");
+                const partners = $(".partners");
                 const totalBeforeTreasuryInput = parseFloat($("#totalBeforeTreasuryInput").val());
 
 
@@ -595,6 +679,7 @@
                 const treasury_id = $("#treasury_id").val();
                 const client = $(".clients").val();
                 const supplier = $(".suppliers").val();
+                const partner = $(".partners").val();
                 const value = $("#value").val();
 
                 //$("#overlay_page").fadeIn();
@@ -614,10 +699,10 @@
                     
                     $("#overlay_page").fadeOut();
 
-                }else if(!client && !supplier){
+                }else if(!client && !supplier && !partner){
                     alertify.set('notifier','position', 'top-center');
                     alertify.set('notifier','delay', 3);
-                    alertify.error("يُرجى اختيار عميل أو مورد لإتمام المعاملة");
+                    alertify.error("يُرجى اختيار جهة لإتمام المعاملة");
                     
                     $("#overlay_page").fadeOut();
 
@@ -672,9 +757,6 @@
                             }
                     });
                 }
-
-
-
             });
         // end save treasury bill when click save bill btn
     </script>

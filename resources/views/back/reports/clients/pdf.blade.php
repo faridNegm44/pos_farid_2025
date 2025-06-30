@@ -47,8 +47,8 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
+<body style="padding: 5px 10px;">    
+    <div style="padding: 5px 10px;border: 1px solid #000;">
         <div class="">
             <div class="invoice-title">
                 <h4 class="text-center" style="font-weight: bold;">
@@ -70,10 +70,10 @@
                     <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
                 @endif
                 @if ($from)
-                    <span class="itemsSearch">تاريخ من: {{ $from }}</span>
+                    <span class="itemsSearch">تاريخ من: {{ Carbon\Carbon::parse($from)->format('d-m-Y h:i:s a') }}</span>
                 @endif
                 @if ($to)
-                    <span class="itemsSearch">تاريخ الي: {{ $to }}</span>
+                    <span class="itemsSearch">تاريخ الي: {{ Carbon\Carbon::parse($to)->format('d-m-Y h:i:s a') }}</span>
                 @endif
             </div>
         @endif
@@ -102,7 +102,7 @@
                             {{--<td>{{ $result->id }}</td>--}}
                             <td>
                                 {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                <span style="margin: 0 5px;display: block;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
+                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
                             </td>
                             <td>
                                 @if(Carbon\Carbon::parse($result->created_at)->format('d-m-Y') != Carbon\Carbon::parse($result->date)->format('d-m-Y'))
@@ -111,10 +111,10 @@
                             </td>
                             <td>{{ $result->treasury_name }}</td>
                             <td>{{ $result->treasury_type }}</td>
-                            <td>{{ $result->amount_money }}</td>
+                            <td>{{ display_number($result->amount_money) }}</td>
                             <td>{{ $result->clientName }}</td>
-                            <td>{{ $result->remaining_money }}</td>
-                            <td>{{ $result->treasury_money_after }}</td>
+                            <td>{{ display_number($result->remaining_money) }}</td>
+                            <td>{{ display_number($result->treasury_money_after) }}</td>
                             <td>{{ $result->userName }}</td>
                             <td>{{ $result->notes }}</td>
                         </tr>

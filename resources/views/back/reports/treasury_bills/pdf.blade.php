@@ -54,8 +54,8 @@
         }*/
     </style>
 </head>
-<body>
-    <div class="container">
+<body style="padding: 5px 10px;">
+    <div style="padding: 5px 10px;border: 1px solid #000;">
         <div class="">
             <div class="invoice-title">
                 <h4 class="text-center" style="font-weight: bold;">
@@ -126,15 +126,15 @@
                                     {{ $result->treasury_type }}
                                 @endif
                             </td>
-                            <td>{{ $result->amount_money }}</td>
+                            <td>{{ display_number($result->amount_money) }}</td>
                             <td>
                                 @if ($result->treasury_type === 'رصيد اول خزنة' || $result->treasury_type === 'مصروف' || $result->treasury_type === 'تحويل بين خزنتين')
                                     لاتوجد جهة
                                 @else
-                                    {{ $result->remaining_money }}
+                                    {{ display_number($result->remaining_money) }}
                                 @endif
                             </td>
-                            <td>{{ $result->treasury_money_after }}</td>
+                            <td>{{ display_number($result->treasury_money_after) }}</td>
                             <td>{{ $result->user_name }}</td>
                             <td>{{ $result->notes }}</td>
                         </tr>

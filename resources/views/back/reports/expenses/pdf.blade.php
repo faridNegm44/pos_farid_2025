@@ -47,8 +47,8 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
+<body style="padding: 5px 10px;">
+    <div style="padding: 5px 10px;border: 1px solid #000;">
         <div class="">
             <div class="invoice-title">
                 <h4 class="text-center" style="font-weight: bold;">
@@ -67,10 +67,10 @@
                     <span class="itemsSearch">الخزينة: {{ $results[0]->treasury_name }}</span>
                 @endif
                 @if ($from)
-                    <span class="itemsSearch">تاريخ من: {{ $from }}</span>
+                    <span class="itemsSearch">تاريخ من: {{ Carbon\Carbon::parse($from)->format('d-m-Y h:i:s a') }}</span>
                 @endif
                 @if ($to)
-                    <span class="itemsSearch">تاريخ الي: {{ $to }}</span>
+                    <span class="itemsSearch">تاريخ الي: {{ Carbon\Carbon::parse($to)->format('d-m-Y h:i:s a') }}</span>
                 @endif
             </div>
         @endif
@@ -97,7 +97,14 @@
                             </td>
                             <td>{{ $result->treasury_name }}</td>
                             <td>{{ $result->title }}</td>
-                            <td>{{ $result->amount_money }}</td>                                    
+                            <td>
+                                @if($result->status == 'اضافة')
+                                    {{ display_number($result->amount) }}
+                                @else
+                                    <span style="margin: 3px;font-size: 12px;">قبل: {{ display_number($result->amount) }}</span>
+                                    <span style="margin: 3px;font-size: 12px;">بعد: 0</span>
+                                @endif    
+                            </td>                                    
                             <td>{{ $result->userName }}</td>
                             <td>{{ $result->notes }}</td>
                         </tr>

@@ -1,6 +1,6 @@
 <div class="row" style="margin-bottom: 10px;">
     <div class="col-xs-6 text-left">
-        <img src="{{ asset('back/images/settings/logo.png') }}" alt="" style="width: 150px;height: 50px;margin-top: -12px; margin-bottom: 7px;">
+        <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" alt="" style="width: 150px;height: 50px;margin-top: -12px; margin-bottom: 7px;">
         <div>
             <span>{{ GeneralSettingsInfo()->phone1  }}</span> 
             <span style="margin: 0 10px;">{{ GeneralSettingsInfo()->phone2 ?? '' }}</span>

@@ -12,55 +12,68 @@ use Illuminate\Support\Str;
 class FinancialYearsController extends Controller
 {
     public function index()
-    {                               
-        $pageNameAr = 'السنوات المالية';
-        $pageNameEn = 'financialYears';
-        return view('back.financialYears.index' , compact('pageNameAr' , 'pageNameEn'));
+    {               
+        if((userPermissions()->financialYears_view)){
+            $pageNameAr = 'السنوات المالية';
+            $pageNameEn = 'financialYears';
+            return view('back.financialYears.index' , compact('pageNameAr' , 'pageNameEn'));
+	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }                  
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            
-            $allData = FinancialYears::where('status', 1)->get();
-
-            foreach($allData as $item){
-                if($item->status == 1){
-                    return response()->json(['foundedActiveFinYear' => 'تحذير: هناك سنة مالية لم تقفل بعد']);
+        if((userPermissions()->financialYears_create)){
+            if (request()->ajax()){
+                
+                $allData = FinancialYears::where('status', 1)->get();
+    
+                foreach($allData as $item){
+                    if($item->status == 1){
+                        return response()->json(['foundedActiveFinYear' => 'تحذير: هناك سنة مالية لم تقفل بعد']);
+                    }
                 }
-            }
-
-            $this->validate($request , [
-                'name' => 'required|string|unique:financial_years,name',
-                'start' => 'required|date',
-                'end' => 'required|date',
-                'notes' => 'nullable|string|max:255',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-                'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
-                'date' => 'حقل :attribute يجب ان يكون من نوع تاريخ.',
-
-            ],[
-                'name' => 'إسم السنة المالية',                
-                'start' => 'تاريخ بداية السنة المالية',                
-                'end' => 'تاريخ نهاية السنة المالية',                
-                'notes' => 'الملاحظات',                
-            ]);
-
-            FinancialYears::create($request->all());
-
-        } // end check request()->ajax()
+    
+                $this->validate($request , [
+                    'name' => 'required|string|unique:financial_years,name',
+                    'start' => 'required|date',
+                    'end' => 'required|date',
+                    'notes' => 'nullable|string|max:255',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+                    'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
+                    'date' => 'حقل :attribute يجب ان يكون من نوع تاريخ.',
+    
+                ],[
+                    'name' => 'إسم السنة المالية',                
+                    'start' => 'تاريخ بداية السنة المالية',                
+                    'end' => 'تاريخ نهاية السنة المالية',                
+                    'notes' => 'الملاحظات',                
+                ]);
+    
+                FinancialYears::create($request->all());
+    
+            } // end check request()->ajax()
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        } 
     }
 
     public function edit($id)
     {
-        if(request()->ajax()){
-            $find = FinancialYears::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return view('back.welcome');
+        if((userPermissions()->financialYears_update)){
+            if(request()->ajax()){
+                $find = FinancialYears::where('id', $id)->first();
+                return response()->json($find);
+            }
+            return view('back.welcome');
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        } 
     }
 
     public function update(Request $request, $id)

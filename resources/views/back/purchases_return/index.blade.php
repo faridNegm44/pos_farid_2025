@@ -120,7 +120,7 @@
                                 <th class="border-bottom-0">#</th>
                                 <th class="border-bottom-0" >مورد</th>
                                 <th class="border-bottom-0" >خزينة</th>
-                                <th class="border-bottom-0" >ع الأصناف</th>
+                                <th class="border-bottom-0" >ع السلع والخدمات</th>
                                 <th class="border-bottom-0" >تاريخ</th>
                                 <th class="border-bottom-0" >ملاحظات</th>
                                 <th class="border-bottom-0" >مستخدم</th>

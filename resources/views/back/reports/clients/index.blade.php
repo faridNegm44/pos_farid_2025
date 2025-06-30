@@ -76,7 +76,7 @@
         
         <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
-                <form method="post" action="{{ url('clients/report/result') }}">
+                <form method="get" action="{{ url('clients/report/result') }}">
                     @csrf
                     <div class="row justify-content-center">
                         <div class="col-md-3">
@@ -99,9 +99,10 @@
                             <div>
                                 <select  name="treasury_type" class="treasury_type selectize" id="treasury_type">
                                     <option value="" selected>أنواع الأذونات</option>                              
+                                    <option value="رصيد اول عميل">رصيد اول مدة</option>                                                                 
                                     <option value="اذن توريد نقدية">اذن توريد نقدية</option>                              
                                     <option value="اذن صرف نقدية">اذن صرف نقدية</option>                              
-                                    <option value="رصيد اول عميل">رصيد اول مدة</option>                                                                 
+                                    <option value="تسوية رصيد للجهة">تسوية رصيد للجهة</option>                              
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-treasury_type" style="display: none;"></bold>

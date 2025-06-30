@@ -54,7 +54,7 @@
                     if(res.length > 0){
                         alertify.set('notifier','position', 'top-center');
                         alertify.set('notifier','delay', 3);
-                        alertify.success("تمت جلب الأصناف المتعلقة بالمخزن بنجاح");
+                        alertify.success("تمت جلب السلع والخدمات المتعلقة بالمخزن بنجاح");
     
                         $.each(res, function(index, value){
                             $("#products")[0].selectize.addOption({
@@ -108,7 +108,7 @@
         
         <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
-                <form method="post" action="{{ url('products/report/result') }}">
+                <form method="get" action="{{ url('products/report/result') }}">
                     @csrf
                     <div class="row justify-content-center">
                         <div class="col-md-2">
@@ -126,22 +126,23 @@
                         </div>    
                         
                         <div class="col-md-2">
-                            <label for="products">الأصناف</label>
+                            <label for="products">السلع والخدمات</label>
                             <div>
                                 <select  name="products" class="products selectize" id="products">
-                                    <option value="" selected>اختر مخزن أولا ثم صنف</option>                                    
+                                    <option value="" selected>اختر مخزن أولا ثم سلعة/خدمة</option>                                    
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-products" style="display: none;"></bold>
                         </div>                                                
                         
                         <div class="col-md-2">
-                            <label for="type">أنواع الحركات علي الأصناف</label>
+                            <label for="type">أنواع الحركات علي السلع والخدمات</label>
                             <div>
                                 <select  name="type" class="type form-control" id="type">
-                                    <option value="" selected>أنواع الحركات علي الأصناف</option>                                    
-                                    <option value="رصيد اول">رصيد اول مدة</option>                                    
-                                    <option value="تسوية صنف" class="text-danger">تسوية صنف</option>                                    
+                                    <option value="" selected class="text-muted">أنواع الحركات علي السلع والخدمات</option>                                    
+                                    <option value="رصيد اول مدة للسلعة/خدمة">رصيد اول مدة للسلعة/خدمة</option>                                    
+                                    <option value="تعديل سعر تكلفة او سعر بيع او خصم او ضريبة للسلعة/للخدمة">تعديل سعر تكلفة او سعر بيع او خصم او ضريبة للسلعة/للخدمة</option>                                    
+                                    <option value="تسوية سلعة/خدمة" class="text-danger">تسوية سلعة/خدمة</option>                                    
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-type" style="display: none;"></bold>

@@ -23,9 +23,9 @@
             $('#example1').DataTable({
                 "paging": false, // تعطيل التقسيم
                 "searching": true, // تفعيل البحث (اختياري)
-                "ordering": true, // تفعيل الترتيب (اختياري)
-                "info": false, // إخفاء معلومات الصفحة (اختياري)
-                "order": [[0, 'asc']]
+                "ordering": false, // تفعيل الترتيب (اختياري)
+                "info": true, // إخفاء معلومات الصفحة (اختياري)
+                "order": [[0, 'desc']]
             });
         });
     </script>
@@ -49,10 +49,10 @@
                     <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
                 @endif
                 @if ($from)
-                    <span class="itemsSearch">تاريخ من: {{ $from }}</span>
+                    <span class="itemsSearch">تاريخ من: {{ Carbon\Carbon::parse($from)->format('d-m-Y h:i:s a') }}</span>
                 @endif
                 @if ($to)
-                    <span class="itemsSearch">تاريخ الي: {{ $to }}</span>
+                    <span class="itemsSearch">تاريخ الي: {{ Carbon\Carbon::parse($to)->format('d-m-Y h:i:s a') }}</span>
                 @endif
             </div>
         </div>
@@ -96,7 +96,7 @@
                                     {{--<td>{{ $result->id }}</td>--}}
                                     <td>
                                         {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                        <span style="margin: 0 5px;display: block;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
+                                        <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
                                     </td>
                                     <td>
                                         @if(Carbon\Carbon::parse($result->created_at)->format('d-m-Y') != Carbon\Carbon::parse($result->date)->format('d-m-Y'))
@@ -105,16 +105,20 @@
                                     </td>
                                     <td>{{ $result->treasury_name }}</td>
                                     <td>{{ $result->treasury_type }}</td>
-                                    <td>{{ $result->supplierName }}</td>
-                                    <td>{{ $result->amount_money }}</td>
-                                    <td>{{ $result->remaining_money }}</td>
-                                    <td>{{ $result->treasury_money_after }}</td>
+                                    <td>( {{ $result->supplierCode }} ) {{ $result->supplierName }}</td>
+                                    <td>{{ display_number($result->amount_money) }}</td>
+                                    <td>{{ display_number($result->remaining_money) }}</td>
+                                    <td>{{ display_number($result->treasury_money_after) }}</td>
                                     <td>{{ $result->userName }}</td>
                                     <td>{{ $result->notes }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $results->links() }}
+                    </div>
                 </div>
             </div>
         </div>

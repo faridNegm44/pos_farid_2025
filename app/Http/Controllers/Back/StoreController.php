@@ -11,37 +11,50 @@ use Yajra\DataTables\Facades\DataTables;
 class StoreController extends Controller
 {
     public function index()
-    {                               
-        $pageNameAr = 'المخازن';
-        $pageNameEn = 'stores';
-        return view('back.stores.index' , compact('pageNameAr' , 'pageNameEn'));
+    {        
+        if((userPermissions()->stores_view)){
+            $pageNameAr = 'المخازن';
+            $pageNameEn = 'stores';
+            return view('back.stores.index' , compact('pageNameAr' , 'pageNameEn'));	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
+                               
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'name' => 'required|string|unique:stores,name',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-
-            ],[
-                'name' => 'إسم المخزن',                
-            ]);
-
-            Store::create($request->all());
+        if((userPermissions()->stores_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'name' => 'required|string|unique:stores,name',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+    
+                ],[
+                    'name' => 'إسم المخزن',                
+                ]);
+    
+                Store::create($request->all());
+            }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
     }
 
     public function edit($id)
     {
-        if(request()->ajax()){
-            $find = Store::where('id', $id)->first();
-            return response()->json($find);
+        if((userPermissions()->stores_update)){
+            if(request()->ajax()){
+                $find = Store::where('id', $id)->first();
+                return response()->json($find);
+            }
+            return view('back.welcome');
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
-        return view('back.welcome');
     }
 
     public function update(Request $request, $id)
@@ -65,15 +78,19 @@ class StoreController extends Controller
     }
 
     public function destroy($id){
-        $store = DB::table('products')->where('store', $id)->first();
-
-        if ($store) {
-            return response()->json(['cannot_delete' => 'cannot_delete']);
-        }
-
-        if (!$store) {
-            DB::table('stores')->where('id', $id)->delete();
-            return response()->json(['success_delete' => 'success_delete']);
+        if((userPermissions()->stores_delete)){
+            $store = DB::table('products')->where('store', $id)->first();
+    
+            if ($store) {
+                return response()->json(['cannot_delete' => 'cannot_delete']);
+            }
+    
+            if (!$store) {
+                DB::table('stores')->where('id', $id)->delete();
+                return response()->json(['success_delete' => 'success_delete']);
+            }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
     }
     

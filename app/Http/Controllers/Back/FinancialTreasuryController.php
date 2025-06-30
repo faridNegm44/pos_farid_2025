@@ -12,66 +12,80 @@ use Carbon\Carbon;
 class FinancialTreasuryController extends Controller
 {
     public function index()
-    {                               
-        $pageNameAr = 'الخزائن المالية';
-        $pageNameEn = 'financial_treasury';
-        return view('back.financial_treasury.index' , compact('pageNameAr' , 'pageNameEn'));
+    {                      
+        if((userPermissions()->financial_treasury_view)){
+            $pageNameAr = 'الخزائن المالية';
+            $pageNameEn = 'financial_treasury';
+            return view('back.financial_treasury.index' , compact('pageNameAr' , 'pageNameEn'));
+	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }           
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'name' => 'required|string|unique:financial_treasuries,name',
-                'moneyFirstDuration' => 'min:0|numeric',
-                'notes' => 'nullable|string|max:255',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-                'min' => 'حقل :attribute أقل قيمة له هي 0 حرف.',
-                'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
-                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-            ],[
-                'name' => 'إسم الخزنة',                
-                'moneyFirstDuration' => 'رصيد أول المدة',                
-                'notes' => 'ملاحظات',                
-            ]);
-
-            DB::transaction(function () {
-                $getId = FinancialTreasury::create(request()->all());  
-                
-                $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'رصيد اول خزنة')->max('num_order'); 
-
-                DB::table('treasury_bill_dets')->insert([
-                    'num_order' => ($lastNumId+1), 
-                    'date' => Carbon::now(),
-                    'treasury_id' => $getId->id, 
-                    'treasury_type' => 'رصيد اول خزنة', 
-                    'bill_id' => 0, 
-                    'bill_type' => 'رصيد اول خزنة',
-                    'client_supplier_id' => 0, 
-                    'treasury_money_after' => request('moneyFirstDuration'), 
-                    'amount_money' => request('moneyFirstDuration'), 
-                    'remaining_money' => request('moneyFirstDuration'),
-                    'transaction_from' => null, 
-                    'transaction_to' => null, 
-                    'notes' => request('notes'), 
-                    'user_id' => auth()->user()->id, 
-                    'year_id' => $this->currentFinancialYear(),
-                    'created_at' => now()
+        if((userPermissions()->financial_treasury_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'name' => 'required|string|unique:financial_treasuries,name',
+                    'moneyFirstDuration' => 'min:0|numeric',
+                    'notes' => 'nullable|string|max:255',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+                    'min' => 'حقل :attribute أقل قيمة له هي 0 حرف.',
+                    'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
+                    'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                ],[
+                    'name' => 'إسم الخزنة',                
+                    'moneyFirstDuration' => 'رصيد أول المدة',                
+                    'notes' => 'ملاحظات',                
                 ]);
-            });
-        }
+    
+                DB::transaction(function () {
+                    $getId = FinancialTreasury::create(request()->all());  
+                    
+                    $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'رصيد اول خزنة')->max('num_order'); 
+    
+                    DB::table('treasury_bill_dets')->insert([
+                        'num_order' => ($lastNumId+1), 
+                        'date' => Carbon::now(),
+                        'treasury_id' => $getId->id, 
+                        'treasury_type' => 'رصيد اول خزنة', 
+                        'bill_id' => 0, 
+                        'bill_type' => 'رصيد اول خزنة',
+                        'client_supplier_id' => 0, 
+                        'treasury_money_after' => request('moneyFirstDuration'), 
+                        'amount_money' => request('moneyFirstDuration'), 
+                        'remaining_money' => request('moneyFirstDuration'),
+                        'transaction_from' => null, 
+                        'transaction_to' => null, 
+                        'notes' => request('notes'), 
+                        'user_id' => auth()->user()->id, 
+                        'year_id' => $this->currentFinancialYear(),
+                        'created_at' => now()
+                    ]);
+                });
+            }
+
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        } 
     }
 
     public function edit($id)
     {
-        if(request()->ajax()){
-            $find = FinancialTreasury::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return view('back.welcome');
+        if((userPermissions()->financial_treasury_update)){
+            if(request()->ajax()){
+                $find = FinancialTreasury::where('id', $id)->first();
+                return response()->json($find);
+            }
+            return view('back.welcome');
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        } 
     }
 
     public function update(Request $request, $id)
@@ -106,16 +120,21 @@ class FinancialTreasuryController extends Controller
 
     public function destroy($id)
     {
-        $treasuryBillDets = DB::table('treasury_bill_dets')->where('treasury_id', $id)->get();
+        if((userPermissions()->financial_treasury_delete)){
+            $treasuryBillDets = DB::table('treasury_bill_dets')->where('treasury_id', $id)->get();
+    
+            if(count($treasuryBillDets) > 1){
+                return response()->json(['cannot_delete' => 'cannot_delete']);
+    
+            }elseif(count($treasuryBillDets) == 1){
+                DB::table('financial_treasuries')->where('id', $id)->delete();
+                DB::table('treasury_bill_dets')->where('treasury_id', $id)->delete();
+                return response()->json(['success_delete' => 'success_delete']);
+            }
 
-        if(count($treasuryBillDets) > 1){
-            return response()->json(['cannot_delete' => 'cannot_delete']);
-
-        }elseif(count($treasuryBillDets) == 1){
-            DB::table('financial_treasuries')->where('id', $id)->delete();
-            DB::table('treasury_bill_dets')->where('treasury_id', $id)->delete();
-            return response()->json(['success_delete' => 'success_delete']);
-        }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        } 
     }
 
 
@@ -134,7 +153,7 @@ class FinancialTreasuryController extends Controller
                 return '<strong class="text-primary">'.$res->name.'</strong>';
             })
             ->addColumn('moneyFirstDuration', function($res){
-                return '<strong style="font-size: 13px;color: red;">'.$res->moneyFirstDuration.'</strong>';
+                return '<strong style="font-size: 13px;color: red;">'.display_number($res->moneyFirstDuration).'</strong>';
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){

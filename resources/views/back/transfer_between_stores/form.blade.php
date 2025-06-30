@@ -57,7 +57,7 @@
                         <label for="products">اصناف المخزن المحول منة</label>
                         <div>    
                           <select class="selectize" id="products" name="products">
-                            <option selected disabled>اختر المخزن المحول منة أولا ثم اختر الصنف المراد تحويل كميه منة</option>
+                            <option selected disabled>اختر المخزن المحول منة أولا ثم اختر السلعة/الخدمة المراد تحويل كميه منة</option>
                           </select>                        
                         </div>
                         <bold class="text-danger" id="errors-products" style="display: none;"></bold>

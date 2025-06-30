@@ -2,7 +2,7 @@
     $(document).ready(function () {
         $(".modal #save").click(function(e){
 
-            alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من عملية التحويل بين الخزنتين</p>', 
+            alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من عملية التحويل بين المخزنين</p>', 
                 function(){
                     e.preventDefault();
                     document.querySelector('.modal #save').disabled = true;        
@@ -36,13 +36,27 @@
                             document.querySelector('.modal #save').disabled = false;
                             document.querySelector('.spinner_request').style.display = 'none';
 
-                            $(".modal").modal('hide');
-                            
-                            alertify.set('notifier','position', 'top-center');
-                            alertify.set('notifier','delay', 6);
-                            alertify.success(`تم التحويل بنجاح`);
-                            
-                            location.reload();
+                            if(res.notAuth){
+                                alertify.dialog('alert')
+                                    .set({transition:'slide',message: `
+                                        <div style="text-align: center;font-weight: bold;">
+                                            <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                                صلاحية غير متوفرة 🔐⚠️
+                                            </p>
+                                            <p>${res.notAuth}</p>
+                                        </div>
+                                    `, 'basic': true})
+                                    .show();  
+                                $(".modal").modal('hide');  
+
+                            }else{
+                                $(".modal").modal('hide');
+                                alertify.set('notifier','position', 'top-center');
+                                alertify.set('notifier','delay', 6);
+                                alertify.success(`تم التحويل بنجاح`);
+                                
+                                location.reload();
+                            }
                         }
                     });
                 },function(){

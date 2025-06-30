@@ -1,37 +1,29 @@
-################### اذون الخزانه
-    رصيد اول خزنة -> relation with ( treasury_id ) in ( treasury_bill_dets )
-    
-    رصيد اول عميل -> relation with ( treasury_id ) in ( treasury_bill_dets )
-    
-    رصيد اول مورد -> relation with ( treasury_id ) in ( treasury_bill_dets )
-
-    اذن توريد نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
-
-    اذن صرف نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
-    
-    اذن ارتجاع نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
-
-    اذن ارتجاع مبيعات -> relation with ( treasury_id ) in ( treasury_bill_dets )
-
-    اذن ارتجاع مشتريات -> relation with ( treasury_id ) in ( treasury_bill_dets )
-
-    تحويل بين خزنتين -> relation with ( treasury_id ) in ( treasury_bill_dets )
-
-    تسوية نقدية -> relation with ( treasury_id ) in ( treasury_bill_dets )
-    
-    مصروف -> relation with ( bill_id ) in ( treasury_bill_dets )
-
-    مرتجع مصروف -> relation with ( bill_id ) in ( treasury_bill_dets )
+################### اذون الخزانه   =>   treasury_bill_dets
+    رصيد اول عميل
+    رصيد اول مورد
+    تسوية رصيد للجهة
+    رصيد اول خزنة
+    رصيد اول شريك
+    تعديل نسبة شريك
+    اضافة فاتورة مشتريات
+    اضافة فاتورة مبيعات
+    مصروف
+    مرتجع مصروف
+    اذن صرف نقدية
+    اذن توريد نقدية
+    تحويل بين خزنتين
+    تحويل
 
 
 
+################### اذون المخزن    =>    store_dets
+    رصيد اول مدة للسلعة/خدمة
+    تعديل سعر تكلفة او سعر بيع او خصم او ضريبة للسلعة/للخدمة
+    تسوية سلعة/خدمة
+    تحويل بين مخزنين
 
-
-################### اذون المخزن
-    رصيد اول مدة للصنف -> relation with ( product_id ) in ( store_dets )
-
-    تسوية صنف -> relation with ( product_id ) in ( store_dets )
-
+    اضافة فاتورة مشتريات
+    اضافة فاتورة مبيعات
 
 
 ################### اذون العملاء والموردين

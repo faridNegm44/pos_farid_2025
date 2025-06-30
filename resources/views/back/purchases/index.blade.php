@@ -66,10 +66,12 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'date', name: 'date'},
                     {data: 'supplierName', name: 'supplierName'},
                     {data: 'treasuryName', name: 'treasuryName'},
                     {data: 'count_items', name: 'count_items'},
-                    {data: 'date', name: 'date'},
+                    {data: 'bill_discount', name: 'bill_discount'},
+                    {data: 'total_bill', name: 'total_bill'},
                     {data: 'notes', name: 'notes'},
                     {data: 'userName', name: 'userName'},
                     {data: 'financialName', name: 'financialName'},
@@ -118,10 +120,12 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
+                                <th class="border-bottom-0" >تاريخ</th>
                                 <th class="border-bottom-0" >مورد</th>
                                 <th class="border-bottom-0" >خزينة</th>
-                                <th class="border-bottom-0" >ع الأصناف</th>
-                                <th class="border-bottom-0" >تاريخ</th>
+                                <th class="border-bottom-0" >عدد</th>
+                                <th class="border-bottom-0" >خصم فاتورة</th>
+                                <th class="border-bottom-0" >إجمالي الفاتورة</th>
                                 <th class="border-bottom-0" >ملاحظات</th>
                                 <th class="border-bottom-0" >مستخدم</th>
                                 <th class="border-bottom-0" >السنة</th>

@@ -11,15 +11,30 @@
                 $(".dataInput").val('');
             },
             success: function(res){
-                $.each(res , function(index, value){                    
-                    $(`.modal form #${index}`).val(value);
-                });
+                if(res.notAuth){
+                    alertify.dialog('alert')
+                        .set({transition:'slide',message: `
+                            <div style="text-align: center;font-weight: bold;">
+                                <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                    صلاحية غير متوفرة 🔐⚠️
+                                </p>
+                                <p>${res.notAuth}</p>
+                            </div>
+                        `, 'basic': true})
+                        .show();  
+                    $(".modal").modal('hide');  
 
-                document.querySelector("#res_id").value = res_id;
-                
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 2);
-                alertify.success("تم استرجاع البيانات بنجاح");
+                }else{
+                    $.each(res , function(index, value){                    
+                        $(`.modal form #${index}`).val(value);
+                    });
+    
+                    document.querySelector("#res_id").value = res_id;
+                    
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 2);
+                    alertify.success("تم استرجاع البيانات بنجاح");
+                }
             }
         });
 

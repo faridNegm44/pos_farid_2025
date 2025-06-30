@@ -16,69 +16,79 @@ class TasweaProductsController extends Controller
 {
     public function index()
     {               
-        $pageNameAr = 'تسوية كميات الأصناف';
-        $pageNameEn = 'taswea_products';
-        $products = Product::all();
-        $taswea_reasons = DB::table('taswea_reasons')->get();
-
-        return view('back.taswea_products.index' , compact('pageNameAr' , 'pageNameEn', 'products', 'taswea_reasons'));
+        if((userPermissions()->taswea_products_view)){
+            $pageNameAr = 'تسوية كميات السلع والخدمات';
+            $pageNameEn = 'taswea_products';
+            $products = Product::all();
+            $taswea_reasons = DB::table('taswea_reasons')->get();
+    
+            return view('back.taswea_products.index' , compact('pageNameAr' , 'pageNameEn', 'products', 'taswea_reasons'));
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        } 
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'product_id' => 'required|integer|exists:products,id',
-                'reason_id' => 'required|integer|exists:taswea_reasons,id',
-                'quantity' => 'required|numeric|min:0',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'exists' => 'حقل :attribute غير موجود.',
-                'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                'min' => 'حقل :attribute أقل قيمة له هي 0.',
-            ],[
-                'product_id' => 'الصنف',                
-                'quantity' => 'الكمية',                
-                'reason_id' => 'سبب التسوية',                
-            ]);
-
-            $find = StoreDets::where('product_id', request('product_id'))->orderBy('id', 'desc')->first();
-            $lastNumId = DB::table('store_dets')->where('type', 'تسوية صنف')->max('num_order');
-            
-            // start db::transaction
-            DB::transaction(function() use($find, $lastNumId){
-
-                $insertGetId = TasweaProducts::create([
-                    'product_id' => request('product_id'),
-                    'old_quantity' => $find->quantity_small_unit,
-                    'quantity' => request('quantity'),
-                    'reason_id' => request('reason_id'),
-                    'user_id' => auth()->user()->id,
-                    'notes' => request('notes'),
-                    'year_id' => $this->currentFinancialYear(),
+        if((userPermissions()->taswea_products_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'product_id' => 'required|integer|exists:products,id',
+                    'reason_id' => 'required|integer|exists:taswea_reasons,id',
+                    'quantity' => 'required|numeric|min:0',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'exists' => 'حقل :attribute غير موجود.',
+                    'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'min' => 'حقل :attribute أقل قيمة له هي 0.',
+                ],[
+                    'product_id' => 'السلعة/الخدمة',                
+                    'quantity' => 'الكمية',                
+                    'reason_id' => 'سبب التسوية',                
                 ]);
-
-                DB::table('store_dets')->insert([
-                    'num_order' => ($lastNumId+1), 
-                    'type' => 'تسوية صنف',
-                    'year_id' => $this->currentFinancialYear(),
-                    'bill_id' => $insertGetId->id,
-                    'product_id' => request('product_id'),
-                    'sell_price_small_unit' => $find->sell_price_small_unit,
-                    'last_cost_price_small_unit' => $find->last_cost_price_small_unit,
-                    'avg_cost_price_small_unit' => $find->avg_cost_price_small_unit,
-                    'product_bill_quantity' => 0,
-                    'quantity_small_unit' => request('quantity'),
-                    'transfer_from' => null,
-                    'transfer_to' => null,
-                    'transfer_quantity' => 0,
-                    'date' => request('custom_date'),
-                    'created_at' => now()
-                ]);
-            }); // end db::transaction 
-
-        }
+    
+                $find = StoreDets::where('product_id', request('product_id'))->orderBy('id', 'desc')->first();
+                $lastNumId = DB::table('store_dets')->where('type', 'تسوية سلعة/خدمة')->max('num_order');
+                
+                // start db::transaction
+                DB::transaction(function() use($find, $lastNumId){
+    
+                    $insertGetId = TasweaProducts::create([
+                        'product_id' => request('product_id'),
+                        'old_quantity' => $find->quantity_small_unit,
+                        'quantity' => request('quantity'),
+                        'reason_id' => request('reason_id'),
+                        'user_id' => auth()->user()->id,
+                        'notes' => request('notes'),
+                        'year_id' => $this->currentFinancialYear(),
+                    ]);
+    
+                    DB::table('store_dets')->insert([
+                        'num_order' => ($lastNumId+1), 
+                        'type' => 'تسوية سلعة/خدمة',
+                        'year_id' => $this->currentFinancialYear(),
+                        'bill_id' => $insertGetId->id,
+                        'product_id' => request('product_id'),
+                        'sell_price_small_unit' => $find->sell_price_small_unit,
+                        'last_cost_price_small_unit' => $find->last_cost_price_small_unit,
+                        'avg_cost_price_small_unit' => $find->avg_cost_price_small_unit,
+                        'tax' => $find->tax,
+                        'discount' => $find->discount,
+                        'product_bill_quantity' => $find->quantity_small_unit,
+                        'quantity_small_unit' => request('quantity'),
+                        'transfer_from' => null,
+                        'transfer_to' => null,
+                        'transfer_quantity' => 0,
+                        'date' => request('custom_date'),
+                        'created_at' => now()
+                    ]);
+                }); // end db::transaction 
+    
+            }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function getCurrentProductQuantity($id)
@@ -91,45 +101,17 @@ class TasweaProductsController extends Controller
         return view('back.welcome');
     }
     
-    public function edit($id)
-    {
-        if(request()->ajax()){
-            $find = TasweaProducts::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return view('back.welcome');
-    }
-
-    public function update(Request $request, $id)
-    {
-        if (request()->ajax()){
-            $find = TasweaProducts::where('id', $id)->first();
-
-            $this->validate($request , [
-                'name' => 'required|string|unique:taswea_products,name,'.$id,
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-
-            ],[
-                'name' => 'إسم القسم',                
-            ]);
-
-            $find->update($request->all());
-        }   
-    }
-
     public function datatable()
     {
         $all = TasweaProducts::leftJoin('store_dets', 'store_dets.bill_id', 'taswea_products.id')
-                            ->where('store_dets.type', 'تسوية صنف')
+                            ->where('store_dets.type', 'تسوية سلعة/خدمة')
                             ->leftJoin('products', 'products.id', 'taswea_products.product_id')
                             ->leftJoin('taswea_reasons', 'taswea_reasons.id', 'taswea_products.reason_id')
                             ->leftJoin('users', 'users.id', 'taswea_products.user_id')
                             ->leftJoin('financial_years', 'financial_years.id', 'taswea_products.year_id')
                             ->select(
                                 'taswea_products.*',
+                                'store_dets.id as storeDetsId',
                                 'products.nameAr as productName',
                                 'users.name as userName',                                
                                 'financial_years.name as financialName',

@@ -98,6 +98,7 @@
                 ajax: `{{ url($pageNameEn.'/datatable') }}`,
                 dataType: 'json',
                 columns: [
+                    {data: 'id', name: 'id'},
                     {data: 'code', name: 'code'},
                     {data: 'action', name: 'action', orderable: false},
                     {data: 'status', name: 'status'},
@@ -158,6 +159,7 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
+                                <th class="border-bottom-0">كود المورد</th>
                                 <th class="border-bottom-0">التحكم</th>
                                 <th class="border-bottom-0">الحالة</th>
                                 <th class="border-bottom-0" style="width: 15%;max-width: 15%;">الإسم</th>

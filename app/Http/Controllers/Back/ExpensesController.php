@@ -14,139 +14,154 @@ use Illuminate\Support\Str;
 class ExpensesController extends Controller
 {
     public function index()
-    {                      
-        $pageNameAr = 'المصروفات';
-        $pageNameEn = 'expenses';
-        $treasuries = FinancialTreasury::where('status', 1)
-                                        ->leftJoin('treasury_bill_dets', function ($join) {
-                                            $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
-                                                ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
-                                        })
-                                        ->select('financial_treasuries.*', 'treasury_bill_dets.treasury_money_after')
-                                        ->get();
-                                        
-                                        //dd($treasuries);
-
-        return view('back.expenses.index' , compact('pageNameAr' , 'pageNameEn', 'treasuries'));
+    {   
+        if((userPermissions()->expenses_view)){
+            $pageNameAr = 'المصروفات';
+            $pageNameEn = 'expenses';
+            $treasuries = FinancialTreasury::where('status', 1)
+                                            ->leftJoin('treasury_bill_dets', function ($join) {
+                                                $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
+                                                    ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
+                                            })
+                                            ->select('financial_treasuries.*', 'treasury_bill_dets.treasury_money_after')
+                                            ->get();
+                                            
+                                            //dd($treasuries);
+    
+            return view('back.expenses.index' , compact('pageNameAr' , 'pageNameEn', 'treasuries'));
+	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $lastAmountOfTreasury = DB::table('treasury_bill_dets')
-                                        ->where('treasury_id', request('treasury'))
-                                        ->orderBy('id', 'desc')
-                                        ->value('treasury_money_after');            
-            
-            $amount = request('amount');
-
-            if($amount > $lastAmountOfTreasury){
-                return response()->json(['error' => 'مبلغ المصروف اكبر من المبلغ الموجود بالخزينة']);
-            
-            }else{
-                $this->validate($request , [
-                    'treasury' => 'required|integer|exists:financial_treasuries,id',
-                    'title' => 'required||string|max:255',
-                    'amount' => 'required|numeric|min:1',
-                    'notes' => 'nullable|string|max:255',
-                ],[
-                    'exists' => 'حقل :attribute غير موجود.',
-                    'required' => 'حقل :attribute إلزامي.',
-                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                    'min' => 'حقل :attribute أقل قيمة له هي 1 حرف.',
-                    'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
-                    'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                    'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                ],[
-                    'treasury' => 'الخزينة',                
-                    'title' => 'وصف المصروف',                
-                    'amount' => 'مبلغ المصروف',                
-                    'notes' => 'ملاحظات',                
-                ]);
-                    
-                DB::transaction(function() use($lastAmountOfTreasury){                   
-                    $getId = Expense::create(request()->all());
-
-                    $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'مصروف')->max('num_order');
-                    DB::table('treasury_bill_dets')->insert([
-                        'num_order' => ($lastNumId+1), 
-                        'date' => Carbon::now(),
-                        'treasury_id' => request('treasury'), 
-                        'treasury_type' => 'مصروف', 
-                        'bill_id' => $getId->id, 
-                        'bill_type' => 0, 
-                        'client_supplier_id' => 0, 
-                        'treasury_money_after' => ($lastAmountOfTreasury - request('amount')), 
-                        'amount_money' => request('amount'), 
-                        'remaining_money' => ($lastAmountOfTreasury - request('amount')), 
-                        'transaction_from' => null, 
-                        'transaction_to' => null, 
-                        'notes' => request('notes'), 
-                        'user_id' => auth()->user()->id, 
-                        'year_id' => $this->currentFinancialYear(),
-                        'created_at' => now()
+        if((userPermissions()->expenses_create)){
+            if (request()->ajax()){
+                $lastAmountOfTreasury = DB::table('treasury_bill_dets')
+                                            ->where('treasury_id', request('treasury'))
+                                            ->orderBy('id', 'desc')
+                                            ->value('treasury_money_after');            
+                
+                $amount = request('amount');
+    
+                if($amount > $lastAmountOfTreasury){
+                    return response()->json(['error' => 'مبلغ المصروف اكبر من المبلغ الموجود بالخزينة']);
+                
+                }else{
+                    $this->validate($request , [
+                        'treasury' => 'required|integer|exists:financial_treasuries,id',
+                        'title' => 'required||string|max:255',
+                        'amount' => 'required|numeric|min:1',
+                        'notes' => 'nullable|string|max:255',
+                    ],[
+                        'exists' => 'حقل :attribute غير موجود.',
+                        'required' => 'حقل :attribute إلزامي.',
+                        'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                        'min' => 'حقل :attribute أقل قيمة له هي 1 حرف.',
+                        'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
+                        'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                        'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    ],[
+                        'treasury' => 'الخزينة',                
+                        'title' => 'وصف المصروف',                
+                        'amount' => 'مبلغ المصروف',                
+                        'notes' => 'ملاحظات',                
                     ]);
-                });
+                        
+                    DB::transaction(function() use($lastAmountOfTreasury){                   
+                        $getId = Expense::create(request()->all());
+    
+                        $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'مصروف')->max('num_order');
+                        DB::table('treasury_bill_dets')->insert([
+                            'num_order' => ($lastNumId+1), 
+                            'date' => Carbon::now(),
+                            'treasury_id' => request('treasury'), 
+                            'treasury_type' => 'مصروف', 
+                            'bill_id' => $getId->id, 
+                            'bill_type' => 0, 
+                            'client_supplier_id' => 0, 
+                            'treasury_money_after' => ($lastAmountOfTreasury - request('amount')), 
+                            'amount_money' => request('amount'), 
+                            'remaining_money' => ($lastAmountOfTreasury - request('amount')), 
+                            'transaction_from' => null, 
+                            'transaction_to' => null, 
+                            'notes' => request('notes'), 
+                            'user_id' => auth()->user()->id, 
+                            'year_id' => $this->currentFinancialYear(),
+                            'created_at' => now()
+                        ]);
+                    });
+                }
             }
-        }
+
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
      
     public function destroy($id)
     {
-        $findExpenseTreasuryBillDets = DB::table('treasury_bill_dets')
-                                        ->where('treasury_type', 'مصروف')
-                                        ->where('bill_id', $id)
-                                        ->first();
+        if((userPermissions()->expenses_delete)){
+            $findExpenseTreasuryBillDets = DB::table('treasury_bill_dets')
+                                            ->where('treasury_type', 'مصروف')
+                                            ->where('bill_id', $id)
+                                            ->first();
+    
+            $lastMoneyOfTreasury = Db::table('treasury_bill_dets')
+                                    ->where('treasury_id', $findExpenseTreasuryBillDets->treasury_id)
+                                    ->orderBy('id', 'desc')
+                                    ->value('treasury_money_after');
+    
+            $lastNumId = DB::table('treasury_bill_dets')
+                            ->where('treasury_type', 'مرتجع مصروف')
+                            ->max('num_order');
+    
+            //dd($lastMoneyOfTreasury);
+    
+            DB::transaction(function() use($id, $findExpenseTreasuryBillDets, $lastNumId, $lastMoneyOfTreasury){
+                // start make new row in treasury_bill_dets باسم مريجع مصروف 
+                    DB::table('treasury_bill_dets')->insert([
+                        'num_order' => ($lastNumId+1), 
+                        'date' => Carbon::now(),
+                        'treasury_id' => $findExpenseTreasuryBillDets->treasury_id, 
+                        'treasury_type' => 'مرتجع مصروف', 
+                        'bill_id' => $findExpenseTreasuryBillDets->bill_id, 
+                        'bill_type' => 0,
+                        'client_supplier_id' => 0,
+                        'treasury_money_after' => ($lastMoneyOfTreasury + $findExpenseTreasuryBillDets->amount_money), 
+                        'amount_money' => $findExpenseTreasuryBillDets->amount_money, 
+                        'remaining_money' => ($lastMoneyOfTreasury + $findExpenseTreasuryBillDets->amount_money), 
+                        'transaction_from' => null, 
+                        'transaction_to' => null, 
+                        'notes' => 'مرتجع مصروف من فاتورة رقم '.$findExpenseTreasuryBillDets->bill_id.'', 
+                        'user_id' => auth()->user()->id, 
+                        'year_id' => $this->currentFinancialYear(),
+                        'created_at' => now()
+                    ]);
+                // end make new row in treasury_bill_dets باسم مريجع مصروف 
+    
+    
+                // start remove data in old row of treasury_bill_dets
+                    DB::table('treasury_bill_dets')->where('treasury_type', 'مصروف')->where('bill_id', $id)->update([
+                        'amount_money' => 0, 
+                        'remaining_money' => 0, 
+                    ]);
+                // end remove data in old row of treasury_bill_dets
+    
+    
+                // start change status in expenses table from اضافه to مرتجع
+                    DB::table('expenses')->where('id', $id)->update([
+                        'status' => 'حذف', 
+                    ]);
+                // end change status in expenses table from اضافه to مرتجع
+            });
 
-        $lastMoneyOfTreasury = Db::table('treasury_bill_dets')
-                                ->where('treasury_id', $findExpenseTreasuryBillDets->treasury_id)
-                                ->orderBy('id', 'desc')
-                                ->value('treasury_money_after');
-
-        $lastNumId = DB::table('treasury_bill_dets')
-                        ->where('treasury_type', 'مرتجع مصروف')
-                        ->max('num_order');
-
-        //dd($lastMoneyOfTreasury);
-
-        DB::transaction(function() use($id, $findExpenseTreasuryBillDets, $lastNumId, $lastMoneyOfTreasury){
-            // start make new row in treasury_bill_dets باسم مريجع مصروف 
-                DB::table('treasury_bill_dets')->insert([
-                    'num_order' => ($lastNumId+1), 
-                    'date' => Carbon::now(),
-                    'treasury_id' => $findExpenseTreasuryBillDets->treasury_id, 
-                    'treasury_type' => 'مرتجع مصروف', 
-                    'bill_id' => $findExpenseTreasuryBillDets->bill_id, 
-                    'bill_type' => 0,
-                    'client_supplier_id' => 0,
-                    'treasury_money_after' => ($lastMoneyOfTreasury + $findExpenseTreasuryBillDets->amount_money), 
-                    'amount_money' => $findExpenseTreasuryBillDets->amount_money, 
-                    'remaining_money' => ($lastMoneyOfTreasury + $findExpenseTreasuryBillDets->amount_money), 
-                    'transaction_from' => null, 
-                    'transaction_to' => null, 
-                    'notes' => 'مرتجع مصروف من فاتورة رقم '.$findExpenseTreasuryBillDets->bill_id.'', 
-                    'user_id' => auth()->user()->id, 
-                    'year_id' => $this->currentFinancialYear(),
-                    'created_at' => now()
-                ]);
-            // end make new row in treasury_bill_dets باسم مريجع مصروف 
-
-
-            // start remove data in old row of treasury_bill_dets
-                DB::table('treasury_bill_dets')->where('treasury_type', 'مصروف')->where('bill_id', $id)->update([
-                    'amount_money' => 0, 
-                    'remaining_money' => 0, 
-                ]);
-            // end remove data in old row of treasury_bill_dets
-
-
-            // start change status in expenses table from اضافه to مرتجع
-                DB::table('expenses')->where('id', $id)->update([
-                    'status' => 'حذف', 
-                ]);
-            // end change status in expenses table from اضافه to مرتجع
-        });
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
 
@@ -186,7 +201,7 @@ class ExpensesController extends Controller
             })
             ->addColumn('amount_money', function($res){
                 if($res->expenses_status == 'اضافة'){
-                    return '<span class="" style="font-size: 12px;">قبل: '.display_number($res->amount_money).'</span>';
+                    return '<span class="" style="font-size: 12px;">'.display_number($res->amount_money).'</span>';
                 }else{
                     return '
                                 <span class="text-danger" style="margin: 3px;font-size: 12px;">قبل: '.display_number($res->amount).'</span>

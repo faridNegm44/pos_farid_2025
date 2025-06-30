@@ -116,8 +116,8 @@
 
             <div class="container-fluid">
     
-                {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
-                {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- start top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
+                {{-------------------------------------------------- start top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
                 <div id="top_section" style="padding: 7px 10px 0;">
                     <div class="row">
                         <div class="col-lg-6">
@@ -132,8 +132,8 @@
                         
                     </div>
                 </div>
-                {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
-                {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- end top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
+                {{-------------------------------------------------- end top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
                 
     
     
@@ -160,15 +160,7 @@
                             <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #f3e5d3; ">
                                 <div class="row">
                                     
-                                    <p class="col-lg-6 col-12">
-                                        <label for="">
-                                            ضريبة ق م (%)
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا."></i>
-                                        </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" name="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" value="{{ display_number( $find[0]->bill_tax ) }}" />
-                                    </p>
-        
-                                    <p class="col-lg-6 col-12">
+                                    <p class="col-12">
                                         <label for="">
                                             خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
@@ -210,7 +202,7 @@
                                 <thead class="text-center thead-dark">
                                     <tr>
                                         <th>#</th>
-                                        <th style="width: 25%;">الصنف</th>
+                                        <th style="width: 25%;">السلعة/الخدمة</th>
                                         <th style="width: 10%;">الوحدة ص</th>
                                         <th style="width: 8%;">ك المخزن</th>
                                         <th style="width: 8%;">
@@ -278,11 +270,6 @@
                 {{-------------------------------------------------- start footer --------------------------------------------------}}
                 {{-------------------------------------------------- start footer --------------------------------------------------}}
                 <div class="row footer-btn-group justify-content-center" style="background: #e4c1d0;">
-                    {{--<button class="col-lg-2 col-12 btn btn-warning-gradient btn-rounded mb-2" data-placement="top" data-toggle="tooltip" title="تعليق الفاتورة">
-                        <i class="fas fa-pause"></i> 
-                        <span class="d-none d-lg-inline">تعليق الفاتورة</span>
-                    </button>--}}
-                            
                     {{-- style="display: none;" --}}
                     <button class="col-lg-2 col-12 btn btn-success-gradient btn-rounded mb-2" data-placement="top" id="save_bill" data-effect="effect-scale" data-toggle="modal" href="#modal_save_bill" data-toggle="tooltip" title="حفظ الفاتورة">
                         <i class="fas fa-check-double"></i> 
@@ -293,12 +280,6 @@
                         <i class="fas fa-reply"></i> 
                         <span class="d-none d-lg-inline">إرجاع الفاتورة كاملة</span>
                     </button>
-        
-        
-                    {{--<button class="col-lg-2 col-12 btn btn-primary-gradient btn-rounded mb-2"  data-placement="top" data-toggle="tooltip" title="مصروفات الإذن" id="dismissal_notices" data-effect="effect-scale" data-toggle="modal" href="#modal_dismissal_notices">
-                        <i class="fas fa-money-bill"></i> 
-                        <span class="d-none d-lg-inline">مصروفات الإذن</span>
-                    </button>--}}
                 </div>
                 {{-------------------------------------------------- end footer --------------------------------------------------}}
                 {{-------------------------------------------------- end footer --------------------------------------------------}}
@@ -417,9 +398,9 @@
                 subTotal += totalBeforeDiscount;
             });
 
-            let tax_bill = $("#tax_bill").val();
+            let tax_bill = $("#tax_bill").val() ?? 0;
             let discount_bill = $("#discount_bill").val(); 
-            let extra_money = $("#extra_money").val(); 
+            let extra_money = $("#extra_money").val() ?? 0; 
 
             let afterDiscountBill = total - discount_bill;    
             let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money ?? 0);    
@@ -560,7 +541,5 @@
 
     </script>
     {{-- end general scripts --}}
-
-    
 </body>
 </html>

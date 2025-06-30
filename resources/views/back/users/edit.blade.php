@@ -12,25 +12,38 @@
                 $(".dataInput").val('');
             },
             success: function(res){
-                console.log(res.id);
+                if(res.notAuth){
+                    alertify.dialog('alert')
+                        .set({transition:'slide',message: `
+                            <div style="text-align: center;font-weight: bold;">
+                                <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                    صلاحية غير متوفرة 🔐⚠️
+                                </p>
+                                <p>${res.notAuth}</p>
+                            </div>
+                        `, 'basic': true})
+                        .show();  
+                    $(".modal").modal('hide');  
 
-                $.each(res, function(index, value){
-                    $(`.modal form #${index}`).val(value);
-                });
-
-
-                $(`.modal form #image_preview_form`).attr('src', `{{ url('back/images/users') }}/${res.image}`);
-                //birth_date.setDate(res.birth_date, true);
-
-                $(".modal form #res_id").val(res.id);
-
+                }else{
+                    console.log(res.id);
+    
+                    $.each(res, function(index, value){
+                        $(`.modal form #${index}`).val(value);
+                    });
+    
+                    $(`.modal form #image_preview_form`).attr('src', `{{ url('back/images/users') }}/${res.image}`);
+                    //birth_date.setDate(res.birth_date, true);
+    
+                    $(".modal form #res_id").val(res.id);
+    
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 2);
+                    alertify.success("تمت جلب البيانات بنجاح");
+                }
 
                 document.querySelector("#image_hidden").value = res.image;
                 document.querySelector("#image_preview_form").src = `{{ url('back/images/users') }}/${res.image}`;
-
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 2);
-                alertify.success("تمت جلب البيانات بنجاح");
             }
         });
 

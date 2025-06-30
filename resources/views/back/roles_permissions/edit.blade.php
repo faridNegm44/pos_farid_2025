@@ -1,69 +1,28 @@
+
 @extends('back.layouts.app')
 
 @section('title')
-    الأذونات والتراخيص
+    {{ $pageNameAr }}
 @endsection
 
 @section('header')
     <style>
+        tbody tr td {
+            padding: 5px !important;
+        }
+        #selectAll{
+            width: 1.5em;
+            height: 1.5em;
+        }
         input[type="checkbox"]{
-            width: 1.50em;
-            height: 1.50em;
-            margin-top: .165em;
+            width: 1em;
+            height: 1em;
             vertical-align: top;
             background-color: #fff;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
             border: 1px solid #e3d9da;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            -webkit-print-color-adjust: exact;
-            color-adjust: exact;
             margin: 0px 8px;
             position: relative;
             top: 3px;
-        }
-
-        #facebook_reviews #update input,
-        #facebook_reviews #update label, 
-        #privacy_policy #create input,
-        #privacy_policy #create label,
-        #privacy_policy #delete input,
-        #privacy_policy #delete label,
-        #policy_to_parent #create input,
-        #policy_to_parent #create label,
-        #policy_to_parent #delete input,
-        #policy_to_parent #delete label,
-        #policy_to_teacher #create input,
-        #policy_to_teacher #create label,
-        #policy_to_teacher #delete input,
-        #policy_to_teacher #delete label,
-        #settings #create input,
-        #settings #create label,
-        #settings #delete input,
-        #settings #delete label,
-        #table_prices #delete input,
-        #table_prices #delete label
-        {
-            display: none;
-            cursor: auto;
-        }
-                
-        #facebook_reviews #update:after,
-        #privacy_policy #create:after,
-        #privacy_policy #delete:after,
-        #policy_to_parent #create:after,
-        #policy_to_parent #delete:after,
-        #policy_to_teacher #create:after,
-        #policy_to_teacher #delete:after,
-        #settings #create:after,
-        #settings #delete:after,
-        #table_prices #delete:after
-        {
-            content: '--------';
-            cursor: auto;
         }
     </style>
 @endsection
@@ -86,140 +45,203 @@
     </script>
 @endsection
 
+
+
 @section('content')
+    <div class="container-fluid">
+        <!-- breadcrumb -->
+        <div class="breadcrumb-header justify-content-between">
+            <div class="my-auto">
+                <div class="d-flex">
+                    <h4 class="content-title mb-0 my-auto">{{ $pageNameAr }}</h4>
+                </div>
+            </div>
+        </div>
+        <!-- breadcrumb -->
 
-    <div class="main-content">
+        <div class="card" style="padding: 10px" id="permisions">
+            @php
+                $models = [
+                    // start first add
+                    'financialYears', 'stores', 'financial_treasury', 'units', 'companies', 'productsCategories', 'products_sub_category', 'products', 'taswea_products', 'transfer_between_stores', 'clients', 'clients_report', 'clients_account_statement', 'suppliers', 'suppliers_report', 'suppliers_account_statement', 'taswea_client_supplier', 'partners', 'partners_report', 'partners_account_statement', 'taswea_partners', 'sales', 'sales_create', 'sales_return', 'products_stock_alert', 'purchases', 'purchases_create', 'purchases_return', 'treasury_bills', 'treasury_bills_create', 'treasury_bills_report', 'transfer_between_storages', 'expenses', 'expenses_report', 'users', 'settings', 'roles_permissions'
+                    // end first add
+                ];
+                $count = 1;
+            @endphp
 
-        <div class="page-content">
-            @if (auth()->user()->role_relation->permissions_update == 1 )
-                <div class="container-fluid">
+            <form action="{{ url('roles_permissions/update/'.$find['id']) }}" method="POST">
+                @csrf
+                <div>
+                    <div style="padding: 0px 5px 20px;">
+                        <label for="role_name">اسم الإذن</label>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0 font-size-18">الأذونات والتراخيص</h4>
-                            </div>
-                        </div>
+                        <input type="text" class="form-control" name="role_name" id="role_name" placeholder="اسم الإذن" value="{{ old('role_name', $find['role_name']) }}" />
+
+                        @if($errors->has('role_name'))
+                            <div class="error text-danger">{{ $errors->first('role_name') }}</div>
+                        @endif
                     </div>
 
-                    @php
-                        $models = ['admins', 'teachers', 'teacher_feedback', 'about_acadmy', 'table_prices', 'blog_category', 'blog', 'langs_course', 'courses', 'facebook_reviews', 'faq', 'privacy_policy', 'policy_to_parent', 'policy_to_teacher', 'settings','permissions'];
+                    <div style="width: 1005;overflow: auto;">
+                        <table class="table table-bordered table-striped table-hover nowrap">
+                            <thead>
+                                <tr>
+                                    <td style="color: #fff !important;padding: 10px;">#</td>
+                                    <td style="color: #fff !important;padding: 10px;">الأسم</td>
+                                    <td style="color: #fff !important;padding: 10px;">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="selectAll">
+                                            <label class="form-check-label" for="selectAll">إختر الكل</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
 
-                        $count = 1;
-                    @endphp
+                            {{-- {{ $find[''.$model.'_create'] == 1 ? 'checked' : '' }} --}}
+                            <tbody>
+                                @foreach ($models as $model)
+                                    <tr style="font-weight: bold;" id="{{ $model }}">
+                                        <td class="text-nowrap fw-semibold">{{ $count++ }}</td>
+                                        <td class="text-nowrap fw-semibold">@lang('app.'.$model)</td>
 
-                    {{-- /////////////////////////////////////  Table  ///////////////////////////////////////////////////////////// --}}
-                    <form action="{{ url('admin/roles_permissions/update/'.$find['id']) }}" method="POST">
-                        @csrf
-                        <div class="card">
-                            <div class="card-body">
-                                <div style="overflow: auto;">
-                                    <div style="padding: 0px 5px 20px;">
-                                        <label for="role_name">اسم الإذن</label>
-                                        
-                                        <input type="text" class="form-control" name="role_name" id="role_name" placeholder="اسم الإذن" value="{{ old('role_name', $find['role_name']) }}" required />
 
-                                        @if($errors->has('role_name'))
-                                            <div class="error">{{ $errors->first('role_name') }}</div>
-                                        @endif
-                                    </div>
-
-                                    <table class="table table-responsive table-hover table-striped table-bordered">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <td>#</td>
-                                                <td>الأسم</td>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="selectAll">
-                                                        <label class="form-check-label" for="selectAll">
-                                                        إختر الكل
-                                                        </label>
+                                        <td>
+                                            <div class="d-flex">
+                                                @if($model != 'settings')
+                                                    <div class="form-check me-3 me-lg-5" id="{{ $model }}_view_div">
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_view" {{ old(''.$model.'_view') ? 'checked' : '' }} {{ $find[''.$model.'_view'] == 1 ? 'checked' : '' }} id="{{ $model }}_view"/>
+                                                        <label class="form-check-label text-purple" for="{{ $model }}_view">عرض</label>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        </thead>
+                                                @endif
 
-                                        <tbody>
-                                            @foreach ($models as $model)
-                                            <tr style="font-weight: bold;" id="{{ $model }}">
-                                                <td class="text-nowrap fw-semibold">{{ $count++ }}</td>
-                                                <td class="text-nowrap fw-semibold">@lang('app.'.$model)</td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                    <div class="form-check me-3 me-lg-5" id="create">
-                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_create" {{ old(''.$model.'_create') ? 'checked' : '' }} {{ $find[''.$model.'_create'] == 1 ? 'checked' : '' }} id="{{ $model }}_create" />
-                                                        <label class="form-check-label" for="{{ $model }}_create">
-                                                        اضافة
-                                                        </label>
+                                                @if(
+                                                    $model != 'clients_report' &&
+                                                    $model != 'clients_account_statement' &&
+                                                    $model != 'suppliers_report' &&
+                                                    $model != 'suppliers_account_statement' &&
+                                                    $model != 'partners_report' &&
+                                                    $model != 'partners_account_statement' &&
+                                                    $model != 'sales_create' &&
+                                                    $model != 'sales_return' &&
+                                                    $model != 'products_stock_alert' &&
+                                                    $model != 'purchases_create' &&
+                                                    $model != 'purchases_return' &&
+                                                    $model != 'treasury_bills_create' &&
+                                                    $model != 'treasury_bills_report' &&
+                                                    $model != 'settings' &&
+                                                    
+                                                    $model != 'expenses_report' 
+                                                )
+                                                    <div class="form-check me-3 me-lg-5" id="{{ $model }}_create_div">
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_create" {{ old(''.$model.'_create') ? 'checked' : '' }} {{ $find[''.$model.'_create'] == 1 ? 'checked' : '' }} id="{{ $model }}_create"/>
+                                                        <label class="form-check-label text-success" for="{{ $model }}_create">اضافة</label>
                                                     </div>
-
-                                                    <div class="form-check me-3 me-lg-5" id="view">
-                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_view" {{ old(''.$model.'_view') ? 'checked' : '' }}  {{ $find[''.$model.'_view'] == 1 ? 'checked' : '' }} id="{{ $model }}_view" />
-                                                        <label class="form-check-label" for="{{ $model }}_view">
-                                                        عرض
-                                                        </label>
+                                                @endif
+                                            
+                                                @if(
+                                                    $model != 'transfer_between_stores' &&
+                                                    $model != 'taswea_products' &&
+                                                    $model != 'clients_report' &&
+                                                    $model != 'clients_account_statement' &&
+                                                    $model != 'suppliers_report' &&
+                                                    $model != 'suppliers_account_statement' &&
+                                                    $model != 'taswea_client_supplier' &&
+                                                    $model != 'partners_report' &&
+                                                    $model != 'partners_account_statement' &&
+                                                    $model != 'taswea_partners' &&
+                                                    $model != 'sales' &&
+                                                    $model != 'sales_create' &&
+                                                    $model != 'sales_return' &&
+                                                    $model != 'products_stock_alert' &&
+                                                    $model != 'purchases' &&
+                                                    $model != 'purchases_create' &&
+                                                    $model != 'purchases_return' &&
+                                                    $model != 'treasury_bills' &&
+                                                    $model != 'treasury_bills_create' &&
+                                                    $model != 'treasury_bills_report' &&
+                                                    $model != 'transfer_between_storages' &&
+                                                    $model != 'expenses' &&
+                                                    $model != 'expenses_report' 
+                                                )
+                                                    <div class="form-check me-3 me-lg-5" id="{{ $model }}_update_div">
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_update" {{ old(''.$model.'_update') ? 'checked' : '' }} {{ $find[''.$model.'_update'] == 1 ? 'checked' : '' }} id="{{ $model }}_update"/>
+                                                        <label class="form-check-label text-primary" for="{{ $model }}_update">تحديث</label>
                                                     </div>
+                                                @endif
 
-                                                    <div class="form-check me-3 me-lg-5" id="update">
-                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_update" {{ old(''.$model.'_update') ? 'checked' : '' }}  {{ $find[''.$model.'_update'] == 1 ? 'checked' : '' }} id="{{ $model }}_update" />
-                                                        <label class="form-check-label" for="{{ $model }}_update">
-                                                        تحديث
-                                                        </label>
+                                                @if(
+                                                    $model != 'financialYears' &&
+                                                    $model != 'transfer_between_stores' &&
+                                                    $model != 'taswea_products' &&
+                                                    $model != 'clients_report' &&
+                                                    $model != 'clients_account_statement' &&
+                                                    $model != 'suppliers_report' &&
+                                                    $model != 'suppliers_account_statement' &&
+                                                    $model != 'taswea_client_supplier' &&
+                                                    $model != 'partners_report' &&
+                                                    $model != 'partners_account_statement' &&
+                                                    $model != 'taswea_partners' &&
+                                                    $model != 'sales' &&
+                                                    $model != 'sales_create' &&
+                                                    $model != 'sales_return' &&
+                                                    $model != 'products_stock_alert' &&
+                                                    $model != 'purchases' &&
+                                                    $model != 'purchases_create' &&
+                                                    $model != 'purchases_return' &&
+                                                    $model != 'treasury_bills' &&
+                                                    $model != 'treasury_bills_create' &&
+                                                    $model != 'treasury_bills_report' &&
+                                                    $model != 'transfer_between_storages' &&
+                                                    $model != 'expenses_report' &&
+                                                    $model != 'settings'
+                                                )
+                                                    <div class="form-check me-3 me-lg-5" id="{{ $model }}_delete_div">
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_delete" {{ old(''.$model.'_delete') ? 'checked' : '' }} {{ $find[''.$model.'_delete'] == 1 ? 'checked' : '' }} id="{{ $model }}_delete"/>
+                                                        <label class="form-check-label text-danger" for="{{ $model }}_delete">حذف</label>
                                                     </div>
+                                                @endif
+                                            </div>
+                                        </td>
 
-                                                    <div class="form-check me-3 me-lg-5" id="delete">
-                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_delete" {{ old(''.$model.'_delete') ? 'checked' : '' }}  {{ $find[''.$model.'_delete'] == 1 ? 'checked' : '' }} id="{{ $model }}_delete" />
-                                                        <label class="form-check-label" for="{{ $model }}_delete">
-                                                        حذف
-                                                        </label>
-                                                    </div>
+{{--
+                                        <td>
+                                            <div class="d-flex">
+                                            <div class="form-check me-3 me-lg-5" id="{{ $model }}_create_div">
+                                                <input class="form-check-input" type="checkbox" name="{{ $model }}_create" {{ old(''.$model.'_create') ? 'checked' : '' }} {{ $find[''.$model.'_create'] == 1 ? 'checked' : '' }} id="{{ $model }}_create"/>
+                                                <label class="form-check-label" for="{{ $model }}_create">اضافة</label>
+                                            </div>
 
-                                                    @if ($model == 'admins')                                                
-                                                        <div class="form-check me-3 me-lg-5">
-                                                            <input class="form-check-input" type="checkbox" name="{{ $model }}_change_password" {{ old(''.$model.'_change_password') ? 'checked' : '' }} {{ $find[''.$model.'_change_password'] == 1 ? 'checked' : '' }} id="{{ $model }}_change_password"/>
-                                                            <label class="form-check-label" for="{{ $model }}_change_password">
-                                                            تغير كلمة المرور
-                                                            </label>
-                                                        </div>
-                                                    @endif
+                                            <div class="form-check me-3 me-lg-5" id="{{ $model }}_view_div">
+                                                <input class="form-check-input" type="checkbox" name="{{ $model }}_view" {{ old(''.$model.'_view') ? 'checked' : '' }} {{ $find[''.$model.'_view'] == 1 ? 'checked' : '' }} id="{{ $model }}_view"/>
+                                                <label class="form-check-label" for="{{ $model }}_view">عرض</label>
+                                            </div>
 
-                                                    @if ($model == 'blog')                                                
-                                                        <div class="form-check me-3 me-lg-5">
-                                                            <input class="form-check-input" type="checkbox" name="{{ $model }}_comment" {{ old(''.$model.'_comment') ? 'checked' : '' }} {{ $find[''.$model.'_comment'] == 1 ? 'checked' : '' }} id="{{ $model }}_comment"/>
-                                                            <label class="form-check-label" for="{{ $model }}_comment">
-                                                            تعليقات المدونات
-                                                            </label>
-                                                        </div>
-                                                    @endif
+                                            <div class="form-check me-3 me-lg-5" id="{{ $model }}_update_div">
+                                                <input class="form-check-input" type="checkbox" name="{{ $model }}_update" {{ old(''.$model.'_update') ? 'checked' : '' }} {{ $find[''.$model.'_update'] == 1 ? 'checked' : '' }} id="{{ $model }}_update"/>
+                                                <label class="form-check-label" for="{{ $model }}_update">تحديث</label>
+                                            </div>
 
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            <div class="form-check me-3 me-lg-5" id="{{ $model }}_delete_div">
+                                                <input class="form-check-input" type="checkbox" name="{{ $model }}_delete" {{ old(''.$model.'_delete') ? 'checked' : '' }} {{ $find[''.$model.'_delete'] == 1 ? 'checked' : '' }} id="{{ $model }}_delete"/>
+                                                <label class="form-check-label" for="{{ $model }}_delete">حذف</label>
+                                            </div>
+                                            </div>
+                                        </td>--}}
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
-                                    <br>
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <button type="submit" class="btn btn-primary waves-effect waves-light" id="save" style="display: block;width: 100%;height: 50px;">حفظ</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    <br>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-primary-gradient waves-effect waves-light" id="save" style="display: block;width: 20%;height: 50px;margin: 0 auto;">تحديث</button>
+                    </div>
                 </div>
-            @else
-                <h4 class="text-center" style="margin: 100px auto;">
-                    لاتمتلك الصلاحيات لرؤيه محتوي الصفحة
-                    <img src="{{ url('back/images/rej2.png') }}" style="width: 80px;height: 78px;position: relative;bottom: 7px;bo"/>
-                </h4>
-            @endif    
 
+            </form>
         </div>
 
-
-        {{-- Include Footer --}}
-        @include('back.layouts.footer')
     </div>
 @endsection
+

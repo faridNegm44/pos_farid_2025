@@ -1,4 +1,4 @@
-{{-- @if(auth()->user()->role_relation->permissions_delete == 1) --}}
+{{--@if(auth()->user()->role_relation->permissions_delete == 1)--}}
     <script>
         $(document).on("click" , "table .delete" ,function(e){
             e.preventDefault();
@@ -30,13 +30,13 @@
             }); // function error
         });
     </script>
-{{-- @else --}}
+{{--@else
     <script>
         $(document).on("click" , "table .delete" ,function(e){
             alertify.set('notifier','position', 'bottom-right');
             alertify.set('notifier','delay', 4);
-            alertify.error("لاتمتلك الصلاحيات لإتمام التحكمية الحذف");
+            alertify.error("لاتمتلك الصلاحيات لإتمام عملية الحذف");
         });
     </script>
-{{-- @endif --}}
+@endif--}}
 

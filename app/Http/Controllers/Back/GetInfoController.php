@@ -8,14 +8,28 @@ use Illuminate\Support\Facades\DB;
 
 class GetInfoController extends Controller
 {
-    public function client_or_supplier($id){
-        $userInfo = DB::table('treasury_bill_dets')
-                                    ->where('client_supplier_id', $id)
-                                    ->orderBy('id', 'desc')
-                                    ->value('remaining_money');
+    public function client_or_supplier($id, $type){
+        if($type == 'عميل' || $type == 'مورد'){
+            $userInfo = DB::table('treasury_bill_dets')
+                                        ->where('client_supplier_id', $id)
+                                        ->orderBy('id', 'desc')
+                                        ->value('remaining_money');
+
+            return response()->json($userInfo);
+
+            dd($userInfo);
+            
+        }elseif($type == 'شريك'){
+            $userInfo = DB::table('treasury_bill_dets')
+                                        ->where('partner_id', $id)
+                                        ->orderBy('id', 'desc')
+                                        ->value('remaining_money');
+
+            return response()->json($userInfo);
+
+        }
 
                                     //dd($userInfo);                                        
-        return response()->json($userInfo);
     }
     
     //public function clientInfo($id){

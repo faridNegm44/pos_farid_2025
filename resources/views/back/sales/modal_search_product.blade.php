@@ -4,7 +4,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header" style="position: relative;">
-                <h6 class="modal-title">بحث عن صنف</h6>
+                <h6 class="modal-title">بحث عن سلعة/خدمة</h6>
                 <button type="button" class="close" data-dismiss="modal" style="position: absolute;left: 4px;color: red;">&times;</button>
             </div>
 
@@ -21,7 +21,7 @@
                         </div>
 
                         <div class="col-md-5 col-sm-12">
-                            <input type="text" class="form-control form-control-sm" id="product_name" name="product_name" placeholder="اسم الصنف">
+                            <input type="text" class="form-control form-control-sm" id="product_name" name="product_name" placeholder="اسم السلعة/الخدمة">
                         </div>
 
                         <div class="col-md-2 col-sm-12">

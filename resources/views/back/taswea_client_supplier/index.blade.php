@@ -113,7 +113,7 @@
                     $.each(res, function(index, value){
                         $("#client_supplier_id")[0].selectize.addOption({
                             value: value.id,
-                            text: `${value.name} ( ${value.remaining_money} )`,
+                            text: `${value.name} ( ${ value.remaining_money ? display_number_js(value.remaining_money) : 0 } )`,
                             remaining_money: value.remaining_money
                         });
                     });

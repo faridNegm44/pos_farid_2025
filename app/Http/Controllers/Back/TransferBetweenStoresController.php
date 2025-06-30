@@ -14,12 +14,16 @@ use Illuminate\Support\Str;
 class TransferBetweenStoresController extends Controller
 {
     public function index()
-    {                        
-        $pageNameAr = 'تحويلات الأصناف بين المخازن';
-        $pageNameEn = 'transfer_between_stores';
-        $stores = DB::table('stores')->where('status', 1)->get();
-                                        
-        return view('back.transfer_between_stores.index' , compact('pageNameAr' , 'pageNameEn', 'stores'));
+    {                
+        if((userPermissions()->transfer_between_stores_view)){
+            $pageNameAr = 'تحويلات السلع والخدمات بين المخازن';
+            $pageNameEn = 'transfer_between_stores';
+            $stores = DB::table('stores')->where('status', 1)->get();
+                                            
+            return view('back.transfer_between_stores.index' , compact('pageNameAr' , 'pageNameEn', 'stores'));
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }        
     }
 
     public function get_products($transfer_from)
@@ -71,90 +75,94 @@ class TransferBetweenStoresController extends Controller
     
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'transaction_from' => 'required|integer|exists:financial_treasuries,id',
-                'transaction_to' => 'required|integer|exists:financial_treasuries,id',
-                'value' => 'required|numeric|min:1',
-                'notes' => 'nullable|string|max:255',
-            ],[
-                'exists' => 'حقل :attribute غير موجود.',
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'min' => 'حقل :attribute أقل قيمة له هي رقم 1.',
-                'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
-                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-            ],[
-                'transaction_from' => 'الخزينة المحول منها',                
-                'transaction_to' => 'الخزينة المحول اليها',                
-                'value' => 'مبلغ التحويل',                
-                'notes' => 'ملاحظات',                
-            ]);
-
-            $transaction_from_last_money = DB::table('treasury_bill_dets')
-                                    ->whereRaw('id = (select max(id) from treasury_bill_dets where treasury_id = '.request('transaction_from').')')                              
-                                    ->value('money');
-
-
-            $transaction_to_last_money = DB::table('treasury_bill_dets')
-                                    ->whereRaw('id = (select max(id) from treasury_bill_dets where treasury_id = '.request('transaction_to').')')                              
-                                    ->value('money');
-
-            $value = request('value');
-            $req_from = request('transaction_from');
-            $req_to = request('transaction_to');
-
-            $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'تحويل')->max('num_order');
-
-            
-            if($value > $transaction_from_last_money){
-                return response()->json(['error' => 'مبلغ التحويل اكبر من المبلغ الموجود بالخزينة']);
-            }else{
-
-                DB::transaction(function() use($transaction_from_last_money, $transaction_to_last_money, $lastNumId, $value, $req_from, $req_to){
-
-                    // start transaction from الخزنه المحول منها
-                    DB::table('treasury_bill_dets')->insert([
-                        'num_order' => ($lastNumId+1), 
-                        'date' => Carbon::now(),
-                        'treasury_id' => $req_from, 
-                        'treasury_type' => 'تحويل', 
-                        'bill_id' => 0, 
-                        'bill_type' => 0, 
-                        'client_supplier_id' => 0, 
-                        'money' => ($transaction_from_last_money - $value), 
-                        'value' => $value, 
-                        'transaction_from' => $req_from, 
-                        'transaction_to' => $req_to, 
-                        'notes' => request('notes'), 
-                        'user_id' => auth()->user()->id, 
-                        'year_id' => $this->currentFinancialYear(),
-                        'created_at' => now()
-                    ]);
-
-                    // start transaction to الخزنه المحول اليها
-                    DB::table('treasury_bill_dets')->insert([
-                        'num_order' => ($lastNumId+1), 
-                        'date' => Carbon::now(),
-                        'treasury_id' => $req_to, 
-                        'treasury_type' => 'تحويل', 
-                        'bill_id' => 0, 
-                        'bill_type' => 0, 
-                        'client_supplier_id' => 0, 
-                        'money' => ($transaction_to_last_money + $value), 
-                        'value' => $value, 
-                        'transaction_from' => $req_from, 
-                        'transaction_to' => $req_to, 
-                        'notes' => request('notes'), 
-                        'user_id' => auth()->user()->id, 
-                        'year_id' => $this->currentFinancialYear(),
-                        'created_at' => now()
-                    ]);
-                });
-
-
+        if((userPermissions()->transfer_between_stores_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'transfer_from' => 'required|integer|exists:financial_treasuries,id',
+                    'transfer_to' => 'required|integer|exists:financial_treasuries,id',
+                    'value' => 'required|numeric|min:1',
+                    'notes' => 'nullable|string|max:255',
+                ],[
+                    'exists' => 'حقل :attribute غير موجود.',
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'min' => 'حقل :attribute أقل قيمة له هي رقم 1.',
+                    'max' => 'حقل :attribute أقصي قيمة له هي 255 حرف.',
+                    'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                ],[
+                    'transfer_from' => 'المخزن المحول منة',                
+                    'transfer_to' => 'المخزن المحول الية',                
+                    'value' => 'العدد المحول',                
+                    'notes' => 'ملاحظات',                
+                ]);
+    
+                $transfer_from_last_money = DB::table('store_dets')
+                                        ->whereRaw('id = (select max(id) from store_dets where treasury_id = '.request('transfer_from').')')                              
+                                        ->value('quantity_small_unit');
+    
+    
+                $transfer_to_last_money = DB::table('store_dets')
+                                        ->whereRaw('id = (select max(id) from store_dets where treasury_id = '.request('transfer_to').')')                              
+                                        ->value('quantity_small_unit');
+    
+                $value = request('value');
+                $req_from = request('transfer_from');
+                $req_to = request('transfer_to');
+    
+                $lastNumId = DB::table('store_dets')->where('treasury_type', 'تحويل')->max('num_order');
+    
+                
+                if($value > $transfer_from_last_money){
+                    return response()->json(['error' => 'مبلغ التحويل اكبر من المبلغ الموجود بالخزينة']);
+                }else{
+    
+                    DB::transaction(function() use($transfer_from_last_money, $transfer_to_last_money, $lastNumId, $value, $req_from, $req_to){
+    
+                        // start transaction from الخزنه المحول منها
+                        DB::table('store_dets')->insert([
+                            'num_order' => ($lastNumId+1), 
+                            'date' => Carbon::now(),
+                            'treasury_id' => $req_from, 
+                            'treasury_type' => 'تحويل', 
+                            'bill_id' => 0, 
+                            'bill_type' => 0, 
+                            'client_supplier_id' => 0, 
+                            'money' => ($transfer_from_last_money - $value), 
+                            'value' => $value, 
+                            'transfer_from' => $req_from, 
+                            'transfer_to' => $req_to, 
+                            'notes' => request('notes'), 
+                            'user_id' => auth()->user()->id, 
+                            'year_id' => $this->currentFinancialYear(),
+                            'created_at' => now()
+                        ]);
+    
+                        // start transaction to الخزنه المحول اليها
+                        DB::table('store_dets')->insert([
+                            'num_order' => ($lastNumId+1), 
+                            'date' => Carbon::now(),
+                            'treasury_id' => $req_to, 
+                            'treasury_type' => 'تحويل', 
+                            'bill_id' => 0, 
+                            'bill_type' => 0, 
+                            'client_supplier_id' => 0, 
+                            'money' => ($transfer_to_last_money + $value), 
+                            'value' => $value, 
+                            'transfer_from' => $req_from, 
+                            'transfer_to' => $req_to, 
+                            'notes' => request('notes'), 
+                            'user_id' => auth()->user()->id, 
+                            'year_id' => $this->currentFinancialYear(),
+                            'created_at' => now()
+                        ]);
+                    });
+    
+    
+                }
             }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
     }   
     
@@ -172,15 +180,15 @@ class TransferBetweenStoresController extends Controller
     public function show($id)
     {
         if(request()->ajax()){
-            $find = DB::table('treasury_bill_dets')
+            $find = DB::table('store_dets')
                         ->where('num_order', $id)
                         ->where('treasury_type', 'تحويل')
-                        ->leftJoin('financial_treasuries as transaction_from_name', 'transaction_from_name.id', 'treasury_bill_dets.treasury_id')
-                        ->leftJoin('financial_treasuries as transaction_to_name', 'transaction_to_name.id', 'treasury_bill_dets.treasury_id')
+                        ->leftJoin('financial_treasuries as transfer_from_name', 'transfer_from_name.id', 'store_dets.treasury_id')
+                        ->leftJoin('financial_treasuries as transfer_to_name', 'transfer_to_name.id', 'store_dets.treasury_id')
                         ->select(
-                            'treasury_bill_dets.*', 
-                            'transaction_from_name.name as transaction_from_name',
-                            'transaction_to_name.name as transaction_to_name',
+                            'store_dets.*', 
+                            'transfer_from_name.name as transfer_from_name',
+                            'transfer_to_name.name as transfer_to_name',
                         )
                         ->get();
 
@@ -244,16 +252,16 @@ class TransferBetweenStoresController extends Controller
 
     public function datatable()
     {
-        $all = DB::table('treasury_bill_dets')->orderBy('num_order', 'asc')
-                        ->leftJoin('financial_treasuries as transaction_from_name', 'transaction_from_name.id', 'treasury_bill_dets.treasury_id')
-                        ->leftJoin('financial_treasuries as transaction_to_name', 'transaction_to_name.id', 'treasury_bill_dets.treasury_id')
+        $all = DB::table('store_dets')->orderBy('num_order', 'asc')
+                        ->leftJoin('financial_treasuries as transfer_from_name', 'transfer_from_name.id', 'store_dets.treasury_id')
+                        ->leftJoin('financial_treasuries as transfer_to_name', 'transfer_to_name.id', 'store_dets.treasury_id')
                         ->select(
-                            'treasury_bill_dets.*', 
-                            'transaction_from_name.name as transaction_from_name',
-                            'transaction_to_name.name as transaction_to_name',
+                            'store_dets.*', 
+                            'transfer_from_name.name as transfer_from_name',
+                            'transfer_to_name.name as transfer_to_name',
                         )
-                        ->orderBy('treasury_bill_dets.bill_id', 'ASC')
-                        ->groupBy('treasury_bill_dets.num_order')
+                        ->orderBy('store_dets.bill_id', 'ASC')
+                        ->groupBy('store_dets.num_order')
                         ->where('treasury_type', 'تحويل')
                         ->get();
 
@@ -287,7 +295,7 @@ class TransferBetweenStoresController extends Controller
                         </button>
                     ';
             })
-            ->rawColumns(['num_order', 'created_at', 'user', 'transaction_from', 'transaction_to', 'value', 'notes', 'action'])
+            ->rawColumns(['num_order', 'created_at', 'user', 'transfer_from', 'transfer_to', 'value', 'notes', 'action'])
             ->toJson();
     }
 }

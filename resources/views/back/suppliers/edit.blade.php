@@ -11,26 +11,40 @@
                 $(".dataInput").val('');
             },
             success: function(res){
-                document.querySelector("#res_id").value = res_id;
+                if(res.notAuth){
+                    alertify.dialog('alert')
+                        .set({transition:'slide',message: `
+                            <div style="text-align: center;font-weight: bold;">
+                                <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                    صلاحية غير متوفرة 🔐⚠️
+                                </p>
+                                <p>${res.notAuth}</p>
+                            </div>
+                        `, 'basic': true})
+                        .show();  
+                    $(".modal").modal('hide');  
 
-                $.each(res , function(index, value){                    
-                    $(`.modal form #${index}`).val(value);
-                });
-                
-                $(`.modal form #code`).val(res.code);
-                
-                $("#debtor_value").css('display', 'none');
-                $("#creditor_value").css('display', 'none');
-        
+                }else{
+                    document.querySelector("#res_id").value = res_id;
+    
+                    $.each(res , function(index, value){                    
+                        $(`.modal form #${index}`).val(value);
+                    });
+                    
+                    $(`.modal form #code`).val(res.code);
+                    
+                    $("#debtor_value").css('display', 'none');
+                    $("#creditor_value").css('display', 'none');
+            
+    
+                    $(`#image_preview_form`).attr('src', `{{ url('back/images/suppliers') }}/${res.image}`);
+                    document.querySelector("#image_preview_form").src = `{{ url('back/images/suppliers') }}/${res.image}`;
+                    document.querySelector("#image_hidden").value = res.image;
 
-                $(`#image_preview_form`).attr('src', `{{ url('back/images/suppliers') }}/${res.image}`);
-                document.querySelector("#image_preview_form").src = `{{ url('back/images/suppliers') }}/${res.image}`;
-                document.querySelector("#image_hidden").value = res.image;
-
-
-                alertify.set('notifier','position', 'top-center');
-                alertify.set('notifier','delay', 2);
-                alertify.success("تم استرجاع البيانات بنجاح");
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 2);
+                    alertify.success("تم استرجاع البيانات بنجاح");
+                }
             }
         });
 

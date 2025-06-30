@@ -219,7 +219,7 @@
   <!-- Invoice Info -->
   <div class="invoice_info">
     <div>رقم الفاتورة: {{ $saleBill[0]->id }}</div>
-    <div>عدد الأصناف: {{ display_number( $saleBill[0]->count_items ) }}</div>
+    <div>عدد السلع والخدمات: {{ display_number( $saleBill[0]->count_items ) }}</div>
   </div>
 
   <!-- Table -->
@@ -227,7 +227,7 @@
     <table style="width: 100%;">
         <thead>
           <tr>
-            <th>الصنف</th>
+            <th>السلعة/الخدمة</th>
             <th>الوحدة</th>
             <th>الكمية</th>
             <th>السعر</th>
@@ -266,12 +266,6 @@
         <tr>
           <td class="label">قيمة الخصم</td>
           <td class="value">{{ display_number( $saleBill[0]->bill_discount ) }} جنية</td>
-        </tr>
-      @endif
-      @if ($saleBill[0]->bill_tax)
-        <tr>
-          <td class="label">الضريبة</td>
-          <td class="value">{{ display_number( $saleBill[0]->bill_tax ) }} %</td>
         </tr>
       @endif
       <tr>

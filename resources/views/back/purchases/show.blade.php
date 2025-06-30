@@ -30,8 +30,6 @@
                 $(`#showProductsModal #header #treasury_type`).text( res[0].treasury_type != res[0].bill_type ? res[0].treasury_type : 'لم يتم صرف مستحقات' );
                 $(`#showProductsModal #header #bill_type`).text( res[0].bill_type );
                 $(`#showProductsModal #header #bill_discount`).text( res[0].bill_discount ? display_number_js(res[0].bill_discount) : 0 );
-                $(`#showProductsModal #header #bill_tax`).text( res[0].bill_tax ? display_number_js(res[0].bill_tax)+' %' : 0 );
-                $(`#showProductsModal #header #extra_money`).text( res[0].extra_money ? display_number_js(res[0].extra_money) : 0 );
 
                 $(`#showProductsModal #header #treasury_money_after`).text(display_number_js( res[0].treasury_money_after ));
 

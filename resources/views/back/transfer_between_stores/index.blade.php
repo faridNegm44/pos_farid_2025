@@ -48,7 +48,8 @@
                         transfer_to.val('');
                         value.val('');
 
-                        $("#products option").remove();
+                        var selectizeInstance = $('#products')[0].selectize;
+                        selectizeInstance.clearOptions();
                     }
 
                     value.val('');
@@ -204,7 +205,7 @@
     </script>
 
     <script>
-        // start when change products selecize جلب المخازن المتعلقه بالصنف عند تغيير الصنف
+        // start when change products selecize جلب المخازن المتعلقه بالسلعة/الخدمة عند تغيير السلعة/الخدمة
         $(document).on('input', '#products', function() {
             let thisVal = $(this).val();
             let selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
@@ -224,7 +225,7 @@
                         if(res.length > 0){
                             alertify.set('notifier','position', 'top-center');
                             alertify.set('notifier','delay', 4);
-                            alertify.success(`تم استدعاء مخازن الصنف بنجاح`);
+                            alertify.success(`تم استدعاء مخازن السلعة/الخدمة بنجاح`);
                         }
     
                         $.each(res, function(index, value) {
@@ -239,7 +240,7 @@
                 })
             }  
         });
-        // end when change products selecize جلب المخازن المتعلقه بالصنف عند تغيير الصنف
+        // end when change products selecize جلب المخازن المتعلقه بالسلعة/الخدمة عند تغيير السلعة/الخدمة
     </script>
 
     {{-- add, edit, delete => script --}}

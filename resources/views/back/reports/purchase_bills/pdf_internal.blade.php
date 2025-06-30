@@ -40,9 +40,9 @@
         }   
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="">
+<body style="padding: 5px 10px;">
+    <div style="padding: 5px 10px;border: 1px solid #000;">
+        <div>
             <div class="invoice-title">
                 <h4 class="text-center" style="font-weight: bold;">
                     {{ $pageNameAr }} {{ $find[0]->id }}
@@ -66,8 +66,6 @@
             
             <ul class="invoice-info" style="flex: 1 1 33.33%; max-width: 33.33%;">
                 <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span>{{ display_number($find[0]->bill_discount) ?? 0 }}</li>                      
-                <li><span>ضريبة الفاتورة:</span> <span class='header_span' id="bill_discount"></span>{{ display_number($find[0]->bill_tax) ?? 0 }} %</li>                      
-                <li><span>مصاريف إضافية :</span> <span class='header_span' id="bill_discount"></span>{{ display_number($find[0]->extra_money) ?? 0 }}</li>                      
                 <li style="font-weight: bold;"><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before"></span>{{ display_number($find[0]->total_bill_before) }}</li>
                 <li style="font-weight: bold;"><span>إجمالي فاتورة بعد:</span> <span class='header_span' id="total_bill_after"></span>{{ display_number($find[0]->total_bill_after) }}</li>
                 <li><span>تاريخ الإنشاء:</span> <span class='header_span' id="created_at"></span>{{ Carbon\Carbon::parse($find[0]->created_at)->format('Y-m-d h:i:s a') }}</li>
@@ -98,8 +96,8 @@
                       <th>سعر البيع</th>
                       <th>الضريبة</th>
                       <th>الخصم</th>
-                      <th>إجمالي الصنف قبل</th>
-                      <th>إجمالي الصنف بعد</th>
+                      <th>إجمالي السلعة/الخدمة قبل</th>
+                      <th>إجمالي السلعة/الخدمة بعد</th>
                     </tr>
                   </thead>                      
                 

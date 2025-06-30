@@ -11,15 +11,21 @@ use Illuminate\Support\Str;
 class ReportsClientsController extends Controller
 {
     public function index()
-    {                   
-        $pageNameAr = 'تقرير عن حركة عميل';        
-        $clients = ClientsAndSuppliers::where('client_supplier_type', 3)
-                                        ->orWhere('client_supplier_type', 4)
-                                        ->orderBy('name', 'asc')
-                                        ->get();   
-        
-                                        //return $clients;
-        return view('back.reports.clients.index' , compact('pageNameAr', 'clients'));
+    {         
+        if((userPermissions()->clients_report_view)){
+            $pageNameAr = 'تقرير عن حركة عميل';        
+            $clients = ClientsAndSuppliers::where('client_supplier_type', 3)
+                                            ->orWhere('client_supplier_type', 4)
+                                            ->orderBy('name', 'asc')
+                                            ->get();   
+            
+                                            //return $clients;
+            return view('back.reports.clients.index' , compact('pageNameAr', 'clients'));
+	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
+                  
     }
 
     public function result(Request $request)
@@ -39,12 +45,12 @@ class ReportsClientsController extends Controller
                         ->select(
                             'treasury_bill_dets.*', 
                             'financial_treasuries.name as treasury_name',
-                            'clients_and_suppliers.name as clientName', 'clients_and_suppliers.client_supplier_type',
+                            'clients_and_suppliers.code as clientCode', 'clients_and_suppliers.name as clientName', 'clients_and_suppliers.client_supplier_type',
                             'users.name as userName',
                             'financial_years.name as financialYearName',
                         )
                         ->whereIn('clients_and_suppliers.client_supplier_type', [3, 4])
-                        ->orderBy('treasury_bill_dets.created_at', 'ASC');
+                        ->orderBy('treasury_bill_dets.id', 'asc');
 
         if ($from && $to) {
             $query->whereBetween('treasury_bill_dets.created_at', [$from, $to]);
@@ -62,9 +68,9 @@ class ReportsClientsController extends Controller
             $query->where('treasury_bill_dets.treasury_type', $treasury_type);
         }
 
-        $results = $query->get();       
+        $results = $query->paginate(50);       
 
-        if(count($results) == 0){
+        if($results->total() == 0){
             return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
         }else{
             return view('back.reports.clients.result' , compact('pageNameAr', 'results', 'treasury_type', 'client_id', 'from', 'to'));
@@ -93,7 +99,7 @@ class ReportsClientsController extends Controller
                             'financial_years.name as financialYearName',
                         )
                         ->whereIn('clients_and_suppliers.client_supplier_type', [3, 4])
-                        ->orderBy('treasury_bill_dets.created_at', 'ASC');
+                        ->orderBy('treasury_bill_dets.id', 'ASC');
 
         if ($from && $to) {
             $query->whereBetween('treasury_bill_dets.created_at', [$from, $to]);
@@ -121,26 +127,32 @@ class ReportsClientsController extends Controller
     }
 
 
-
-
+    ////////////////////////////////////////////////////////////  كشف حساب  ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////  كشف حساب  ////////////////////////////////////////////////////////////
 
 
     // start index account_statement
     public function account_statement()
     {                   
-        $pageNameAr = 'كشف حساب للعملاء';        
-        $clients = ClientsAndSuppliers::where('client_supplier_type', 3)
-                                        ->orWhere('client_supplier_type', 4)
-                                        ->orderBy('name', 'asc')
-                                        ->get();   
+        if((userPermissions()->clients_account_statement_view)){
+            $pageNameAr = 'كشف حساب للعملاء';        
+            $clients = ClientsAndSuppliers::where('client_supplier_type', 3)
+                                            ->orWhere('client_supplier_type', 4)
+                                            ->orderBy('name', 'asc')
+                                            ->get();   
+            
+                                            //return $clients;
+            return view('back.reports.clients.account_statement' , compact('pageNameAr', 'clients'));
+	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
         
-                                        //return $clients;
-        return view('back.reports.clients.account_statement' , compact('pageNameAr', 'clients'));
     }
 
     public function account_statement_pdf(Request $request)
     {                   
-        $pageNameAr = 'كشف حساب';
+        $pageNameAr = 'كشف حساب لعميل';
         $client_id = request('client_id');
         $treasury_type = request('treasury_type');
         $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
@@ -166,7 +178,6 @@ class ReportsClientsController extends Controller
                             'clients_and_suppliers.client_supplier_type',
                             
                             'sale_bills.id as saleBillId',
-                            'sale_bills.bill_tax',
                             'sale_bills.bill_discount',
                             'sale_bills.extra_money',
                             'sale_bills.count_items',
@@ -180,7 +191,7 @@ class ReportsClientsController extends Controller
                             'financial_years.name as financialYearName',
                         )
                         ->whereIn('clients_and_suppliers.client_supplier_type', [3, 4])
-                        ->orderBy('treasury_bill_dets.created_at', 'ASC');
+                        ->orderBy('treasury_bill_dets.id', 'ASC');
 
         if ($from && $to) {
             $query->whereBetween('treasury_bill_dets.created_at', [$from, $to]);

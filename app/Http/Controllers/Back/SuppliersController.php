@@ -19,120 +19,133 @@ class SuppliersController extends Controller
         $this->latestId = $latestId = DB::table('clients_and_suppliers')->where('client_supplier_type', 1)->orWhere('client_supplier_type', 2)->max('code');
     }
     public function index()
-    {                   
-        $pageNameAr = 'الموردين';
-        $pageNameEn = 'suppliers';
-        
-        return view('back.suppliers.index' , compact('pageNameAr' , 'pageNameEn'));
+    {           
+        if((userPermissions()->suppliers_view)){
+            $pageNameAr = 'الموردين';
+            $pageNameEn = 'suppliers';
+            
+            return view('back.suppliers.index' , compact('pageNameAr' , 'pageNameEn'));
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }          
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'name' => 'required|string|unique:clients_and_suppliers,name|max:255',
-                'type_payment' => 'required|in:كاش,آجل',
-                'address' => 'nullable|string|max:255',
-                'phone' => 'nullable|numeric',
-                'money' => 'nullable|numeric',
-                'debit_limit' => 'nullable|numeric',
-                'commercial_register' => 'nullable|numeric',
-                'tax_card' => 'nullable|numeric',
-                'vat_registration_code' => 'nullable|numeric',
-                'phone_of_commissioner' => 'nullable|integer',
-                'image' => 'mimes:jpeg,png,jpg,gif|max:1500',
-                'note' => 'nullable|string|max:255',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
-                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                'in' => 'القيمة المختارة في :attribute غير مسموح بها. يُرجى اختيار قيمة من الخيارات المتاحة فقط.',
-
-            ],[
-                'name' => 'إسم المورد',                
-                'address' => 'عنوان المورد',     
-                'type_payment' => 'طريقة التعامل',                           
-                'phone' => 'تلفون المورد',                
-                'money' => 'الفلوس',                
-                'debit_limit' => 'الحد الآقصي لـ مدين',                
-                'commercial_register' => 'ك السجل التجاري',                
-                'tax_card' => 'ك البطاقة الضريبية',                
-                'vat_registration_code' => 'ك التسجيل ض.ق.م',                
-                'name_of_commissioner' => 'اسم المفوض',                
-                'phone_of_commissioner' => 'تليفون المفوض',                
-                'image' => 'إسم المورد',                
-                'note' => 'ملاحظات',                
-                'image' => 'الصورة',                
-            ]);
-
-
-            DB::transaction(function () {
-                if(request('image') == ""){
-                    $name = "df_image.png";
-                }else{
-                    $file = request('image');
-                    $name = time() . '.' .$file->getClientOriginalExtension();
-                    $path = public_path('back/images/suppliers');
-                    $file->move($path , $name);
-                }
-
-                $moneyOnHim = request('money_on_him');
-                $moneyForHim = request('money_for_him');
-                $lastNumId = DB::table('treasury_bill_dets')
-                                ->where('treasury_type', 'رصيد اول مورد')
-                                ->max('num_order');
-                                
-                $getId = DB::table('clients_and_suppliers')->insertGetId([
-                    'client_supplier_type' => request('client_supplier_type'),
-                    'code' => ($this->latestId+1),
-                    'name' => request('name'),
-                    'email' => request('email'),
-                    'phone' => request('phone'),
-                    'address' => request('address'),
-                    'image' => $name,
-                    'type_payment' => request('type_payment'),
-                    'debit' => request('debit'),
-                    'debit_limit' => request('debit_limit'),
-                    'status' => request('status'),
-                    'commercial_register' => request('commercial_register'),
-                    'tax_card' => request('tax_card'),
-                    'vat_registration_code' => request('vat_registration_code'),
-                    'name_of_commissioner' => request('name_of_commissioner'),
-                    'phone_of_commissioner' => request('phone_of_commissioner'),
-                    'note' => request('note'),
-                    'created_at' => now()
+        if((userPermissions()->suppliers_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'name' => 'required|string|unique:clients_and_suppliers,name|max:255',
+                    'type_payment' => 'required|in:كاش,آجل',
+                    'address' => 'nullable|string|max:255',
+                    'phone' => 'nullable|numeric',
+                    'money' => 'nullable|numeric',
+                    'debit_limit' => 'nullable|numeric',
+                    'commercial_register' => 'nullable|numeric',
+                    'tax_card' => 'nullable|numeric',
+                    'vat_registration_code' => 'nullable|numeric',
+                    'phone_of_commissioner' => 'nullable|integer',
+                    'image' => 'mimes:jpeg,png,jpg,gif|max:1500',
+                    'note' => 'nullable|string|max:255',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+                    'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'in' => 'القيمة المختارة في :attribute غير مسموح بها. يُرجى اختيار قيمة من الخيارات المتاحة فقط.',
+    
+                ],[
+                    'name' => 'إسم المورد',                
+                    'address' => 'عنوان المورد',     
+                    'type_payment' => 'طريقة التعامل',                           
+                    'phone' => 'تلفون المورد',                
+                    'money' => 'الفلوس',                
+                    'debit_limit' => 'الحد الآقصي لـ مدين',                
+                    'commercial_register' => 'ك السجل التجاري',                
+                    'tax_card' => 'ك البطاقة الضريبية',                
+                    'vat_registration_code' => 'ك التسجيل ض.ق.م',                
+                    'name_of_commissioner' => 'اسم المفوض',                
+                    'phone_of_commissioner' => 'تليفون المفوض',                
+                    'image' => 'إسم المورد',                
+                    'note' => 'ملاحظات',                
+                    'image' => 'الصورة',                
                 ]);
-        
-                DB::table('treasury_bill_dets')->insert([
-                    'num_order' => ($lastNumId+1), 
-                    'date' => Carbon::now(),
-                    'treasury_id' => 0, 
-                    'treasury_type' => 'رصيد اول مورد',
-                    'bill_id' => 0,
-                    'bill_type' => 'رصيد اول مورد', 
-                    'client_supplier_id' => $getId, 
-                    'amount_money' => $moneyOnHim > 0 ? $moneyOnHim : ($moneyForHim * -1),
-                    'remaining_money' => $moneyOnHim > 0 ? $moneyOnHim : ($moneyForHim * -1),
-                    'transaction_from' => null, 
-                    'transaction_to' => null, 
-                    'notes' => request('note'), 
-                    'user_id' => auth()->user()->id, 
-                    'year_id' => $this->currentFinancialYear(),
-                    'created_at' => now()
-                ]);
-            });
-        }
+    
+    
+                DB::transaction(function () {
+                    if(request('image') == ""){
+                        $name = "df_image.png";
+                    }else{
+                        $file = request('image');
+                        $name = time() . '.' .$file->getClientOriginalExtension();
+                        $path = public_path('back/images/suppliers');
+                        $file->move($path , $name);
+                    }
+    
+                    $moneyOnHim = request('money_on_him');
+                    $moneyForHim = request('money_for_him');
+                    $lastNumId = DB::table('treasury_bill_dets')
+                                    ->where('treasury_type', 'رصيد اول مورد')
+                                    ->max('num_order');
+                                    
+                    $getId = DB::table('clients_and_suppliers')->insertGetId([
+                        'client_supplier_type' => request('client_supplier_type'),
+                        'code' => ($this->latestId+1),
+                        'name' => request('name'),
+                        'email' => request('email'),
+                        'phone' => request('phone'),
+                        'address' => request('address'),
+                        'image' => $name,
+                        'type_payment' => request('type_payment'),
+                        'debit' => request('debit'),
+                        'debit_limit' => request('debit_limit'),
+                        'status' => request('status'),
+                        'commercial_register' => request('commercial_register'),
+                        'tax_card' => request('tax_card'),
+                        'vat_registration_code' => request('vat_registration_code'),
+                        'name_of_commissioner' => request('name_of_commissioner'),
+                        'phone_of_commissioner' => request('phone_of_commissioner'),
+                        'note' => request('note'),
+                        'created_at' => now()
+                    ]);
+            
+                    DB::table('treasury_bill_dets')->insert([
+                        'num_order' => ($lastNumId+1), 
+                        'date' => Carbon::now(),
+                        'treasury_id' => 0, 
+                        'treasury_type' => 'رصيد اول مورد',
+                        'bill_id' => 0,
+                        'bill_type' => 'رصيد اول مورد', 
+                        'client_supplier_id' => $getId, 
+                        'amount_money' => $moneyOnHim > 0 ? $moneyOnHim : ($moneyForHim * -1),
+                        'remaining_money' => $moneyOnHim > 0 ? $moneyOnHim : ($moneyForHim * -1),
+                        'transaction_from' => null, 
+                        'transaction_to' => null, 
+                        'notes' => request('note'), 
+                        'user_id' => auth()->user()->id, 
+                        'year_id' => $this->currentFinancialYear(),
+                        'created_at' => now()
+                    ]);
+                });
+            }
+
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function edit($id)
     {
-        if(request()->ajax()){
-            $find = ClientsAndSuppliers::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return view('back.welcome');
+        if((userPermissions()->suppliers_update)){
+            if(request()->ajax()){
+                $find = ClientsAndSuppliers::where('id', $id)->first();
+                return response()->json($find);
+            }
+            return view('back.welcome');
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function update(Request $request, $id)
@@ -216,21 +229,25 @@ class SuppliersController extends Controller
 
     public function destroy($id)
     {
-        $find = ClientsAndSuppliers::where('id', $id)->first();
-        $supplierTreasuryBillDets = DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->get();
+        if((userPermissions()->suppliers_delete)){
+            $find = ClientsAndSuppliers::where('id', $id)->first();
+            $supplierTreasuryBillDets = DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->get();
 
-        if(count($supplierTreasuryBillDets) > 1){
-            return response()->json(['cannot_delete' => $find->name]);
+            if(count($supplierTreasuryBillDets) > 1){
+                return response()->json(['cannot_delete' => $find->name]);
 
-        }elseif(count($supplierTreasuryBillDets) == 1){
-            if($find->image != "df_image.png"){
-                File::delete(public_path('back/images/suppliers/'.$find->image));
+            }elseif(count($supplierTreasuryBillDets) == 1){
+                if($find->image != "df_image.png"){
+                    File::delete(public_path('back/images/suppliers/'.$find->image));
+                }
+                
+                $find->delete();
+                DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->delete();
+                return response()->json(['success_delete' => $find->name]);
             }
-            
-            $find->delete();
-            DB::table('treasury_bill_dets')->where('client_supplier_id', $id)->delete();
-            return response()->json(['success_delete' => $find->name]);
-        }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function datatable()

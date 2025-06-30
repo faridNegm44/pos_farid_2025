@@ -88,7 +88,7 @@
                         <div class="col-md-3">
                             <label for="status">الحالة</label>
                             <div>    
-                                <select  name="status" class="form-control">
+                                <select name="status" id="status" class="form-control">
                                     <option value="1">نشط</option>
                                     <option value="0">معطل</option>
                                 </select>
@@ -101,6 +101,19 @@
 
                     <div class="row row-xs">                        
                         <div class="col-md-3">
+                            <label for="role">التراخيص</label>
+                            <i class="fas fa-star require_input"></i>
+                            <div>    
+                                <select name="role" id="role" class="form-control">
+                                    @foreach ($permissions as $item)
+                                        <option value="{{ $item->id }}">{{ $item->role_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <bold class="text-danger" id="errors-role" style="display: none;"></bold>
+                        </div>
+                        
+                        <div class="col-md-3">
                             <label for="birth_date">تاريخ الميلاد</label>
                             {{--<i class="fas fa-star require_input"></i>--}}
                             <div>    
@@ -109,7 +122,7 @@
                             <bold class="text-danger" id="errors-birth_date" style="display: none;"></bold>
                         </div>
 
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <label for="address">العنوان </label>
                             {{--<i class="fas fa-star require_input"></i>--}}
                             <div>    

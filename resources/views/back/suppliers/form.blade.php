@@ -57,7 +57,7 @@
                         <div class="col-lg-2 col-md-12">
                             <label for="type_payment">
                                 طريقة التعامل
-                                {{--<i class="fas fa-info-circle text-danger" data-bs-toggle="tooltip" title="⚠️ عند اختيارك لطريقة التعامل بالآجل، سيكون المورد قادراً على استلام الأصناف دون سداد قيمتها في الوقت الحالي. يُرجى التأكد من أهلية المورد لهذا النوع من التعامل."></i>--}}
+                                {{--<i class="fas fa-info-circle text-danger" data-bs-toggle="tooltip" title="⚠️ عند اختيارك لطريقة التعامل بالآجل، سيكون المورد قادراً على استلام السلع والخدمات دون سداد قيمتها في الوقت الحالي. يُرجى التأكد من أهلية المورد لهذا النوع من التعامل."></i>--}}
                             </label>
                             <div>
                                 <select id="type_payment" name="type_payment" class="form-control">

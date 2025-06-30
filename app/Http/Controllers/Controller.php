@@ -15,7 +15,8 @@ class Controller extends BaseController
 
 
     function currentFinancialYear(){
-        return DB::table('financial_years')->where('status', 1)->first()->id;
+        $year = DB::table('financial_years')->where('status', 1)->first();
+        return $year ? $year->id : null;
     }
     
     function getNextId($table, $column = 'id'){

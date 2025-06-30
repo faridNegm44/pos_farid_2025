@@ -76,7 +76,7 @@
         
         <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
-                <form method="post" action="{{ url('expenses/report/result') }}">
+                <form method="get" action="{{ url('expenses/report/result') }}">
                     @csrf
                     <div class="row justify-content-center">
                         <div class="col-md-2">

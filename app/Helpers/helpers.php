@@ -3,8 +3,8 @@
 use App\Models\Back\FinancialYears;
 use App\Models\Back\Setting;
 use App\Models\Back\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-
 
 
 // start get curren financial year where status 1
@@ -24,7 +24,13 @@ use Illuminate\Support\Facades\DB;
 // start get authUserInfo
     if (!function_exists('authUserInfo')) {
         function authUserInfo(){
-            return User::where('id', auth()->user()->id)->first();
+            return User::where('users.id', auth()->user()->id)
+                        ->leftJoin('roles_permissions', 'roles_permissions.id', '=', 'users.role')
+                        ->select(
+                            'users.*',
+                            'roles_permissions.role_name'
+                        )
+                        ->first();
         }
     }
 // end get authUserInfo`
@@ -33,20 +39,32 @@ use Illuminate\Support\Facades\DB;
 // start show الارقام العشريه
 if (!function_exists('display_number')) {
     function display_number($number) {
-        if (strpos($number, '.') !== false) {
-            // فقط إذا كانت .00 أو أصفار بعد الفاصلة
-            if (preg_match('/\.0+$/', $number)) {
-                return (int)$number;
-            }
-            return rtrim(rtrim($number, '0'), '.');
+        // تأكد أنه رقم
+        if (!is_numeric($number)) {
+            return $number;
         }
-        return $number;
+
+        if (strpos($number, '.') !== false) {
+            // إذا كانت فقط .00 أو أصفار بعد الفاصلة
+            if (preg_match('/\.0+$/', $number)) {
+                return number_format((int)$number);
+            }
+
+            // إزالة الأصفار الزائدة بعد الفاصلة بدون تقريب
+            $trimmed = rtrim(rtrim($number, '0'), '.');
+            return number_format($trimmed, strlen(substr(strrchr($trimmed, '.'), 1)), '.', ',');
+        }
+
+        // رقم صحيح بدون فاصل عشري
+        return number_format($number);
     }
 }
 // end show الارقام العشريه
 
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// بداية احصائيات الصفحة الرئيسية /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 // start get last 5 sale bill
 function getLastSaleBills(){
@@ -86,19 +104,99 @@ function getLastPurchaseBills(){
 }
 // end get last 5 purchase bill
 
-//// start function role_permissions
-//function userPermissions(){
-//    $permissions = DB::table('users')
-//            ->where('users.id', auth()->user()->id)
-//            ->leftJoin('roles_permissions', 'roles_permissions.id', '=', 'users.user_role')
-//            ->select(
-//                'users.*',
-//                'roles_permissions.*',
-//                'roles_permissions.id as role_permission_id',
-//                'users.id as user_id' 
-//            )
-//            ->first();
+
+
+// start get last 5 products top sales
+function topProductsInThisMonth(){
+    $topProducts = DB::table('sale_bills')
+                    ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
+                    ->leftJoin('products', 'products.id', 'store_dets.product_id')
+                    ->groupBy('store_dets.product_id')
+                    ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                    ->select(
+                        DB::raw('SUM(store_dets.product_bill_quantity) as total_product'),
+                        'products.nameAr as productNameAr',
+                        'products.id as productId',
+                    )
+                    ->orderBy('total_product', 'desc')
+                    ->limit(5)
+                    ->get();
+
+    return $topProducts;
+}
+// end get last 5 products top sales
+
+
+
+// start count total expenses today اليوم
+function totalExpensesToday(){
+    $totalExpenses = DB::table('expenses')->whereDate('created_at', Carbon::today())->where('status', 'اضافة')->sum('amount'); 
+    return $totalExpenses;
+}
+// end count total expenses today اليوم
+
+
+
+// start count total expenses today اليوم
+function totalSalesToday(){
+    $totalSales = DB::table('sale_bills')->whereDate('created_at', Carbon::today())->sum('total_bill_after'); 
+    return $totalSales;
+}
+// end count total expenses today اليوم
+
+
+
+// start stock_alert أصناف وصلت للحد الأدنى
+function stockAlert(){
+    $stockAlert = DB::table('store_dets')
+                    ->leftJoin('products', 'products.id', 'store_dets.product_id')
+                    ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
+                    ->leftJoin('stores', 'stores.id', 'products.store')
+
+                    ->whereIn('store_dets.id', function($query){
+                        $query->select(DB::raw('MAX(id)'))
+                            ->from('store_dets')
+                            ->groupBy('store_dets.product_id');
+                    })
+
+                    ->whereColumn('products.stockAlert', '>=', 'store_dets.quantity_small_unit')
+                    ->orderBy('products.nameAr', 'asc')
+                    ->count();
+
+    return $stockAlert;
+}
+// end stock_alert أصناف وصلت للحد الأدنى
+
+
+
+// start count total financial_treasury
+function totalFinancialTreasury(){
+    $latestBalances = DB::table('treasury_bill_dets as t1')
+                        ->select('t1.treasury_id', 't1.treasury_money_after')
+                        ->where('t1.treasury_id', '!=', 0)
+                        ->whereRaw(
+                            't1.id = (SELECT MAX(t2.id) FROM treasury_bill_dets t2 WHERE t2.treasury_id = t1.treasury_id)'
+                        )
+                        ->sum('treasury_money_after');
+
+    return $latestBalances;
+}
+// end count total financial_treasury
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// نهاية احصائيات الصفحة الرئيسية /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+// start function role_permissions
+function userPermissions(){
+    $permissions = DB::table('users')
+            ->where('users.id', auth()->user()->id)
+            ->leftJoin('roles_permissions', 'roles_permissions.id', '=', 'users.role')
+            ->select('roles_permissions.*')
+            ->first();
         
-//    return $permissions;
-//}
-//// end function role_permissions
+    return $permissions;
+}
+// end function role_permissions

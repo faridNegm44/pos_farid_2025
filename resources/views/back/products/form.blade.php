@@ -16,22 +16,33 @@
                 <div class="pd-30 pd-sm-40 bg-gray-100">
                   <h5 style="text-decoration: underline;font-weight: bold;">بيانات أساسية</h5>
                   <div class="row row-xs">
+                    <div class="col-lg-1 col-md-6 col-12">
+                      <label for="type">نوع السلعة/الخدمة</label>
+                        <div>    
+                            <select name="type" class="type form-control" id="type">
+                                <option value="سلعة">سلعة</option>
+                                <option value="خدمي">خدمي</option>
+                            </select>
+                        </div>
+                      <bold class="text-danger" id="errors-type" style="display: none;"></bold>
+                    </div> 
+                    
                     <div class="col-lg-3 col-md-6 col-12">
-                      <label for="nameAr">إسم الصنف بالعربية</label>
+                      <label for="nameAr">إسم السلعة/الخدمة بالعربية</label>
                       <i class="fas fa-star require_input"></i>
                       <div>
-                          <input type="text" class="form-control dataInput" placeholder="إسم الصنف بالعربية" id="nameAr" name="nameAr" data-autofocus >
+                          <input type="text" class="form-control dataInput" placeholder="إسم السلعة/الخدمة بالعربية" id="nameAr" name="nameAr" data-autofocus >
                       </div>
                       <bold class="text-danger" id="errors-nameAr" style="display: none;"></bold>
-                  </div>                        
+                    </div>                        
 
-                  <div class="col-lg-3 col-md-6 col-12">
-                      <label for="nameEn">إسم الصنف بالأجنبية</label>
-                      <div>
-                          <input type="text" class="form-control dataInput" placeholder="إسم الصنف بالأجنبية" id="nameEn" name="nameEn" >
-                      </div>
-                      <bold class="text-danger" id="errors-nameEn" style="display: none;"></bold>
-                  </div>
+                    <div class="col-lg-2 col-md-6 col-12">
+                        <label for="nameEn">إسم السلعة/الخدمة بالأجنبية</label>
+                        <div>
+                            <input type="text" class="form-control dataInput" placeholder="إسم السلعة/الخدمة بالأجنبية" id="nameEn" name="nameEn" >
+                        </div>
+                        <bold class="text-danger" id="errors-nameEn" style="display: none;"></bold>
+                    </div>
 
                     <div class="col-lg-1 col-md-6 col-12">
                         <label for="shortCode">ك مختصر</label>
@@ -50,9 +61,9 @@
                     </div>                        
 
                     <div class="col-lg-1 col-md-6 col-12">
-                      <label for="status">حالة الصنف</label>
+                      <label for="status">الحالة</label>
                         <div>    
-                            <select  name="status" class="status selectize" id="status">
+                            <select  name="status" class="status form-control" id="status">
                                 <option value="1">نشط</option>
                                 <option value="0">معطل</option>
                             </select>
@@ -61,9 +72,9 @@
                     </div>  
 
                     <div class="col-lg-2 col-md-6 col-12">
-                      <label for="image">صورة الصنف</label>
+                      <label for="image">صورة السلعة/الخدمة</label>
                       <div>
-                          <input type="file" class="form-control dataInput" placeholder="صورة الصنف" id="image" name="image" >
+                          <input type="file" class="form-control dataInput" placeholder="صورة السلعة/الخدمة" id="image" name="image" >
                           <input type="hidden" class="dataInput" id="image_hidden" name="image_hidden" >
                       </div>
                       <bold class="text-danger" id="errors-image" style="display: none;"></bold>
@@ -84,10 +95,10 @@
                     </div>                        
 
                     <div class="col-lg-2 col-md-6 col-12">
-                      <label for="category">اقسام الأصناف الرئيسية</label>
+                      <label for="category">اقسام السلع والخدمات الرئيسية</label>
                       <div>    
                           <select  name="category" class="category form-control" id="category">
-                            <option value="" selected>اقسام الأصناف الرئيسية</option>                              
+                            <option value="" selected>اقسام السلع والخدمات الرئيسية</option>                              
                             @foreach ($productCategoys as $categoy)
                               <option value="{{ $categoy->id }}">{{ $categoy->name }}</option>                              
                             @endforeach
@@ -97,7 +108,7 @@
                     </div>                        
 
                     <div class="col-lg-2 col-md-6 col-12">
-                      <label for="sub_category">اقسام الأصناف الفرعية</label>
+                      <label for="sub_category">اقسام السلع والخدمات الفرعية</label>
                       <div>    
                           <select  name="sub_category" class="sub_category form-control" id="sub_category"></select>
                       </div>
@@ -126,7 +137,7 @@
                     </div> 
 
                     <div class="col-lg-2 col-md-6 col-12">
-                      <label for="desc">وصف الصنف</label>
+                      <label for="desc">وصف السلعة/الخدمة</label>
                       <div>
                           <input type="text" class="form-control dataInput" placeholder="وصف المنتج" id="desc" name="desc" >
                       </div>
@@ -138,7 +149,7 @@
 
                   <h5 style="text-decoration: underline;font-weight: bold;">بيانات السعر والوحدات</h5>
                   <div class="row row-xs">
-                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                    <div class="col-lg-4 col-md-6 col-md-4 col-12">
                       <label for="bigUnit">الوحدة الكبري</label>
                       <div>    
                           <select  name="bigUnit" class="bigUnit selectize" id="bigUnit">
@@ -151,7 +162,7 @@
                       <bold class="text-danger" id="errors-bigUnit" style="display: none;"></bold>
                     </div>                        
 
-                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                    <div class="col-lg-4 col-md-6 col-md-4 col-12">
                       <label for="smallUnit">الوحدة الصغري</label>
                       <div>    
                           <select  name="smallUnit" class="smallUnit selectize" id="smallUnit">
@@ -164,7 +175,7 @@
                       <bold class="text-danger" id="errors-smallUnit" style="display: none;"></bold>
                     </div> 
 
-                    <div class="col-lg-2 col-md-6 col-md-4 col-12" id="small_unit_numbers_section">
+                    <div class="col-lg-4 col-md-6 col-md-4 col-12" id="small_unit_numbers_section">
                       <label for="small_unit_numbers">عدد وحدات الصغري</label>
                       <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" title="عدد الوحدات الصغرى التي تُكوِّن وحدة كبرى واحدة من هذا المنتج (مثال: 1 كرتونة = 12 علبة)"></i>
                       <i class="fas fa-star require_input"></i>
@@ -175,7 +186,7 @@
                       <bold class="text-danger" id="errors-small_unit_numbers" style="display: none;"></bold>
                     </div>  
 
-                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                    <div class="col-lg-4 col-md-6 col-md-4 col-12">
                         <label for="last_cost_price_small_unit">س الشراء</label>
                         <div>
                             <input type="number" class="form-control dataInput" placeholder="س الشراء" id="last_cost_price_small_unit" name="last_cost_price_small_unit" min="0">
@@ -183,7 +194,7 @@
                         <bold class="text-danger" id="errors-last_cost_price_small_unit" style="display: none;"></bold>
                     </div>                        
 
-                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                    <div class="col-lg-4 col-md-6 col-md-4 col-12">
                       <label for="sell_price_small_unit">سعر البيع</label>
                       <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" title="هذا السعر مخصص لبيع أصغر وحدة ممكنة من هذا المنتج، مثل العبوة أو القطعة أو الجرام بحسب طبيعة المنتج"></i>
 
@@ -194,6 +205,17 @@
                     </div>  
 
                     <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                      <label for="type_tax">نوع الضريبة</label>
+                        <div>    
+                            <select name="type_tax" class="type_tax form-control" id="type_tax">
+                                <option value="نسبة">نسبة</option>
+                                <option value="قيمة">قيمة</option>
+                            </select>
+                        </div>
+                      <bold class="text-danger" id="errors-type_tax" style="display: none;"></bold>
+                    </div>   
+                    
+                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
                       <label for="tax">الضريبة</label>
                       <div>
                           <input type="number" class="form-control dataInput" placeholder="الضريبة" id="tax" name="tax" min="0">
@@ -201,7 +223,7 @@
                       <bold class="text-danger" id="errors-tax" style="display: none;"></bold>
                     </div>   
                     
-                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                    <div class="col-lg-4 col-md-6 col-md-4 col-12">
                       <label for="discountPercentage">أقصي نسبة خصم %</label>
                       <div>
                           <input type="number" class="form-control dataInput" placeholder="أقصي نسبة خصم %" id="discountPercentage" name="discountPercentage" min="0">
@@ -209,7 +231,7 @@
                       <bold class="text-danger" id="errors-discountPercentage" style="display: none;"></bold>
                     </div>
                   
-                    <div class="col-lg-2 col-md-6 col-md-4 col-12">
+                    <div class="col-lg-4 col-md-6 col-md-4 col-12">
                         <label for="max_sale_quantity">أقصي كمية بيع</label>
                         <div>
                             <input type="number" class="form-control dataInput" placeholder="أقصي كمية بيع" id="max_sale_quantity" name="max_sale_quantity" min="0">
@@ -217,9 +239,9 @@
                         <bold class="text-danger" id="errors-max_sale_quantity" style="display: none;"></bold>
                     </div>
 
-                    <div class="col-lg-2 col-md-6 col-12" id="firstPeriodCountSection">
+                    <div class="col-lg-4 col-md-6 col-12" id="firstPeriodCountSection">
                       <label for="firstPeriodCount">رصيد أول مدة</label>
-                      <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" title="يرجى إدخال رصيد أول المدة لهذا الصنف بعدد الوحدات الصغرى فقط، مثلًا: إذا كانت الكرتونة تحتوي على 12 قطعة، يتم إدخال 12."></i>
+                      <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip" title="يرجى إدخال رصيد أول المدة لهذا السلعة/الخدمة بعدد الوحدات الصغرى فقط، مثلًا: إذا كانت الكرتونة تحتوي على 12 قطعة، يتم إدخال 12."></i>
 
                       <div>
                           <input type="number" class="form-control dataInput" placeholder="رصيد أول مدة" id="firstPeriodCount" name="firstPeriodCount" min="0">
@@ -232,7 +254,7 @@
                   
                   
                   {{--<hr>--}}
-                  {{-- <h5 style="text-decoration: underline;font-weight: bold;">س ترويجي للصنف</h5> --}}
+                  {{-- <h5 style="text-decoration: underline;font-weight: bold;">س ترويجي للسلعة/خدمة</h5> --}}
                   {{--<div class="row">
                     <div class="col-lg-12 col-md-6 col-lg-12 col-md-6 col-12">
                       <div class="card overflow-hidden">
@@ -241,7 +263,7 @@
                             <div class="panel panel-default  mb-4">
                               <div class="panel-heading1 bg bg-warning-gradient ">
                                 <h4 class="panel-title1">
-                                  <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion11" href="#collapseFour1" aria-expanded="false">س ترويجي للصنف</a>
+                                  <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion11" href="#collapseFour1" aria-expanded="false">س ترويجي للسلعة/خدمة</a>
                                 </h4>
                               </div>
                               <div id="collapseFour1" class="panel-collapse collapse" role="tabpanel" aria-expanded="false" style="">

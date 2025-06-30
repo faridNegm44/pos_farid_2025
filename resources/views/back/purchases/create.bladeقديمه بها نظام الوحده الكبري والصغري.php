@@ -124,8 +124,8 @@
 
             <div class="container-fluid">
     
-                {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
-                {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- start top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
+                {{-------------------------------------------------- start top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
                 <div id="top_section" style="padding: 7px 10px 0;">
                     <div class="row">
                         <div class="col-lg-4" style="margin-bottom: 8px;">
@@ -141,13 +141,13 @@
                         
                         <div class="col-lg-7" style="margin-bottom: 8px;">
                             <select class="" id="products_selectize" style="border: 1px solid #5c5c5c !important;">
-                                <option value="" selected>إبحث عن صنف</option>         
+                                <option value="" selected>إبحث عن سلعة/خدمة</option>         
                             </select>
                         </div>
                     </div>
                 </div>
-                {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
-                {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- end top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
+                {{-------------------------------------------------- end top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
                 
     
     
@@ -226,7 +226,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>حذف</th>
-                                        <th style="width: 20%;">الصنف</th>
+                                        <th style="width: 20%;">السلعة/الخدمة</th>
                                         <th style="width: 10%;">الوحدة ص</th>
                                         <th style="width: 8%;">ك المخزن</th>
                                         <th style="width: 8%;">
@@ -456,7 +456,7 @@
                 render: {
                     option: function(item, escape) {
                         return `<option>
-                                    الصنف: ${escape(item.nameAr)} - 
+                                    السلعة/الخدمة: ${escape(item.nameAr)} - 
                                     كود: ${escape(item.id)} - 
                                     س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } - 
                                     س شراء: ${ display_number_js( escape(item.last_cost_price_small_unit) ) }
@@ -465,7 +465,7 @@
                     },
                     item: function(item, escape) {
                         return `<div>
-                                    الصنف: ${escape(item.nameAr)} - 
+                                    السلعة/الخدمة: ${escape(item.nameAr)} - 
                                     كود: ${escape(item.id)} - 
                                     س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } - 
                                     س شراء: ${ display_number_js( escape(item.last_cost_price_small_unit) ) }
@@ -498,7 +498,7 @@
 
 
 
-            // بدايه اختيار صنف من selectize واضافته في في جدول الاصناف
+            // بدايه اختيار سلعة/خدمة من selectize واضافته في في جدول الاصناف
             $('#products_selectize').change(function() {
                 var productId = $(this).val();
                 var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
@@ -506,7 +506,7 @@
 
                 if (selectedItem) {
                     var productData = selectizeInstance.options[productId]; // بيانات العنصر المحدد
-                    var productName = productData.nameAr; // اسم الصنف
+                    var productName = productData.nameAr; // اسم السلعة/الخدمة
                     
                     var smallUnit = productData.smallUnit; // الوحدة الصغري
                     var smallUnitName = productData.smallUnitName; // الوحدة الصغري
@@ -607,7 +607,7 @@
                     selectizeInstance.clear();
                 }
             });
-            // نهاية اختيار صنف من selectize واضافته في في جدول الاصناف
+            // نهاية اختيار سلعة/خدمة من selectize واضافته في في جدول الاصناف
         });
     </script>
     {{--  end search products by selectize #products_selectize --}}

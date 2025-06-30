@@ -23,8 +23,8 @@
             $('#example1').DataTable({
                 "paging": false, // تعطيل التقسيم
                 "searching": true, // تفعيل البحث (اختياري)
-                "ordering": true, // تفعيل الترتيب (اختياري)
-                "info": false, // إخفاء معلومات الصفحة (اختياري)
+                "ordering": false, // تفعيل الترتيب (اختياري)
+                "info": true, // إخفاء معلومات الصفحة (اختياري)
                 "order": [[0, 'desc']]
             });
         });
@@ -46,10 +46,10 @@
                     <span class="itemsSearch">الخزينة: {{ $results[0]->treasury_name }}</span>
                 @endif
                 @if ($from)
-                    <span class="itemsSearch">تاريخ من: {{ $from }}</span>
+                    <span class="itemsSearch">تاريخ من: {{ Carbon\Carbon::parse($from)->format('d-m-Y h:i:s a') }}</span>
                 @endif
                 @if ($to)
-                    <span class="itemsSearch">تاريخ الي: {{ $to }}</span>
+                    <span class="itemsSearch">تاريخ الي: {{ Carbon\Carbon::parse($to)->format('d-m-Y h:i:s a') }}</span>
                 @endif
             </div>
         </div>
@@ -85,6 +85,10 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $results->links() }}
+                    </div>
                 </div>
             </div>
         </div>

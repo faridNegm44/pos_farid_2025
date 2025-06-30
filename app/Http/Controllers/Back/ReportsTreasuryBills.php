@@ -11,20 +11,25 @@ use Illuminate\Support\Str;
 class ReportsTreasuryBills extends Controller
 {
     public function index()
-    {                   
-        $pageNameAr = 'تقرير عن حركة الخزائن المالية';        
-        $treasuries = FinancialTreasury::where('status', 1)->orderBy('name', 'asc')->get();        
-        //$treasuries = FinancialTreasury::where('status', 1)
-        //                                ->leftJoin('treasury_bill_dets', function ($join) {
-        //                                    $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
-        //                                        ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
-        //                                })
-        //                                ->select('financial_treasuries.*', 'treasury_bill_dets.money')
-        //                                ->get();        
-
-
-                                        //return $treasuries;
-        return view('back.reports.treasury_bills.index' , compact('pageNameAr', 'treasuries'));
+    {                  
+        if((userPermissions()->treasury_bills_report_view)){
+            $pageNameAr = 'تقرير عن حركة الخزائن المالية';        
+            $treasuries = FinancialTreasury::where('status', 1)->orderBy('name', 'asc')->get();        
+            //$treasuries = FinancialTreasury::where('status', 1)
+            //                                ->leftJoin('treasury_bill_dets', function ($join) {
+            //                                    $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
+            //                                        ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
+            //                                })
+            //                                ->select('financial_treasuries.*', 'treasury_bill_dets.money')
+            //                                ->get();        
+    
+    
+            //return $treasuries;
+            return view('back.reports.treasury_bills.index' , compact('pageNameAr', 'treasuries'));	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
+         
     }
     
     
@@ -50,8 +55,8 @@ class ReportsTreasuryBills extends Controller
                         'users.name as user_name',
                         'financial_years.name as financial_years',
                         'expenses.title as expensesTitle',
-                    )
-                    ->orderBy('treasury_bill_dets.id', 'desc');
+                    );
+                    //->orderBy('treasury_bill_dets.id', 'desc');
 
         if($treasury_id){
             $query->where('treasury_bill_dets.treasury_id', $treasury_id);
@@ -69,11 +74,9 @@ class ReportsTreasuryBills extends Controller
             $query->where('treasury_bill_dets.created_at', '<=', $to);
         }
 
-        $results = $query->get();
+        $results = $query->paginate(50);       
 
-        //return $results;
-        
-        if(count($results) == 0){
+        if($results->total() == 0){
             return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
         }else{
             return view('back.reports.treasury_bills.result' , compact('pageNameAr', 'results', 'treasury_id', 'treasury_type', 'from', 'to'));
@@ -103,7 +106,7 @@ class ReportsTreasuryBills extends Controller
                         'financial_years.name as financial_years',
                         'expenses.title as expensesTitle',
                     )
-                    ->orderBy('treasury_bill_dets.id', 'desc');
+                    ->orderBy('treasury_bill_dets.id', 'asc');
 
         if($treasury_id){
             $query->where('treasury_bill_dets.treasury_id', $treasury_id);

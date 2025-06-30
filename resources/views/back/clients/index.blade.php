@@ -41,7 +41,24 @@
     <script src="{{ asset('back/assets/file-upload-with-preview.min.js') }}"></script>
     <script> new FileUploadWithPreview('file_upload') </script>
 
-    
+
+    @if (session()->has('notAuth'))
+		<script>
+			$(document).ready(function () {
+				alertify.dialog('alert')
+						.set({transition:'slide',message: `
+							<div style="text-align: center;font-weight: bold;">
+								<p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+									صلاحية غير متوفرة 🔐⚠️
+								</p>
+								<p>{{ session()->get('notAuth') }}</p>
+							</div>
+						`, 'basic': true})
+						.show();  
+
+			});
+		</script>
+	@endif
 
     <script>
         // open modal when click button (insert)
@@ -113,6 +130,7 @@
                 ajax: `{{ url($pageNameEn.'/datatable') }}`,
                 dataType: 'json',
                 columns: [
+                    {data: 'id', name: 'id'},
                     {data: 'code', name: 'code'},
                     {data: 'action', name: 'action', orderable: false},
                     {data: 'status', name: 'status'},
@@ -173,6 +191,7 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
+                                <th class="border-bottom-0">كود العميل</th>
                                 <th class="border-bottom-0">التحكم</th>
                                 <th class="border-bottom-0">الحالة</th>
                                 <th class="border-bottom-0" style="width: 15%;max-width: 15%;">الإسم</th>

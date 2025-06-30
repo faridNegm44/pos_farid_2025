@@ -16,7 +16,7 @@
                 <div class="pd-30 pd-sm-40 bg-gray-100">
                     <div class="row row-xs">
                         <div class="col-md-12">
-                            <label for="product_id">الأصناف</label>
+                            <label for="product_id">السلع والخدمات</label>
                             <i class="fas fa-star require_input"></i>
                             <div>
                                 <select name="product_id" class="product_id selectize" id="products_selectize">

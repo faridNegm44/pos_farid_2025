@@ -129,8 +129,8 @@
 
             <div class="container-fluid">
     
-                {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
-                {{-------------------------------------------------- start top الموردين وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- start top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
+                {{-------------------------------------------------- start top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
                 <div id="top_section" style="padding: 7px 10px 0;">
                     <div class="row">
                         <div class="col-lg-4" style="margin-bottom: 8px;">
@@ -146,13 +146,13 @@
                         
                         <div class="col-lg-7" style="margin-bottom: 8px;">
                             <select class="" id="products_selectize" style="border: 1px solid #5c5c5c !important;">
-                                <option value="" selected>إبحث عن صنف</option>         
+                                <option value="" selected>إبحث عن سلعة/خدمة</option>         
                             </select>
                         </div>
                     </div>
                 </div>
-                {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
-                {{-------------------------------------------------- end top الموردين وبحث عن صنف --------------------------------------------------}}
+                {{-------------------------------------------------- end top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
+                {{-------------------------------------------------- end top الموردين وبحث عن سلعة/خدمة --------------------------------------------------}}
                 
     
     
@@ -183,9 +183,9 @@
                                     <p class="col-lg-6 col-12">
                                         <label for="">
                                             ضريبة ق م (%)
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا."></i>
+                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" name="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
+                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
                                     </p>
         
                                     <p class="col-lg-6 col-12">
@@ -231,7 +231,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>حذف</th>
-                                        <th style="width: 20%;">الصنف</th>
+                                        <th style="width: 20%;">السلعة/الخدمة</th>
                                         <th style="width: 10%;">الوحدة ص</th>
                                         <th style="width: 8%;">ك المخزن</th>
                                         <th style="width: 8%;">
@@ -388,7 +388,7 @@
                                     الاسم: ${escape(item.name)} - 
                                     تليفون: ${escape(item.phone ?? '')} -                                 
                                     عنوان: ${escape(item.address  ?? '' )} -                           
-                                    الفلوس: ${escape(item.remaining_money >= 0 ? 'علية '+ item.remaining_money : 'لة '+ item.remaining_money )}                           
+                                    الفلوس: ${escape(item.remaining_money >= 0 ? 'علية '+ display_number_js( item.remaining_money ) : 'لة '+ display_number_js( item.remaining_money ) )}                           
                                 </option>`;
                     },
                     item: function(item, escape) {
@@ -397,7 +397,7 @@
                                     الاسم: ${escape(item.name)} - 
                                     تليفون: ${escape(item.phone ?? '')} -   
                                     عنوان: ${escape(item.address  ?? '' )} -                              
-                                    الفلوس: ${escape(item.remaining_money >= 0 ? 'علية '+ item.remaining_money : 'لة '+ item.remaining_money )}                      
+                                    الفلوس: ${escape(item.remaining_money >= 0 ? 'علية '+ display_number_js(item.remaining_money) : 'لة '+ display_number_js(item.remaining_money) )}                      
                                 </div>`;
                     }
                 },
@@ -427,9 +427,9 @@
                     if (selected) {
                         $('#supplier_name').text(selected.name);
                         if(selected.remaining_money >= 0){
-                            $("#on_him").text(`${parseFloat(selected.remaining_money).toLocaleString()}`);
+                            $("#on_him").text(`${ display_number_js(selected.remaining_money) }`);
                         }else{
-                            $("#for_him").text(`${parseFloat(selected.remaining_money).toLocaleString()}`);
+                            $("#for_him").text(`${ display_number_js(selected.remaining_money) }`);
                         }
 
                         alertify.set('notifier', 'position', 'bottom-center');
@@ -464,7 +464,7 @@
                     option: function(item, escape) {
                         return `<option>
                                     كود: ${escape(item.id)} - 
-                                    الصنف: ${escape(item.nameAr)} - 
+                                    السلعة/الخدمة: ${escape(item.nameAr)} - 
                                     س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } - 
                                     س تكلفة: ${ display_number_js( escape(item.last_cost_price_small_unit) ) } - 
                                     كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
@@ -473,7 +473,7 @@
                     item: function(item, escape) {
                         return `<div>
                                     كود: ${escape(item.id)} - 
-                                    الصنف: ${escape(item.nameAr)} - 
+                                    السلعة/الخدمة: ${escape(item.nameAr)} - 
                                     س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } - 
                                     س تكلفة: ${ display_number_js( escape(item.last_cost_price_small_unit) ) } - 
                                     كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
@@ -506,7 +506,7 @@
 
 
 
-            // بدايه اختيار صنف من selectize واضافته في في جدول الاصناف
+            // بدايه اختيار سلعة/خدمة من selectize واضافته في في جدول الاصناف
             $('#products_selectize').change(function() {
                 var productId = $(this).val();
                 var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
@@ -514,7 +514,7 @@
 
                 if (selectedItem) {
                     var productData = selectizeInstance.options[productId]; // بيانات العنصر المحدد
-                    var productName = productData.nameAr; // اسم الصنف
+                    var productName = productData.nameAr; // اسم السلعة/الخدمة
                     
                     var smallUnit = productData.smallUnit; // الوحدة الصغري
                     var smallUnitName = productData.smallUnitName; // الوحدة الصغري
@@ -601,7 +601,7 @@
                     selectizeInstance.clear();
                 }
             });
-            // نهاية اختيار صنف من selectize واضافته في في جدول الاصناف
+            // نهاية اختيار سلعة/خدمة من selectize واضافته في في جدول الاصناف
         });
     </script>
     {{--  end search products by selectize #products_selectize --}}
@@ -647,29 +647,40 @@
                 subTotal += totalBeforeDiscount;
             });
 
-            let tax_bill = $("#tax_bill").val();
             let discount_bill = $("#discount_bill").val(); 
-            let extra_money = $("#extra_money").val(); 
-
             let afterDiscountBill = total - discount_bill;    
-            let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money ?? 0);    
-            
-            let afterTaxBill = (afterExtraMoney + ( afterExtraMoney * Number(tax_bill) ) / 100);
 
             // عرض الإجمالي الكلي في الـ div
-            $('.subtotal').text( subTotal + ' جنية');
-            $('.total_bill_after').text( afterTaxBill + ' جنية');
+            $('.subtotal').text( parseFloat(subTotal).toLocaleString() + ' جنية');
+            $('.total_bill_after').text( parseFloat(afterDiscountBill).toLocaleString() + ' جنية');
         }
     </script>
     {{-- end function calcTotal --}}
 
     
+    {{-- start when change tax_bill update prod_tax value --}}
+    <script>
+        $(document).on('input', '#tax_bill', function () {
+            const thisVal = $(this);
+            
+            if(countTableTr() == 0){
+                thisVal.val('');
+                alertify.set('notifier', 'position', 'bottom-center');
+                alertify.set('notifier', 'delay', 3);
+                alertify.error("خطأ: اضف أصناف أولا الي الفاتورة");
+            }else{
+                $('.prod_tax').val( Number(thisVal.val()) );
+                calcTotal();
+            }
+        });
+    </script>
+    {{-- end when change tax_bill update prod_tax value --}}
 
 
     {{-- start when change sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .tax --}}
     <script>
         $(document).ready(function () {
-            $(document).on('input', '.sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .prod_tax, #discount_bill, #tax_bill, #extra_money', function () {
+            $(document).on('input', '.sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .prod_tax, #discount_bill', function () {
 
                 calcTotal();
 
@@ -690,7 +701,6 @@
         });
     </script>
     {{-- end when change sellPrice, .purchasePrice, .product_new_qty, .prod_discount, .tax --}}
-
 
 
 

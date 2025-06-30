@@ -32,17 +32,31 @@
                             alertify.error("هناك شيئ ما خطأ");
                         },
                         success: function(res){
-
                             document.querySelector('.modal #save').disabled = false;
                             document.querySelector('.spinner_request').style.display = 'none';
 
-                            $(".modal").modal('hide');
-                            
-                            alertify.set('notifier','position', 'top-center');
-                            alertify.set('notifier','delay', 6);
-                            alertify.success(`تم التحويل بنجاح`);
-                            
-                            location.reload();
+                            if(res.notAuth){
+                                alertify.dialog('alert')
+                                    .set({transition:'slide',message: `
+                                        <div style="text-align: center;font-weight: bold;">
+                                            <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                                صلاحية غير متوفرة 🔐⚠️
+                                            </p>
+                                            <p>${res.notAuth}</p>
+                                        </div>
+                                    `, 'basic': true})
+                                    .show();  
+                                $(".modal").modal('hide');  
+
+                            }else{
+                                $(".modal").modal('hide');
+                                
+                                alertify.set('notifier','position', 'top-center');
+                                alertify.set('notifier','delay', 6);
+                                alertify.success(`تم التحويل بنجاح`);
+                                
+                                location.reload();
+                            }
                         }
                     });
                 },function(){

@@ -17,12 +17,29 @@
               url: `{{ url($pageNameEn.'/destroy/${res_id}') }}`,
               type: "get",
               success: function(res){
-                  $('#example1').DataTable().ajax.reload( null, false );
-                  
-                  alertify.set('notifier','position', 'top-center');
-                  alertify.set('notifier','delay', 4);
-                  alertify.success(`تم حذف المصروف بنجاح وارجاع مبلغ المصروف الي الخزينة`);
-            },
+                if(res.notAuth){
+                        alertify.dialog('alert')
+                            .set({transition:'slide',message: `
+                                <div style="text-align: center;font-weight: bold;">
+                                    <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                        صلاحية غير متوفرة 🔐⚠️
+                                    </p>
+                                    <p>${res.notAuth}</p>
+                                </div>
+                            `, 'basic': true})
+                            .show();  
+                        $(".modal").modal('hide');  
+
+                    }else{
+                        $('#example1').DataTable().ajax.reload( null, false );
+                          
+                        location.reload();
+                        
+                        alertify.set('notifier','position', 'top-center');
+                        alertify.set('notifier','delay', 4);
+                        alertify.success(`تم حذف المصروف بنجاح وارجاع مبلغ المصروف الي الخزينة`);
+                    }
+            },  
             error: function(){
 
             }

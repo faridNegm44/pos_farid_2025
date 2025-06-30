@@ -48,62 +48,58 @@ class PurchaseBillController extends Controller
         if (request()->ajax()){
 
             //dd( request()->all() );
-            //$this->validate($request, [
-            //    'supplier_id' => 'required|integer|exists:clients_and_suppliers,id',
-            //    'financial_treasuries' => 'nullable|integer|exists:financial_treasuries,id',
-            //    'custom_bill_num' => 'nullable|string',
+            $this->validate($request, [
+                'supplier_id' => 'required|integer|exists:clients_and_suppliers,id',
+                'financial_treasuries' => 'nullable|integer|exists:financial_treasuries,id',
+                'custom_bill_num' => 'nullable|string',
                 
-            //    'custom_date' => 'nullable|date',
-            //    'discount_bill' => 'nullable|numeric|min:0',
-            //    'extra_money' => 'nullable|numeric|min:0',
-            //    'tax_bill' => 'nullable|numeric|min:0',
+                'custom_date' => 'nullable|date',
+                'discount_bill' => 'nullable|numeric|min:0',
 
-            //    'product_new_qty' => 'array',
-            //    'product_new_qty.*' => 'integer|min:1',
+                'product_new_qty' => 'array',
+                'product_new_qty.*' => 'integer|min:1',
                 
-            //    'purchasePrice' => 'array',
-            //    'purchasePrice.*' => 'numeric|min:1',
+                'purchasePrice' => 'array',
+                'purchasePrice.*' => 'numeric|min:1',
                 
-            //    'sellPrice' => 'array',
-            //    'sellPrice.*' => 'numeric|min:1',
+                'sellPrice' => 'array',
+                'sellPrice.*' => 'numeric|min:1',
                 
-            //    'prod_tax' => 'array',
-            //    'prod_tax.*' => 'nullable|numeric|min:0',
+                'prod_tax' => 'array',
+                'prod_tax.*' => 'nullable|numeric|min:0',
                 
-            //    'prod_discount' => 'array',
-            //    'prod_discount.*' => 'nullable|numeric|min:0',
+                'prod_discount' => 'array',
+                'prod_discount.*' => 'nullable|numeric|min:0',
                 
-            //    //'prod_bonus' => 'array',
-            //    //'prod_bonus.*' => 'nullable|numeric|min:0',
-            //], [
-            //    'required' => 'يجب تعبئة حقل :attribute، لا يمكن تركه فارغًا.',
-            //    'string' => 'يجب أن يكون حقل :attribute عبارة عن نص.',
-            //    'unique' => 'حقل :attribute مُستخدم مسبقًا، الرجاء اختيار قيمة مختلفة.',
-            //    'integer' => 'يجب أن يكون حقل :attribute رقمًا صحيحًا (بدون كسور).',
-            //    'numeric' => 'يجب أن يحتوي حقل :attribute على رقم صحيح أو عشري.',
-            //    'min' => 'يجب ألا تكون قيمة :attribute أقل من :min.',
-            //    'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
-            //    'array' => 'يجب أن يكون حقل :attribute عبارة عن مجموعة عناصر.',
-            //], [
-            //    'supplier_id' => 'المورد',
-            //    'financial_treasuries' => 'الخزينة المالية',
-            //    'custom_bill_num' => 'رقم الفاتورة المخصص',
-            //    'custom_date' => 'تاريخ الفاتورة',
-            //    'discount_bill' => 'الخصم العام على الفاتورة',
-            //    'extra_money' => 'مصاريف إضافية',
-            //    'tax_bill' => 'ضريبة الفاتورة',
-            //    'sale_quantity' => 'كميات المنتجات',
-            //    'sale_quantity.*' => 'الكمية لكل منتج',
-            //    'purchasePrice' => 'أسعار الشراء',
-            //    'purchasePrice.*' => 'سعر الشراء لكل منتج',
-            //    'sellPrice' => 'أسعار البيع',
-            //    'sellPrice.*' => 'سعر البيع لكل منتج',
-            //    'prod_tax' => 'ضرائب المنتجات',
-            //    'prod_tax.*' => 'نسبة الضريبة على المنتج',
-            //    'prod_discount' => 'خصومات المنتجات',
-            //    'prod_discount.*' => 'قيمة الخصم على المنتج',
-            //    //'prod_bonus.*' => 'بونص المنتج',
-            //]);
+                //'prod_bonus' => 'array',
+                //'prod_bonus.*' => 'nullable|numeric|min:0',
+            ], [
+                'required' => 'يجب تعبئة حقل :attribute، لا يمكن تركه فارغًا.',
+                'string' => 'يجب أن يكون حقل :attribute عبارة عن نص.',
+                'unique' => 'حقل :attribute مُستخدم مسبقًا، الرجاء اختيار قيمة مختلفة.',
+                'integer' => 'يجب أن يكون حقل :attribute رقمًا صحيحًا (بدون كسور).',
+                'numeric' => 'يجب أن يحتوي حقل :attribute على رقم صحيح أو عشري.',
+                'min' => 'يجب ألا تكون قيمة :attribute أقل من :min.',
+                'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
+                'array' => 'يجب أن يكون حقل :attribute عبارة عن مجموعة عناصر.',
+            ], [
+                'supplier_id' => 'المورد',
+                'financial_treasuries' => 'الخزينة المالية',
+                'custom_bill_num' => 'رقم الفاتورة المخصص',
+                'custom_date' => 'تاريخ الفاتورة',
+                'discount_bill' => 'الخصم العام على الفاتورة',
+                'sale_quantity' => 'كميات المنتجات',
+                'sale_quantity.*' => 'الكمية لكل منتج',
+                'purchasePrice' => 'أسعار الشراء',
+                'purchasePrice.*' => 'سعر الشراء لكل منتج',
+                'sellPrice' => 'أسعار البيع',
+                'sellPrice.*' => 'سعر البيع لكل منتج',
+                'prod_tax' => 'ضرائب المنتجات',
+                'prod_tax.*' => 'نسبة الضريبة على المنتج',
+                'prod_discount' => 'خصومات المنتجات',
+                'prod_discount.*' => 'قيمة الخصم على المنتج',
+                //'prod_bonus.*' => 'بونص المنتج',
+            ]);
 
 
 
@@ -114,11 +110,9 @@ class PurchaseBillController extends Controller
             $calcTotalProductsBefore = 0; // مخصص لتجميع سعر كل منتج قبل الخصم والضريبه ودمج كل الاسعار في سعر واحد 
             $calcTotalProductsAfterBeforeFinal = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد قبل خصم الفاتوره ومصاريف اضافيه للفاتوره وضريبه الفاتورة
             $calcTotalProductsAfter = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد 
-            
+        
             $discount_bill = request('discount_bill'); // مخصص لخصم قيمه علي الفاتوره كلها
-            $tax_bill = request('tax_bill'); // مخصص لضريبه القيمه المضافه علي الفاتوره كلها
-            $extra_money = request('extra_money'); // مخصص للمصاريف الإضافيه
-            
+
             foreach( request('prod_name')  as $index => $product_id ){
                 $lastProductQuantity = DB::table('store_dets')
                             ->where('product_id', $product_id)
@@ -138,17 +132,14 @@ class PurchaseBillController extends Controller
 
                 $calcTotalProductsBefore += $quantity * $purchasePrice; // مخصص لتجميع  المنتجات كلها قبل تطبيق اي خصومات او ضرائب
                 
-                $product_total = ( $quantity * $purchasePrice );    //  اجمالي الصنف قبل كسعر بيع
-                $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                $product_total = ( $quantity * $purchasePrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
+                $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
 
                 
                 $calcTotalProductsAfterBeforeFinal += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
                 
-                $afterMinusStaticDiscount = $calcTotalProductsAfterBeforeFinal - $discount_bill ;
-                $afterPlusExtraMoney = $afterMinusStaticDiscount + $extra_money ;
-                $afterPlusTaxBill = $afterPlusExtraMoney + ($afterPlusExtraMoney * $tax_bill / 100) ;
-                $calcTotalProductsAfter = $afterPlusTaxBill;    //  اجمالي سعر المنتجات بعد الخصم والضريبة لكل منتج + خصم ومصاريف اضافيه وضريبه الفاتوره كامله
+                $calcTotalProductsAfter = $calcTotalProductsAfterBeforeFinal - $discount_bill ;
             }
 
             //dd($calcTotalProductsAfter);
@@ -156,10 +147,6 @@ class PurchaseBillController extends Controller
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // نهاية العمليات الحسابيه الخاصه بكل منتج سواء سعر بيعه او عدد البيع او الضريبه وكذاله اجمالي سعر المنتجات كلها قبل وبعد الخصم
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
             
 
 
@@ -169,9 +156,7 @@ class PurchaseBillController extends Controller
                     'custom_bill_num' => request('custom_bill_num'),
                     'supplier_id' => request('supplier_id'),
                     'treasury_id' => request('treasury_id'),
-                    'bill_tax' => request('tax_bill'),
-                    'bill_discount' => request('bill_discount'),
-                    'extra_money' => request('extra_money'),
+                    'bill_discount' => request('discount_bill'),
                     'count_items' => count(request('prod_name')),
                     'total_bill_before' => $calcTotalProductsBefore,
                     'total_bill_after' => $calcTotalProductsAfter,
@@ -201,9 +186,9 @@ class PurchaseBillController extends Controller
                     $last_cost_price_small_unit = $purchasePrice;
                     $sell_price_small_unit = $sellPrice;
                     
-                    $product_total = (  $quantity * $purchasePrice );    // اجمالي الصنف قبل
-                    $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                    $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                    $product_total = (  $quantity * $purchasePrice );    // اجمالي السلعة/الخدمة قبل
+                    $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                    $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
                                         
                     // حساب متوسط التكلفه ///////////////////////////////////////////////////////////////////////////
                         //✅ الإجمالي الحالي في المخزون:
@@ -227,7 +212,7 @@ class PurchaseBillController extends Controller
                     
                         $getLatestPriceFromStoreDets = DB::table('store_dets')
                                                         ->where('type', 'اضافة فاتورة مشتريات')
-                                                        ->orWhere('type', 'رصيد اول مدة للصنف')
+                                                        ->orWhere('type', 'رصيد اول مدة للسلعة/خدمة')
                                                         ->where('product_id', $product_id)
                                                         ->orderBy('id', 'desc')
                                                         ->first();
@@ -395,8 +380,6 @@ class PurchaseBillController extends Controller
     }
 
 
-
-
     
     public function edit($id)
     {
@@ -463,14 +446,14 @@ class PurchaseBillController extends Controller
                 return $res->supplierName;
             })
             ->addColumn('treasuryName', function($res){
-                return $res->treasuryName;
+                return $res->treasuryName ?? "<span class='text-muted'>لم يتم صرف مستحقات</span>";
             })
             ->addColumn('count_items', function($res){
                 return display_number($res->count_items);
             })
             ->addColumn('date', function($res){
                 $dates = Carbon::parse($res->created_at)->format('d-m-Y')
-                        .' <span style="font-weight: bold;margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
+                        .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
                 if($res->custom_date){
                     $dates.= 'تاريخ اخر '.Carbon::parse($res->custom_date)->format('Y-m-d');
                 }
@@ -479,6 +462,15 @@ class PurchaseBillController extends Controller
             })
             ->addColumn('financialName', function($res){
                 return $res->financialName;
+            })
+            ->addColumn('bill_discount', function($res){
+                return $res->bill_discount ? display_number($res->bill_discount) : 0;
+            })
+            ->addColumn('total_bill', function($res){
+                return  "
+                            <span style='margin: 0 5px;'>قبل: ".display_number($res->total_bill_before)."</span>
+                            <span style='font-size: 15px;'>بعد: ".display_number($res->total_bill_after)."</span>
+                        ";
             })
             ->addColumn('userName', function($res){
                 return $res->userName;
@@ -503,7 +495,7 @@ class PurchaseBillController extends Controller
                         </a>
                 ';
             })
-            ->rawColumns(['id', 'supplierName', 'treasuryName', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])
+            ->rawColumns(['id', 'supplierName', 'treasuryName', 'total_bill', 'bill_discount', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])
             ->toJson();
     }
 }

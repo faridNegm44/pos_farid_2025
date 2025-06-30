@@ -12,11 +12,16 @@ class ReportsExpensesController extends Controller
 {
     public function index()
     {                   
-        $pageNameAr = 'تقرير عن المصروفات';        
-        $treasuries = DB::table('financial_treasuries')->orderBy('name', 'asc')->get();        
-
-        //return $query;
-        return view('back.reports.expenses.index' , compact('pageNameAr', 'treasuries'));
+        if((userPermissions()->expenses_report_view)){
+            $pageNameAr = 'تقرير عن المصروفات';        
+            $treasuries = DB::table('financial_treasuries')->orderBy('name', 'asc')->get();        
+    
+            return view('back.reports.expenses.index' , compact('pageNameAr', 'treasuries'));
+	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
+        
     }
 
     public function result(Request $request)
@@ -35,6 +40,8 @@ class ReportsExpensesController extends Controller
                             'treasury_bill_dets.*', 
                             'expenses.id as expenses_id',
                             'expenses.title',
+                            'expenses.status',
+                            'expenses.amount',
                             'financial_treasuries.name as treasury_name',
                             'users.name as userName',
                         )
@@ -53,11 +60,9 @@ class ReportsExpensesController extends Controller
             $query->where('treasury_bill_dets.treasury_id', $treasury);
         }
 
-        $results = $query->get();
-        //return $results;
-        
+        $results = $query->paginate(50);       
 
-        if(count($results) == 0){
+        if($results->total() == 0){
             return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
         }else{
             return view('back.reports.expenses.result' , compact('pageNameAr', 'results', 'treasury', 'from', 'to'));
@@ -80,6 +85,8 @@ class ReportsExpensesController extends Controller
                             'treasury_bill_dets.*', 
                             'expenses.id as expenses_id',
                             'expenses.title',
+                            'expenses.status',
+                            'expenses.amount',
                             'financial_treasuries.name as treasury_name',
                             'users.name as userName',
                         )

@@ -69,6 +69,7 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'storeDetsId', name: 'storeDetsId'},
                     {data: 'product_id', name: 'product_id'},
                     {data: 'productName', name: 'productName'},
                     {data: 'quantityBefore', name: 'quantityBefore'},
@@ -109,14 +110,14 @@
 
                         return `<option ${disabled}>
                                     كود: ${escape(item.id)} - 
-                                    الصنف: ${escape(item.nameAr)} - 
+                                    السلعة/الخدمة: ${escape(item.nameAr)} - 
                                     كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
                                 </option>`;
                     },
                     item: function(item, escape) {
                         return `<div>
                                     كود: ${escape(item.id)} - 
-                                    الصنف: ${escape(item.nameAr)} - 
+                                    السلعة/الخدمة: ${escape(item.nameAr)} - 
                                     كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
                                 </div>`;
                     }
@@ -147,7 +148,7 @@
 
 
 
-            // بدايه اختيار صنف من selectize واضافته في في جدول العملاء
+            // بدايه اختيار سلعة/خدمة من selectize واضافته في في جدول العملاء
             $('#products_selectize').change(function() {
                 
                 var productId = $(this).val();
@@ -168,7 +169,7 @@
                     $("#current_quantity, #quantity").val('');
                 }
             });
-            // نهاية اختيار صنف من selectize واضافته في في جدول العملاء
+            // نهاية اختيار سلعة/خدمة من selectize واضافته في في جدول العملاء
         });
     </script>
     {{--  end search products by selectize #products_selectize --}}
@@ -209,9 +210,10 @@
                             <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
                                 <thead>
                                     <tr>
-                                        <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0">كود الصنف</th>
-                                        <th class="border-bottom-0" >إسم الصنف</th>
+                                        <th class="border-bottom-0">الرقم الأساسي</th>
+                                        <th class="border-bottom-0">الرقم المرجعى</th>
+                                        <th class="border-bottom-0">كود السلعة/الخدمة</th>
+                                        <th class="border-bottom-0" >إسم السلعة/الخدمة</th>
                                         <th class="border-bottom-0">الكمية قبل</th>
                                         <th class="border-bottom-0">الكمية بعد</th>
                                         <th class="border-bottom-0">حالة التسوية</th>

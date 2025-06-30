@@ -136,11 +136,11 @@
                             </div>
                         </div>
                         
-                        {{-- تقرير عن حركة صنف --}}
+                        {{-- تقرير عن حركة سلعة/خدمة --}}
                         <div class="list-group-item d-flex align-items-center" style="border: 1px solid #ddd;">
                             <div>
                                 <div class="font-weight-semibold">
-                                    <a href="{{ url('products/report') }}" target="_blank" class="text-dark">تقرير عن حركة صنف</a>
+                                    <a href="{{ url('products/report') }}" target="_blank" class="text-dark">تقرير عن حركة سلعة/خدمة</a>
                                 </div>
                             </div>
                             <div class="mr-auto">

@@ -15,11 +15,16 @@ class ReportsProductsController extends Controller
 {
     public function index()
     {                   
-        $pageNameAr = 'تقرير عن حركة صنف';        
-        $stores = DB::table('stores')->orderBy('name', 'asc')->get();        
-
-        //return $query;
-        return view('back.reports.products.index' , compact('pageNameAr', 'stores'));
+        if((userPermissions()->products_report_view)){
+            $pageNameAr = 'تقرير عن حركة سلعة/خدمة';        
+            $stores = DB::table('stores')->orderBy('name', 'asc')->get();        
+    
+            return view('back.reports.products.index' , compact('pageNameAr', 'stores'));
+	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
+        
     }
 
 
@@ -36,7 +41,7 @@ class ReportsProductsController extends Controller
     
     public function result(Request $request)
     {                   
-        $pageNameAr = 'تقرير عن حركة صنف';      
+        $pageNameAr = 'تقرير عن حركة سلعة/خدمة';      
 
         $product = request('products');
         $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
@@ -47,6 +52,9 @@ class ReportsProductsController extends Controller
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
                     ->leftJoin('taswea_products', 'taswea_products.id', 'store_dets.bill_id')
                     ->leftJoin('users', 'users.id', 'taswea_products.user_id')
+                    //->where('store_dets.type', 'رصيد اول مدة للسلعة/خدمة')
+                    //->orWhere('store_dets.type', 'تسوية سلعة/خدمة')
+                    //->orWhere('store_dets.type', 'تعديل سعر تكلفة او سعر بيع او خصم او ضريبة للسلعة/للخدمة')
                     ->select(
                         'store_dets.*', 
                         'products.nameAr',
@@ -71,11 +79,11 @@ class ReportsProductsController extends Controller
             $query->where('store_dets.type', $type);
         }
 
-        $results = $query->get();
-        //return $results;
-        
+        $results = $query->paginate(50);       
 
-        if(count($results) == 0){
+        //return $results;
+
+        if($results->total() == 0){
             return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
         }else{
             return view('back.reports.products.result' , compact('pageNameAr', 'results', 'product', 'type', 'from', 'to'));
@@ -84,7 +92,7 @@ class ReportsProductsController extends Controller
     
     public function result_pdf(Request $request)
     {                   
-        $pageNameAr = 'تقرير عن حركة صنف';      
+        $pageNameAr = 'تقرير عن حركة سلعة/خدمة';      
 
         $product = request('products');
         $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;

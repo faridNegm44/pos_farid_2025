@@ -23,7 +23,7 @@
                                 <select name="treasury_id" class="form-control treasuries" id="treasuries">
                                     <option value="" selected>اختر خزينة</option>
                                     @foreach ($treasuries as $treasury)
-                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->treasury_money_after }}</option>
+                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ display_number($treasury->treasury_money_after) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -95,13 +95,13 @@
                     <div class="col-12" style="margin-top: 25px;display: none;" id="modal_save_bill_footer">
                         <h3 class="alert-danger text-center" style="padding: 10px 20px;margin: 5px auto;display: none;">يجب اصلاح جميع أخطاء الفاتورة قبل الحفظ</h3>
                         <div class="row justify-content-center">
-                            <button class="col-lg-4 col-12 btn btn-success-gradient btn-rounded" id="finally_save_bill_btn" style="font-size: 14px;color: #000;">
+                            <button class="col-lg-6 col-12 btn btn-success-gradient btn-rounded" id="finally_save_bill_btn" style="font-size: 14px;color: #000;">
                                 حفظ الفاتورة                            
                             </button>
             
-                            <button class="col-lg-4 col-12 btn btn-primary-gradient btn-rounded" id="finally_save_bill_and_print_btn" style="font-size: 14px;color: #000;">
+                            {{--<button class="col-lg-4 col-12 btn btn-primary-gradient btn-rounded" id="finally_save_bill_and_print_btn" style="font-size: 14px;color: #000;">
                                 حفظ وطباعة
-                            </button>
+                            </button>--}}
 
                             <button class="col-lg-4 btn btn-secondary-gradient btn-rounded" style='font-size: 14px;color: #000;' data-dismiss="modal">
                                 إغلاق

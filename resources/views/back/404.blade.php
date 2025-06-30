@@ -62,7 +62,7 @@
 				<img src="{{ asset('back') }}/assets/img/media/404.png" class="error-page" alt="error">
 				<h2>عذرًا. الصفحة التي تبحث عنها غير موجودة.</h2>
 				<h6>قد تكون قد أخطأت في كتابة العنوان أو ربما تم نقل الصفحة.</h6>
-                <a class="btn btn-outline-danger" href="{{ url('/back_dash') }}">العودة للصفحة الرئيسية</a>
+                <a class="btn btn-outline-danger" href="{{ url('/') }}">العودة للصفحة الرئيسية</a>
 			</div>
 			<!-- /Main-error-wrapper -->
 				

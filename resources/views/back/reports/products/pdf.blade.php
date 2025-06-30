@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $pageNameAr }} ( {{ $product ? $results[0]->nameAr : 'جميع الأصناف' }} ) - {{ date('d-m-Y') }} - {{ date('h:i a') }}</title>
+    <title>{{ $pageNameAr }} ( {{ $product ? $results[0]->nameAr : 'جميع السلع والخدمات' }} ) - {{ date('d-m-Y') }} - {{ date('h:i a') }}</title>
 
     <link rel="icon" href="{{ url('back') }}/images/settings/fiv.png" type="image/x-icon"/>
 
@@ -54,12 +54,12 @@
         }*/
     </style>
 </head>
-<body>
-    <div class="container">
+<body style="padding: 5px 10px;">
+    <div style="padding: 5px 10px;border: 1px solid #000;">
         <div class="">
             <div class="invoice-title">
                 <h4 class="text-center" style="font-weight: bold;">
-                    {{ $pageNameAr }} ( {{ $product ? $results[0]->nameAr : 'جميع الأصناف' }} )
+                    {{ $pageNameAr }} ( {{ $product ? $results[0]->nameAr : 'جميع السلع والخدمات' }} )
                 </h4>
             </div>
             <hr>
@@ -90,9 +90,8 @@
                     <tr class="gray">
                         <th>رقم الحركة</th>
                         <th>تاريخ الحركة</th>
-                        <th>اسم الصنف</th>
+                        <th>اسم السلعة/الخدمة</th>
                         <th>نوع الحركة</th>
-                        <th>تفاصيل الحركة</th>
                         <th>مستخدم</th>
                         <th>ملاحظات</th>
                     </tr>
@@ -107,19 +106,7 @@
                                 <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>                            
                             </td>
                             <td style="font-weight: bold;">{{ $result->nameAr }}</td>
-                            <td>{{ $result->type }}</td>
-                            <td>
-                                @if ($result->type == 'تسوية صنف')
-                                    <span style="margin: 0 5px;">الكمية قبل: {{ $result->quantity }}</span> -
-                                    <span style="margin: 0 5px;">الكمية بعد: {{ $result->quantity_all }}</span> -
-
-                                    @if ($result->quantity_all > $result->quantity)
-                                        <span>زيادة {{ $result->quantity_all - $result->quantity }}</span>            
-                                    @else
-                                        <span>عجز {{ $result->quantity - $result->quantity_all }}</span>            
-                                    @endif
-                                @endif
-                            </td>
+                            <td>{{ $result->type }}</td>                            
                             <td>{{ $result->userName }}</td>
                             <td>{{ $result->tasweaNotes }}</td>
                         </tr>

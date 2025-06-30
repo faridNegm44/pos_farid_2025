@@ -33,19 +33,35 @@
                     document.querySelector('.modal #save').disabled = false;
                     document.querySelector('.spinner_request').style.display = 'none';
 
-                    if(res.error){
-                        alertify.set('notifier','position', 'top-center');
-                        alertify.set('notifier','delay', 6);
-                        alertify.warning(`مبلغ المصروف اكبر من المبلغ الموجود بالخزينة`);
+                    if(res.notAuth){
+                        alertify.dialog('alert')
+                            .set({transition:'slide',message: `
+                                <div style="text-align: center;font-weight: bold;">
+                                    <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                        صلاحية غير متوفرة 🔐⚠️
+                                    </p>
+                                    <p>${res.notAuth}</p>
+                                </div>
+                            `, 'basic': true})
+                            .show();  
+                        $(".modal").modal('hide');  
 
-                    }else{                    
-                        $(".modal").modal('hide');
-                        location.reload();
-
-                        alertify.set('notifier','position', 'top-center');
-                        alertify.set('notifier','delay', 3);
-                        alertify.success("تمت الإضافة بنجاح");
+                    }else{
+                        if(res.error){
+                            alertify.set('notifier','position', 'top-center');
+                            alertify.set('notifier','delay', 6);
+                            alertify.warning(`مبلغ المصروف اكبر من المبلغ الموجود بالخزينة`);
+    
+                        }else{                    
+                            $(".modal").modal('hide');
+                            location.reload();
+    
+                            alertify.set('notifier','position', 'top-center');
+                            alertify.set('notifier','delay', 3);
+                            alertify.success("تمت الإضافة بنجاح");
+                        }
                     }
+
                 }
             });
         });

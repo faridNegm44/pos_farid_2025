@@ -14,66 +14,74 @@ use Carbon\Carbon;
 class TasweaClientSupplierController extends Controller
 {
     public function index()
-    {               
-        $pageNameAr = 'تسوية رصيد عميل / مورد';
-        $pageNameEn = 'taswea_client_supplier';
-        $taswea_reasons = DB::table('taswea_reasons_to_client_supplier')->get();
-
-        return view('back.taswea_client_supplier.index' , compact('pageNameAr' , 'pageNameEn', 'taswea_reasons'));
+    {          
+        if((userPermissions()->taswea_client_supplier_view)){
+            $pageNameAr = 'تسوية رصيد عميل / مورد';
+            $pageNameEn = 'taswea_client_supplier';
+            $taswea_reasons = DB::table('taswea_reasons_to_client_supplier')->get();
+    
+            return view('back.taswea_client_supplier.index' , compact('pageNameAr' , 'pageNameEn', 'taswea_reasons'));
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }      
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'client_supplier_id' => 'required|integer|exists:clients_and_suppliers,id',
-                'reason_id' => 'required|integer|exists:taswea_reasons_to_client_supplier,id',
-                'new_remaining_money' => 'required|numeric',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'exists' => 'حقل :attribute غير موجود.',
-                'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
-                'min' => 'حقل :attribute أقل قيمة له هي 0.',
-            ],[
-                'client_supplier_id' => 'اختيار الجهة',                
-                'reason_id' => 'سبب التسوية',                
-                'new_remaining_money' => 'رصيد الجهة الجديد',                
-            ]);
-
-            $find = DB::table('treasury_bill_dets')->where('client_supplier_id', request('client_supplier_id'))->orderBy('id', 'desc')->first();
-            $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'تسوية رصيد للجهة')->max('num_order');
-
-            // start db::transaction
-            DB::transaction(function() use($find, $lastNumId){
-
-                $insertGetId = DB::table('taswea_client_supplier')->insertGetId([
-                    'client_supplier_id' => request('client_supplier_id'),
-                    'old_money' => $find->remaining_money,
-                    'new_money' => request('new_remaining_money'),
-                    'reason_id' => request('reason_id'),
-                    'user_id' => auth()->user()->id,
-                    'notes' => request('notes'),
-                    'year_id' => $this->currentFinancialYear(),
-                    'created_at' => now(),
+        if((userPermissions()->taswea_client_supplier_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'client_supplier_id' => 'required|integer|exists:clients_and_suppliers,id',
+                    'reason_id' => 'required|integer|exists:taswea_reasons_to_client_supplier,id',
+                    'new_remaining_money' => 'required|numeric',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'exists' => 'حقل :attribute غير موجود.',
+                    'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'min' => 'حقل :attribute أقل قيمة له هي 0.',
+                ],[
+                    'client_supplier_id' => 'اختيار الجهة',                
+                    'reason_id' => 'سبب التسوية',                
+                    'new_remaining_money' => 'رصيد الجهة الجديد',                
                 ]);
-
-                DB::table('treasury_bill_dets')->insert([
-                    'num_order' => ($lastNumId+1), 
-                    'date' => Carbon::now(),
-                    'treasury_id' => 0, 
-                    'treasury_type' => 'تسوية رصيد للجهة', 
-                    'bill_id' => $insertGetId, 
-                    'bill_type' => 'تسوية رصيد للجهة',
-                    'client_supplier_id' => request('client_supplier_id'), 
-                    'remaining_money' => request('new_remaining_money'),
-                    'notes' => request('notes'), 
-                    'user_id' => auth()->user()->id, 
-                    'year_id' => $this->currentFinancialYear(),
-                    'created_at' => now()
-                ]);
-            }); // end db::transaction 
-        }
+    
+                $find = DB::table('treasury_bill_dets')->where('client_supplier_id', request('client_supplier_id'))->orderBy('id', 'desc')->first();
+                $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'تسوية رصيد للجهة')->max('num_order');
+    
+                // start db::transaction
+                DB::transaction(function() use($find, $lastNumId){
+    
+                    $insertGetId = DB::table('taswea_client_supplier')->insertGetId([
+                        'client_supplier_id' => request('client_supplier_id'),
+                        'old_money' => $find->remaining_money,
+                        'new_money' => request('new_remaining_money'),
+                        'reason_id' => request('reason_id'),
+                        'user_id' => auth()->user()->id,
+                        'notes' => request('notes'),
+                        'year_id' => $this->currentFinancialYear(),
+                        'created_at' => now(),
+                    ]);
+    
+                    DB::table('treasury_bill_dets')->insert([
+                        'num_order' => ($lastNumId+1), 
+                        'date' => Carbon::now(),
+                        'treasury_id' => 0, 
+                        'treasury_type' => 'تسوية رصيد للجهة', 
+                        'bill_id' => $insertGetId, 
+                        'bill_type' => 'تسوية رصيد للجهة',
+                        'client_supplier_id' => request('client_supplier_id'), 
+                        'remaining_money' => request('new_remaining_money'),
+                        'notes' => request('notes'), 
+                        'user_id' => auth()->user()->id, 
+                        'year_id' => $this->currentFinancialYear(),
+                        'created_at' => now()
+                    ]);
+                }); // end db::transaction 
+            }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function getCurrentRemainingMoney($clientOrSupplier)
@@ -118,8 +126,8 @@ class TasweaClientSupplierController extends Controller
     public function datatable()
     {
         $all = DB::table('taswea_client_supplier')
-                            ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'taswea_client_supplier.id')
-                            ->where('treasury_bill_dets.bill_type', 'تسوية رصيد للجهة')
+                            //->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'taswea_client_supplier.id')
+                            //->where('treasury_bill_dets.bill_type', 'تسوية رصيد للجهة')
                             ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'taswea_client_supplier.client_supplier_id')
                             ->leftJoin('clients_and_suppliers_types', 'clients_and_suppliers_types.id', 'clients_and_suppliers.client_supplier_type')
                             ->leftJoin('taswea_reasons_to_client_supplier', 'taswea_reasons_to_client_supplier.id', 'taswea_client_supplier.reason_id')

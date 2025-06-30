@@ -23,8 +23,8 @@
             $('#example1').DataTable({
                 "paging": false, // تعطيل التقسيم
                 "searching": true, // تفعيل البحث (اختياري)
-                "ordering": true, // تفعيل الترتيب (اختياري)
-                "info": false, // إخفاء معلومات الصفحة (اختياري)
+                "ordering": false, // تفعيل الترتيب (اختياري)
+                "info": true, // إخفاء معلومات الصفحة (اختياري)
                 "order": [[0, 'desc']]
             });
         });
@@ -50,10 +50,10 @@
                     <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
                 @endif
                 @if ($from)
-                    <span class="itemsSearch">تاريخ من: {{ $from }}</span>
+                    <span class="itemsSearch">تاريخ من: {{ Carbon\Carbon::parse($from)->format('d-m-Y h:i:s a') }}</span>
                 @endif
                 @if ($to)
-                    <span class="itemsSearch">تاريخ الي: {{ $to }}</span>
+                    <span class="itemsSearch">تاريخ الي: {{ Carbon\Carbon::parse($to)->format('d-m-Y h:i:s a') }}</span>
                 @endif
             </div>
         </div>
@@ -65,7 +65,7 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">رقم الحركة</th>
-                                <th class="border-bottom-0" >تاريخ الحركة</th>
+                                <th class="border-bottom-0" style="width: 15%;">تاريخ الحركة</th>
                                 <th class="border-bottom-0" >تاريخ اخر</th>
                                 <th class="border-bottom-0">خزينة الحركة</th>
                                 <th class="border-bottom-0">نوع الحركة</th>
@@ -81,6 +81,7 @@
                             @foreach ($results as $result)    
                                 @php
                                     $type = '';
+                                    $color = '#000';
 
                                     if($result->treasury_type == 'مصروف'){
                                         $type = '#FF748B';
@@ -92,18 +93,27 @@
                                         $type = '#8ae3aa';
                                     }elseif($result->treasury_type == 'اذن صرف نقدية'){
                                         $type = '#de7df0';
-                                    }elseif($result->treasury_type == 'رصيد اول عميل' || $result->treasury_type == 'رصيد اول مورد'){
-                                        $type = '#fafafa';
+                                    }elseif($result->treasury_type == 'تعديل نسبة شريك'){
+                                        $type = '#737576';
+                                        $color = '#fff';
+                                    }elseif($result->treasury_type == 'تسوية رصيد للجهة'){
+                                        $type = '#f10202';
+                                        $color = '#fff';
+                                    }elseif($result->treasury_type == 'مرتجع مصروف'){
+                                        $type = '#000';
+                                        $color = '#fff';
+                                    }elseif($result->treasury_type == 'رصيد اول عميل' || $result->treasury_type == 'رصيد اول مورد' || $result->treasury_type == 'رصيد اول شريك'){
+                                        $type = '#87c5fd';
                                     }
                                 @endphp
 
 
-                                <tr style="background: {{ $type }};">
+                                <tr style="background: {{ $type }};color: {{ $color }}">
                                     <td>{{ $result->id }}</td>
                                     {{--<td>{{ $result->num_order }}</td>--}}
                                     <td>
                                         {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                        <span style="margin: 0 5px;display: block;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
+                                        <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
                                     </td>
                                     <td>
                                         @if(Carbon\Carbon::parse($result->created_at)->format('d-m-Y') != Carbon\Carbon::parse($result->date)->format('d-m-Y'))
@@ -119,21 +129,25 @@
                                             {{ $result->treasury_type }}
                                         @endif
                                     </td>
-                                    <td>{{ $result->amount_money }}</td>
+                                    <td>{{ display_number($result->amount_money) }}</td>
                                     <td>
                                         @if ($result->treasury_type === 'رصيد اول خزنة' || $result->treasury_type === 'مصروف' || $result->treasury_type === 'تحويل بين خزنتين')
                                             لاتوجد جهة
                                         @else
-                                            {{ $result->remaining_money }}
+                                            {{ display_number($result->remaining_money) }}
                                         @endif
                                     </td>
-                                    <td>{{ $result->treasury_money_after }}</td>
+                                    <td>{{ display_number($result->treasury_money_after) }}</td>
                                     <td>{{ $result->user_name }}</td>
-                                    <td>{{ $result->notes }}</td>
+                                    <td style="font-size: 9px !important;">{{ $result->notes }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $results->links() }}
+                    </div>
                 </div>
             </div>
         </div>

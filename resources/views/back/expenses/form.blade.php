@@ -23,7 +23,7 @@
                               <select class="form-control" id="treasury" name="treasury">
                                 <option value="" >-- اختر خزينة --</option>
                                   @foreach ($treasuries as $treasury)
-                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ $treasury->treasury_money_after }}</option>
+                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ display_number($treasury->treasury_money_after) }}</option>
                                   @endforeach
                               </select>
                             </div>

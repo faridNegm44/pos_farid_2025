@@ -53,11 +53,9 @@ class ReportsSaleBillsController extends Controller
             $query->where('treasury_bill_dets.treasury_id', $treasury);
         }
 
-        $results = $query->get();
-        //return $results;
-        
+        $results = $query->paginate(50);       
 
-        if(count($results) == 0){
+        if($results->total() == 0){
             return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
         }else{
             return view('back.reports.expenses.result' , compact('pageNameAr', 'results', 'treasury', 'from', 'to'));

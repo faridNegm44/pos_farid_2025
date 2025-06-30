@@ -92,24 +92,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('datatable' , 'ProductSubCategoyController@datatable');
     });
 
-    // taswea_client_supplier Routes
-    Route::group(['prefix' => 'taswea_client_supplier'] , function (){
-        Route::get('/' , 'TasweaClientSupplierController@index');
-        Route::post('/store' , 'TasweaClientSupplierController@store');
-        Route::get('/getCurrentRemainingMoney/{clientOrSupplier}' , 'TasweaClientSupplierController@getCurrentRemainingMoney');
-        
-        Route::get('datatable' , 'TasweaClientSupplierController@datatable');
-    });
-
-    // taswea_products Routes
-    Route::group(['prefix' => 'taswea_products'] , function (){
-        Route::get('/' , 'TasweaProductsController@index');
-        Route::post('/store' , 'TasweaProductsController@store');
-        Route::get('/getCurrentProductQuantity/{id}' , 'TasweaProductsController@getCurrentProductQuantity');
-        
-        Route::get('datatable' , 'TasweaProductsController@datatable');
-    });
-
     // companies Routes
     Route::group(['prefix' => 'companies'] , function (){
         Route::get('/' , 'CompanyController@index');
@@ -132,7 +114,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('datatable' , 'FinancialYearsController@datatable');
     });
 
-
     // stores Routes
     Route::group(['prefix' => 'stores'] , function (){
         Route::get('/' , 'StoreController@index');
@@ -144,8 +125,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('datatable' , 'StoreController@datatable');
     });
 
-
-    
     // financial_treasury Routes
     Route::group(['prefix' => 'financial_treasury'] , function (){
         Route::get('/' , 'FinancialTreasuryController@index');
@@ -156,7 +135,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         
         Route::get('datatable' , 'FinancialTreasuryController@datatable');
     });
-
 
     // clients Routes
     Route::group(['prefix' => 'clients'] , function (){
@@ -173,13 +151,12 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         //تقرير عن حركة عميل
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsClientsController@index');
-            Route::post('result' , 'ReportsClientsController@result');
+            Route::get('result' , 'ReportsClientsController@result');
             Route::get('result/pdf' , 'ReportsClientsController@result_pdf'); // خاص بتقرير عن حركة الجةة pdf
             Route::get('account_statement' , 'ReportsClientsController@account_statement'); // خاص بكشف الحساب
             Route::get('account_statement/pdf' , 'ReportsClientsController@account_statement_pdf'); // خاص بكشف الحساب pdf
         });
     });
-    
 
     // suppliers Routes
     Route::group(['prefix' => 'suppliers'] , function (){
@@ -196,11 +173,34 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         //تقرير عن حركة مورد
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsSuppliersController@index');
-            Route::post('result' , 'ReportsSuppliersController@result');
+            Route::get('result' , 'ReportsSuppliersController@result');
             Route::get('result/pdf' , 'ReportsSuppliersController@result_pdf');
+            Route::get('account_statement' , 'ReportsSuppliersController@account_statement'); // خاص بكشف الحساب
+            Route::get('account_statement/pdf' , 'ReportsSuppliersController@account_statement_pdf'); // خاص بكشف الحساب pdf
         });
     });
     
+    // partners Routes
+    Route::group(['prefix' => 'partners'] , function (){
+        Route::get('/' , 'PartnersController@index');
+        Route::post('/store' , 'PartnersController@store');
+        Route::get('/edit/{id}' , 'PartnersController@edit');
+        Route::post('/update/{id}' , 'PartnersController@update');
+        Route::get('/destroy/{id}' , 'PartnersController@destroy');
+        
+        Route::post('store_client_from_pos_page' , 'PartnersController@storeClientFromPosPage');
+        Route::post('/import' , 'PartnersController@import');
+        Route::get('datatable' , 'PartnersController@datatable');
+
+        //تقرير عن حركة شريك
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsPartnersController@index');
+            Route::get('result' , 'ReportsPartnersController@result');
+            Route::get('result/pdf' , 'ReportsPartnersController@result_pdf'); // خاص بتقرير عن حركة الجةة pdf
+            Route::get('account_statement' , 'ReportsPartnersController@account_statement'); // خاص بكشف الحساب
+            Route::get('account_statement/pdf' , 'ReportsPartnersController@account_statement_pdf'); // خاص بكشف الحساب pdf
+        });
+    });
 
     // treasury_bills Routes
     Route::group(['prefix' => 'treasury_bills'] , function (){
@@ -215,7 +215,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         //تقرير عن حركة الخزائن المالية
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsTreasuryBills@index');
-            Route::post('result' , 'ReportsTreasuryBills@result');
+            Route::get('result' , 'ReportsTreasuryBills@result');
             Route::get('result/pdf' , 'ReportsTreasuryBills@result_pdf');
         });
     });
@@ -233,33 +233,20 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         
         Route::get('/getProductsByStore/{store}' , 'ReportsProductsController@getProductsByStore');
 
-        //تقرير عن حركة صنف
+        //تقرير عن حركة سلعة/خدمة
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsProductsController@index');
-            Route::post('result' , 'ReportsProductsController@result');
+            Route::get('result' , 'ReportsProductsController@result');
             Route::get('result/pdf' , 'ReportsProductsController@result_pdf');
         });
         
         //تقرير عن كشكول النواقص
         Route::group(['prefix' => 'report/stock_alert'] , function (){
             Route::get('/' , 'ReportsProductsStockAlertController@index');
-            Route::post('result' , 'ReportsProductsStockAlertController@result');
+            Route::get('result' , 'ReportsProductsStockAlertController@result');
             Route::get('result/pdf' , 'ReportsProductsStockAlertController@result_pdf');
         });
     });
-
-    // pos Routes
-    Route::group(['prefix' => 'pos'] , function (){
-        Route::get('/' , 'PosController@index');
-        Route::get('/create' , 'PosController@create');
-        Route::post('/store' , 'PosController@store');
-        Route::get('/edit/{id}' , 'PosController@edit');
-        Route::post('/update/{id}' , 'PosController@update');
-        Route::get('/destroy/{id}' , 'PosController@destroy');
-        
-        Route::get('datatable' , 'PosController@datatable');
-    });
-
 
     // expenses
     Route::group(['prefix' => 'expenses'] , function (){
@@ -273,12 +260,12 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         //تقرير عن المصروفات
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsExpensesController@index');
-            Route::post('result' , 'ReportsExpensesController@result');
+            Route::get('result' , 'ReportsExpensesController@result');
             Route::get('result/pdf' , 'ReportsExpensesController@result_pdf');
         });
     });
 
-    // transfer_between_storages
+    // transfer_between_storages التحويل بين المخازن
     Route::group(['prefix' => 'transfer_between_storages'] , function (){
         Route::get('/' , 'TransferBetweenStoragesController@index');
         Route::post('/store' , 'TransferBetweenStoragesController@store');
@@ -291,7 +278,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('datatable' , 'TransferBetweenStoragesController@datatable');
     });
 
-    // transfer_between_stores
+    // transfer_between_stores التحويل بين الخزن المالية
     Route::group(['prefix' => 'transfer_between_stores'] , function (){
         Route::get('/' , 'TransferBetweenStoresController@index');
         Route::post('/store' , 'TransferBetweenStoresController@store');
@@ -304,18 +291,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         
         Route::get('datatable' , 'TransferBetweenStoresController@datatable');
     });
-
-
-    // Get Info Of client || supplier || treasury || store || product || transfer || expense
-    Route::group(['prefix' => 'get_info'] , function (){
-        Route::get('/client_or_supplier/{id}' , 'GetInfoController@client_or_supplier');
-        //Route::get('/client_or_supplier/{id}' , 'GetInfoController@clientInfo');
-
-        Route::get('/treasury/{id}' , 'GetInfoController@treasury');
-    });
-    // Get Info Of client || supplier || treasury || store || product || transfer || expense
-
-
     
     // purchases Routes
     Route::group(['prefix' => 'purchases'] , function (){
@@ -332,7 +307,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         //تقرير عن فواتير مشتريات  
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsPurchaseBillsController@index');
-            Route::post('result' , 'ReportsPurchaseBillsController@result');
+            Route::get('result' , 'ReportsPurchaseBillsController@result');
             Route::get('result/pdf' , 'ReportsPurchaseBillsController@result_pdf');
             Route::get('result/pdf/{id}' , 'ReportsPurchaseBillsController@result_pdf_internal');
         });
@@ -354,7 +329,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         //تقرير عن فواتير مرتجع مشتريات  
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsPurchaseReturnBillsController@index');
-            Route::post('result' , 'ReportsPurchaseReturnBillsController@result');
+            Route::get('result' , 'ReportsPurchaseReturnBillsController@result');
             Route::get('result/pdf' , 'ReportsPurchaseReturnBillsController@result_pdf');
             Route::get('result/pdf/{id}' , 'ReportsPurchaseReturnBillsController@result_pdf_internal');
         });
@@ -378,14 +353,34 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         //تقرير عن فواتير مبيعات  
         Route::group(['prefix' => 'report'] , function (){
             Route::get('/' , 'ReportsSaleBillsController@index');
-            Route::post('result' , 'ReportsSaleBillsController@result');
+            Route::get('result' , 'ReportsSaleBillsController@result');
             Route::get('result/pdf' , 'ReportsSaleBillsController@result_pdf');
             Route::get('result/pdf/{id}' , 'ReportsSaleBillsController@result_pdf_internal');
             
             Route::get('print_receipt/{id}', 'SaleBillController@print_receipt'); // طباعة ريسيت فاتورة البيع
         });
     });
-    
+
+    // sales_return Routes  مرتجع مبيعات
+    Route::group(['prefix' => 'sales_return'] , function (){
+        Route::get('/' , 'SalesReturnBillController@index');
+        Route::get('/{id}' , 'SalesReturnBillController@create');
+        Route::post('/store/{id}' , 'SalesReturnBillController@store');
+
+        Route::get('/show/{id}' , 'SalesReturnBillController@show');
+        Route::post('/update/{id}' , 'SalesReturnBillController@update');
+        Route::get('/destroy/{id}' , 'SalesReturnBillController@destroy');
+        
+        Route::get('datatable' , 'SalesReturnBillController@datatable');
+
+        //تقرير عن فواتير مرتجع مبيعات  
+        Route::group(['prefix' => 'report'] , function (){
+            Route::get('/' , 'ReportsPurchaseReturnBillsController@index');
+            Route::get('result' , 'ReportsPurchaseReturnBillsController@result');
+            Route::get('result/pdf' , 'ReportsPurchaseReturnBillsController@result_pdf');
+            Route::get('result/pdf/{id}' , 'ReportsPurchaseReturnBillsController@result_pdf_internal');
+        });
+    });
     
     
     // search_products Routes
@@ -395,11 +390,78 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
 
 
-    // start get all products contains char this search
+    // start get all products || clients || suppliers when change contains char this search
     Route::get('search_products_by_selectize' , 'SearchController@search_products_by_selectize');
     Route::get('search_suppliers_by_selectize' , 'SearchController@search_suppliers_by_selectize');
     Route::get('search_clients_by_selectize' , 'SearchController@search_clients_by_selectize');
-    // end get all products contains char this search
+    // end get all products || clients || suppliers when change contains char this search
+
+
+
+    // Get Info Of client || supplier || treasury || store || product || transfer || expense
+    Route::group(['prefix' => 'get_info'] , function (){
+        Route::get('/client_or_supplier/{id}/{type}' , 'GetInfoController@client_or_supplier'); 
+        Route::get('/treasury/{id}' , 'GetInfoController@treasury');
+    });
+    // Get Info Of client || supplier || treasury || store || product || transfer || expense
+
+
+
+
+    // start taswea تسويه العملاء والموردين والشركاء والأصناف
+        // taswea_client_supplier Routes
+        Route::group(['prefix' => 'taswea_client_supplier'] , function (){
+            Route::get('/' , 'TasweaClientSupplierController@index');
+            Route::post('/store' , 'TasweaClientSupplierController@store');
+            Route::get('/getCurrentRemainingMoney/{clientOrSupplier}' , 'TasweaClientSupplierController@getCurrentRemainingMoney');
+            
+            Route::get('datatable' , 'TasweaClientSupplierController@datatable');
+        });
+        
+        // taswea_partners Routes
+        Route::group(['prefix' => 'taswea_partners'] , function (){
+            Route::get('/' , 'TasweaPartnersController@index');
+            Route::post('/store' , 'TasweaPartnersController@store');
+            Route::get('/getCurrentRemainingMoney/{partner}' , 'TasweaPartnersController@getCurrentRemainingMoney');
+            
+            Route::get('datatable' , 'TasweaPartnersController@datatable');
+        });
+
+        // taswea_products Routes
+        Route::group(['prefix' => 'taswea_products'] , function (){
+            Route::get('/' , 'TasweaProductsController@index');
+            Route::post('/store' , 'TasweaProductsController@store');
+            Route::get('/getCurrentProductQuantity/{id}' , 'TasweaProductsController@getCurrentProductQuantity');
+            
+            Route::get('datatable' , 'TasweaProductsController@datatable');
+        });
+
+    // end taswea تسويه العملاء والموردين والشركاء والأصناف 
+
+
+
+
+
+    // analytics Routes
+    Route::group(['prefix' => 'analytics'] , function (){
+        // start المنتجات الأكثر والأقل مبيعاً
+        Route::get('top_products' , 'AnalyticsController@index_top_products');
+        Route::get('datatable_top_products' , 'AnalyticsController@datatable_top_products');
+        // end المنتجات الأكثر والأقل مبيعاً
+    });
+    
+    
+    
+    // roles_permissions Routes
+    Route::group(['prefix' => 'roles_permissions'] , function (){
+        Route::get('/' , 'RolesPermissionsController@index');
+        Route::get('create' , 'RolesPermissionsController@create');
+        Route::post('/store' , 'RolesPermissionsController@store');
+        Route::get('/edit/{id}' , 'RolesPermissionsController@edit');
+        Route::post('/update/{id}' , 'RolesPermissionsController@update');
+
+        Route::get('datatable' , 'RolesPermissionsController@datatable');
+    });
 
 
 
@@ -411,6 +473,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('datatable' , 'SettingController@datatable');
     });
 
-
+    
     
 });

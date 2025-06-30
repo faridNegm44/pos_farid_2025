@@ -138,9 +138,9 @@ class PurchaseBillController extends Controller
 
                 $calcTotalProductsBefore += $quantity * $purchasePrice; // مخصص لتجميع  المنتجات كلها قبل تطبيق اي خصومات او ضرائب
                 
-                $product_total = ( $quantity * $purchasePrice );    //  اجمالي الصنف قبل كسعر بيع
-                $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                $product_total = ( $quantity * $purchasePrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
+                $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
 
                 
                 $calcTotalProductsAfterBeforeFinal += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
@@ -198,7 +198,7 @@ class PurchaseBillController extends Controller
                     
                     // بدايه معرفه لو وحده المنتج المختاره في الفاتوره كبري ام صغري /////////////////////////////////////////////////////////////////
                     $productInfo = DB::table('products')->where('id', $product_id)->first();
-                    $unit = (float) request('prod_units')[$index]; // مخصص لمعرفة نوع الوحده المستخدمه لكل صنف في عملية الشراء
+                    $unit = (float) request('prod_units')[$index]; // مخصص لمعرفة نوع الوحده المستخدمه لكل سلعة/خدمة في عملية الشراء
                     
                     if ($unit == $productInfo->smallUnit) {
                         $totalQuantity = $lastProductQuantity + $quantity;
@@ -207,9 +207,9 @@ class PurchaseBillController extends Controller
                         $last_cost_price_small_unit = $purchasePrice;
                         $sell_price_small_unit = $sellPrice;
                         
-                        $product_total = ( $onlyQuantityThisBill * $purchasePrice );    // اجمالي الصنف قبل
-                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                        $product_total = ( $onlyQuantityThisBill * $purchasePrice );    // اجمالي السلعة/الخدمة قبل
+                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
                         
                         $calcTotalProductsAfter += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
                         
@@ -235,7 +235,7 @@ class PurchaseBillController extends Controller
                         
                             $getLatestPriceFromStoreDets = DB::table('store_dets')
                                                             ->where('type', 'اضافة فاتورة مشتريات')
-                                                            ->orWhere('type', 'رصيد اول مدة للصنف')
+                                                            ->orWhere('type', 'رصيد اول مدة للسلعة/خدمة')
                                                             ->where('product_id', $product_id)
                                                             ->orderBy('id', 'desc')
                                                             ->first();
@@ -258,8 +258,8 @@ class PurchaseBillController extends Controller
                                 
                     } else { // لو وحده المنتج المختاره في الفاتوره كبري
                                                 
-                        $product_total = ( $quantity * $purchasePrice );    // اجمالي الصنف قبل سعر تكلفه
-                        $product_total_sell_price = ( $quantity * $sellPrice );    // اجمالي الصنف قبل سعر بيعه
+                        $product_total = ( $quantity * $purchasePrice );    // اجمالي السلعة/الخدمة قبل سعر تكلفه
+                        $product_total_sell_price = ( $quantity * $sellPrice );    // اجمالي السلعة/الخدمة قبل سعر بيعه
 
                         $onlyQuantityThisBill = $quantity * $productInfo->small_unit_numbers;
                         
@@ -268,15 +268,15 @@ class PurchaseBillController extends Controller
                         
                         $totalQuantity = $lastProductQuantity + $onlyQuantityThisBill;
 
-                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
 
                         $calcTotalProductsAfter += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
 
                         //  حساب متوسط التكلفه ///////////////////////////////////////////////////////////////////////////
                             $getLatestPriceFromStoreDets = DB::table('store_dets')
                                                             ->where('type', 'اضافة فاتورة مشتريات')
-                                                            ->orWhere('type', 'رصيد اول مدة للصنف')
+                                                            ->orWhere('type', 'رصيد اول مدة للسلعة/خدمة')
                                                             ->where('product_id', $product_id)
                                                             ->orderBy('id', 'desc')
                                                             ->first();

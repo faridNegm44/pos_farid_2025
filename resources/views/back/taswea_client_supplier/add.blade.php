@@ -40,18 +40,33 @@
                         alertify.error("هناك شيئ ما خطأ");
                     },
                     success: function(res){
-                        $(".modal form bold[class=text-danger]").css('display', 'none');
-                        $(".dataInput").val('');
+                        if(res.notAuth){
+                            alertify.dialog('alert')
+                                .set({transition:'slide',message: `
+                                    <div style="text-align: center;font-weight: bold;">
+                                        <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                            صلاحية غير متوفرة 🔐⚠️
+                                        </p>
+                                        <p>${res.notAuth}</p>
+                                    </div>
+                                `, 'basic': true})
+                                .show();  
+                            $(".modal").modal('hide');  
 
-                        location.reload();
-                        $('#save').hide();
+                        }else{
+                            $(".modal form bold[class=text-danger]").css('display', 'none');
+                            $(".dataInput").val('');
+    
+                            location.reload();
+                            $('#save').hide();
+                            
+                            alertify.set('notifier','position', 'top-center');
+                            alertify.set('notifier','delay', 3);
+                            alertify.success("✅ تمت تسوية رصيد الجهة بنجاح 💼💰");
+                        }
                         
                         document.querySelector('.modal #save').disabled = false;
                         document.querySelector('.spinner_request').style.display = 'none';
-    
-                        alertify.set('notifier','position', 'top-center');
-                        alertify.set('notifier','delay', 3);
-                        alertify.success("✅ تمت تسوية رصيد الجهة بنجاح 💼💰");
                     }
                 });
             }

@@ -60,7 +60,7 @@
 				<img src="{{ asset('back') }}/assets/img/media/403.png" class="error-page" alt="error">
 				<h2 class="text-white">عذرًا. لا تمتلك الصلاحيات للدخول لهذة الصفحة.</h2>
 				<h6 style="color: #d8d8d8">من فضلك راجع مسؤلين النظام قبل الدخول للصفحة المطلوبة.</h6>
-                <a class="btn btn-outline-light text-white" href="{{ url('/back_dash') }}">العودة للصفحة الرئيسية</a>
+                <a class="btn btn-outline-light text-white" href="{{ url('/') }}">العودة للصفحة الرئيسية</a>
 			</div>
 			<!-- /Main-error-wrapper -->
 				

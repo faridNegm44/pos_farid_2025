@@ -59,7 +59,7 @@
         </div>--}}
 
         <div class="bill_info">
-            {{--<div style="float: right" style="font-weight: bold;">الأصناف: {{ $SalesContentCount }}</div>
+            {{--<div style="float: right" style="font-weight: bold;">السلع والخدمات: {{ $SalesContentCount }}</div>
             <div style="float: left" style="font-weight: bold;">رقم الفاتورة: {{ $SalesHeader['id'] }}</div>--}}
         </div>
 
@@ -67,7 +67,7 @@
             <table style="width: 100%;text-align: center;">
                 <thead>
                     <tr>
-                        <td style="width: 50%;font-weight: bold;border-bottom: 2px solid #000;">الصنف</td>
+                        <td style="width: 50%;font-weight: bold;border-bottom: 2px solid #000;">السلعة/الخدمة</td>
                         <td style="width: 20%;font-weight: bold;border-bottom: 2px solid #000;">الوحدة</td>
                         <td style="width: 10%;font-weight: bold;border-bottom: 2px solid #000;">الكمية</td>
                         <td style="width: 20%;font-weight: bold;border-bottom: 2px solid #000;">إجمالي السعر</td>

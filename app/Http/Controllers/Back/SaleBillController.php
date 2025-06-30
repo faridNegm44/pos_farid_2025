@@ -52,9 +52,8 @@ class SaleBillController extends Controller
                 'financial_treasuries' => 'nullable|integer|exists:financial_treasuries,id',
                 'custom_bill_num' => 'nullable|string',
                 'custom_date' => 'nullable|date',
-                'static_discount_bill' => 'nullable|numeric|min:0',
+                'bill_discount' => 'nullable|numeric|min:0',
                 'extra_money' => 'nullable|numeric|min:0',
-                'tax_bill' => 'nullable|numeric|min:0',
             
                 'sale_quantity' => 'array',
                 'sale_quantity.*' => 'integer|min:1',
@@ -85,9 +84,8 @@ class SaleBillController extends Controller
                 'financial_treasuries' => 'الخزينة المالية',
                 'custom_bill_num' => 'رقم الفاتورة المخصص',
                 'custom_date' => 'تاريخ الفاتورة',
-                'static_discount_bill' => 'الخصم العام على الفاتورة',
+                'bill_discount' => 'الخصم العام على الفاتورة',
                 'extra_money' => 'مصاريف إضافية',
-                'tax_bill' => 'ضريبة الفاتورة',
                 'sale_quantity' => 'كميات المنتجات',
                 'sale_quantity.*' => 'الكمية لكل منتج',
                 'purchasePrice' => 'أسعار الشراء',
@@ -109,8 +107,7 @@ class SaleBillController extends Controller
             $calcTotalProductsAfterBeforeFinal = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد قبل خصم الفاتوره ومصاريف اضافيه للفاتوره وضريبه الفاتورة
             $calcTotalProductsAfter = 0; // مخصص لتجميع سعر كل منتج بعد الخصم والضريبه ودمجكل الاسعار في سعر واحد 
             
-            $static_discount_bill = request('static_discount_bill'); // مخصص لخصم قيمه علي الفاتوره كلها
-            $tax_bill = request('tax_bill'); // مخصص لضريبه القيمه المضافه علي الفاتوره كلها
+            $bill_discount = request('bill_discount'); // مخصص لخصم قيمه علي الفاتوره كلها
             $extra_money = request('extra_money'); // مخصص للمصاريف الإضافيه
             
             foreach( request('prod_name')  as $index => $product_id ){
@@ -141,17 +138,16 @@ class SaleBillController extends Controller
                     $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
                     $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
                     
-                    $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
-                    $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                    $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                    $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
+                    $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                    $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
 
                     
                     $calcTotalProductsAfterBeforeFinal += $after_discount + ( $after_discount * $tax / 100 );    // اجمالي سعر المنتجات بعد الخصم والضريبة
                     
-                    $afterMinusStaticDiscount = $calcTotalProductsAfterBeforeFinal - $static_discount_bill ;
+                    $afterMinusStaticDiscount = $calcTotalProductsAfterBeforeFinal - $bill_discount ;
                     $afterPlusExtraMoney = $afterMinusStaticDiscount + $extra_money ;
-                    $afterPlusTaxBill = $afterPlusExtraMoney + ($afterPlusExtraMoney * $tax_bill / 100) ;
-                    $calcTotalProductsAfter = $afterPlusTaxBill;    //  اجمالي سعر المنتجات بعد الخصم والضريبة لكل منتج + خصم ومصاريف اضافيه وضريبه الفاتوره كامله
+                    $calcTotalProductsAfter = $afterPlusExtraMoney;    //  اجمالي سعر المنتجات بعد الخصم والضريبة لكل منتج + خصم ومصاريف اضافيه وضريبه الفاتوره كامله
                                                     
                 }elseif($sale_quantity > $lastProductQuantity){
                     $sale_quantity_big_than_stock = sprintf(
@@ -193,8 +189,7 @@ class SaleBillController extends Controller
                             'custom_bill_num' => request('custom_bill_num'),
                             'client_id' => request('client_id'),
                             'treasury_id' => request('treasury_id'),
-                            'bill_tax' => request('tax_bill'),
-                            'bill_discount' => request('static_discount_bill'),
+                            'bill_discount' => request('bill_discount'),
                             'extra_money' => request('extra_money'),
                             'count_items' => count(request('prod_name')),
                             'total_bill_before' => $calcTotalProductsBefore,
@@ -230,9 +225,9 @@ class SaleBillController extends Controller
                             $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
                             $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
                             
-                            $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
-                            $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                            $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                            $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
+                            $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                            $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
                             // نهاية حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
                             
                             DB::table('store_dets')->insert([
@@ -303,12 +298,12 @@ class SaleBillController extends Controller
                 
                 DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
                     $lastNumId = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->max('num_order');
-    
+                
                     $saleBillId = DB::table('sale_bills')->insertGetId([
                         'custom_bill_num' => request('custom_bill_num'),
                         'client_id' => request('client_id'),
                         'treasury_id' => request('treasury_id'),
-                        'bill_tax' => request('bill_tax'),
+                        'bill_discount' => request('bill_discount'),
                         'extra_money' => request('extra_money'),
                         'count_items' => count(request('prod_name')),
                         'total_bill_before' => $calcTotalProductsBefore,
@@ -344,9 +339,9 @@ class SaleBillController extends Controller
                         $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
                         $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
                         
-                        $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي الصنف قبل كسعر بيع
-                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي الصنف بعد الخصم نسبه
-                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي الصنف بعد الخصم والضريبه نسبة
+                        $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
+                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
                         // نهاية حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
 
                         
@@ -585,15 +580,15 @@ class SaleBillController extends Controller
                             <i class="fas fa-print"></i>
                         </button>
 
-                        <button type="button" class="btn btn-sm btn-dark upload" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="تحميل الفاتورة على المنصة الإلكترونية" res_id="'.$res->id.'">
-                            <i class="fas fa-file-upload"></i>
-                        </button>
 
-
-                        <button type="button" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
+                        <a type="button" href="'.url('sales_return/'.$res->id).'" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
                             <i class="fas fa-reply"></i>
-                        </button>
+                        </a>
                 ';
+
+                //<button type="button" class="btn btn-sm btn-dark upload" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="تحميل الفاتورة على المنصة الإلكترونية" res_id="'.$res->id.'">
+                //    <i class="fas fa-file-upload"></i>
+                //</button>
             })
             ->rawColumns(['id', 'clientName', 'treasuryName', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])
             ->toJson();

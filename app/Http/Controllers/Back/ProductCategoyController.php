@@ -12,42 +12,51 @@ use Yajra\DataTables\Facades\DataTables;
 class ProductCategoyController extends Controller
 {
     public function index()
-    {                               
-        $pageNameAr = 'الأقسام الرئيسية للأصناف';
-        $pageNameEn = 'productsCategories';
-        return view('back.productsCategories.index' , compact('pageNameAr' , 'pageNameEn'));
-    }
-
-    public function create()
-    {
-        
+    {       
+        if((userPermissions()->productsCategories_view)){
+            $pageNameAr = 'الأقسام الرئيسية للأصناف';
+            $pageNameEn = 'productsCategories';
+            return view('back.productsCategories.index' , compact('pageNameAr' , 'pageNameEn'));
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }                         
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'name' => 'required|string|unique:product_categoys,name',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
+        if((userPermissions()->productsCategories_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'name' => 'required|string|unique:product_categoys,name',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+    
+                ],[
+                    'name' => 'إسم القسم',                
+                ]);
+    
+                ProductCategoy::create($request->all());
+            }
 
-            ],[
-                'name' => 'إسم القسم',                
-            ]);
-
-            ProductCategoy::create($request->all());
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
     }
 
     public function edit($id)
     {
-        if(request()->ajax()){
-            $find = ProductCategoy::where('id', $id)->first();
-            return response()->json($find);
+        if((userPermissions()->productsCategories_update)){
+            if(request()->ajax()){
+                $find = ProductCategoy::where('id', $id)->first();
+                return response()->json($find);
+            }
+            return view('back.welcome');
+
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
-        return view('back.welcome');
     }
 
     public function update(Request $request, $id)
@@ -72,15 +81,21 @@ class ProductCategoyController extends Controller
 
      
     public function destroy($id){
-        $category = DB::table('products')->where('category', $id)->first();
-
-        if ($category) {
-            return response()->json(['cannot_delete' => 'cannot_delete']);
-        }
-
-        if (!$category) {
-            DB::table('product_categoys')->where('id', $id)->delete();
-            return response()->json(['success_delete' => 'success_delete']);
+        if((userPermissions()->productsCategories_delete)){
+            $category = DB::table('products')->where('category', $id)->first();
+    
+            if ($category) {
+                return response()->json(['cannot_delete' => 'cannot_delete']);
+            }
+    
+            if (!$category) {
+                DB::table('product_categoys')->where('id', $id)->delete();
+                DB::table('product_sub_categories')->where('main_category', $id)->delete();
+                return response()->json(['success_delete' => 'success_delete']);
+            }
+            
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
     }
 

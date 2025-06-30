@@ -11,42 +11,53 @@ use Yajra\DataTables\Facades\DataTables;
 class CompanyController extends Controller
 {
     public function index()
-    {                               
-        $pageNameAr = 'شركات الأصناف';
-        $pageNameEn = 'companies';
-        return view('back.companies.index' , compact('pageNameAr' , 'pageNameEn'));
-    }
+    {            
+        if((userPermissions()->companies_view)){
+            $pageNameAr = 'شركات السلع والخدمات';
+            $pageNameEn = 'companies';
 
-    public function create()
-    {
-        
+            return view('back.companies.index' , compact('pageNameAr' , 'pageNameEn'));
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
+                           
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'name' => 'required|string|unique:companies,name',
-            ],[
-                'required' => 'حقل :attribute إلزامي.',
-                'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
-                'unique' => 'حقل :attribute مستخدم من قبل.',
+        if((userPermissions()->companies_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'name' => 'required|string|unique:companies,name',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+    
+                ],[
+                    'name' => 'إسم الشركة',                
+                ]);
+    
+                Company::create($request->all());
+            }
 
-            ],[
-                'name' => 'إسم الشركة',                
-            ]);
-
-            Company::create($request->all());
-        }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function edit($id)
     {
-        if(request()->ajax()){
-            $find = Company::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return view('back.welcome');
+        if((userPermissions()->companies_update)){
+            if(request()->ajax()){
+                $find = Company::where('id', $id)->first();
+                return response()->json($find);
+            }
+            return view('back.welcome');
+
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function update(Request $request, $id)
@@ -71,16 +82,22 @@ class CompanyController extends Controller
 
      
     public function destroy($id){
-        $unit = DB::table('products')->where('company', $id)->first();
+        if((userPermissions()->companies_delete)){
+            
+            $unit = DB::table('products')->where('company', $id)->first();
+    
+            if ($unit) {
+                return response()->json(['cannot_delete' => 'cannot_delete']);
+            }
+    
+            if (!$unit) {
+                DB::table('companies')->where('id', $id)->delete();
+                return response()->json(['success_delete' => 'success_delete']);
+            }
 
-        if ($unit) {
-            return response()->json(['cannot_delete' => 'cannot_delete']);
-        }
-
-        if (!$unit) {
-            DB::table('companies')->where('id', $id)->delete();
-            return response()->json(['success_delete' => 'success_delete']);
-        }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
 

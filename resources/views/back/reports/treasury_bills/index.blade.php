@@ -72,12 +72,8 @@
 @endsection
 
 
-
-
-
-
 @section('content')
-    <div class="container-fluid">
+    <div style="padding: 10px;">
         <!-- breadcrumb -->
         <div class="breadcrumb-header text-danger" style="display: block !important;text-align: center;margin-bottom: 15px;">
             <h4 class="content-title mb-5 my-auto">{{ $pageNameAr }}</h4>
@@ -96,7 +92,7 @@
 
         <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
-                <form method="post" action="{{ url('treasury_bills/report/result') }}">
+                <form method="get" action="{{ url('treasury_bills/report/result') }}">
                     @csrf
                     <div class="row justify-content-center">
                         <div class="col-md-2">
@@ -117,12 +113,17 @@
                             <div>
                                 <select  name="treasury_type" class="treasury_type selectize" id="treasury_type">
                                     <option value="" selected>أنواع الأذونات</option>                              
+                                    <option value="رصيد اول خزنة">رصيد اول خزنة</option>                              
                                     <option value="اذن توريد نقدية">اذن توريد نقدية</option>                              
                                     <option value="اذن صرف نقدية">اذن صرف نقدية</option>                              
-                                    <option value="رصيد اول خزنة">رصيد اول خزنة</option>                              
                                     <option value="مصروف">مصروف</option>                              
-                                    <option value="تحويل">تحويل</option>                              
-                                   
+                                    <option value="مرتجع مصروف">مرتجع مصروف</option>                              
+                                    <option value="تحويل بين خزنتين">تحويل بين خزنتين</option>                              
+                                    <option value="رصيد اول عميل">رصيد اول عميل</option>                              
+                                    <option value="رصيد اول مورد">رصيد اول مورد</option>                              
+                                    <option value="رصيد اول شريك">رصيد اول شريك</option>                              
+                                    <option value="تعديل نسبة شريك">تعديل نسبة شريك</option>                              
+                                    <option value="تسوية رصيد للجهة">تسوية رصيد للجهة</option>                              
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-treasury_type" style="display: none;"></bold>

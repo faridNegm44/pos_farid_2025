@@ -75,7 +75,7 @@
         
         <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
-                <form method="post" action="{{ url('products/report/stock_alert/result') }}">
+                <form method="get" action="{{ url('products/report/stock_alert/result') }}">
                     @csrf
                     <div class="row justify-content-center">
                         <div class="col-md-2">
@@ -92,7 +92,7 @@
                         </div>    
                         
                         <div class="col-md-2">
-                            <label for="product_categoys">أقسام الأصناف</label>
+                            <label for="product_categoys">أقسام السلع والخدمات</label>
                             <div>
                                 <select  name="product_categoys" class="product_categoys selectize" id="product_categoys">
                                     <option value="" selected>اختر قسم</option>                              

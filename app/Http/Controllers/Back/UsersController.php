@@ -19,90 +19,103 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $pageNameAr = 'مستخدمين النظام';
-        $pageNameEn = 'users';
-        // $permissions = RolesPermissions::all();
-        return view('back.users.index' , compact('pageNameAr' , 'pageNameEn'));
+        if((userPermissions()->users_view)){
+            $pageNameAr = 'مستخدمين النظام';
+            $pageNameEn = 'users';
+            $permissions = RolesPermissions::all();
+
+            return view('back.users.index' , compact('pageNameAr' , 'pageNameEn', 'permissions'));	
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }
     }
 
     public function store(Request $request)
     {
-        if (request()->ajax()){
-            $this->validate($request , [
-                'name' => 'required|string|max:100|unique:users,name',
-                'email' => 'required|string|email|max:100|unique:users,email',
-                'gender' => 'required|in:ذكر,انثي' ,
-                'birth_date' => 'nullable|date' ,
-                'phone' => 'nullable|numeric',
-                'address' => 'nullable|string',
-                'nat_id' => 'nullable|min:14|numeric|unique:users,nat_id',
-                'password' => ['required', 'string', Password::min(6)], // ->mixedCase()->numbers()->symbols()
-                'confirmed_password' => 'required|same:password',
-                //'role' => 'required',
-                'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1500',
-                'status' => 'required|in:1,0',
-                'note' => 'nullable|string',
-            ],[
-                'required' => ':attribute مطلوب.',
-                'string' => ':attribute غير صحيح.',
-                'numeric' => ':attribute غير صحيح.',
-                'date' => ':attribute يجب ان يكون تاريخ.',
-                'email' => ':attribute البريد الإلكتروني.',
-                'unique' => ':attribute مستخدم من قبل.',
-                'min' => ':attribute أقل من القيمة المطلوبة.',
-                'nat_id.min' => ':attribute يجب أن يكون على الأقل :min رقم.',
-                'same' => ':attribute غير مطابقة مع كلمة المرور.',
-                'mimes' => ':attribute يجب أن تكون من نوع JPG أو PNG أو JPEG أو GIF.',
-                'max' => ':attribute كبير عن المطلوب.',
-                'password.min' => ':attribute يجب أن تكون كلمة المرور على الأقل 6 أحرف.',
-                'password.mixed_case' => ':attribute يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة.',
-                'password.numbers' => ':attribute يجب أن تحتوي كلمة المرور على أرقام.',
-                'password.symbols' => ':attribute يجب أن تحتوي كلمة المرور على رموز.',
-            ],[
-                'name' => 'إسم المستخدم',
-                'email' => 'البريد الإلكتروني',
-                'gender' => 'نوع المستخدم',
-                'birth_date' => 'تاريخ الميلاد',
-                'phone' => 'التليفون',
-                'address' => 'العنوان',
-                'nat_id' => 'الرقم القومي',
-                'role' => 'تراخيص المستخدم',
-                'status' => 'حالة المستخدم',
-                'address' => 'العنوان',
-                'nat_id' => 'الرقم القومي',
-                'password' => 'كلمة المرور',
-                'confirmed_password' => 'تأكيد كلمة المرور',
-                'theme' => 'ثيم النظام',
-                'image' => 'صورة المستخدم',
-            ]);
-
-            if($request->hasFile('image')){
-                $file = request('image');
-                $name = time() . '.' .$file->getClientOriginalExtension();
-                $path = public_path('back/images/users');
-                $file->move($path , $name);
+        if((userPermissions()->users_create)){
+            if (request()->ajax()){
+                $this->validate($request , [
+                    'name' => 'required|string|max:100|unique:users,name',
+                    'email' => 'required|string|email|max:100|unique:users,email',
+                    'gender' => 'required|in:ذكر,انثي' ,
+                    'birth_date' => 'nullable|date' ,
+                    'phone' => 'nullable|numeric',
+                    'address' => 'nullable|string',
+                    'nat_id' => 'nullable|min:14|numeric|unique:users,nat_id',
+                    'password' => ['required', 'string', Password::min(6)], // ->mixedCase()->numbers()->symbols()
+                    'confirmed_password' => 'required|same:password',
+                    'role' => 'required',
+                    'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1500',
+                    'status' => 'required|in:1,0',
+                    'note' => 'nullable|string',
+                ],[
+                    'required' => ':attribute مطلوب.',
+                    'string' => ':attribute غير صحيح.',
+                    'numeric' => ':attribute غير صحيح.',
+                    'date' => ':attribute يجب ان يكون تاريخ.',
+                    'email' => ':attribute البريد الإلكتروني.',
+                    'unique' => ':attribute مستخدم من قبل.',
+                    'min' => ':attribute أقل من القيمة المطلوبة.',
+                    'nat_id.min' => ':attribute يجب أن يكون على الأقل :min رقم.',
+                    'same' => ':attribute غير مطابقة مع كلمة المرور.',
+                    'mimes' => ':attribute يجب أن تكون من نوع JPG أو PNG أو JPEG أو GIF.',
+                    'max' => ':attribute كبير عن المطلوب.',
+                    'password.min' => ':attribute يجب أن تكون كلمة المرور على الأقل 6 أحرف.',
+                    'password.mixed_case' => ':attribute يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة.',
+                    'password.numbers' => ':attribute يجب أن تحتوي كلمة المرور على أرقام.',
+                    'password.symbols' => ':attribute يجب أن تحتوي كلمة المرور على رموز.',
+                ],[
+                    'name' => 'إسم المستخدم',
+                    'email' => 'البريد الإلكتروني',
+                    'gender' => 'نوع المستخدم',
+                    'birth_date' => 'تاريخ الميلاد',
+                    'phone' => 'التليفون',
+                    'address' => 'العنوان',
+                    'nat_id' => 'الرقم القومي',
+                    'role' => 'تراخيص المستخدم',
+                    'status' => 'حالة المستخدم',
+                    'address' => 'العنوان',
+                    'nat_id' => 'الرقم القومي',
+                    'password' => 'كلمة المرور',
+                    'confirmed_password' => 'تأكيد كلمة المرور',
+                    'theme' => 'ثيم النظام',
+                    'image' => 'صورة المستخدم',
+                ]);
+    
+                if($request->hasFile('image')){
+                    $file = request('image');
+                    $name = time() . '.' .$file->getClientOriginalExtension();
+                    $path = public_path('back/images/users');
+                    $file->move($path , $name);
+                }
+                else{
+                    $name = "df_image.png";
+                }
+    
+                $data = request()->except(['_token', 'confirmed_password', 'image_hidden']);
+                $data['password'] = Hash::make(request()->get('password'));
+                $data['role'] = request('role');
+                $data['theme'] = 1;
+                $data['image'] = $name;
+    
+                User::insert($data);
             }
-            else{
-                $name = "df_image.png";
-            }
-
-            $data = request()->except(['_token', 'confirmed_password', 'image_hidden']);
-            $data['password'] = Hash::make(request()->get('password'));
-            $data['role'] = 1;
-            $data['theme'] = 1;
-            $data['image'] = $name;
-
-            User::insert($data);
-        }
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        } 
     }
 
     public function edit($id)
     {
-        if (request()->ajax()){
-            $find = User::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return response()->json(['failed' => 'Access Denied']);
+        if((userPermissions()->users_update)){
+            if (request()->ajax()){
+                $find = User::where('id', $id)->first();
+                return response()->json($find);
+            }
+            return response()->json(['failed' => 'Access Denied']);
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        } 
     }
 
     public function update(Request $request, $id)
@@ -121,7 +134,7 @@ class UsersController extends Controller
                 'nat_id' => 'nullable|min:14|numeric|unique:users,nat_id,'.$id,
                 'password' => ['nullable', 'string', Password::min(6)], // ->mixedCase()->numbers()->symbols()
                 'confirmed_password' => 'nullable|same:password',
-                //'role' => 'required',
+                'role' => 'required',
                 'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1500',
                 'status' => 'required|in:1,0',
                 'note' => 'nullable|string',
@@ -174,7 +187,7 @@ class UsersController extends Controller
 
             $data = request()->except(['_token', 'confirmed_password', 'image_hidden']);
             $data['password'] = request('password') ? Hash::make(request('password')) : $find['password'];
-            $data['role'] = 1;
+            $data['role'] = request('role');
             $data['theme'] = 1;
             $data['image'] = $name;
 
@@ -187,7 +200,7 @@ class UsersController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function datatable()
     {
-        $all = User::all();
+        $all = User::leftJoin('roles_permissions', 'roles_permissions.id', 'users.role')->select('users.*', 'roles_permissions.role_name');
         return DataTables::of($all)
             ->addColumn('gender', function($res){
                 if($res->gender == 'ذكر'){

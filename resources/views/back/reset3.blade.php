@@ -58,7 +58,7 @@
     </div>  
     
     <div class="bill_info">
-        <div style="float: right">الأصناف: 4</div>
+        <div style="float: right">السلع والخدمات: 4</div>
         <div style="float: left">رقم الفاتورة: 287897</div>
     </div>  
     
@@ -66,7 +66,7 @@
         <table style="width: 100%;text-align: center;">
             <thead style="background: #a8a8a8;">
                 <tr>
-                    <td style="width: 50%;">الصنف</td>
+                    <td style="width: 50%;">السلعة/الخدمة</td>
                     <td style="width: 20%;">الوحدة</td>
                     <td style="width: 10%;">الكمية</td>
                     <td style="width: 20%;">إجمالي السعر</td>
