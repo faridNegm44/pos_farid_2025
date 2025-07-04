@@ -111,7 +111,7 @@
 									</span>
 									<h4 class="text-white mb-0">
 										<a class="text-white" href="{{ url('report/profits') }}" target="_blank">
-											{{  floor( display_number( totalProfitToday()['profit'] ) * 100 ) / 100 }}
+											{{  totalProfitToday()['profit'] ? floor( display_number( totalProfitToday()['profit'] ) * 100 ) / 100 : 0 }}
 										</a>
 										
 									</h4>
@@ -333,7 +333,7 @@
 									@foreach (getLastSaleBills() as $item)
 										<tr>
 											<td>{{ $item->id }}</td>
-											<td style="font-size: 11px !important;">
+											<td style="font-size: 9px !important;">
 												{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}
 												<span style="margin: 0 2px;color: red;">
 													{{ \Carbon\Carbon::parse($item->created_at)->format('h:i:s a') }}

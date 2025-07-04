@@ -218,18 +218,18 @@
                             <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
                                 <thead>
                                     <tr>
-                                        <th class="border-bottom-0">الرقم الأساسي</th>
-                                        <th class="border-bottom-0">الرقم المرجعى</th>
-                                        <th class="border-bottom-0">كود السلعة/الخدمة</th>
-                                        <th class="border-bottom-0" >إسم السلعة/الخدمة</th>
-                                        <th class="border-bottom-0">الكمية قبل</th>
-                                        <th class="border-bottom-0">الكمية بعد</th>
-                                        <th class="border-bottom-0">حالة التسوية</th>
-                                        <th class="border-bottom-0">سبب التسوية</th>
-                                        <th class="border-bottom-0">تاريخ التسوية</th>
-                                        <th class="border-bottom-0">مستخدم</th>
-                                        <th class="border-bottom-0">ملاحظات</th>
-                                        <th class="border-bottom-0" >السنة</th>
+                                        <th class="border-bottom-0 nowrap_thead">الرقم الأساسي</th>
+                                        <th class="border-bottom-0 nowrap_thead">الرقم المرجعى</th>
+                                        <th class="border-bottom-0 nowrap_thead">كود السلعة/الخدمة</th>
+                                        <th class="border-bottom-0 nowrap_thead" >إسم السلعة/الخدمة</th>
+                                        <th class="border-bottom-0 nowrap_thead">الكمية قبل</th>
+                                        <th class="border-bottom-0 nowrap_thead">الكمية بعد</th>
+                                        <th class="border-bottom-0 nowrap_thead">حالة التسوية</th>
+                                        <th class="border-bottom-0 nowrap_thead">سبب التسوية</th>
+                                        <th class="border-bottom-0 nowrap_thead">تاريخ التسوية</th>
+                                        <th class="border-bottom-0 nowrap_thead">مستخدم</th>
+                                        <th class="border-bottom-0 nowrap_thead">ملاحظات</th>
+                                        <th class="border-bottom-0 nowrap_thead" >السنة</th>
                                     </tr>
                                 </thead>
                             </table>
