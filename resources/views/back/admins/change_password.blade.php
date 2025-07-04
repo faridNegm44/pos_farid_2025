@@ -2,7 +2,7 @@
     <form class="" id="form" enctype="multipart/form-data">
         @csrf
 
-            <p style="font-weight: bold;color: rgb(76, 76, 161);padding: 5px 10px;">
+            <p style="color: rgb(76, 76, 161);padding: 5px 10px;">
                 @lang('app.name'):
                 @if (app()->getLocale() == 'en')
                     {{ $find['name_en'] }}

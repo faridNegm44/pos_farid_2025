@@ -1,10 +1,10 @@
 <!--Horizontal-main -->
 <div class="sticky">
-    <div class="horizontal-main hor-menu clearfix side-header bg bg-primary-gradient" style="background-image: linear-gradient(to left, #0698bf 0, #6c8895 100%) !important;">
+    <div class="horizontal-main hor-menu clearfix side-header bg bg-primary-gradient" style="background-image: linear-gradient(to left, #194a61 0, #0698bf 100%) !important;">
         <div class="horizontal-mainwrapper container clearfix">
             <!--Nav-->
             <nav class="horizontalMenu clearfix">
-                <ul class="horizontalMenu-list bg bg-primary-gradient" style="background-image: linear-gradient(to left, #0698bf 0, #6c8895 100%) !important;">
+                <ul class="horizontalMenu-list bg bg-primary-gradient" style="background-image: linear-gradient(to left, #194a61 0, #0698bf 100%) !important;">
                                    
                     <li aria-haspopup="true"><a href="{{ url('products') }}" class="sub-icon text-light">اعدادات البيانات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
@@ -107,7 +107,31 @@
                             <li aria-haspopup="true"><a href="{{ url('treasury_bills/report') }}" class="slide-item text-dark">تقرير عن حركة الخزائن المالية</a></li>
                         </ul>
                     </li>--}}
-                                        
+                    
+                    <li aria-haspopup="true"><a href="{{ url('purchases/create') }}" class="sub-icon text-light">المشتريات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                        <ul class="sub-menu">
+                            <li aria-haspopup="true"><a href="{{ url('/purchases') }}" class="slide-item text-dark">فواتير المشتريات</a></li>
+                            <li aria-haspopup="true"><a href="{{ url('/purchases/create') }}" class="slide-item text-dark">فاتورة مشتريات جديدة</a></li>
+                            
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('purchases_return') }}" class="slide-item text-dark">فواتير مرتجع المشتريات</a></li>
+
+                            {{--<li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">تعديل فاتورة مشتريات</a></li>
+                            <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">مرتجع / تعديل فاتورة مشتريات</a></li>
+                            <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">مرتجع مشتريات بدون فاتورة</a></li>
+                            <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">تعديل مرتجع مشتريات</a></li>
+                            
+                            <hr class="navbar_hr"/>
+                            
+                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">الموردين</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">حسابات الموردين</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">طلبيات مورد</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">إشعار خصم أو إضافة لمورد</a></li>
+                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">نصدير ديون الموردين إلي ملف إكسيل</a></li>--}}
+                        </ul>
+                    </li>
+
+                    
                     <li aria-haspopup="true"><a href="{{ url('sales/create') }}" class="sub-icon text-light">المبيعات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">                                          
                             <li aria-haspopup="true"><a href="{{ url('/sales') }}" class="slide-item text-dark">فواتير المبيعات</a></li>
@@ -133,29 +157,7 @@
                         </ul>
                     </li>
 
-                    <li aria-haspopup="true"><a href="{{ url('purchases/create') }}" class="sub-icon text-light">المشتريات<i class="fe fe-chevron-down horizontal-icon"></i></a>
-                        <ul class="sub-menu">
-                            <li aria-haspopup="true"><a href="{{ url('/purchases') }}" class="slide-item text-dark">فواتير المشتريات</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('/purchases/create') }}" class="slide-item text-dark">فاتورة مشتريات جديدة</a></li>
-                            
-                            <hr class="navbar_hr"/>
-                            <li aria-haspopup="true"><a href="{{ url('purchases_return') }}" class="slide-item text-dark">فواتير مرتجع المشتريات</a></li>
-
-                            {{--<li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">تعديل فاتورة مشتريات</a></li>
-                            <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">مرتجع / تعديل فاتورة مشتريات</a></li>
-                            <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">مرتجع مشتريات بدون فاتورة</a></li>
-                            <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">تعديل مرتجع مشتريات</a></li>
-                            
-                            <hr class="navbar_hr"/>
-                            
-                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">الموردين</a></li>
-                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">حسابات الموردين</a></li>
-                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">طلبيات مورد</a></li>
-                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">إشعار خصم أو إضافة لمورد</a></li>
-                            <li aria-haspopup="true"><a href="#" class="slide-item text-dark">نصدير ديون الموردين إلي ملف إكسيل</a></li>--}}
-                        </ul>
-                    </li>
-
+                    
                     <li aria-haspopup="true"><a href="{{ url('settingsssssw') }}" class="sub-icon text-light">المعاملات اليومية<i class="fe fe-chevron-down horizontal-icon"></i></a>
                         <ul class="sub-menu">
                             <li aria-haspopup="true"><a href="{{ url('/treasury_bills') }}" class="slide-item text-dark">جميع معاملات الخزائن المالية</a></li>
@@ -171,9 +173,12 @@
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('/expenses') }}" class="slide-item text-dark">المصروفات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('expenses/report') }}" class="slide-item text-dark">تقرير عن المصروفات</a></li>
-                           
+                            
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('/transfer_between_storages') }}" class="slide-item text-dark">التحويل من خزنة لأخري</a></li>
+                            
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('report/profits') }}" class="slide-item text-dark">تقرير الربحية</a></li>
                         </ul>
                     </li>
 

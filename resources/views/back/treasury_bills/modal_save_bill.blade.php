@@ -73,22 +73,22 @@
                     </div>
                     
                     <div class="col-lg-4" style="font-size: 14px;">
-                        <div class="total_items" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;font-weight: bold;">
+                        <div class="total_items" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;">
                             عدد العناصر:
                             <span style="font-size: 20px;">2</span>
                         </div>
     
-                        <div class="" style="background: rgb(82, 82, 82);border: 1px dashed;color: #fff;padding: 7px 10px;margin-bottom: 10px;font-weight: bold;">
+                        <div class="" style="background: rgb(82, 82, 82);border: 1px dashed;color: #fff;padding: 7px 10px;margin-bottom: 10px;">
                             المستحق دفعة:
                             <span style="font-size: 23px;" id="total_amount">1491.12</span>
                         </div>
     
-                        <div class="" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;font-weight: bold;">
+                        <div class="" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;">
                             إجمالي المدفوع:
                             <span style="font-size: 23px;" id="sumPriceCash">0</span>
                         </div>
     
-                        <div class="" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;font-weight: bold;">
+                        <div class="" style="border: 1px dashed;padding: 7px 10px;margin-bottom: 10px;">
                             متبقي:
                             <span style="font-size: 20px;" id="minPriceCash">0</span>
                         </div>

@@ -111,6 +111,37 @@
                 background: #e0e7f8 !important;
                 box-shadow: 0 6px 15px 1px #c0c0c7;
             }*/
+
+            .dt-buttons .btn {
+            /*background-color: #3a8095;*/
+            border-radius: 3px !important;
+            padding: 5px 9px;
+            margin: 0 5px;
+            
+            font-size: 10px;
+        }
+
+        .dt-buttons .btn:hover {
+            /*background-color: #165f75;*/
+        }
+        .dt-buttons .dropdown-item.active, .dropdown-item:active{
+            /*background-color: #3a8095;*/
+            padding: 5px 9px;
+            font-size: 10px;
+        }
+        /*.dt-buttons .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: .25rem 1.5rem;
+            clear: both;
+            font-weight: 400;
+            color: #242f48;
+            text-align: inherit;
+            white-space: nowrap;
+            border: 0;
+            background: #f2f2e2;
+            font-size: 10px;
+        }*/
         </style>
 	</head>
 

@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="">
-                            <table class="table table-responsive table-striped table-bordered text-center" id="productTable" style="font-weight: bold;">
+                            <table class="table table-responsive table-striped table-bordered text-center" id="productTable" style="">
                                 <thead>
                                     <tr>
                                         <th>#</th>

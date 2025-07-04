@@ -336,7 +336,7 @@
         
         // start reload page when click refresh_page btn
             $(".refresh_page").on("click", function(){
-                alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من إلغاء المعاملة</p>', 
+                alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="line-height: 2;"> هل أنت متأكد من إلغاء المعاملة</p>', 
                     function(){
                         location.reload();
                     },function(){
@@ -717,7 +717,7 @@
 
                     $("#overlay_page").fadeOut();
 
-                    alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من حفظ المعاملة في الخزينة المالية ؟</p>', 
+                    alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="line-height: 2;"> هل أنت متأكد من حفظ المعاملة في الخزينة المالية ؟</p>', 
                         function(){
         
                             $.ajax({

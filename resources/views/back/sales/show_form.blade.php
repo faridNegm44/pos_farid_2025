@@ -19,10 +19,9 @@
                       <li><span>اذن الفاتورة:</span> <span class='header_span' id="bill_type"></span></li>
                       <li><span>عدد أصناف الفاتورة:</span> <span class='header_span' id="count_items"></span></li>
                       <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span></li>                      
-                      <li><span>ضريبة الفاتورة:</span> <span class='header_span' id="bill_tax"></span></li>                      
                       <li><span>مصاريف إضافية:</span> <span class='header_span' id="extra_money"></span></li>                      
                       <li><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before"></span></li>
-                      <li><span>إجمالي فاتورة بعد:</span> <span class='header_span' id="total_bill_after" style="border: 1px solid;padding: 2px 5px;"></span></li>
+                      <li><span>إجمالي فاتورة بعد:</span> <span class='header_span badge badge-danger' id="total_bill_after" style="font-size: 22px;padding: 3px 20px !important;"></span></li>
                       
                     </ul>
                   </div>
@@ -57,8 +56,8 @@
                       <th>سعر البيع</th>
                       <th>الخصم</th>
                       <th>الضريبة</th>
-                      <th>إجمالي السلعة/الخدمة قبل</th>
-                      <th>إجمالي السلعة/الخدمة بعد</th>
+                      <th>الإجمالي قبل</th>
+                      <th>الإجمالي بعد</th>
                     </tr>
                   </thead>
 

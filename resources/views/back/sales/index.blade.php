@@ -22,7 +22,7 @@
 
         #showProductsModal .invoice-info li > span:last-child {
             font-size: 13px;
-            font-weight: bold;
+            
         }
 
         #showProductsModal .invoice-info {
@@ -33,6 +33,9 @@
 
         #showProductsModal .invoice-info li {
             margin-bottom: 5px;
+        }
+        #showProductsModal .table-bordered td, .table-bordered th{
+            font-size: 12px !important;
         }
     </style>
 @endsection
@@ -66,14 +69,23 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'action', name: 'action', orderable: false},
                     {data: 'clientName', name: 'clientName'},
                     {data: 'treasuryName', name: 'treasuryName'},
+                    {data: 'total_bill', name: 'total_bill'},
                     {data: 'count_items', name: 'count_items'},
                     {data: 'date', name: 'date'},
                     {data: 'notes', name: 'notes'},
                     {data: 'userName', name: 'userName'},
                     {data: 'financialName', name: 'financialName'},
-                    {data: 'action', name: 'action', orderable: false},
+                ],
+                dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                buttons: [
+                    { extend: 'excel', text: '📊 Excel', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'} },
+                    { extend: 'print', text: '🖨️ طباعة', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'}, customize: function (win) { $(win.document.body).css('direction', 'rtl'); } },
+                    { extend: 'colvis', text: '👁️ إظهار/إخفاء الأعمدة', className: 'btn btn-outline-dark' }
                 ],
                 "bDestroy": true,
                 order: [[0, 'desc']],
@@ -117,15 +129,16 @@
                     <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
                         <thead>
                             <tr>
-                                <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0" >عميل</th>
-                                <th class="border-bottom-0" >خزينة</th>
-                                <th class="border-bottom-0" >ع السلع والخدمات</th>
-                                <th class="border-bottom-0" >تاريخ</th>
-                                <th class="border-bottom-0" >ملاحظات</th>
-                                <th class="border-bottom-0" >مستخدم</th>
-                                <th class="border-bottom-0" >السنة</th>
-                                <th class="border-bottom-0">التحكم</th>
+                                <th class="border-bottom-0 nowrap_thead">#</th>
+                                <th class="border-bottom-0 nowrap_thead">التحكم</th>
+                                <th class="border-bottom-0 nowrap_thead" >عميل</th>
+                                <th class="border-bottom-0 nowrap_thead" >خزينة</th>
+                                <th class="border-bottom-0 nowrap_thead" >اجمالي الفاتورة</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 60px !important;min-width: 60px !important;">ع العناصر</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ</th>
+                                <th class="border-bottom-0 nowrap_thead" >ملاحظات</th>
+                                <th class="border-bottom-0 nowrap_thead" >مستخدم</th>
+                                <th class="border-bottom-0 nowrap_thead" >السنة</th>
                             </tr>
                         </thead>                                
                     </table>

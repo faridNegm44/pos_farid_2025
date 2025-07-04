@@ -21,7 +21,7 @@
                                 <input type="hidden" name="dismissal_notices[]" id="dismissal_notices" value="2">
                             </th>
                             <td>
-                                <input type="text" class="form-control text-center dismissal_notices_amount numValidate focused" name="dismissal_notices_amount[]" id="dismissal_notices" placeholder="تكلفة المصروف" value="0.00" style="font-weight: bold;color: red;text-align: right;">
+                                <input type="text" class="form-control text-center dismissal_notices_amount numValidate focused" name="dismissal_notices_amount[]" id="dismissal_notices" placeholder="تكلفة المصروف" value="0.00" style="color: red;text-align: right;">
                             </td>
                         </tr>
                     </tbody>

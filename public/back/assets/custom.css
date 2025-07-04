@@ -32,12 +32,12 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 
 .modal form label {
     font-size: 12px !important;
-    font-weight: bold;
+    
 }
 
 .modal form .text-danger{
     font-size: 11px;
-    font-weight: bold;
+    
 }
 
 #image_preview_form{
@@ -107,7 +107,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 .alertify .ajs-body .ajs-content {
     padding: 16px 16px 16px 24px;
     font-size: 12px;
-    font-weight: bold;
+    
     text-align: center;
 }
 
@@ -118,7 +118,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 
 div.dataTables_wrapper div.dataTables_info{
     font-size: 12px;
-    font-weight: bold;
+    
     position: relative;
     top: 3px;
 }
@@ -167,7 +167,7 @@ table .edit, table .delete, table .show, table .crm_info, table .print, table .v
 
 .ajs-button {
     border: 0px;
-    font-weight: bold;
+    
 }
 
 .ajs-cancel {
@@ -176,19 +176,19 @@ table .edit, table .delete, table .show, table .crm_info, table .print, table .v
 }
 
 .ajs-success{
-    font-weight: bold;
+    
     width: 320px !important;
     background: rgb(77, 124, 91) !important;
 }
 
 .ajs-error{
-    font-weight: bold;
+    
     width: 320px !important;
     background: rgb(155, 56, 64) !important;
 }
 
 .ajs-warning{
-    font-weight: bold;
+    
     width: 320px !important;
     background: orange !important;
 }
@@ -200,10 +200,6 @@ table .edit, table .delete, table .show, table .crm_info, table .print, table .v
     font-size: 12px;
 }
 
-.sub-icon{
-    /*color: rgb(37, 37, 37) !important;*/
-    font-weight: bold !important;
-}
 .slide-item{
     font-weight: bold !important;
 }

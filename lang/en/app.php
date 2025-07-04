@@ -38,5 +38,11 @@ return [
     'expenses_report' => 'تقرير المصروفات',
     'settings' => 'الإعدادات',
     'users' => 'المستخدمون',
-    'roles_permissions' => 'الصلاحيات والتراخيص'
+    'roles_permissions' => 'الصلاحيات والتراخيص',
+    'total_sell_bill_today' => 'إجمالي المبيعات اليوم',
+    'total_profit_today' => 'إجمالي الربح اليوم',
+    'total_money_on_financial_treasury' => 'رصيد الخزن',
+    'top_products' => 'المنتجات الأكثر والأقل مبيعاً',
+    'top_clients' => 'العملاء الأكثر شراءً والأقل شراءً',
+    'profit' => 'تقرير الربحية'
 ];

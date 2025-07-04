@@ -19,7 +19,7 @@
                         {{--<div class="col-lg-1 col-md-4">
                             <label for="code">كود العميل</label>
                             <div>
-                                <input type="text" readonly class="form-control" id="code" name="code" value="{{ ($latestId) }}" style="font-weight: bold;font-size: 17px;">
+                                <input type="text" readonly class="form-control" id="code" name="code" value="{{ ($latestId) }}" style="font-size: 17px;">
                             </div>
                             <bold class="text-danger" id="errors-code" style="display: none;"></bold>
                         </div>--}}

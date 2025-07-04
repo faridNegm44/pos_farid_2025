@@ -47,7 +47,7 @@
 			$(document).ready(function () {
 				alertify.dialog('alert')
 						.set({transition:'slide',message: `
-							<div style="text-align: center;font-weight: bold;">
+							<div style="text-align: center;">
 								<p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
 									صلاحية غير متوفرة 🔐⚠️
 								</p>
@@ -141,6 +141,14 @@
                     {data: 'address', name: 'address'},
                     {data: 'notes', name: 'notes'},
                     {data: 'created_at', name: 'created_at'},
+                ],
+                dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                buttons: [
+                    { extend: 'excel', text: '📊 Excel', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'} },
+                    { extend: 'print', text: '🖨️ طباعة', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'}, customize: function (win) { $(win.document.body).css('direction', 'rtl'); } },
+                    { extend: 'colvis', text: '👁️ إظهار/إخفاء الأعمدة', className: 'btn btn-outline-dark' }
                 ],
                 "bDestroy": true,
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},

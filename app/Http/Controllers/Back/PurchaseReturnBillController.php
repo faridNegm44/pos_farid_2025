@@ -474,7 +474,7 @@ class PurchaseReturnBillController extends Controller
             })
             ->addColumn('date', function($res){
                 $dates = Carbon::parse($res->created_at)->format('d-m-Y')
-                        .' <span style="font-weight: bold;margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
+                        .' <span style="margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
                 if($res->custom_date){
                     $dates.= 'تاريخ اخر '.Carbon::parse($res->custom_date)->format('Y-m-d');
                 }

@@ -13,7 +13,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-        if((userPermissions()->settings_view)){            
+        if((userPermissions()->settings_update)){            
             $pageNameAr = 'الإعدادات العامة';
             $pageNameEn = 'settings';
             $find = Setting::where('id', 1)->first();

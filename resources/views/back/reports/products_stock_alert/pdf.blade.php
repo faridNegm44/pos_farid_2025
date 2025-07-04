@@ -25,7 +25,7 @@
             margin: 0 10px;
         }
         .itemsSearch span{
-            font-weight: bold;
+            
         }
 
         @media print {
@@ -58,7 +58,7 @@
     <div style="padding: 5px 10px;border: 1px solid #000;">
         <div class="">
             <div class="invoice-title">
-                <h4 class="text-center" style="font-weight: bold;">
+                <h4 class="text-center" style="">
                     {{ $pageNameAr }}
                 </h4>
             </div>

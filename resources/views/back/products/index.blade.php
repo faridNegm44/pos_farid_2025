@@ -20,37 +20,6 @@
             margin: 32px 0px 24px;
         }
         .ajs-warning{width: 400px !important;min-width: 400px !important;}
-
-        .dt-buttons .btn {
-            /*background-color: #3a8095;*/
-            border-radius: 8px;
-            padding: 5px 9px;
-            margin: 0 5px;
-            font-weight: bold;
-            font-size: 10px;
-        }
-
-        .dt-buttons .btn:hover {
-            /*background-color: #165f75;*/
-        }
-        .dt-buttons .dropdown-item.active, .dropdown-item:active{
-            /*background-color: #3a8095;*/
-            padding: 5px 9px;
-            font-size: 10px;
-        }
-        /*.dt-buttons .dropdown-item {
-            display: block;
-            width: 100%;
-            padding: .25rem 1.5rem;
-            clear: both;
-            font-weight: 400;
-            color: #242f48;
-            text-align: inherit;
-            white-space: nowrap;
-            border: 0;
-            background: #f2f2e2;
-            font-size: 10px;
-        }*/
     </style>
 
 @endsection
@@ -118,8 +87,10 @@
                     {data: 'id', name: 'id'},
                     {data: 'action', name: 'action', orderable: false},
                     {data: 'name', name: 'name'},
-                    {data: 'sell_price_small_unit', name: 'sell_price_small_unit'},
                     {data: 'last_cost_price_small_unit', name: 'last_cost_price_small_unit'},
+                    {data: 'sell_price_small_unit', name: 'sell_price_small_unit'},
+                    {data: 'prod_discount', name: 'prod_discount'},
+                    {data: 'prod_tax', name: 'prod_tax'},
                     {data: 'units', name: 'units'},
                     {data: 'store_name', name: 'store_name'},
                     {data: 'category', name: 'category'},
@@ -127,24 +98,19 @@
                     {data: 'status', name: 'status'},
                     {data: 'image', name: 'image'},
                 ],
-                dom: 'Blfrtip',
+                dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                 buttons: [
-                    { extend: 'copy', text: '📋 نسخ', className: 'btn btn-outline-dark' },
-                    { extend: 'excel', text: '📊 Excel', className: 'btn btn-outline-dark' },
-                    { extend: 'pdf', text: '📄 PDF', className: 'btn btn-outline-dark' },
-                    { extend: 'print', text: '🖨️ طباعة', className: 'btn btn-outline-dark' },
-                    {
-                        extend: 'colvis',
-                        text: '👁️ إظهار/إخفاء الأعمدة',
-                        className: 'buttons-collection buttons-colvis btn btn-outline-dark'
-                    }
+                    { extend: 'excel', text: '📊 Excel', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'} },
+                    { extend: 'print', text: '🖨️ طباعة', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'}, customize: function (win) { $(win.document.body).css('direction', 'rtl'); } },
+                    { extend: 'colvis', text: '👁️ إظهار/إخفاء الأعمدة', className: 'btn btn-outline-dark' }
                 ],
                 order: [[ 0, 'desc' ]],
-                fixedColumns: {
-                    leftColumns: 2
-                },
                 "bDestroy": true,
-                language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
+                language: {
+                    sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'
+                },
                 lengthMenu: [[50, 100, 200, -1], [50, 100, 200, "الكل"]]
             });
         });
@@ -232,8 +198,10 @@
                                 <th class="border-bottom-0 nowrap_thead">كود</th>
                                 <th class="border-bottom-0 nowrap_thead">التحكم</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">اسم السلعة/الخدمة</th>
-                                <th class="border-bottom-0 nowrap_thead">سعر البيع</th>
                                 <th class="border-bottom-0 nowrap_thead">سعر التكلفة</th>
+                                <th class="border-bottom-0 nowrap_thead">سعر البيع</th>
+                                <th class="border-bottom-0 nowrap_thead">خصم</th>
+                                <th class="border-bottom-0 nowrap_thead">ضريبة</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">الوحدات</th>
                                 <th class="border-bottom-0 nowrap_thead" >المخزن</th>
                                 <th class="border-bottom-0 nowrap_thead" >القسم</th>

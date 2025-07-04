@@ -215,7 +215,7 @@ class ExpensesController extends Controller
             ->addColumn('created_at', function($res){
                 if($res->created_at){
                     return Carbon::parse($res->created_at)->format('d-m-Y')
-                            .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
+                            .' <span style="margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
                 }
             })
             ->addColumn('notes', function($res){

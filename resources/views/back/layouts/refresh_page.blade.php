@@ -3,7 +3,7 @@
         alertify.confirm(
         'تحذير !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
         `<div style="text-align: center;">
-            <p style="font-weight: bold;">
+            <p style="">
                 هل انت متأكد من الإلغاء وتحديث الصفحة
             </p>
         </div>`,

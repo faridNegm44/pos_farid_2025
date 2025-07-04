@@ -17,7 +17,7 @@
                   <div class=" tab-menu-heading">
                     <div class="tabs-menu1">
                       <!-- Tabs -->
-                      <ul class="nav panel-tabs main-nav-line" style="justify-content: center;margin-bottom: 10px;font-weight: bold;text-decoration: underline;">
+                      <ul class="nav panel-tabs main-nav-line" style="justify-content: center;margin-bottom: 10px;text-decoration: underline;">
                         <li><a href="#general" class="nav-link active" data-toggle="tab">عام</a></li>
                         <li><a href="#images" class="nav-link" data-toggle="tab">الصور</a></li>
                         {{--  <li><a href="#mail" class="nav-link" data-toggle="tab">البريد الإلكتروني</a></li>  --}}
@@ -34,7 +34,7 @@
                         {{--------------------- tab 1 general  ---------------------}}
                         <div class="tab-pane active" id="general">
 
-                          <h5 style="text-decoration: underline;font-weight: bold;">معلومات أساسية</h5>
+                          <h5 style="text-decoration: underline;">معلومات أساسية</h5>
                           <div class="row row-xs">
                             <div class="col-lg-4">
                               <label for="app_name" class="main-content-label tx-11 tx-medium tx-gray-600">اسم البرنامج</label>
@@ -69,7 +69,7 @@
                          
 
                           <br>
-                          <h5 style="text-decoration: underline;font-weight: bold;">معلومات الإتصال</h5>
+                          <h5 style="text-decoration: underline;">معلومات الإتصال</h5>
                           <div class="row row-xs">
                             <div class="col-lg-4">
                               <label for="email" class="main-content-label tx-11 tx-medium tx-gray-600">البريد الإلكتروني</label>
@@ -100,7 +100,7 @@
                           
                           
                           <br>
-                          <h5 style="text-decoration: underline;font-weight: bold;">معلومات أخري</h5>
+                          <h5 style="text-decoration: underline;">معلومات أخري</h5>
                           <div class="col-lg-12">
                             <label for="policy" class="main-content-label tx-11 tx-medium tx-gray-600">سياسة مكتوبة بالريسيت</label>
                             <textarea name="policy" class="form-control" placeholder="سياسة مكتوبة بالريسيت" style="min-height: 100px;">{!! $find['policy'] !!}</textarea>
@@ -109,7 +109,7 @@
                             </div>
                           </div>
                           
-                          {{--<h5 style="text-decoration: underline;font-weight: bold;">معلومات أخري</h5>
+                          {{--<h5 style="text-decoration: underline;">معلومات أخري</h5>
                           <div class="row row-xs">
                             <div class="col-lg-3">
                               <label for="cost_price" class="main-content-label tx-11 tx-medium tx-gray-600">طريقه حساب التكلفة</label>
@@ -134,7 +134,7 @@
 
                         {{--------------------- tab 2 images ---------------------}}
                         <div class="tab-pane" id="images">
-                          <h5 style="text-decoration: underline;font-weight: bold;">الصور</h5>
+                          <h5 style="text-decoration: underline;">الصور</h5>
                           <div class="row row-xs">
                             <div class="col-lg-6">
                               <label for="logo" class="main-content-label tx-11 tx-medium tx-gray-600">صورة لوحة التحكم</label>
@@ -178,7 +178,7 @@
 
                         {{--------------------- tab 4 social ---------------------}}
                         {{--<div class="tab-pane" id="social">
-                          <h5 style="text-decoration: underline;font-weight: bold;">التواصل الإجتماعي</h5>
+                          <h5 style="text-decoration: underline;">التواصل الإجتماعي</h5>
                           <div class="row row-xs">
                             <div class="col-lg-6">
                               <label for="facebook" class="main-content-label tx-11 tx-medium tx-gray-600">فيس بوك</label>
@@ -236,7 +236,7 @@
                         
                         {{--------------------- tab 5 others ---------------------}}
                         {{--<div class="tab-pane" id="others">
-                          <h5 style="text-decoration: underline;font-weight: bold;">أخري</h5>
+                          <h5 style="text-decoration: underline;">أخري</h5>
                           <div class="row row-xs">
                             <div class="col-lg-6" style="margin-bottom: 10px;">
                               <label for="enable_reviews" class="main-content-label tx-11 tx-medium tx-gray-600">التعليقات والتقيمات</label>
@@ -272,7 +272,7 @@
                           </div>
 
                           <br>
-                          <h5 style="text-decoration: underline;font-weight: bold;">لينك الخريطة</h5>
+                          <h5 style="text-decoration: underline;">لينك الخريطة</h5>
                           <div class="row row-xs">
                             <div class="col-12">
                               <label for="map_location" class="main-content-label tx-11 tx-medium tx-gray-600">لينك الخريطة</label>

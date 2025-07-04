@@ -20,11 +20,11 @@
     <div class="main" style="width: 4cm; height: 2.5cm; margin-bottom: 0.5cm;text-align: center;">
         <div style="position: relative;top: 5px;">
             
-            <span style="font-size: 7pt;position: relative;bottom: 8px;font-weight: bold;">
+            <span style="font-size: 7pt;position: relative;bottom: 8px;">
                 {{ $product->name_ar }}
             </span>          
 
-            <div style="font-size: 8pt;position: relative;bottom: 8px;margin-left: 3px;font-weight: bold;">
+            <div style="font-size: 8pt;position: relative;bottom: 8px;margin-left: 3px;">
                 سعر: {{ $product->sell_price }} - كود: {{ $product->short_code }}
             </div>
         </div>
@@ -32,16 +32,16 @@
         {!! DNS1D::getBarcodeHTML(strval( $product->short_code ), "C128", 1, 40) !!}
 
         <div style="position: relative;top: 3px;">
-            <span style="font-size: 7pt;position: relative;bottom: 8px;font-weight: bold;">
+            <span style="font-size: 7pt;position: relative;bottom: 8px;">
                 {{ $settings['name'] }} - 
             </span>
             
-            <span style="font-size: 7pt;position: relative;bottom: 8px;font-weight: bold;">
+            <span style="font-size: 7pt;position: relative;bottom: 8px;">
                 {{ $settings['phone1'] }} 
             </span>
 
             <div style="position: relative;bottom: 18px;text-align: left;left: 7px;">
-                <span style="font-size: 6pt;font-weight: bold;">
+                <span style="font-size: 6pt;">
                     (1200)
                 </span>
             </div>

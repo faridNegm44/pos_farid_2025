@@ -44,7 +44,7 @@
 <body>
 
     <div class="top_info">
-        <p style="font-weight: bold;text-decoration: underline;font-size: 13px;margin-bottom: 4px;">{{ $settings['name'] }}</p>
+        <p style="text-decoration: underline;font-size: 13px;margin-bottom: 4px;">{{ $settings['name'] }}</p>
         <p>{{ $settings['address'] }}</p>
         <p style="margin-bottom: 4px;">{{ $settings['phone1'] }} - {{ $settings['phone2'] }}</p>
     </div>  
@@ -82,7 +82,7 @@
                 </tr>              
             </tbody>
 
-            <tfoot style="background: rgb(42, 42, 42);height: 28px;color: #fff;font-weight: bold;font-size: 17px;">
+            <tfoot style="background: rgb(42, 42, 42);height: 28px;color: #fff;font-size: 17px;">
                 <tr>
                     <td colspan="2">الإجمالي</td>
                     <td colspan="2">1200</td>
@@ -96,11 +96,11 @@
         <div style="float: right">
             <p>
                 <span>الصافي: </span>
-                <span style="font-weight: bold;">120.00</span>
+                <span style="">120.00</span>
             </p>
         
             <p>
-                <span style="font-weight: bold;">المطلوب: </span>
+                <span style="">المطلوب: </span>
                 <span style="background: rgb(42, 42, 42);color: #fff;padding: 2px 5px;font-size: 17px;">110.00</span>
             </p>
         
@@ -109,19 +109,19 @@
         <div style="float: left">
             <p>
                 <span>الخصم: </span>
-                <span style="font-weight: bold;">10.00</span>
+                <span style="">10.00</span>
             </p>        
         </div>
     </div> 
     
     
     {{-- footer_info2 --}}
-    <div class="footer_info2" style="font-size: 8px;margin-top: 60px;text-align: center;font-weight: bold;">        
+    <div class="footer_info2" style="font-size: 8px;margin-top: 60px;text-align: center;">        
         <p>تاريخ الفاتورة: {{ date('h:ia') }} <span style="margin: 0px 5px;">{{ date('Y-m-d') }}</span></p>
     </div> 
 
     {{-- footer_info3 --}}
-    <div class="footer_info3" style="font-size: 8px;border-top: 1px dashed #000;text-align: left;font-weight: bold;">        
+    <div class="footer_info3" style="font-size: 8px;border-top: 1px dashed #000;text-align: left;">        
         <p>Powered By: R-Plus For Software - 01012775704 - 0112470305 </p>
     </div> 
 

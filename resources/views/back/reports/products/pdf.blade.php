@@ -25,7 +25,7 @@
             margin: 0 10px;
         }
         .itemsSearch span{
-            font-weight: bold;
+            
         }
 
         @media print {
@@ -58,7 +58,7 @@
     <div style="padding: 5px 10px;border: 1px solid #000;">
         <div class="">
             <div class="invoice-title">
-                <h4 class="text-center" style="font-weight: bold;">
+                <h4 class="text-center" style="">
                     {{ $pageNameAr }} ( {{ $product ? $results[0]->nameAr : 'جميع السلع والخدمات' }} )
                 </h4>
             </div>
@@ -105,7 +105,7 @@
                                 {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
                                 <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>                            
                             </td>
-                            <td style="font-weight: bold;">{{ $result->nameAr }}</td>
+                            <td style="">{{ $result->nameAr }}</td>
                             <td>{{ $result->type }}</td>                            
                             <td>{{ $result->userName }}</td>
                             <td>{{ $result->tasweaNotes }}</td>

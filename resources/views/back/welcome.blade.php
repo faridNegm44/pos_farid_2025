@@ -36,7 +36,7 @@
 			$(document).ready(function () {
 				alertify.dialog('alert')
 						.set({transition:'slide',message: `
-							<div style="text-align: center;font-weight: bold;">
+							<div style="text-align: center;">
 								<p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
 									صلاحية غير متوفرة 🔐⚠️
 								</p>
@@ -63,6 +63,11 @@
         <!-- breadcrumb -->
 
 
+		{{--<h1>
+			{{ topClientsPurchases() }}
+		</h1>--}}
+
+
 		{{-- start first section --}}
 		<div class="row row-sm" id="first_section">
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
@@ -77,10 +82,12 @@
 							<div class="col-9">
 								<div class="mt-0 text-center">
 									<span class="text-white" style="font-size: 11px;">
-										<a class="text-white" href="{{ url('products/report/stock_alert') }}" target="_blank">إجمالي الربح اليوم</a>
+										<a class="text-white" href="{{ url('sales') }}" target="_blank">إجمالي المبيعات اليوم</a>
 									</span>
 									<h4 class="text-white mb-0">
-										<a class="text-white" href="{{ url('products/report/stock_alert') }}" target="_blank">150</a>
+										<a class="text-white" href="{{ url('sales') }}" target="_blank">
+											{{ display_number( totalSalesToday() ) }}
+										</a>
 									</h4>
 								</div>
 							</div>
@@ -100,12 +107,13 @@
 							<div class="col-9">
 								<div class="mt-0 text-center">
 									<span class="text-white" style="font-size: 11px;">
-										<a class="text-white" href="{{ url('sales') }}" target="_blank">إجمالي المبيعات اليوم</a>
+										<a class="text-white" href="{{ url('report/profits') }}" target="_blank">إجمالي الربح اليوم</a>
 									</span>
 									<h4 class="text-white mb-0">
-										<a class="text-white" href="{{ url('sales') }}" target="_blank">
-											{{ display_number( totalSalesToday() ) }}
+										<a class="text-white" href="{{ url('report/profits') }}" target="_blank">
+											{{  floor( display_number( totalProfitToday()['profit'] ) * 100 ) / 100 }}
 										</a>
+										
 									</h4>
 								</div>
 							</div>
@@ -227,7 +235,7 @@
 						<a href="{{ url('analytics/top_clients') }}" target="_blank" class="btn btn-sm btn-outline-info">تفاصيل أكثر 🔍</a>
 					</span>
 
-					@if (count(topProductsInThisMonth()) > 0 )
+					@if (count(topProductsInSales()) > 0 )
 						<table class="table table-bordered table-hover text-center">
 							<thead class="thead-dark">
 								<tr>
@@ -237,11 +245,11 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach (topProductsInThisMonth() as $product)
+								@foreach (topClientsPurchases() as $client)
 									<tr>
-										<th scope="row">5</th>
-										<td>فيصل الرشيد</td>
-										<td>9,870</td>
+										<th scope="row">{{ $client->client_id }}</th>
+										<td>{{ $client->name }}</td>
+										<td>{{ display_number($client->client_total) }}</td>
 									</tr>									
 								@endforeach							
 							</tbody>
@@ -268,7 +276,7 @@
 						<a href="{{ url('analytics/top_products') }}" target="_blank" class="btn btn-sm btn-outline-info ">تفاصيل أكثر 🔍</a>
 					</span>
 
-					@if (count(topProductsInThisMonth()) > 0 )
+					@if (count(topProductsInSales()) > 0 )
 						<table class="table table-bordered table-hover text-center">
 							<thead class="thead-dark">
 								<tr>
@@ -278,7 +286,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach (topProductsInThisMonth() as $product)
+								@foreach (topProductsInSales() as $product)
 									<tr>
 										<th scope="row">{{ $product->productId }}</th>
 										<td>{{ $product->productNameAr }}</td>
@@ -314,7 +322,7 @@
 								<thead class="thead-dark">
 									<tr>
 										<th class="">#</th>
-										<th class="wd-lg-22p">ت الفاتورة</th>
+										<th class="wd-lg-20p">ت الفاتورة</th>
 										<th class="wd-lg-25p">العميل</th>
 										<th class="">عدد</th>
 										<th class="wd-lg-20p ">إجمالي</th>
@@ -325,24 +333,32 @@
 									@foreach (getLastSaleBills() as $item)
 										<tr>
 											<td>{{ $item->id }}</td>
-											<td style="font-size: 9px !important;">
+											<td style="font-size: 11px !important;">
 												{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}
-												<span style="font-weight: bold;margin: 0 2px;color: red;">
+												<span style="margin: 0 2px;color: red;">
 													{{ \Carbon\Carbon::parse($item->created_at)->format('h:i:s a') }}
 												</span>
 											</td>
 											<td><a href="{{ url('sales/report/print_receipt/'.$item->id) }}" class="tx-primary">{{ $item->clientName }}</a></td>
 											<td class="tx-medium tx-danger">{{ display_number( $item->count_items ) }}</td>
-											<td class="tx-medium tx-inverse">												
-												<span class="text-muted" style="font-size: 10px !important;">
-													قبل: {{ display_number( $item->total_bill_before ) }}
-												</span>
-												<span class="" style="font-size: 12px !important;">
-													بعد: {{ display_number( $item->total_bill_after ) }}
-												</span>
+											<td class="tx-medium tx-inverse">	
+												@if ($item->total_bill_before == $item->total_bill_after)
+													<span class="" style="font-size: 12px !important;">
+														{{ display_number( $item->total_bill_after ) }}
+													</span>
+													
+												@else
+													<span class="text-muted" style="font-size: 10px !important;">
+														قبل: {{ display_number( $item->total_bill_before ) }}
+													</span>
+
+													<span class="" style="font-size: 12px !important;">
+														بعد: {{ display_number( $item->total_bill_after ) }}
+													</span>
+												@endif											
 											</td>
 											<td>
-												<a target="_blank" class="btn btn-sm btn-primary" href="{{ url('sales/report/print_receipt/'.$item->id) }}" style="height: 20px;line-height: 10px;">عرض</a>
+												<a target="_blank" class="btn btn-sm btn-outline-primary" href="{{ url('sales/report/print_receipt/'.$item->id) }}" style="height: 20px;line-height: 10px;">عرض</a>
 											</td>
 										</tr>
 									@endforeach

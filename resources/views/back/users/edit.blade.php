@@ -15,7 +15,7 @@
                 if(res.notAuth){
                     alertify.dialog('alert')
                         .set({transition:'slide',message: `
-                            <div style="text-align: center;font-weight: bold;">
+                            <div style="text-align: center;">
                                 <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
                                     صلاحية غير متوفرة 🔐⚠️
                                 </p>

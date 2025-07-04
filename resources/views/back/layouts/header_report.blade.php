@@ -12,7 +12,7 @@
             <div>{{ GeneralSettingsInfo()->address  }}</div>
             
             <div>المستخدم: {{ auth()->user()->name  }}</div>
-            {{ date('d-m-Y') }} <span style="font-size: 16px;font-weight: bold;">{{ date('h:i a') }}</span>
+            {{ date('d-m-Y') }} <span style="font-size: 16px;">{{ date('h:i a') }}</span>
         </div>
     </div>
     

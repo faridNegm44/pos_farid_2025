@@ -68,8 +68,8 @@ class ProductController extends Controller
                     'bigUnit' => 'nullable|integer|exists:units,id',
                     'smallUnit' => 'required|integer|exists:units,id',
                     'small_unit_numbers' => 'required|min:1|numeric',
-                    'last_cost_price_small_unit' => 'nullable|min:0|numeric',
-                    'sell_price_small_unit' => 'nullable|min:0|numeric',
+                    'last_cost_price_small_unit' => 'required|min:0|numeric',
+                    'sell_price_small_unit' => 'required|min:0|numeric',
                     'max_sale_quantity' => 'nullable|min:0|numeric',
                     'offerDiscountPercentage' => 'nullable|min:0|numeric',
                     'offerStart' => 'nullable|date|before:offerEnd',
@@ -150,6 +150,8 @@ class ProductController extends Controller
                         'bigUnit' => $this->ifNullToZero('bigUnit'),
                         'smallUnit' => request('smallUnit'),
                         'small_unit_numbers' => request('small_unit_numbers'),
+                        'prod_tax' => $this->ifNullToZero('tax'),
+                        'prod_discount' => $this->ifNullToZero('discountPercentage'),
                         'max_sale_quantity' => $this->ifNullToZero('max_sale_quantity'),
                         'image' => $name,
                         'offerDiscountStatus' => 0,
@@ -249,8 +251,8 @@ class ProductController extends Controller
                 'bigUnit' => 'nullable|integer|exists:units,id',
                 'smallUnit' => 'required|integer|exists:units,id',
                 'small_unit_numbers' => 'required|min:1|numeric',
-                'last_cost_price_small_unit' => 'nullable|min:0|numeric',
-                'sell_price_small_unit' => 'nullable|min:0|numeric',
+                'last_cost_price_small_unit' => 'required|min:0|numeric',
+                'sell_price_small_unit' => 'required|min:0|numeric',
                 'max_sale_quantity' => 'nullable|min:0|numeric',
                 'offerDiscountPercentage' => 'nullable|min:0|numeric',
                 'offerStart' => 'nullable|date|before:offerEnd',
@@ -341,6 +343,8 @@ class ProductController extends Controller
                             'type_tax' => request('type_tax'),
                             'bigUnit' => request('bigUnit') ?? 0 ,
                             'smallUnit' => request('smallUnit'),
+                            'prod_tax' => request('tax'),
+                            'prod_discount' => request('discountPercentage'),
                             'max_sale_quantity' => request('max_sale_quantity') ?? 0 ,
                             'status' => request('status') ?? 1,
                             'image' => $name,
@@ -358,7 +362,7 @@ class ProductController extends Controller
                             'product_id' => $id,
                             'sell_price_small_unit' => request('sell_price_small_unit'),
                             'last_cost_price_small_unit' => request('last_cost_price_small_unit'),
-                            'avg_cost_price_small_unit' => request('last_cost_price_small_unit'),
+                            'avg_cost_price_small_unit' => $lastRow->avg_cost_price_small_unit,
                             'quantity_small_unit' => $lastRow->quantity_small_unit,
                             'tax' => request('tax'),
                             'discount' => request('discountPercentage'),
@@ -382,6 +386,8 @@ class ProductController extends Controller
                             'type_tax' => request('type_tax'),
                             'bigUnit' => request('bigUnit') ?? 0 ,
                             'smallUnit' => request('smallUnit'),
+                            'prod_tax' => request('tax'),
+                            'prod_discount' => request('discountPercentage'),
                             'max_sale_quantity' => request('max_sale_quantity') ?? 0 ,
                             'status' => request('status') ?? 1,
                             'image' => $name,
@@ -410,6 +416,8 @@ class ProductController extends Controller
                         'bigUnit' => request('bigUnit') ?? 0,
                         'smallUnit' => request('smallUnit'),
                         'small_unit_numbers' => request('small_unit_numbers'),
+                        'prod_tax' => request('tax'),
+                        'prod_discount' => request('discountPercentage'),
                         'max_sale_quantity' => request('max_sale_quantity') ?? 0,
                         'status' => request('status') ?? 1,
                         'image' => $name,
@@ -515,10 +523,16 @@ class ProductController extends Controller
                 return $names;
             })
             ->addColumn('sell_price_small_unit', function($res){
-                return '<strong style="font-size: 14px;">'.display_number($res->sell_price_small_unit).'</strong>';
+                return '<strong style="font-size: 15px;">'.display_number($res->sell_price_small_unit).'</strong>';
             })
             ->addColumn('last_cost_price_small_unit', function($res){
                 return display_number($res->last_cost_price_small_unit);
+            })
+            ->addColumn('prod_discount', function($res){
+                return display_number($res->prod_discount);
+            })
+            ->addColumn('prod_tax', function($res){
+                return display_number($res->prod_tax);
             })
             ->addColumn('units', function($res){
                 $units = "<span>
@@ -565,16 +579,16 @@ class ProductController extends Controller
             })
             ->addColumn('action', function($res){
                 return '
-                        <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->productId.'">
-                            <i class="fas fa-marker"></i>
-                        </button>
-
                         <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->productId.'" product_name="'.$res->nameAr.'">
                             <i class="fa fa-trash"></i>
                         </button>
+                        
+                        <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->productId.'">
+                            <i class="fas fa-marker"></i>
+                        </button>
                     ';
             })
-            ->rawColumns(['id', 'name', 'sell_price_small_unit', 'last_cost_price_small_unit', 'units', 'category', 'quantity_small_unit', 'image', 'status', 'action'])
+            ->rawColumns(['id', 'name', 'sell_price_small_unit', 'last_cost_price_small_unit', 'prod_discount', 'prod_tax', 'units', 'category', 'quantity_small_unit', 'image', 'status', 'action'])
             ->toJson();
     }
 }

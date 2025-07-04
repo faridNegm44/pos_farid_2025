@@ -56,8 +56,7 @@ class RolesPermissionsController extends Controller
         ]);
 
         RolesPermissions::create([
-            //////////////////////////// start first  ////////////////////////////
-            //////////////////////////// start first  ////////////////////////////
+            // start first
             'role_name' => request('role_name'),
             'financialYears_create' => request('financialYears_create') ? 1 : 0, 
             'financialYears_update' => request('financialYears_update') ? 1 : 0, 
@@ -97,6 +96,7 @@ class RolesPermissionsController extends Controller
             'transfer_between_stores_view' => request('transfer_between_stores_view') ? 1 : 0, 
             'clients_create' => request('clients_create') ? 1 : 0, 
             'clients_update' => request('clients_update') ? 1 : 0, 
+            'clients_view' => request('clients_view') ? 1 : 0, 
             'clients_delete' => request('clients_delete') ? 1 : 0, 
             'clients_report_view' => request('clients_report_view') ? 1 : 0, 
             'clients_account_statement_view' => request('clients_account_statement_view') ? 1 : 0, 
@@ -145,8 +145,17 @@ class RolesPermissionsController extends Controller
             'roles_permissions_view' => request('roles_permissions_view') ? 1 : 0, 
             'roles_permissions_delete' => request('roles_permissions_delete') ? 1 : 0,
             'created_at' => now(),
-            //////////////////////////// end first  ////////////////////////////
-            //////////////////////////// end first  ////////////////////////////
+            // end first
+            
+            
+            // start second
+            'total_sell_bill_today_view' => request('total_sell_bill_today_view') ? 1 : 0,
+            'total_profit_today_view' => request('total_profit_today_view') ? 1 : 0,
+            'total_money_on_financial_treasury_view' => request('total_money_on_financial_treasury_view') ? 1 : 0,
+            'top_products_view' => request('top_products_view') ? 1 : 0,
+            'top_clients_view' => request('top_clients_view') ? 1 : 0,
+            'profit_view' => request('profit_view') ? 1 : 0,
+            // end second            
         ]);
         
         return redirect()->to('/roles_permissions');
@@ -172,83 +181,111 @@ class RolesPermissionsController extends Controller
         $this->validate($request , [
             'role_name' => 'required|max:100|unique:roles_permissions,role_name,'.$id,
         ],[
-            'role_name.required' => 'الإسم مطلوب',
-            'role_name.unique' => 'الإسم مكرر',
+            'role_name.required' => 'اسم الإذن مطلوب',
+            'role_name.unique' => 'اسم الإذن مستخدم من قبل',
         ]);
 
         $find->update([
+            // start first
             'role_name' => request('role_name'),
-            'product_create' => request('product_create') == null ? '0' : '1',
-            'product_view' => request('product_view') == null ? '0' : '1',
-            'product_update' => request('product_update') == null ? '0' : '1',
-            'product_delete' => request('product_delete') == null ? '0' : '1',
-            'product_category_create' => request('product_category_create') == null ? '0' : '1',
-            'product_category_view' => request('product_category_view') == null ? '0' : '1',
-            'product_category_update' => request('product_category_update') == null ? '0' : '1',
-            'product_category_delete' => request('product_category_delete') == null ? '0' : '1',
-            'product_attr_create' => request('product_attr_create') == null ? '0' : '1',
-            'product_attr_view' => request('product_attr_view') == null ? '0' : '1',
-            'product_attr_update' => request('product_attr_update') == null ? '0' : '1',
-            'product_attr_delete' => request('product_attr_delete') == null ? '0' : '1',
-            'product_company_create' => request('product_company_create') == null ? '0' : '1',
-            'product_company_view' => request('product_company_view') == null ? '0' : '1',
-            'product_company_update' => request('product_company_update') == null ? '0' : '1',
-            'product_company_delete' => request('product_company_delete') == null ? '0' : '1',
-            'product_tag_create' => request('product_tag_create') == null ? '0' : '1',
-            'product_tag_view' => request('product_tag_view') == null ? '0' : '1',
-            'product_tag_update' => request('product_tag_update') == null ? '0' : '1',
-            'product_tag_delete' => request('product_tag_delete') == null ? '0' : '1',
-            'product_comment_create' => request('product_comment_create') == null ? '0' : '1',
-            'product_comment_view' => request('product_comment_view') == null ? '0' : '1',
-            'product_comment_update' => request('product_comment_update') == null ? '0' : '1',
-            'product_comment_delete' => request('product_comment_delete') == null ? '0' : '1',
-            'client_create' => request('client_create') == null ? '0' : '1',
-            'client_view' => request('client_view') == null ? '0' : '1',
-            'client_update' => request('client_update') == null ? '0' : '1',
-            'client_delete' => request('client_delete') == null ? '0' : '1',
-            'client_order_create' => request('client_order_create') == null ? '0' : '1',
-            'client_order_view' => request('client_order_view') == null ? '0' : '1',
-            'client_order_update' => request('client_order_update') == null ? '0' : '1',
-            'client_order_delete' => request('client_order_delete') == null ? '0' : '1',
-            'about_me_update' => request('about_me_update') == null ? '0' : '1',
-            'customer_messages_view' => request('customer_messages_view') == null ? '0' : '1',
-            'testimonials_create' => request('testimonials_create') == null ? '0' : '1',
-            'testimonials_view' => request('testimonials_view') == null ? '0' : '1',
-            'testimonials_update' => request('testimonials_update') == null ? '0' : '1',
-            'testimonials_delete' => request('testimonials_delete') == null ? '0' : '1',
-            'faqs_create' => request('faqs_create') == null ? '0' : '1',
-            'faqs_view' => request('faqs_view') == null ? '0' : '1',
-            'faqs_update' => request('faqs_update') == null ? '0' : '1',
-            'faqs_delete' => request('faqs_delete') == null ? '0' : '1',
-            'coupons_create' => request('coupons_create') == null ? '0' : '1',
-            'coupons_view' => request('coupons_view') == null ? '0' : '1',
-            'coupons_update' => request('coupons_update') == null ? '0' : '1',
-            'coupons_delete' => request('coupons_delete') == null ? '0' : '1',
-            'users_create' => request('users_create') == null ? '0' : '1',
-            'users_view' => request('users_view') == null ? '0' : '1',
-            'users_update' => request('users_update') == null ? '0' : '1',
-            'users_delete' => request('users_delete') == null ? '0' : '1',
-            'home_page_offers_create' => request('home_page_offers_create') == null ? '0' : '1',
-            'home_page_offers_view' => request('home_page_offers_view') == null ? '0' : '1',
-            'home_page_offers_update' => request('home_page_offers_update') == null ? '0' : '1',
-            'home_page_offers_delete' => request('home_page_offers_delete') == null ? '0' : '1',
-            'home_page_products_analytics_create' => request('home_page_products_analytics_create') == null ? '0' : '1',
-            'home_page_products_analytics_view' => request('home_page_products_analytics_view') == null ? '0' : '1',
-            'home_page_products_analytics_update' => request('home_page_products_analytics_update') == null ? '0' : '1',
-            'home_page_products_analytics_delete' => request('home_page_products_analytics_delete') == null ? '0' : '1',
-            'home_page_ads_settings_view' => request('home_page_ads_settings_view') == null ? '0' : '1',
-            'home_page_ads_settings_update' => request('home_page_ads_settings_update') == null ? '0' : '1',
-            'home_page_sliders_create' => request('home_page_sliders_create') == null ? '0' : '1',
-            'home_page_sliders_view' => request('home_page_sliders_view') == null ? '0' : '1',
-            'home_page_sliders_update' => request('home_page_sliders_update') == null ? '0' : '1',
-            'home_page_sliders_delete' => request('home_page_sliders_delete') == null ? '0' : '1',
-            'privacy_policies_update' => request('privacy_policies_update') == null ? '0' : '1',
-            'terms_conditions_update' => request('terms_conditions_update') == null ? '0' : '1',
-            'general_settings_update' => request('general_settings_update') == null ? '0' : '1',
-            'permissions_create' => request('permissions_create') == null ? '0' : '1',
-            'permissions_view' => request('permissions_view') == null ? '0' : '1',
-            'permissions_update' => request('permissions_update') == null ? '0' : '1',
-            'permissions_delete' => request('permissions_delete') == null ? '0' : '1',
+            'financialYears_create' => request('financialYears_create') ? 1 : 0, 
+            'financialYears_update' => request('financialYears_update') ? 1 : 0, 
+            'financialYears_view' => request('financialYears_view') ? 1 : 0, 
+            'stores_create' => request('stores_create') ? 1 : 0, 
+            'stores_update' => request('stores_update') ? 1 : 0, 
+            'stores_view' => request('stores_view') ? 1 : 0, 
+            'stores_delete' => request('stores_delete') ? 1 : 0, 
+            'financial_treasury_create' => request('financial_treasury_create') ? 1 : 0, 
+            'financial_treasury_update' => request('financial_treasury_update') ? 1 : 0, 
+            'financial_treasury_view' => request('financial_treasury_view') ? 1 : 0, 
+            'financial_treasury_delete' => request('financial_treasury_delete') ? 1 : 0, 
+            'units_create' => request('units_create') ? 1 : 0, 
+            'units_update' => request('units_update') ? 1 : 0, 
+            'units_view' => request('units_view') ? 1 : 0, 
+            'units_delete' => request('units_delete') ? 1 : 0, 
+            'companies_create' => request('companies_create') ? 1 : 0, 
+            'companies_update' => request('companies_update') ? 1 : 0, 
+            'companies_view' => request('companies_view') ? 1 : 0, 
+            'companies_delete' => request('companies_delete') ? 1 : 0, 
+            'productsCategories_create' => request('productsCategories_create') ? 1 : 0, 
+            'productsCategories_update' => request('productsCategories_update') ? 1 : 0, 
+            'productsCategories_view' => request('productsCategories_view') ? 1 : 0, 
+            'productsCategories_delete' => request('productsCategories_delete') ? 1 : 0, 
+            'products_sub_category_create' => request('products_sub_category_create') ? 1 : 0, 
+            'products_sub_category_update' => request('products_sub_category_update') ? 1 : 0, 
+            'products_sub_category_view' => request('products_sub_category_view') ? 1 : 0, 
+            'products_sub_category_delete' => request('products_sub_category_delete') ? 1 : 0, 
+            'products_create' => request('products_create') ? 1 : 0, 
+            'products_update' => request('products_update') ? 1 : 0, 
+            'products_view' => request('products_view') ? 1 : 0, 
+            'products_delete' => request('products_delete') ? 1 : 0, 
+            'products_report_view' => request('products_report_view') ? 1 : 0, 
+            'taswea_products_create' => request('taswea_products_create') ? 1 : 0, 
+            'taswea_products_view' => request('taswea_products_view') ? 1 : 0, 
+            'transfer_between_stores_create' => request('transfer_between_stores_create') ? 1 : 0, 
+            'transfer_between_stores_view' => request('transfer_between_stores_view') ? 1 : 0, 
+            'clients_create' => request('clients_create') ? 1 : 0, 
+            'clients_update' => request('clients_update') ? 1 : 0, 
+            'clients_view' => request('clients_view') ? 1 : 0, 
+            'clients_delete' => request('clients_delete') ? 1 : 0, 
+            'clients_report_view' => request('clients_report_view') ? 1 : 0, 
+            'clients_account_statement_view' => request('clients_account_statement_view') ? 1 : 0, 
+            'suppliers_create' => request('suppliers_create') ? 1 : 0, 
+            'suppliers_update' => request('suppliers_update') ? 1 : 0, 
+            'suppliers_view' => request('suppliers_view') ? 1 : 0, 
+            'suppliers_delete' => request('suppliers_delete') ? 1 : 0, 
+            'suppliers_report_view' => request('suppliers_report_view') ? 1 : 0, 
+            'suppliers_account_statement_view' => request('suppliers_account_statement_view') ? 1 : 0, 
+            'taswea_client_supplier_create' => request('taswea_client_supplier_create') ? 1 : 0, 
+            'taswea_client_supplier_view' => request('taswea_client_supplier_view') ? 1 : 0, 
+            'partners_create' => request('partners_create') ? 1 : 0, 
+            'partners_update' => request('partners_update') ? 1 : 0, 
+            'partners_view' => request('partners_view') ? 1 : 0, 
+            'partners_delete' => request('partners_delete') ? 1 : 0, 
+            'partners_report_view' => request('partners_report_view') ? 1 : 0, 
+            'partners_account_statement_view' => request('partners_account_statement_view') ? 1 : 0, 
+            'taswea_partners_create' => request('taswea_partners_create') ? 1 : 0, 
+            'taswea_partners_view' => request('taswea_partners_view') ? 1 : 0, 
+            'sales_create' => request('sales_create') ? 1 : 0, 
+            'sales_return' => request('sales_return') ? 1 : 0, 
+            'sales_view' => request('sales_view') ? 1 : 0, 
+            'sales_return_view' => request('sales_return_view') ? 1 : 0, 
+            'products_stock_alert_view' => request('products_stock_alert_view') ? 1 : 0, 
+            'purchases_create' => request('purchases_create') ? 1 : 0, 
+            'purchases_return' => request('purchases_return') ? 1 : 0, 
+            'purchases_view' => request('purchases_view') ? 1 : 0, 
+            'purchases_return_view' => request('purchases_return_view') ? 1 : 0, 
+            'treasury_bills_create' => request('treasury_bills_create') ? 1 : 0, 
+            'treasury_bills_view' => request('treasury_bills_view') ? 1 : 0, 
+            'treasury_bills_report_view' => request('treasury_bills_report_view') ? 1 : 0, 
+            'transfer_between_storages_create' => request('transfer_between_storages_create') ? 1 : 0, 
+            'transfer_between_storages_view' => request('transfer_between_storages_view') ? 1 : 0, 
+            'expenses_create' => request('expenses_create') ? 1 : 0, 
+            'expenses_view' => request('expenses_view') ? 1 : 0, 
+            'expenses_delete' => request('expenses_delete') ? 1 : 0, 
+            'expenses_report_view' => request('expenses_report_view') ? 1 : 0, 
+            'users_create' => request('users_create') ? 1 : 0, 
+            'users_update' => request('users_update') ? 1 : 0, 
+            'users_view' => request('users_view') ? 1 : 0, 
+            'users_delete' => request('users_delete') ? 1 : 0, 
+            'settings_update' => request('settings_update') ? 1 : 0, 
+            'settings_view' => request('settings_view') ? 1 : 0, 
+            'roles_permissions_create' => request('roles_permissions_create') ? 1 : 0, 
+            'roles_permissions_update' => request('roles_permissions_update') ? 1 : 0, 
+            'roles_permissions_view' => request('roles_permissions_view') ? 1 : 0, 
+            'roles_permissions_delete' => request('roles_permissions_delete') ? 1 : 0,
+            'created_at' => now(),
+            // end first
+            
+            
+            // start second
+            'total_sell_bill_today_view' => request('total_sell_bill_today_view') ? 1 : 0,
+            'total_profit_today_view' => request('total_profit_today_view') ? 1 : 0,
+            'total_money_on_financial_treasury_view' => request('total_money_on_financial_treasury_view') ? 1 : 0,
+            'top_products_view' => request('top_products_view') ? 1 : 0,
+            'top_clients_view' => request('top_clients_view') ? 1 : 0,
+            'profit_view' => request('profit_view') ? 1 : 0,
+            // end second            
         ]);
         
         return redirect()->to('roles_permissions');
@@ -277,10 +314,10 @@ class RolesPermissionsController extends Controller
         $all = RolesPermissions::all();
         return DataTables::of($all)
         ->addColumn('id', function($res){
-            return "<span style='font-weight: bold;'>".$res->id."</span>";
+            return "<span style=''>".$res->id."</span>";
         })
         ->addColumn('role_name', function($res){
-            return "<span style='font-weight: bold;'>".$res->role_name."</span>";
+            return "<span style=''>".$res->role_name."</span>";
         })
         ->addColumn('action', function($res){
             return 

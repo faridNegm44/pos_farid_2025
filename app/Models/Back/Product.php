@@ -11,6 +11,6 @@ class Product extends Model
 
     protected $table = 'products';
     protected $fillable = [
-        'shortCode', 'natCode', 'nameAr', 'nameEn', 'store', 'company', 'category', 'stockAlert', 'divisible', 'sellPrice', 'purchasePrice', 'discountPercentage', 'tax', 'firstPeriodCount', 'bigUnit', 'smallUnit', 'smallUnitPrice', 'smallUnitNumbers', 'max_sale_quantity', 'status', 'image', 'desc', 'offerDiscountStatus', 'offerDiscountPercentage', 'offerStart', 'offerEnd'
+        'shortCode', 'natCode', 'nameAr', 'nameEn', 'store', 'company', 'category', 'stockAlert', 'divisible', 'sellPrice', 'purchasePrice', 'discountPercentage', 'tax', 'firstPeriodCount', 'bigUnit', 'smallUnit', 'smallUnitPrice', 'smallUnitNumbers', 'max_sale_quantity', 'status', 'image', 'desc', 'offerDiscountStatus', 'offerDiscountPercentage', 'offerStart', 'offerEnd', 'prod_tax', 'prod_discount'
     ];
 }

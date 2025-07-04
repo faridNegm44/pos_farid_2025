@@ -381,6 +381,16 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
             Route::get('result/pdf/{id}' , 'ReportsPurchaseReturnBillsController@result_pdf_internal');
         });
     });
+        
+
+    // تقارير أخري
+    Route::group(['prefix' => 'report'] , function (){
+        Route::group(['prefix' => 'profits'] , function (){
+            Route::get('/' , 'ReportsProfitsController@index');
+            Route::get('result/pdf' , 'ReportsProfitsController@result_pdf');
+        });
+
+    });
     
     
     // search_products Routes

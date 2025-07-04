@@ -21,7 +21,7 @@
         /* padding: 3px; */
         font-size: 8px;
         font-family: sans-serif !important;
-        font-weight: bold;
+        
         text-align: center;
         position: relative;
       }

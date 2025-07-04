@@ -7,11 +7,12 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 
-// start get curren financial year where status 1
+// start get curren financial year where status 1 => السنوات المالية
     function getFinancialYear(){
         return FinancialYears::where('status', 1)->first();
     }
-// end get curren financial year where status 1
+// end get curren financial year where status 1 => السنوات المالية
+
 
 // start get GeneralSettingsInfo
     if (!function_exists('GeneralSettingsInfo')) {
@@ -19,7 +20,8 @@ use Illuminate\Support\Facades\DB;
             return Setting::first();
         }
     }
-// end get GeneralSettingsInfo`
+// end get GeneralSettingsInfo
+
 
 // start get authUserInfo
     if (!function_exists('authUserInfo')) {
@@ -33,7 +35,7 @@ use Illuminate\Support\Facades\DB;
                         ->first();
         }
     }
-// end get authUserInfo`
+// end get authUserInfo
 
 
 // start show الارقام العشريه
@@ -62,6 +64,26 @@ if (!function_exists('display_number')) {
 // end show الارقام العشريه
 
 
+// start get type of cost price from settings  
+function getCostPrice(){
+    return DB::table('settings')->first(); 
+}
+// end get type of cost price from settings  
+
+
+// start function role_permissions
+function userPermissions(){
+    $permissions = DB::table('users')
+            ->where('users.id', auth()->user()->id)
+            ->leftJoin('roles_permissions', 'roles_permissions.id', '=', 'users.role')
+            ->select('roles_permissions.*')
+            ->first();
+        
+    return $permissions;
+}
+// end function role_permissions
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// بداية احصائيات الصفحة الرئيسية /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +107,7 @@ function getLastSaleBills(){
 }
 // end get last 5 sale bill
 
+
 // start get last 5 purchase bill
 function getLastPurchaseBills(){
     $getLastPurchaseBills = DB::table('purchase_bills')
@@ -105,9 +128,8 @@ function getLastPurchaseBills(){
 // end get last 5 purchase bill
 
 
-
-// start get last 5 products top sales
-function topProductsInThisMonth(){
+// start get last 5 products top sales => الأصناف الأكثر مبيعا
+function topProductsInSales(){
     $topProducts = DB::table('sale_bills')
                     ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
@@ -124,29 +146,75 @@ function topProductsInThisMonth(){
 
     return $topProducts;
 }
-// end get last 5 products top sales
+// end get last 5 products top sales => الأصناف الأكثر مبيعا
+
+
+// start get last 5 clients top purchases => العملاء الأكثر شراءا
+function topClientsPurchases(){
+    $topClients = DB::table('sale_bills')
+                    ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                    ->select(
+                        'client_id', 
+                        DB::raw('SUM(total_bill_after) as client_total'),
+                        'clients_and_suppliers.name'
+                    )
+                    ->groupBy('client_id')
+                    ->orderBy('client_total', 'desc')
+                    ->limit(5)
+                    ->get();
+
+                    //dd($topClients);
+    return $topClients;
+}
+// end get last 5 clients top purchases => العملاء الأكثر شراءا
 
 
 
-// start count total expenses today اليوم
+// start count total expenses today => مصروفات اليوم
 function totalExpensesToday(){
     $totalExpenses = DB::table('expenses')->whereDate('created_at', Carbon::today())->where('status', 'اضافة')->sum('amount'); 
     return $totalExpenses;
 }
-// end count total expenses today اليوم
+// end count total expenses today => مصروفات اليوم
 
 
 
-// start count total expenses today اليوم
+// start count total sales today => اجمالي مبيعات اليوم 
 function totalSalesToday(){
     $totalSales = DB::table('sale_bills')->whereDate('created_at', Carbon::today())->sum('total_bill_after'); 
     return $totalSales;
 }
-// end count total expenses today اليوم
+// end count total sales today => اجمالي مبيعات اليوم 
+
+
+// start => حساب الربحيه اليوم
+function totalProfitToday(){
+    $totalProductsSellPriceToday = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->whereDate('created_at', Carbon::today())->sum('total_after'); 
+    
+    $totalProductsCostPriceToday = DB::table('store_dets')
+                    ->where('type', 'اضافة فاتورة مبيعات')
+                    ->whereDate('created_at', Carbon::today())
+                    ->get()
+                    ->sum(function ($row) {
+                        return ( ( getCostPrice()->cost_price == 1 ? $row->last_cost_price_small_unit : $row->avg_cost_price_small_unit ) * $row->product_bill_quantity)
+                            + $row->tax
+                            //+ $row->extra_money
+                            - $row->discount;
+                    });
+    
+    $profit = ($totalProductsSellPriceToday - $totalProductsCostPriceToday) - totalExpensesToday();
+    
+    return [
+        'totalProductsSellPriceToday' => $totalProductsSellPriceToday,
+        'totalProductsCostPriceToday' => $totalProductsCostPriceToday,
+        'profit' => $profit
+    ];
+}
+// end => حساب الربحيه اليوم
 
 
 
-// start stock_alert أصناف وصلت للحد الأدنى
+// start stock_alert => أصناف وصلت للحد الأدنى
 function stockAlert(){
     $stockAlert = DB::table('store_dets')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
@@ -165,11 +233,11 @@ function stockAlert(){
 
     return $stockAlert;
 }
-// end stock_alert أصناف وصلت للحد الأدنى
+// end stock_alert => أصناف وصلت للحد الأدنى
 
 
 
-// start count total financial_treasury
+// start count total financial_treasury => حساب اجمالي الفلوس في جميع الخزائن
 function totalFinancialTreasury(){
     $latestBalances = DB::table('treasury_bill_dets as t1')
                         ->select('t1.treasury_id', 't1.treasury_money_after')
@@ -181,22 +249,8 @@ function totalFinancialTreasury(){
 
     return $latestBalances;
 }
-// end count total financial_treasury
+// end count total financial_treasury => حساب اجمالي الفلوس في جميع الخزائن
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// نهاية احصائيات الصفحة الرئيسية /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-// start function role_permissions
-function userPermissions(){
-    $permissions = DB::table('users')
-            ->where('users.id', auth()->user()->id)
-            ->leftJoin('roles_permissions', 'roles_permissions.id', '=', 'users.role')
-            ->select('roles_permissions.*')
-            ->first();
-        
-    return $permissions;
-}
-// end function role_permissions

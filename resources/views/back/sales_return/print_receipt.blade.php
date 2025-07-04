@@ -10,7 +10,7 @@
       margin: 20px;
       margin-bottom: 35px;
       color: #000;
-      font-weight: bold;
+      
 
     }
 
@@ -42,7 +42,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
+      
       font-size: 14px;
     }
 
@@ -73,14 +73,14 @@
     .invoice_info {
       display: flex;
       justify-content: space-between;
-      font-weight: bold;
+      
       border: 1px dashed #000;
       border-radius: 5px;
       padding: 4px 8px;
     }
     
     .date_info {
-      font-weight: bold;
+      
       font-size: 9px;
       text-align: center;
       padding-top: 5px;
@@ -118,13 +118,13 @@
     }
 
     .totals_section td.label {
-      font-weight: bold;
+      
       font-size: 11px;
     }
 
     .totals_section td.value {
       font-size: 13px;
-      font-weight: bold;
+      
     }
 
     .policy_section {
@@ -276,7 +276,7 @@
       @endif
       <tr>
         <td class="label final_total" style="font-size: 14px;">الإجمالي بعد</td>
-        <td class="value" style="font-size: 18px;font-weight: bold;">{{ display_number( $saleBill[0]->total_bill_after ) }} جنية</td>
+        <td class="value" style="font-size: 18px;">{{ display_number( $saleBill[0]->total_bill_after ) }} جنية</td>
       </tr>
     </table>
   </div>

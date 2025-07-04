@@ -26,7 +26,7 @@
             margin: 0 10px;
         }
         .itemsSearch span{
-            font-weight: bold;
+            
         }
 
         .totals_bill_tr, .supplier_info_tr {
@@ -70,7 +70,7 @@
     <div class="container" style="border: 1px solid #000;">
         <div class="">
             <div class="invoice-title">
-                <h4 class="text-center" style="font-weight: bold;">
+                <h4 class="text-center" style="">
                     {{ $pageNameAr }} - {{ $results[0]->supplierName }}
                 </h4>
             </div>
@@ -118,13 +118,13 @@
                 {{----------------------------------------------------------------------------------------}}
                 @if ($bill->treasury_type === 'رصيد اول مورد')
                     <div class="bill-container" style="padding: 0 10px;">
-                        <p style="font-weight: bold;font-size: 15px;">
+                        <p style="font-size: 15px;">
                             رقم الحركة: {{ $bill->id }}
                             - ( {{ $bill->treasury_type }} )
                         </p>
                         <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
                             {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;font-weight: bold;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
                         </span>
                         <span style="margin: 3px 10px;"><strong>المبلغ:</strong> {{ display_number($bill->remaining_money) }}</span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
@@ -140,13 +140,13 @@
                 {{----------------------------------------------------------------------------------------}}                
                 @elseif ($bill->treasury_type == 'اذن توريد نقدية' && $bill->bill_type == 0)
                     <div class="bill-container" style="padding: 10px;">
-                        <p style="font-weight: bold;font-size: 15px;">
+                        <p style="font-size: 15px;">
                             رقم الحركة: {{ $bill->id }}
                             - ( {{ $bill->treasury_type }} )
                         </p>
                         <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
                             {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;font-weight: bold;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
                         </span>
                         
                         <span style="margin: 3px 10px;"><strong>خزينة المعاملة:</strong> {{ $bill->treasury_name }}</span>
@@ -168,13 +168,13 @@
                 {{----------------------------------------------------------------------------------------}}                
                 @elseif ($bill->treasury_type === 'اذن صرف نقدية')
                     <div class="bill-container" style="padding: 10px;">
-                        <p style="font-weight: bold;font-size: 15px;">
+                        <p style="font-size: 15px;">
                             رقم الحركة: {{ $bill->id }}
                             - ( {{ $bill->treasury_type }} )
                         </p>
                         <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
                             {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;font-weight: bold;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
                         </span>
                         
                         <span style="margin: 3px 10px;"><strong>خزينة المعاملة:</strong> {{ $bill->treasury_name }}</span>
@@ -196,13 +196,13 @@
                 {{----------------------------------------------------------------------------------------}}                
                 @elseif ($bill->treasury_type === 'تسوية رصيد للجهة')
                     <div class="bill-container" style="padding: 10px;">
-                        <p style="font-weight: bold;font-size: 15px;">
+                        <p style="font-size: 15px;">
                             رقم الحركة: {{ $bill->id }}
                             - ( {{ $bill->treasury_type }} )
                         </p>
                         <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
                             {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;font-weight: bold;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
                         </span>
                     
                         <span style="margin: 3px 10px;">
@@ -222,13 +222,13 @@
                 {{-----------------------------------------------------------------------------------------------}}          
                 @elseif ($bill->treasury_type == 'اذن توريد نقدية' && $bill->bill_type == 'اضافة فاتورة مشتريات')
                     <div class="bill-container" style="padding: 10px;">
-                        <p style="font-weight: bold;font-size: 15px;">
+                        <p style="font-size: 15px;">
                             رقم الحركة: {{ $bill->id }}
                             - ( {{ $bill->treasury_type }} ) - ( {{ $bill->bill_type }} )
                         </p>
                         <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
                             {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;font-weight: bold;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
                         </span>
                         <span style="margin: 3px 10px;"><strong>خزينة المعاملة:</strong> {{ $bill->treasury_name }}</span>
                         <span style="margin: 3px 10px;">
@@ -288,13 +288,13 @@
                 {{-----------------------------------------------------------------------------------------------}}          
                 @elseif ($bill->treasury_type == $bill->bill_type)
                     <div class="bill-container" style="padding: 10px;">
-                        <p style="font-weight: bold;font-size: 15px;">
+                        <p style="font-size: 15px;">
                             رقم الحركة: {{ $bill->id }}
                             - ( {{ $bill->treasury_type }} )
                         </p>
                         <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
                             {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;font-weight: bold;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
                         </span>
                         
                         <span style="margin: 3px 10px;"><strong>خصم الفاتورة:</strong> {{ $bill->bill_discount ?? 'لايوجد' }}</span>
@@ -362,7 +362,7 @@
         </div>
 
         <div class="text-center" style="margin-top: 30px;">
-            <h3 style="font-weight: bold;padding-top: 15px;">
+            <h3 style="padding-top: 15px;">
                 @foreach ($results as $bill)
                     @if ($loop->last)
                         @if($bill->remaining_money === 0)

@@ -193,14 +193,14 @@
 			if(@json(session()->has('error_auth'))){
 				alertify.set('notifier','position', 'top-center');
 				alertify.set('notifier','delay', 5);
-				alertify.error(`<div class="text-center" style="color: #fff;font-weight: bold;">${@json(session()->get('error_auth'))}</div>`);
+				alertify.error(`<div class="text-center" style="color: #fff;">${@json(session()->get('error_auth'))}</div>`);
 			}
 
 			// check if user email or password error
 			if(@json(session()->has('error_email_or_password'))){
 				alertify.set('notifier','position', 'top-center');
 				alertify.set('notifier','delay', 5);
-				alertify.error(`<div class="text-center" style="color: #fff;font-weight: bold;">${@json(session()->get('error_email_or_password'))}</div>`);
+				alertify.error(`<div class="text-center" style="color: #fff;">${@json(session()->get('error_email_or_password'))}</div>`);
 			}
 			@json(session()->forget('error_email_or_password'));
 
@@ -212,7 +212,7 @@
 				$.each(errorMessages, function(index, message) {
 					alertify.set('notifier','position', 'top-center');
 					alertify.set('notifier','delay', 5);
-					alertify.error(`<div class="text-center" style="color: #fff;font-weight: bold;">${message}</div>`);
+					alertify.error(`<div class="text-center" style="color: #fff;">${message}</div>`);
 				});
 			}
 		</script>

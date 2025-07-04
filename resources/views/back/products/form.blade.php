@@ -14,7 +14,7 @@
                 <input type="hidden" id="res_id" value="" />               
                 
                 <div class="pd-30 pd-sm-40 bg-gray-100">
-                  <h5 style="text-decoration: underline;font-weight: bold;">بيانات أساسية</h5>
+                  <h5 style="text-decoration: underline;">بيانات أساسية</h5>
                   <div class="row row-xs">
                     <div class="col-lg-1 col-md-6 col-12">
                       <label for="type">نوع السلعة/الخدمة</label>
@@ -147,7 +147,7 @@
                   <hr>
 
 
-                  <h5 style="text-decoration: underline;font-weight: bold;">بيانات السعر والوحدات</h5>
+                  <h5 style="text-decoration: underline;">بيانات السعر والوحدات</h5>
                   <div class="row row-xs">
                     <div class="col-lg-4 col-md-6 col-md-4 col-12">
                       <label for="bigUnit">الوحدة الكبري</label>
@@ -209,7 +209,7 @@
                         <div>    
                             <select name="type_tax" class="type_tax form-control" id="type_tax">
                                 <option value="نسبة">نسبة</option>
-                                <option value="قيمة">قيمة</option>
+                                {{--<option value="قيمة">قيمة</option>--}}
                             </select>
                         </div>
                       <bold class="text-danger" id="errors-type_tax" style="display: none;"></bold>
@@ -254,7 +254,7 @@
                   
                   
                   {{--<hr>--}}
-                  {{-- <h5 style="text-decoration: underline;font-weight: bold;">س ترويجي للسلعة/خدمة</h5> --}}
+                  {{-- <h5 style="text-decoration: underline;">س ترويجي للسلعة/خدمة</h5> --}}
                   {{--<div class="row">
                     <div class="col-lg-12 col-md-6 col-lg-12 col-md-6 col-12">
                       <div class="card overflow-hidden">

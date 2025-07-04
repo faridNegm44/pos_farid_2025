@@ -11,18 +11,25 @@
             padding: 5px !important;
         }
         #selectAll{
-            width: 1.5em;
-            height: 1.5em;
+            width: 2em;
+            height: 2em;
         }
         input[type="checkbox"]{
-            width: 1em;
-            height: 1em;
+            width: 1.5em;
+            height: 1.5em;
             vertical-align: top;
             background-color: #fff;
             border: 1px solid #e3d9da;
             margin: 0px 8px;
             position: relative;
             top: 3px;
+        }
+        .badge{
+            font-size: 12px !important;
+            padding: 4px 10px 7px !important;
+        }
+        .me-3{
+            width: 130px !important;
         }
     </style>
 @endsection
@@ -48,7 +55,7 @@
 
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container">
         <!-- breadcrumb -->
         <div class="breadcrumb-header justify-content-between">
             <div class="my-auto">
@@ -63,26 +70,33 @@
             @php
                 $models = [
                     // start first add
-                    'financialYears', 'stores', 'financial_treasury', 'units', 'companies', 'productsCategories', 'products_sub_category', 'products', 'taswea_products', 'transfer_between_stores', 'clients', 'clients_report', 'clients_account_statement', 'suppliers', 'suppliers_report', 'suppliers_account_statement', 'taswea_client_supplier', 'partners', 'partners_report', 'partners_account_statement', 'taswea_partners', 'sales', 'sales_create', 'sales_return', 'products_stock_alert', 'purchases', 'purchases_create', 'purchases_return', 'treasury_bills', 'treasury_bills_create', 'treasury_bills_report', 'transfer_between_storages', 'expenses', 'expenses_report', 'users', 'settings', 'roles_permissions'
+                        'financialYears', 'stores', 'financial_treasury', 'units', 'companies', 'productsCategories', 'products_sub_category', 'products', 'taswea_products', 'transfer_between_stores', 'clients', 'clients_report', 'clients_account_statement', 'suppliers', 'suppliers_report', 'suppliers_account_statement', 'taswea_client_supplier', 'partners', 'partners_report', 'partners_account_statement', 'taswea_partners', 'sales', 'sales_return', 'products_stock_alert', 'purchases', 'purchases_return', 'treasury_bills', 'treasury_bills_report', 'transfer_between_storages', 'expenses', 'expenses_report', 'users', 'settings', 'roles_permissions',
                     // end first add
+                    
+                    
+                    // start second add
+                        'total_sell_bill_today', 'total_profit_today', 'total_money_on_financial_treasury', 'top_products', 'top_clients', 'profit'
+                    // end second add
+                    
                 ];
                 $count = 1;
             @endphp
 
-            <form action="{{ url('roles_permissions/update/'.$find['id']) }}" method="POST">
+                <form action="{{ url('roles_permissions/update/'.$find['id']) }}" method="POST">
                 @csrf
                 <div>
                     <div style="padding: 0px 5px 20px;">
                         <label for="role_name">اسم الإذن</label>
 
-                        <input type="text" class="form-control" name="role_name" id="role_name" placeholder="اسم الإذن" value="{{ old('role_name', $find['role_name']) }}" />
+                        <input type="text" class="form-control" name="role_name" id="role_name" placeholder="اسم الإذن"
+                        value="{{ old('role_name', $find['role_name']) }}" />
 
                         @if($errors->has('role_name'))
                             <div class="error text-danger">{{ $errors->first('role_name') }}</div>
                         @endif
                     </div>
 
-                    <div style="width: 1005;overflow: auto;">
+                    <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover nowrap">
                             <thead>
                                 <tr>
@@ -91,26 +105,30 @@
                                     <td style="color: #fff !important;padding: 10px;">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="selectAll">
-                                            <label class="form-check-label" for="selectAll">إختر الكل</label>
+                                            <label class="form-check-label text-white" for="selectAll">إختر الكل</label>
                                         </div>
                                     </td>
                                 </tr>
                             </thead>
 
-                            {{-- {{ $find[''.$model.'_create'] == 1 ? 'checked' : '' }} --}}
                             <tbody>
                                 @foreach ($models as $model)
-                                    <tr style="font-weight: bold;" id="{{ $model }}">
+                                    <tr style="" id="{{ $model }}">
                                         <td class="text-nowrap fw-semibold">{{ $count++ }}</td>
                                         <td class="text-nowrap fw-semibold">@lang('app.'.$model)</td>
-
-
                                         <td>
                                             <div class="d-flex">
                                                 @if($model != 'settings')
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_view_div">
-                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_view" {{ old(''.$model.'_view') ? 'checked' : '' }} {{ $find[''.$model.'_view'] == 1 ? 'checked' : '' }} id="{{ $model }}_view"/>
-                                                        <label class="form-check-label text-purple" for="{{ $model }}_view">عرض</label>
+                                                        <input 
+                                                            class="form-check-input" 
+                                                            type="checkbox" 
+                                                            name="{{ $model }}_view"
+                                                            {{ old(''.$model.'_view') ? 'checked' : '' }}
+                                                            {{ $find[''.$model.'_view'] == 1 ? 'checked' : '' }}
+                                                            id="{{ $model }}_view" 
+                                                        />
+                                                        <label class="form-check-label badge badge-purple rounded-pill" for="{{ $model }}_view">عرض</label>
                                                     </div>
                                                 @endif
 
@@ -126,15 +144,25 @@
                                                     $model != 'products_stock_alert' &&
                                                     $model != 'purchases_create' &&
                                                     $model != 'purchases_return' &&
-                                                    $model != 'treasury_bills_create' &&
-                                                    $model != 'treasury_bills_report' &&
+                                                    $model != 'treasury_bills_create' &&   
+                                                    $model != 'treasury_bills_report' && 
+                                                    $model != 'total_sell_bill_today' &&
+                                                    $model != 'total_profit_today' &&
+                                                    $model != 'total_money_on_financial_treasury' &&
+                                                    $model != 'top_products' &&
+                                                    $model != 'top_clients' &&
+                                                    $model != 'profit' &&                                                 
                                                     $model != 'settings' &&
                                                     
                                                     $model != 'expenses_report' 
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_create_div">
-                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_create" {{ old(''.$model.'_create') ? 'checked' : '' }} {{ $find[''.$model.'_create'] == 1 ? 'checked' : '' }} id="{{ $model }}_create"/>
-                                                        <label class="form-check-label text-success" for="{{ $model }}_create">اضافة</label>
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_create"
+                                                            {{ old(''.$model.'_create') ? 'checked' : '' }}
+                                                            {{ $find[''.$model.'_create'] == 1 ? 'checked' : '' }}
+                                                            id="{{ $model }}_create" />
+                                                        <label class="form-check-label badge badge-success rounded-pill"
+                                                            for="{{ $model }}_create">اضافة</label>
                                                     </div>
                                                 @endif
                                             
@@ -161,11 +189,21 @@
                                                     $model != 'treasury_bills_report' &&
                                                     $model != 'transfer_between_storages' &&
                                                     $model != 'expenses' &&
+                                                    $model != 'total_sell_bill_today' &&
+                                                    $model != 'total_profit_today' &&
+                                                    $model != 'total_money_on_financial_treasury' &&
+                                                    $model != 'top_products' &&
+                                                    $model != 'top_clients' &&
+                                                    $model != 'profit' &&
                                                     $model != 'expenses_report' 
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_update_div">
-                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_update" {{ old(''.$model.'_update') ? 'checked' : '' }} {{ $find[''.$model.'_update'] == 1 ? 'checked' : '' }} id="{{ $model }}_update"/>
-                                                        <label class="form-check-label text-primary" for="{{ $model }}_update">تحديث</label>
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_update"
+                                                            {{ old(''.$model.'_update') ? 'checked' : '' }}
+                                                            {{ $find[''.$model.'_update'] == 1 ? 'checked' : '' }}
+                                                            id="{{ $model }}_update" />
+                                                        <label class="form-check-label badge badge-info rounded-pill"
+                                                            for="{{ $model }}_update">تحديث</label>
                                                     </div>
                                                 @endif
 
@@ -193,40 +231,25 @@
                                                     $model != 'treasury_bills_report' &&
                                                     $model != 'transfer_between_storages' &&
                                                     $model != 'expenses_report' &&
+                                                    $model != 'total_sell_bill_today' &&
+                                                    $model != 'total_profit_today' &&
+                                                    $model != 'total_money_on_financial_treasury' &&
+                                                    $model != 'top_products' &&
+                                                    $model != 'top_clients' &&
+                                                    $model != 'profit' &&
                                                     $model != 'settings'
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_delete_div">
-                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_delete" {{ old(''.$model.'_delete') ? 'checked' : '' }} {{ $find[''.$model.'_delete'] == 1 ? 'checked' : '' }} id="{{ $model }}_delete"/>
-                                                        <label class="form-check-label text-danger" for="{{ $model }}_delete">حذف</label>
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_delete"
+                                                            {{ old(''.$model.'_delete') ? 'checked' : '' }}
+                                                            {{ $find[''.$model.'_delete'] == 1 ? 'checked' : '' }}
+                                                            id="{{ $model }}_delete" />
+                                                        <label class="form-check-label badge badge-danger rounded-pill"
+                                                            for="{{ $model }}_delete">حذف</label>
                                                     </div>
                                                 @endif
                                             </div>
                                         </td>
-
-{{--
-                                        <td>
-                                            <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5" id="{{ $model }}_create_div">
-                                                <input class="form-check-input" type="checkbox" name="{{ $model }}_create" {{ old(''.$model.'_create') ? 'checked' : '' }} {{ $find[''.$model.'_create'] == 1 ? 'checked' : '' }} id="{{ $model }}_create"/>
-                                                <label class="form-check-label" for="{{ $model }}_create">اضافة</label>
-                                            </div>
-
-                                            <div class="form-check me-3 me-lg-5" id="{{ $model }}_view_div">
-                                                <input class="form-check-input" type="checkbox" name="{{ $model }}_view" {{ old(''.$model.'_view') ? 'checked' : '' }} {{ $find[''.$model.'_view'] == 1 ? 'checked' : '' }} id="{{ $model }}_view"/>
-                                                <label class="form-check-label" for="{{ $model }}_view">عرض</label>
-                                            </div>
-
-                                            <div class="form-check me-3 me-lg-5" id="{{ $model }}_update_div">
-                                                <input class="form-check-input" type="checkbox" name="{{ $model }}_update" {{ old(''.$model.'_update') ? 'checked' : '' }} {{ $find[''.$model.'_update'] == 1 ? 'checked' : '' }} id="{{ $model }}_update"/>
-                                                <label class="form-check-label" for="{{ $model }}_update">تحديث</label>
-                                            </div>
-
-                                            <div class="form-check me-3 me-lg-5" id="{{ $model }}_delete_div">
-                                                <input class="form-check-input" type="checkbox" name="{{ $model }}_delete" {{ old(''.$model.'_delete') ? 'checked' : '' }} {{ $find[''.$model.'_delete'] == 1 ? 'checked' : '' }} id="{{ $model }}_delete"/>
-                                                <label class="form-check-label" for="{{ $model }}_delete">حذف</label>
-                                            </div>
-                                            </div>
-                                        </td>--}}
                                     </tr>
                                 @endforeach
                             </tbody>

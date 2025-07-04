@@ -181,7 +181,8 @@ class SaleBillController extends Controller
                 ///////////////////////////////////////////////////////////////////////////////  لو العميل كاش
 
                 if(request('amount_paid') === null || floatval(request('amount_paid')) !== $calcTotalProductsAfter){
-                    return response()->json(['errorClientPayment' => ' هذا العميل غير مصرح لة بالشراء الآجل. يجب أن يكون المبلغ المدفوع مساوي للرقم المستحق دفعة في الفاتورة']);
+                    return response()->json(['errorClientPayment' => '⚠️ عذرًا، هذا العميل غير مصرح له بالشراء الآجل.
+💵 يجب أن يكون المبلغ المدفوع مساويًا لقيمة الفاتورة المستحقة بالكامل.']);
                 }else{
                     DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
                         $lastNumId = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->max('num_order');
@@ -208,9 +209,10 @@ class SaleBillController extends Controller
                                         ->value('quantity_small_unit');
                                         
                             $lastProductInfo = DB::table('store_dets')
-                                        ->where('product_id', $product_id)
-                                        ->orderBy('id', 'desc')
-                                        ->first();
+                                                ->where('product_id', $product_id)
+                                                //->where('type', 'اضافة فاتورة مشتريات')
+                                                ->orderBy('id', 'desc')
+                                                ->first();                                        
                                         
                             $sale_quantity = (float) request('sale_quantity')[$index];
                             $sellPrice = (float) request('sellPrice')[$index];
@@ -218,16 +220,26 @@ class SaleBillController extends Controller
                             $tax = (float) request('prod_tax')[$index];                    
         
                             // بدايه حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
-                            $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
-                            $onlyQuantityThisBill = $sale_quantity;
-    
-                            $sell_price_small_unit = $sellPrice; // سعر البيع الي جاي من فاتوره البيع 
-                            $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
-                            $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
-                            
-                            $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
-                            $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
-                            $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
+                                $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
+                                $onlyQuantityThisBill = $sale_quantity;
+                                    
+                                $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
+                                $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
+                                
+                                $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
+                                $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                                $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
+
+                                // بدايه التاكد لو تم التغير ف سعر البيع للمنتج 
+                                if($sellPrice == display_number($lastProductInfo->sell_price_small_unit)){
+                                    $sell_price_small_unit = $sellPrice; 
+                                    $current_sell_price_in_sale_bill = $sellPrice; 
+                                }else{
+                                    $sell_price_small_unit = $lastProductInfo->sell_price_small_unit; 
+                                    $current_sell_price_in_sale_bill = $sellPrice; 
+                                }
+                                // نهايه التاكد لو تم التغير ف سعر البيع للمنتج 
+                                
                             // نهاية حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
                             
                             DB::table('store_dets')->insert([
@@ -236,6 +248,7 @@ class SaleBillController extends Controller
                                 'year_id' => $this->currentFinancialYear(),
                                 'bill_id' => $saleBillId,
                                 'product_id' => $product_id,
+                                'current_sell_price_in_sale_bill' => $current_sell_price_in_sale_bill,                                            
                                 'sell_price_small_unit' => $sell_price_small_unit,                                            
                                 'last_cost_price_small_unit' => $last_cost_price_small_unit,
                                 'avg_cost_price_small_unit' => $avg_cost_price_small_unit, 
@@ -252,7 +265,8 @@ class SaleBillController extends Controller
                                 'created_at' => now()
                             ]);
                             
-                        } // End foreach to request('prod_name')         
+                        } // End foreach to request('prod_name')    
+                    
         
                         $lastAmountOfTreasury = DB::table('treasury_bill_dets')
                                         ->where('treasury_id', request('treasury_id'))
@@ -323,6 +337,7 @@ class SaleBillController extends Controller
                                     
                         $lastProductInfo = DB::table('store_dets')
                                     ->where('product_id', $product_id)
+                                    //->where('type', 'اضافة فاتورة مشتريات')
                                     ->orderBy('id', 'desc')
                                     ->first();
                                     
@@ -332,16 +347,26 @@ class SaleBillController extends Controller
                         $tax = (float) request('prod_tax')[$index];                    
     
                         // بدايه حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
-                        $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
-                        $onlyQuantityThisBill = $sale_quantity;
+                            $totalQuantity = $lastProductQuantity - $sale_quantity; // بقوم انقاص الكميه المباعه من رصيد المخزن
+                            $onlyQuantityThisBill = $sale_quantity;
 
-                        $sell_price_small_unit = $sellPrice; // سعر البيع الي جاي من فاتوره البيع 
-                        $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
-                        $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
-                        
-                        $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
-                        $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
-                        $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
+                            $last_cost_price_small_unit = $lastProductInfo->last_cost_price_small_unit; // جلب اخر سعر تكلفه من المنتج من اخر صف له 
+                            $avg_cost_price_small_unit = $lastProductInfo->avg_cost_price_small_unit; // جلب اخر متوسط تكلفه من المنتج من اخر صف له 
+                            
+                            $product_total = ( $onlyQuantityThisBill * $sellPrice );    //  اجمالي السلعة/الخدمة قبل كسعر بيع
+                            $after_discount = $product_total - ( $product_total * $discount / 100 );    // اجمالي السلعة/الخدمة بعد الخصم نسبه
+                            $after_tax = $after_discount + ( $after_discount * $tax / 100 );    // اجمالي السلعة/الخدمة بعد الخصم والضريبه نسبة
+
+                            // بدايه التاكد لو تم التغير ف سعر البيع للمنتج 
+                                if($sellPrice == display_number($lastProductInfo->sell_price_small_unit)){
+                                    $sell_price_small_unit = $sellPrice; 
+                                    $current_sell_price_in_sale_bill = $sellPrice; 
+                                }else{
+                                    $sell_price_small_unit = $lastProductInfo->sell_price_small_unit; 
+                                    $current_sell_price_in_sale_bill = $sellPrice; 
+                                }
+                            // نهايه التاكد لو تم التغير ف سعر البيع للمنتج 
+                            
                         // نهاية حساب اجمالي سعر كل منتج لوحده بعد الضرايب والخصم
 
                         
@@ -351,6 +376,7 @@ class SaleBillController extends Controller
                             'year_id' => $this->currentFinancialYear(),
                             'bill_id' => $saleBillId,
                             'product_id' => $product_id,
+                            'current_sell_price_in_sale_bill' => $current_sell_price_in_sale_bill,                                            
                             'sell_price_small_unit' => $sell_price_small_unit,                                            
                             'last_cost_price_small_unit' => $last_cost_price_small_unit,
                             'avg_cost_price_small_unit' => $avg_cost_price_small_unit, 
@@ -451,6 +477,7 @@ class SaleBillController extends Controller
                         
                         'store_dets.product_id',
                         'store_dets.sell_price_small_unit',
+                        'store_dets.current_sell_price_in_sale_bill',
                         'store_dets.last_cost_price_small_unit',
                         'store_dets.avg_cost_price_small_unit',
                         'store_dets.product_bill_quantity',
@@ -547,12 +574,28 @@ class SaleBillController extends Controller
             ->addColumn('treasuryName', function($res){
                 return $res->treasuryName;
             })
+            ->addColumn('total_bill', function($res){
+                $total_bill = '';
+                
+                if($res->total_bill_before != $res->total_bill_after){
+                    $total_bill.= "
+                        <span class='badge badge-danger text-white' style='font-size: 100% !important;'>قبل  ".display_number($res->total_bill_before)."</span>
+                    ";
+
+                    $total_bill .=  "<span style='font-size: 15px !important;'>بعد ".display_number($res->total_bill_after)."</span>";
+                }else{
+                    $total_bill .=  "<span style='font-size: 15px !important;'>".display_number($res->total_bill_after)."</span>";
+                }
+                
+                
+                return $total_bill;
+            })
             ->addColumn('count_items', function($res){
                 return display_number($res->count_items);
             })
             ->addColumn('date', function($res){
                 $dates = Carbon::parse($res->created_at)->format('d-m-Y')
-                        .' <span style="font-weight: bold;margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
+                        .' <span class="badge badge-dark text-white" style="margin: 0 7px;font-size: 100% !important;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
                 if($res->custom_date){
                     $dates.= 'تاريخ اخر '.Carbon::parse($res->custom_date)->format('Y-m-d');
                 }
@@ -571,26 +614,25 @@ class SaleBillController extends Controller
                         </span>';
             })
             ->addColumn('action', function($res){
-                return '
-                        <button type="button" class="btn btn-sm btn-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        
-                        <button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
-                            <i class="fas fa-print"></i>
-                        </button>
-
-
+                return '                        
                         <a type="button" href="'.url('sales_return/'.$res->id).'" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
                             <i class="fas fa-reply"></i>
                         </a>
+                        
+                        <button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
+                        <i class="fas fa-print"></i>
+                        </button>
+                        
+                        <button type="button" class="btn btn-sm btn-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
+                            <i class="fas fa-eye"></i>
+                        </button>
                 ';
 
                 //<button type="button" class="btn btn-sm btn-dark upload" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="تحميل الفاتورة على المنصة الإلكترونية" res_id="'.$res->id.'">
                 //    <i class="fas fa-file-upload"></i>
                 //</button>
             })
-            ->rawColumns(['id', 'clientName', 'treasuryName', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])
+            ->rawColumns(['id', 'clientName', 'treasuryName', 'count_items', 'total_bill', 'date', 'notes', 'userName', 'financialName', 'action'])
             ->toJson();
     }
 
@@ -622,6 +664,7 @@ class SaleBillController extends Controller
                         'sale_bills.*',
                         
                         'store_dets.product_id', 
+                        'store_dets.current_sell_price_in_sale_bill', 
                         'store_dets.sell_price_small_unit', 
                         'store_dets.product_bill_quantity', 
                         'store_dets.total_before as productTotalBefore', 

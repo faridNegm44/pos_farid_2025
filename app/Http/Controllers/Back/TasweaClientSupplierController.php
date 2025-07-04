@@ -167,7 +167,7 @@ class TasweaClientSupplierController extends Controller
             })
             ->addColumn('tasweaCreatedAt', function($res){
                 return Carbon::parse($res->created_at)->format('d-m-Y')
-                            .' <span style="font-weight: bold;margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
+                            .' <span style="margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
             })
             //->addColumn('status', function($res){
             //    if($res->new_money  > $res->old_money){

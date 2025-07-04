@@ -4,14 +4,14 @@
         <div class="main-header-left ">
             <a class="animated-arrow hor-toggle horizontal-navtoggle"><span></span></a>
             <a class="header-brand" href="{{ url('') }}">
-                <img src="{{ asset('back') }}/assets/img/brand/logo-white.png" class="desktop-dark">
-                <img src="{{ asset('back') }}/assets/img/brand/logo.png" class="desktop-logo">
-                <img src="{{ asset('back') }}/assets/img/brand/favicon.png" class="desktop-logo-1">
-                <img src="{{ asset('back') }}/assets/img/brand/favicon.png" class="desktop-logo-dark">
+                <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-dark">
+                <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-logo">
+                <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->fav_icon) }}" class="desktop-logo-1">
+                <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->fav_icon) }}" class="desktop-logo-dark">
             </a>         
 
             {{--<div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">--}}
-            <div class="horizontal-main header-layout d-none d-lg-flex d-xl-flex">
+            <div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">
 
                 <div class="horizontal-mainwrapper container clearfix">
                     <nav class="horizontalMenu clearfix"><div class="horizontal-overlapbg"></div>
@@ -141,7 +141,7 @@
             <div>
                 {{--<p>{{ authUserInfo()->name }}</p>--}}
                 {{--<span>{{ authUserInfo()->role_name }}</span>--}}
-                <a class="bg bg-info-transparent text-dark" style="font-size: 11px;margin: 5px;padding: 10px !important;">
+                <a class="bg bg-info-transparent text-dark d-none d-lg-inline d-xl-inline" style="font-size: 11px;margin: 5px;padding: 10px !important;">
                     <i class="fas fa-user-cog "></i>
                     {{ authUserInfo()->name }} - <span>{{ authUserInfo()->role_name }}</span>
                 </a>
@@ -415,7 +415,8 @@
                     </div>
                 </div>
 
-                <div class="dropdown main-header-message right-toggle">
+                {{-- right-toggle d-none d-lg-inline d-md-inline d-sm-inline d-xs-inline --}}
+                <div class="dropdown main-header-message">
                     <a class="nav-link pr-0" data-toggle="sidebar-left" data-target=".sidebar-left">
                         <svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                     </a>

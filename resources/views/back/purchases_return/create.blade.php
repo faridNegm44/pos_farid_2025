@@ -145,12 +145,12 @@
                     <div class="row"> 
     
                         <div class="col-lg-4 product-selection p-3 total_info" style="background: #ae7187;">
-                            <div class="text-center" style="font-weight: bold;text-decoration: underline;background: rgb(69 43 49);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                            <div class="text-center" style="text-decoration: underline;background: rgb(69 43 49);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
                                 {{ $pageNameAr }}
                                 <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ $find[0]->id }}</span>
                             </div>
                             
-                            <div class="text-center" id="date_time" style="font-weight: bold;font-size: 25px !important;margin-top: 10px;">
+                            <div class="text-center" id="date_time" style="font-size: 25px !important;margin-top: 10px;">
                                 <span class="badge badge-light" id="date"></span>
                                 <span class="badge badge-danger mx-2" id="time"></span>
                             </div>
@@ -176,11 +176,11 @@
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" value="{{ display_number( $find[0]->extra_money ) }}"/>
                                     </p>--}}
                         
-                                    <p class="col-6" id="countTableTr" style="font-size: 13px;font-weight: bold;">
+                                    <p class="col-6" id="countTableTr" style="font-size: 13px;">
                                         عدد العناصر:
                                         <span style="font-size: 16px;">{{ display_number( $find[0]->count_items ) }}</span>
                                     </p>
-                                    <p class="col-6" style="font-size: 13px;font-weight: bold;font-size: 14px;">
+                                    <p class="col-6" style="font-size: 13px;font-size: 14px;">
                                         م الفرعي: 
                                         <span style="font-size: 16px;" class="subtotal">{{ display_number( $find[0]->total_bill_before ) }}</span>
                                     </p>
@@ -458,7 +458,7 @@
             alertify.confirm(
                 'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
                 `<div style="text-align: center;">
-                    <p style="font-weight: bold;">
+                    <p style="">
                         هل انت متأكد من حفظ مرتجع الفاتورة الحالية
                     </p>
                 </div>`,

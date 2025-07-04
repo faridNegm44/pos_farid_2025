@@ -157,12 +157,12 @@
                     <div class="row"> 
     
                         <div class="col-lg-4 product-selection p-3 total_info" style="background: #70a584;">
-                            <div class="text-center" style="font-weight: bold;text-decoration: underline;background: rgb(66 112 81);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                            <div class="text-center" style="text-decoration: underline;background: rgb(66 112 81);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
                                 {{ $pageNameAr }}
                                 <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ ($lastBillNum+1) }}</span>
                             </div>
                             
-                            <div class="text-center" id="date_time" style="font-weight: bold;font-size: 25px !important;margin-top: 10px;">
+                            <div class="text-center" id="date_time" style="font-size: 25px !important;margin-top: 10px;">
                                 <span class="badge badge-light" id="date"></span>
                                 <span class="badge badge-danger mx-2" id="time"></span>
                             </div>
@@ -196,11 +196,11 @@
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" />
                                     </p>
                                 
-                                    <p class="col-6" id="countTableTr" style="font-size: 13px;font-weight: bold;">
+                                    <p class="col-6" id="countTableTr" style="font-size: 13px;">
                                         عدد العناصر:
                                         <span style="font-size: 16px;">0</span>
                                     </p>
-                                    <p class="col-6" style="font-size: 13px;font-weight: bold;font-size: 14px;">
+                                    <p class="col-6" style="font-size: 13px;font-size: 14px;">
                                         م الفرعي: 
                                         <span style="font-size: 16px;" class="subtotal">0</span>
                                     </p>
@@ -510,6 +510,8 @@
                     var sellPrice = productData.sell_price_small_unit == null ? 0 : display_number_js(productData.sell_price_small_unit); // سعر البيع
                     var purchasePrice = productData.last_cost_price_small_unit == null ? 0 :  display_number_js(productData.last_cost_price_small_unit); // سعر الشراء
                     var purchasePriceAvg = productData.avg_cost_price_small_unit == null ? 0 :  display_number_js(productData.last_cost_price_small_unit); // سعر الشراء
+                    var discount = productData.prod_discount == null ? 0 : display_number_js(productData.prod_discount); // خصم المنتج
+                    var tax = productData.prod_tax == null ? 0 : display_number_js(productData.prod_tax); // ضريبة المنتج
                     
                     var quantity_all = display_number_js(productData.quantity_small_unit); // كميه المخزن
 
@@ -568,8 +570,8 @@
                                     <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
                                     <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
                                 </td>
-                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="0"></td>
-                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="0"></td>
+                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="${discount}"></td>
+                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}"></td>
                                 <td><input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total[]" value="0"></td>
                                 </tr>
                             `);
@@ -643,7 +645,7 @@
                 let totalAfterTax = totalAfterDiscount + taxAmount;
                 
                 // 5. تحديث إجمالي الصف
-                row.find('.prod_total').val( totalAfterTax );
+                row.find('.prod_total').val( totalAfterTax.toFixed(3) );
 
                 total += totalAfterTax;
                 subTotal += totalBeforeDiscount;
@@ -749,7 +751,7 @@
             alertify.confirm(
                 'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
                 `<div style="text-align: center;">
-                    <p style="font-weight: bold;">
+                    <p style="">
                         هل انت متأكد من حفظ الفاتورة الحالية
                     </p>
                 </div>`,

@@ -2,7 +2,7 @@
     $(document).ready(function () {
         $(".modal #save").click(function(e){
 
-            alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="font-weight: bold;line-height: 2;"> هل أنت متأكد من عملية التحويل بين المخزنين</p>', 
+            alertify.confirm('انتبه <i class="fas fa-exclamation-triangle text-danger" style="margin: 0px 3px;font-size: 25px;"></i>', '<p class="text-danger text-center" style="line-height: 2;"> هل أنت متأكد من عملية التحويل بين المخزنين</p>', 
                 function(){
                     e.preventDefault();
                     document.querySelector('.modal #save').disabled = true;        
@@ -39,7 +39,7 @@
                             if(res.notAuth){
                                 alertify.dialog('alert')
                                     .set({transition:'slide',message: `
-                                        <div style="text-align: center;font-weight: bold;">
+                                        <div style="text-align: center;">
                                             <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
                                                 صلاحية غير متوفرة 🔐⚠️
                                             </p>

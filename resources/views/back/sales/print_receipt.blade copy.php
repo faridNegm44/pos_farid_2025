@@ -45,7 +45,7 @@
     <div id="bill">
         <div class="top_info">
             {{ GeneralSettingsInfo()->app_name }}
-            {{--<p style="font-weight: bold;text-decoration: underline;font-size: 13px;margin-bottom: 4px;">{{ $settings['name'] }}</p>
+            {{--<p style="text-decoration: underline;font-size: 13px;margin-bottom: 4px;">{{ $settings['name'] }}</p>
             <p>{{ $settings['address'] }}</p>
             <p style="margin-bottom: 4px;">{{ $settings['phone1'] }} - {{ $settings['phone2'] }}</p>--}}
         </div>
@@ -59,18 +59,18 @@
         </div>--}}
 
         <div class="bill_info">
-            {{--<div style="float: right" style="font-weight: bold;">السلع والخدمات: {{ $SalesContentCount }}</div>
-            <div style="float: left" style="font-weight: bold;">رقم الفاتورة: {{ $SalesHeader['id'] }}</div>--}}
+            {{--<div style="float: right" style="">السلع والخدمات: {{ $SalesContentCount }}</div>
+            <div style="float: left" style="">رقم الفاتورة: {{ $SalesHeader['id'] }}</div>--}}
         </div>
 
         <div class="table_info">
             <table style="width: 100%;text-align: center;">
                 <thead>
                     <tr>
-                        <td style="width: 50%;font-weight: bold;border-bottom: 2px solid #000;">السلعة/الخدمة</td>
-                        <td style="width: 20%;font-weight: bold;border-bottom: 2px solid #000;">الوحدة</td>
-                        <td style="width: 10%;font-weight: bold;border-bottom: 2px solid #000;">الكمية</td>
-                        <td style="width: 20%;font-weight: bold;border-bottom: 2px solid #000;">إجمالي السعر</td>
+                        <td style="width: 50%;border-bottom: 2px solid #000;">السلعة/الخدمة</td>
+                        <td style="width: 20%;border-bottom: 2px solid #000;">الوحدة</td>
+                        <td style="width: 10%;border-bottom: 2px solid #000;">الكمية</td>
+                        <td style="width: 20%;border-bottom: 2px solid #000;">إجمالي السعر</td>
                     </tr>
                 </thead>
 
@@ -85,7 +85,7 @@
                     @endforeach
                 </tbody>--}}
 
-                <tfoot style="height: 28px;font-weight: bold;font-size: 17px;">
+                <tfoot style="height: 28px;font-size: 17px;">
                     <tr>
                         <td colspan="2" style="border-bottom: 2px solid #000;">الإجمالي</td>
                         {{--<td colspan="2" style="border-bottom: 2px solid #000;">{{ $TotalBefore }}</td>--}}
@@ -98,8 +98,8 @@
         <div class="footer_info">
             <div style="float: right">
                 <p>
-                    <span style="font-weight: bold;">المطلوب: </span>
-                    {{--<span style="padding: 2px 10px;font-size: 20px;border: 2px solid #000;font-weight: bold;">{{ $TotalBefore }}</span>--}}
+                    <span style="">المطلوب: </span>
+                    {{--<span style="padding: 2px 10px;font-size: 20px;border: 2px solid #000;">{{ $TotalBefore }}</span>--}}
                 </p>
 
             </div>
@@ -108,12 +108,12 @@
 
 
         {{-- footer_info2 --}}
-        <div class="footer_info2" style="font-size: 8px;margin-top: 60px;text-align: center;font-weight: bold;">
+        <div class="footer_info2" style="font-size: 8px;margin-top: 60px;text-align: center;">
             <p>تاريخ الفاتورة: {{ date('h:ia') }} <span style="margin: 0px 5px;">{{ date('Y-m-d') }}</span></p>
         </div>
 
         {{-- footer_info3 --}}
-        <div class="footer_info3" style="font-size: 7px;border-top: 1px dashed #000;text-align: left;font-weight: bold;line-height: 0px;">
+        <div class="footer_info3" style="font-size: 7px;border-top: 1px dashed #000;text-align: left;line-height: 0px;">
             <p>Powered By: R-Plus For Software - 01012775704 - 01124700305 </p>
         </div>
     </div>

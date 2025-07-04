@@ -5,7 +5,7 @@
 	}
 
 	form .text-danger {
-		font-weight: bold;
+		
 		font-size: 12px;
 		margin-top: 7px;
 		display: block;
@@ -18,7 +18,7 @@
 
 	.ajs-button {
 		border: 0px;
-		font-weight: bold;
+		
 	}
 
 	.ajs-cancel {
@@ -57,7 +57,7 @@
 
 	.breadcrumb .active{
 		color: #727bb7;
-		font-weight: bold;
+		
 	}
 	.form_bordred_sections{
 		border: 5px solid #fff;
@@ -89,19 +89,19 @@
 	/* body[data-sidebar="dark"] .mm-active .active, body[data-sidebar="colored"] .mm-active .active{
 		color: #2a3042 !important;
 		background: #e9e9e9;
-		font-weight: bold;
+		
 	}
 
 	body[data-sidebar="dark"].vertical-collpsed .vertical-menu #sidebar-menu ul li.mm-active .active, body[data-sidebar="colored"].vertical-collpsed .vertical-menu #sidebar-menu ul li.mm-active .active{
 		color: #2a3042 !important;
 		background: #e9e9e9;
-		font-weight: bold;
+		
 	}
 
 	body[data-sidebar="colored"] .mm-active>a{
 		background: #fff;
 		color: #34394b !important;
-		font-weight: bold;
+		
 	}
 
 	body[data-sidebar="colored"] .mm-active>a i{
@@ -124,7 +124,7 @@
 		border-radius: 20px;
 		box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.1), -15px -15px 20px #fffb;
 		direction: ltr;
-		font-weight: bold;
+		
 	}
 	.calculator .buttons {
 		position: relative;

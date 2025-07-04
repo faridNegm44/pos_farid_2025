@@ -40,6 +40,8 @@ class SearchController extends Controller
                             'products.small_unit_numbers', 
                             'products.max_sale_quantity', 
                             'products.status', 
+                            'products.prod_discount',
+                            'products.prod_tax',
                             
                             'store_dets.id as store_dets_id',
                             'store_dets.sell_price_small_unit',
@@ -50,7 +52,6 @@ class SearchController extends Controller
                             'smallUnit.name as smallUnitName',
                             'bigUnit.name as bigUnitName',
                         ]);
-
 
                         //return $items;
         return response()->json(['items' => $items]);        

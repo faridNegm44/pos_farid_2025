@@ -180,9 +180,9 @@
     }
     
     .inputs_table{
-        max-width: 70px;
+        max-width: 95% !important;
         height: 20px !important;
-        font-weight: bold;
+        
         font-size: 13px;
         margin: auto;
         display: block;
@@ -193,7 +193,7 @@
         max-width: 70% !important;
         width: 70% !important;
         height: 20px !important;
-        font-weight: bold;
+        
         border: 1px solid #ccc;
         margin: auto;
     }
@@ -211,11 +211,11 @@
 
     thead tr{
         font-size: 12px;
-        font-weight: bold;
+        
     }
     tbody tr{
         font-size: 12px;
-        font-weight: bold;
+        
     }
     .prod_name{
         font-size: 11px;
@@ -223,7 +223,7 @@
 
     #countTableTr span{
         font-size: 16px;
-        font-weight: bold;
+        
         color: red;
     }
     .header .btn-group .btn{
@@ -264,7 +264,7 @@
     
     .ajs-button {
         border: 0px;
-        font-weight: bold;
+        
     }
 
     .ajs-cancel {
@@ -273,19 +273,19 @@
     }
 
     .ajs-success{
-        font-weight: bold;
+        
         width: 320px !important;
         {{--  background: rgb(77, 124, 91) !important;  --}}
     }
 
     .ajs-error{
-        font-weight: bold;
+        
         width: 320px !important;
         background: rgb(155, 56, 64) !important;
     }
 
     .ajs-warning{
-        font-weight: bold;
+        
         width: 320px !important;
         background: orange !important;
     }
@@ -341,7 +341,7 @@
     {{--  start modal_search_product  --}}
     #modal_search_product #search_by{
         font-size: 13px;
-        font-weight: bold;
+        
     }
     #modal_search_product #search_form{
         margin-bottom: 20px; 

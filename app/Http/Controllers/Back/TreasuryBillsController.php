@@ -208,7 +208,7 @@ class TreasuryBillsController extends Controller
             ->addColumn('created_at', function($res){
                 if($res->created_at){
                     return Carbon::parse($res->created_at)->format('d-m-Y')
-                            .' <p style="font-weight: bold;margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</p>';
+                            .' <p style="margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</p>';
                 }
             })
             ->addColumn('date', function($res){

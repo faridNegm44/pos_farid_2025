@@ -69,6 +69,14 @@
                     {data: 'user', name: 'user'},
                     {data: 'action', name: 'action', orderable: false},
                 ],
+                dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                buttons: [
+                    { extend: 'excel', text: '📊 Excel', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'} },
+                    { extend: 'print', text: '🖨️ طباعة', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'}, customize: function (win) { $(win.document.body).css('direction', 'rtl'); } },
+                    { extend: 'colvis', text: '👁️ إظهار/إخفاء الأعمدة', className: 'btn btn-outline-dark' }
+                ],
                 order: [[ 0, "desc" ]],
                 "bDestroy": true,
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
@@ -114,16 +122,16 @@
                     <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
                         <thead>
                             <tr>
-                                <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0">الخزينة</th>
-                                <th class="border-bottom-0" style="width: 20%;">وصف المصروف</th>
-                                <th class="border-bottom-0">م المصروف</th>
-                                {{--<th class="border-bottom-0">مبلغ خزينة بعد المصروف</th>--}}
-                                <th class="border-bottom-0">الحالة</th>
-                                <th class="border-bottom-0">ملاحظات</th>
-                                <th class="border-bottom-0">تاريخ</th>
-                                <th class="border-bottom-0">مستخدم</th>
-                                <th class="border-bottom-0">التحكم</th>
+                                <th class="border-bottom-0 nowrap_thead">#</th>
+                                <th class="border-bottom-0 nowrap_thead">الخزينة</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">وصف المصروف</th>
+                                <th class="border-bottom-0 nowrap_thead">م المصروف</th>
+                                {{--<th class="border-bottom-0 nowrap_thead">مبلغ خزينة بعد المصروف</th>--}}
+                                <th class="border-bottom-0 nowrap_thead">الحالة</th>
+                                <th class="border-bottom-0 nowrap_thead">ملاحظات</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">تاريخ</th>
+                                <th class="border-bottom-0 nowrap_thead">مستخدم</th>
+                                <th class="border-bottom-0 nowrap_thead">التحكم</th>
                             </tr>
                         </thead>                                
                     </table>
