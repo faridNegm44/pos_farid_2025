@@ -40,8 +40,9 @@ class SaleBillController extends Controller
                                     ->get();
                                     
         $lastBillNum = DB::table('sale_bills')->max('id');                                
+        $extra_expenses = DB::table('extra_expenses')->orderBy('expense_type', 'asc')->get();                                
 
-        return view('back.sales.create' , compact('pageNameAr' , 'pageNameEn', 'suppliers', 'treasuries', 'lastBillNum'));
+        return view('back.sales.create' , compact('pageNameAr' , 'pageNameEn', 'suppliers', 'treasuries', 'lastBillNum', 'extra_expenses'));
     }
 
     public function store(Request $request)
@@ -552,6 +553,7 @@ class SaleBillController extends Controller
                     ->select(
                         'sale_bills.*',
                         'clients_and_suppliers.name as clientName',
+                        'clients_and_suppliers.phone as clientPhone',
                         'financial_treasuries.name as treasuryName',
                         'financial_years.name as financialName',
                         'users.name as userName',
@@ -570,6 +572,9 @@ class SaleBillController extends Controller
             })
             ->addColumn('clientName', function($res){
                 return $res->clientName;
+            })
+            ->addColumn('clientPhone', function($res){
+                return $res->clientPhone;
             })
             ->addColumn('treasuryName', function($res){
                 return $res->treasuryName;

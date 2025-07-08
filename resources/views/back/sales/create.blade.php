@@ -112,7 +112,8 @@
     
         {{--@include('back.sales.modal_search_product')--}}
         {{--@include('back.sales.modal_dismissal_notices')--}}
-    
+        
+        
         
         
         <form>
@@ -127,17 +128,24 @@
                 <div id="top_section" style="padding: 7px 10px 0;">
                     <div class="row">
                         <div class="col-lg-5" style="margin-bottom: 8px;">
-                            <select class="" name="client_id" id="clients" style="border: 1px solid #5c5c5c !important;">
+                            <select name="client_id" id="clients" style="border: 1px solid #5c5c5c !important;">
                                 <option value="" selected>إبحث عن عميل</option>         
                             </select>
                             <bold class="text-danger" id="errors-client_id" style="display: none;"></bold>
                         </div>
                         
                         <div class="col-lg-1" style="margin-bottom: 8px;">
+                            <button type="button" class="btn btn-danger-gradient waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".client_modal" title="اضافة عميل جديد" style="width: 75%;margin: 0px auto;font-size: 19px;padding: 0px !important;display: block;">
+                                <i class="fas fa-user-plus"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="col-lg-1" style="margin-bottom: 8px;">
                             <input type="text" class="form-control" id="custom_bill_num" name="custom_bill_num" placeholder="رقم فاتورة مخصص" value="">
                         </div>
                         
-                        <div class="col-lg-6" style="margin-bottom: 8px;">
+                        
+                        <div class="col-lg-5" style="margin-bottom: 8px;">
                             <select class="" id="products_selectize" style="border: 1px solid #5c5c5c !important;">
                                 <option value="" selected>إبحث عن سلعة/خدمة</option>         
                             </select>
@@ -172,7 +180,7 @@
                             <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #cccccc;background-color: #ededed;">
                                 <div class="row">
                                                                         
-                                    <p class="col-lg-4 col-12">
+                                    <p class="col-lg-3 col-12">
                                         <label for="">
                                             ضريبة ق م (%)
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
@@ -180,7 +188,7 @@
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
                                     </p>
         
-                                    <p class="col-lg-4 col-12">
+                                    <p class="col-lg-3 col-12">
                                         <label for="">
                                             خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
@@ -188,12 +196,21 @@
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" />
                                     </p>
                                     
-                                    <p class="col-lg-4 col-12">
+                                    <p class="col-lg-6 col-12">
                                         <label for="">
                                             مصاريف إضافية
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" />
+                                        <span class="row">
+                                            <select class="col-8 form-control" name="extra_expense_type" id="extra_expense_type">
+                                                <option value="" selected>اختر مصروف اضافي</option>                                            
+                                                @foreach ($extra_expenses as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->expense_type }}</option>                                            
+                                                @endforeach
+                                            </select>
+
+                                            <input autocomplete="off" type="text" class="col-4 form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" />
+                                        </span>
                                     </p>
                                 
                                     <p class="col-6" id="countTableTr" style="font-size: 13px;">
@@ -282,6 +299,7 @@
             </div>
         </form>
         
+        @include('back.sales.modal_add_new_client')
         @include('back.layouts.notification_sidebar')
     </div>
     
@@ -659,8 +677,8 @@
 
             // عرض الإجمالي الكلي في الـ div
             $('.subtotal').text( parseFloat(subTotal).toLocaleString() + ' جنية');
-            $('.total_bill_after').text( parseFloat(afterExtraMoney).toLocaleString() + ' جنية');
-            $('#remaining').text( parseFloat(afterExtraMoney).toLocaleString() + ' جنية');
+            $('.total_bill_after').text( afterExtraMoney + ' جنية');
+            $('#remaining').text( parseFloat(afterExtraMoney).toLocaleString() + ' جنية'); 
 
 
             //if(bill_discount > total){
@@ -692,11 +710,40 @@
     </script>
     {{-- end when change tax_bill update prod_tax value --}}
     
+    
+    
+    {{-- start when change extra_expense_type --}}
+    <script>
+        $(document).on('input', '#extra_expense_type', function () {
+            const thisVal = $(this).val();
+
+            if(thisVal){
+                $.ajax({
+                    type: "GET",
+                    url: `{{ url('get_info/extra_expenses') }}/${thisVal}`,
+                    success: function(res){
+                        alertify.set('notifier','position', 'bottom-center');
+                        alertify.set('notifier','delay', 3);
+                        alertify.success("تم استدعاء سعر هذا المصروف الإضافي بنجاح 💰");
+                        
+                        $('#extra_money').val( res.amount ? display_number_js(res.amount) : 0 );
+
+                        calcTotal();
+                    }
+                });       
+            }else{
+                $('#extra_money').val('');
+            }
+        });
+    </script>
+    {{-- end when change extra_expense_type --}}
+
+    
 
     {{-- start when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
     <script>
         $(document).ready(function () {
-            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #bill_discount, #extra_money', function () {
+            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #bill_discount, #extra_money, #extra_expense_type', function () {
                 calcTotal();
                 //$("#overlay_page").fadeIn();
                 //$("#overlay_page").fadeOut();
@@ -704,38 +751,6 @@
         });
     </script>
     {{-- end when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
-
-
-
-    {{-- start when change clients or suppliers --}}
-    {{--<script>
-        $(document).on('input', '#supplier', function() {      
-            const client_id = $(thclients)[0].selectize.getValue();
-
-            $.ajax({
-                type: "GET",
-                url: `{{ url('get_info/supplierInfo') }}/${client_id}`,
-        clients: function(){
-                    $("#on_him").text(0);
-                    $("#for_him").text(0);
-                },
-                success: function(res){
-                    alertify.set('notifier','position', 'bottom-center');
-                    alertify.set('notifier','delay', 3);
-                    alertify.success("تم استدعاء الموقف المالي للجهة بنجاح");
-                    
-                    if(res > 0){
-                        $("#on_him").text(`${parseFloat(res).toLocaleString()}`);
-                    }else{
-                        $("#for_him").text(`${parseFloat(res).toLocaleString()}`);
-                    } 
-                }
-            });                        
-        });
-    </script>--}}
-    {{--end when change clients or suppliers --}}
-
-
 
 
     {{--  start when click finally_save_bill_btn to save bill --}}
@@ -832,6 +847,67 @@
     </script>
     {{--  end when click finally_save_bill_btn to save bill --}}
     
+
+
+
+    {{-- start client modal --}}
+    <script>
+        $('.client_modal #save').click(function(e){
+            e.preventDefault();
+
+            document.querySelector('.modal #save').disabled = true;        
+            document.querySelector('.spinner_request').setAttribute("style", "display: inline-block;");
+
+            const client_modal_name = $("#client_modal_name").val();
+            const client_modal_phone = $("#client_modal_phone").val();
+            const client_modal_address = $("#client_modal_address").val();
+            const client_modal_type_payment = $("#client_modal_type_payment").val();
+
+            $.ajax({
+                url: "{{ url('clients/store_client_from_pos_page') }}",
+                type: 'POST',
+                data: {
+                    client_modal_name: client_modal_name,
+                    client_modal_phone: client_modal_phone,
+                    client_modal_address: client_modal_address,
+                    client_modal_type_payment: client_modal_type_payment,
+                },
+                beforeSend:function () {
+                    $('form [id^=errors]').text('');
+                },
+                error: function(res){
+                    console.log(res);
+
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 4);
+                    alertify.error("عذرًا، حدث خطأ أثناء العملية ⚠️ يُرجى المحاولة مرة أخرى 🔄");
+
+                    document.querySelector('.modal #save').disabled = false;
+                    document.querySelector('.spinner_request').style.display = 'none';
+
+                    $(`.client_modal #errors-client_modal_name`).css('display' , 'block').text(res.responseJSON.errors.client_modal_name);
+                    $(`.client_modal #errors-client_modal_phone`).css('display' , 'block').text(res.responseJSON.errors.client_modal_phone);
+                    $(`.client_modal #errors-client_modal_address`).css('display' , 'block').text(res.responseJSON.errors.client_modal_address);
+                    $(`.client_modal #errors-client_modal_type_payment`).css('display' , 'block').text(res.responseJSON.errors.client_modal_type_payment);
+                },
+                success: function(res){
+                    $(".client_modal").modal('hide');
+
+                    document.querySelector('.modal #save').disabled = false;
+                    document.querySelector('.spinner_request').style.display = 'none';
+
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 4);
+                    alertify.success("تمت اضافة العميل بنجاح");
+
+                }
+            });
+        });
+    </script>
+    {{-- end client modal --}}
+
+
+
 
     {{-- start general scripts --}}
     <script>

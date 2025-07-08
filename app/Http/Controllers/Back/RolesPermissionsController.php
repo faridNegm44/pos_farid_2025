@@ -144,6 +144,9 @@ class RolesPermissionsController extends Controller
             'roles_permissions_update' => request('roles_permissions_update') ? 1 : 0, 
             'roles_permissions_view' => request('roles_permissions_view') ? 1 : 0, 
             'roles_permissions_delete' => request('roles_permissions_delete') ? 1 : 0,
+            'tax_bill_view' => request('tax_bill_view') ? 1 : 0,
+            'discount_bill_view' => request('discount_bill_view') ? 1 : 0,
+            'cost_price_view' => request('cost_price_view') ? 1 : 0,
             'created_at' => now(),
             // end first
             
@@ -274,7 +277,10 @@ class RolesPermissionsController extends Controller
             'roles_permissions_update' => request('roles_permissions_update') ? 1 : 0, 
             'roles_permissions_view' => request('roles_permissions_view') ? 1 : 0, 
             'roles_permissions_delete' => request('roles_permissions_delete') ? 1 : 0,
-            'created_at' => now(),
+            'tax_bill_view' => request('tax_bill_view') ? 1 : 0,
+            'discount_bill_view' => request('discount_bill_view') ? 1 : 0,
+            'cost_price_view' => request('cost_price_view') ? 1 : 0,
+            'updated_at' => now(),
             // end first
             
             

@@ -47,4 +47,10 @@ class GetInfoController extends Controller
         $treasuryInfo = DB::table('treasury_bill_dets')->where('treasury_id', $id)->orderBy('id', 'desc')->first();        
         return response()->json($treasuryInfo);
     }
+    
+    
+    public function extra_expenses($id){
+        $extra_expense = DB::table('extra_expenses')->where('id', $id)->first();        
+        return response()->json($extra_expense);
+    }
 }

@@ -32,13 +32,15 @@
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('products') }}" class="slide-item text-dark">السلع والخدمات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('products/report') }}" class="slide-item text-dark">تقرير عن حركة سلعة/خدمة</a></li>
-
+                            
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item text-dark">تسوية كميات السلع والخدمات</a></li>
-
+                            
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('transfer_between_stores') }}" class="slide-item text-dark">تحويلات السلع والخدمات بين المخازن</a></li>
                             
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('extra_expenses') }}" class="slide-item text-dark">المصاريف الإضافية علي الفواتير</a></li>
                         </ul>
                     </li>                    
                     

@@ -27,6 +27,7 @@ return [
     'sales_create' => 'إنشاء فاتورة بيع',
     'sales_return' => 'مرتجع مبيعات',
     'products_stock_alert' => 'كشكول النواقص',
+    'products_report' => 'تقرير عن حركة سلعة/خدمة',
     'purchases' => 'المشتريات',
     'purchases_create' => 'إنشاء فاتورة شراء',
     'purchases_return' => 'مرتجع مشتريات',
@@ -44,5 +45,8 @@ return [
     'total_money_on_financial_treasury' => 'رصيد الخزن',
     'top_products' => 'المنتجات الأكثر والأقل مبيعاً',
     'top_clients' => 'العملاء الأكثر شراءً والأقل شراءً',
-    'profit' => 'تقرير الربحية'
+    'profit' => 'تقرير الربحية',
+    'tax_bill' => 'ضريبة علي السلع / الخدمات',
+    'discount_bill' => 'خصم علي السلع / الخدمات',
+    'cost_price' => 'سعر تكلفة السلع / الخدمات',
 ];

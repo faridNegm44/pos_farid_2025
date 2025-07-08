@@ -3,116 +3,115 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <head>
 
-		<meta charset="UTF-8">
-		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
-        <meta name="csrf-token" content="{{ csrf_token() }}" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
-		<meta name="Author" content="Spruko Technologies Private Limited">
-		<meta name="Keywords" content="dashboard, admin, bootstrap admin template, codeigniter, php, php framework, codeigniter 4, php mvc, php codeigniter, best php framework, codeigniter admin, codeigniter dashboard, admin panel template, bootstrap 4 admin template, bootstrap dashboard template"/>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+    <meta name="Author" content="Spruko Technologies Private Limited">
+    <meta name="Keywords" content="dashboard, admin, bootstrap admin template, codeigniter, php, php framework, codeigniter 4, php mvc, php codeigniter, best php framework, codeigniter admin, codeigniter dashboard, admin panel template, bootstrap 4 admin template, bootstrap dashboard template"/>
 
-        <!-- Title -->
-        <title> {{ GeneralSettingsInfo()->app_name }}: @yield('title') </title>
+    <!-- Title -->
+    <title> {{ GeneralSettingsInfo()->app_name }}: @yield('title') </title>
 
-        <!-- Favicon -->
-        <link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
 
-        <!-- Bootstrap css-->
-        <link href="{{ asset('back') }}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Bootstrap css-->
+    <link href="{{ asset('back') }}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
 
-        <!-- Icons css -->
-        <link href="{{ asset('back') }}/assets/css-rtl/icons.css" rel="stylesheet">
+    <!-- Icons css -->
+    <link href="{{ asset('back') }}/assets/css-rtl/icons.css" rel="stylesheet">
 
-        <!--  Right-sidemenu css -->
-        <link href="{{ asset('back') }}/assets/plugins/sidebar/sidebar.css" rel="stylesheet">
+    <!--  Right-sidemenu css -->
+    <link href="{{ asset('back') }}/assets/plugins/sidebar/sidebar.css" rel="stylesheet">
 
-        <!-- P-scroll bar css-->
-        <link href="{{ asset('back') }}/assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
+    <!-- P-scroll bar css-->
+    <link href="{{ asset('back') }}/assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
 
-        <!-- Style css -->
-        <link href="{{ asset('back') }}/assets/css-rtl/style.css" rel="stylesheet">
-        <link href="{{ asset('back') }}/assets/css-rtl/style-dark.css" rel="stylesheet">
+    <!-- Style css -->
+    <link href="{{ asset('back') }}/assets/css-rtl/style.css" rel="stylesheet">
+    <link href="{{ asset('back') }}/assets/css-rtl/style-dark.css" rel="stylesheet">
 
-        <!-- Maps css -->
-		<link href="{{ asset('back') }}/assets/plugins/jqvmap/jqvmap.min.css" rel="stylesheet">
+    <!-- Maps css -->
+    <link href="{{ asset('back') }}/assets/plugins/jqvmap/jqvmap.min.css" rel="stylesheet">
 
-        <!---Internal Owl Carousel css-->
-		<link href="{{ url('back') }}/assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <!---Internal Owl Carousel css-->
+    <link href="{{ url('back') }}/assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
 
-		<!---Internal  Multislider css-->
-		<link href="{{ url('back') }}/assets/plugins/multislider/multislider.css" rel="stylesheet">
+    <!---Internal  Multislider css-->
+    <link href="{{ url('back') }}/assets/plugins/multislider/multislider.css" rel="stylesheet">
 
-        <!--- Select2 css --->
-		<link href="{{ url('back') }}/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
+    <!--- Select2 css --->
+    <link href="{{ url('back') }}/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
 
-        <!-- Data table css -->
-		<link href="{{ url('back') }}/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
-		<link href="{{ url('back') }}/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet">
-		<link href="{{ url('back') }}/assets/plugins/datatable/css/responsive.bootstrap4.min.css" rel="stylesheet" />
-		<link href="{{ url('back') }}/assets/plugins/datatable/css/jquery.dataTables.min.css" rel="stylesheet">
-		<link href="{{ url('back') }}/assets/plugins/datatable/css/responsive.dataTables.min.css" rel="stylesheet">
-		<link href="{{ url('back') }}/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
+    <!-- Data table css -->
+    <link href="{{ url('back') }}/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="{{ url('back') }}/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet">
+    <link href="{{ url('back') }}/assets/plugins/datatable/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="{{ url('back') }}/assets/plugins/datatable/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="{{ url('back') }}/assets/plugins/datatable/css/responsive.dataTables.min.css" rel="stylesheet">
+    <link href="{{ url('back') }}/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
 
-        {{-- alertify --}}
-        <link href="{{ asset('back/assets/css-rtl/alertify.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
-        <link href="{{ asset('back/assets/css-rtl/default.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
+    {{-- alertify --}}
+    <link href="{{ asset('back/assets/css-rtl/alertify.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
+    <link href="{{ asset('back/assets/css-rtl/default.rtl.min.css') }}" type="text/css" rel="stylesheet"/>
 
-        {{-- flatpickr --}}
-        <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">        
+    {{-- flatpickr --}}
+    <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">        
 
-        {{-- selectize --}}
-        <link href="{{ asset('back/assets/selectize.css') }}" type="text/css" rel="stylesheet"/>
+    {{-- selectize --}}
+    <link href="{{ asset('back/assets/selectize.css') }}" type="text/css" rel="stylesheet"/>
 
-        @yield('header')
+    @yield('header')
 
-        <!-- Skinmodes css -->
-        <link href="{{ asset('back') }}/assets/css-rtl/skin-modes.css" rel="stylesheet" />
+    <!-- Skinmodes css -->
+    <link href="{{ asset('back') }}/assets/css-rtl/skin-modes.css" rel="stylesheet" />
 
-        <!-- Animations css -->
-        <link href="{{ asset('back') }}/assets/css-rtl/animate.css" rel="stylesheet">
+    <!-- Animations css -->
+    <link href="{{ asset('back') }}/assets/css-rtl/animate.css" rel="stylesheet">
 
-        <!---Switcher css-->
-        <link href="{{ asset('back') }}/assets/switcher/css/switcher-rtl.css" rel="stylesheet">
-        <link href="{{ asset('back') }}/assets/switcher/demo.css" rel="stylesheet">
-        
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Cairo:slnt,wght@11,200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">
+    <!---Switcher css-->
+    <link href="{{ asset('back') }}/assets/switcher/css/switcher-rtl.css" rel="stylesheet">
+    <link href="{{ asset('back') }}/assets/switcher/demo.css" rel="stylesheet">
 
-        {{-- custom css --}}
-        <link href="{{ asset('back') }}/assets/custom.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Cairo:slnt,wght@11,200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">
 
-        <style>
-            @font-face {
-                font-family: "4_F4";
-                src: url("{{ asset('back/fonts/4_F4.ttf') }}");
-            }
-            body{
-                /* font-family: Arial, Helvetica, sans-serif, serif; */
-                font-family: "4_F4", serif;        
-            }   
+    {{-- custom css --}}
+    <link href="{{ asset('back') }}/assets/custom.css" rel="stylesheet">
 
-            .nowrap_thead{
-                white-space: nowrap;
-            }
+    <style>
+        @font-face {
+            font-family: "4_F4";
+            src: url("{{ asset('back/fonts/4_F4.ttf') }}");
+        }
+        body{
+            /* font-family: Arial, Helvetica, sans-serif, serif; */
+            font-family: "4_F4", serif;        
+        }   
+
+        .nowrap_thead{
+            white-space: nowrap;
+        }
             
 
-
-            @media (max-width: 991px) {
-               .horizontalMenucontainer .breadcrumb-header {
-                    margin-top: 20px;
-                    padding-top: 30px;
-                }
+        @media (max-width: 991px) {
+            .horizontalMenucontainer .breadcrumb-header {
+                margin-top: 20px;
+                padding-top: 30px;
             }
-            /*.horizontalMenucontainer .side-header{
-                background: #e0e7f8 !important;
-                box-shadow: 0 6px 15px 1px #c0c0c7;
-            }*/
+        }
+        /*.horizontalMenucontainer .side-header{
+            background: #e0e7f8 !important;
+            box-shadow: 0 6px 15px 1px #c0c0c7;
+        }*/
 
-            .dt-buttons .btn {
+        .dt-buttons .btn {
             /*background-color: #3a8095;*/
             border-radius: 3px !important;
             padding: 5px 9px;
@@ -142,11 +141,45 @@
             background: #f2f2e2;
             font-size: 10px;
         }*/
-        </style>
-	</head>
+        .selectize-dropdown [data-selectable]{
+            font-size: 12px !important;
+        }
+
+        /* Scrollbar عمودي */
+        ::-webkit-scrollbar:vertical {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track:vertical {
+            background: #eee;
+        }
+        ::-webkit-scrollbar-thumb:vertical {
+            background: #666;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+        ::-webkit-scrollbar-thumb:vertical:hover {
+            background: #333;
+        }
+        /* Scrollbar أفقي */
+        ::-webkit-scrollbar:horizontal {
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track:horizontal {
+            background: #f9f9f9;
+        }
+        ::-webkit-scrollbar-thumb:horizontal {
+            background: #999;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+        ::-webkit-scrollbar-thumb:horizontal:hover {
+            background: #666;
+        }
+    </style>
+</head>
 
 
-<body class="main-body {{-- dark-theme --}}">
+<body class="main-body">
 
     <!-- Start Switcher -->
     {{--@include('back.layouts.switcher')--}}

@@ -140,11 +140,12 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
     Route::group(['prefix' => 'clients'] , function (){
         Route::get('/' , 'ClientsController@index');
         Route::post('/store' , 'ClientsController@store');
+        
         Route::get('/edit/{id}' , 'ClientsController@edit');
         Route::post('/update/{id}' , 'ClientsController@update');
         Route::get('/destroy/{id}' , 'ClientsController@destroy');
         
-        Route::post('store_client_from_pos_page' , 'ClientsController@storeClientFromPosPage');
+        Route::post('store_client_from_pos_page' , 'ClientsController@store_client_from_pos_page');
         Route::post('/import' , 'ClientsController@import');
         Route::get('datatable' , 'ClientsController@datatable');
 
@@ -166,7 +167,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::post('/update/{id}' , 'SuppliersController@update');
         Route::get('/destroy/{id}' , 'SuppliersController@destroy');
         
-        Route::post('store_client_from_pos_page' , 'SuppliersController@storeClientFromPosPage');
         Route::post('/import' , 'SuppliersController@import');
         Route::get('datatable' , 'SuppliersController@datatable');
 
@@ -187,9 +187,8 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/edit/{id}' , 'PartnersController@edit');
         Route::post('/update/{id}' , 'PartnersController@update');
         Route::get('/destroy/{id}' , 'PartnersController@destroy');
-        
-        Route::post('store_client_from_pos_page' , 'PartnersController@storeClientFromPosPage');
         Route::post('/import' , 'PartnersController@import');
+        
         Route::get('datatable' , 'PartnersController@datatable');
 
         //تقرير عن حركة شريك
@@ -263,6 +262,17 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
             Route::get('result' , 'ReportsExpensesController@result');
             Route::get('result/pdf' , 'ReportsExpensesController@result_pdf');
         });
+    });
+
+    // extra_expenses Routes => مصاريف اضافيه علي الفواتير بيع وشراء
+    Route::group(['prefix' => 'extra_expenses'] , function (){
+        Route::get('/' , 'ExtraExpensesController@index');
+        Route::post('/store' , 'ExtraExpensesController@store');
+        Route::get('/edit/{id}' , 'ExtraExpensesController@edit');
+        Route::post('/update/{id}' , 'ExtraExpensesController@update');
+        Route::get('/destroy/{id}' , 'ExtraExpensesController@destroy');
+        
+        Route::get('datatable' , 'ExtraExpensesController@datatable');
     });
 
     // transfer_between_storages التحويل بين المخازن
@@ -408,12 +418,15 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
 
 
-    // Get Info Of client || supplier || treasury || store || product || transfer || expense
+    // Get Info Of client || supplier || treasury || store || product || transfer || expense || extra expenses
     Route::group(['prefix' => 'get_info'] , function (){
         Route::get('/client_or_supplier/{id}/{type}' , 'GetInfoController@client_or_supplier'); 
         Route::get('/treasury/{id}' , 'GetInfoController@treasury');
+        
+        // extra_expenses
+        Route::get('/extra_expenses/{id}' , 'GetInfoController@extra_expenses');
     });
-    // Get Info Of client || supplier || treasury || store || product || transfer || expense
+    // Get Info Of client || supplier || treasury || store || product || transfer || expense || extra expenses
 
 
 

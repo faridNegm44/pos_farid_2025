@@ -71,7 +71,7 @@
                                 <th class="border-bottom-0">قيمة الحركة</th>
                                 <th class="border-bottom-0" style="width: 12%;">الجهة</th>
                                 <th class="border-bottom-0">نسبة الجهة</th>
-                                <th class="border-bottom-0">علي الجهة / لها</th>
+                                <th class="border-bottom-0">علية / لية</th>
                                 {{--<th class="border-bottom-0">مبلغ الخزينة بعد</th>--}}
                                 <th class="border-bottom-0" >مستخدم</th>
                                 <th class="border-bottom-0">ملاحظات</th>

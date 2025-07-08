@@ -7,9 +7,34 @@
 
 @section('header')
 
+
+
 @endsection
 
-@section('footer')  
+@section('footer') 
+    <script>
+        $(document).ready(function(){
+            // $('.datetimepicker').datetimepicker({ dropdownParent: $('.modal') });
+
+
+            // jQuery.datetimepicker.setLocale('en');
+            // jQuery('.datetimepicker').datetimepicker({
+            //     dropdownParent: $('.modal'),
+            //     timepicker:false,
+            //     format:'d-m-Y',
+            //     // theme:'dark'
+            // });
+
+
+
+            $(document).on('click', '.modal-body .datetimepicker', function() {
+                $(this).datetimepicker('show');
+            });
+
+        });
+
+    </script>
+
     <script>       
         // open modal when click button (insert)
         document.addEventListener('keydown', function(event){
@@ -50,17 +75,11 @@
                 ajax: `{{ url($pageNameEn.'/datatable') }}`,
                 dataType: 'json',
                 columns: [
-                    {data: 'num_order', name: 'num_order'},
-                    {data: 'created_at', name: 'created_at'},
-                    {data: 'date', name: 'date'},
-                    {data: 'client_supplier', name: 'client_supplier'},
-                    {data: 'treasury_type', name: 'treasury_type'},
-                    {data: 'treasury', name: 'treasury'},
-                    {data: 'amount_money', name: 'amount_money'},
-                    {data: 'remaining_money', name: 'remaining_money'},
-                    {data: 'treasury_money_after', name: 'treasury_money_after'},
-                    {data: 'user', name: 'user'},
+                    {data: 'id', name: 'id'},
+                    {data: 'expense_type', name: 'expense_type'},
+                    {data: 'amount', name: 'amount'},
                     {data: 'notes', name: 'notes'},
+                    {data: 'action', name: 'action', orderable: false},
                 ],
                 dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
                     "<'row'<'col-sm-12'tr>>" +
@@ -71,7 +90,6 @@
                     { extend: 'colvis', text: '👁️ إظهار/إخفاء الأعمدة', className: 'btn btn-outline-dark' }
                 ],
                 "bDestroy": true,
-                order: [[ 1, "desc" ]],
                 language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
             });
@@ -79,6 +97,9 @@
     </script>
 
     {{-- add, edit, delete => script --}}
+    @include('back.extra_expenses.add')
+    @include('back.extra_expenses.edit')
+    @include('back.extra_expenses.delete')
 @endsection
 
 
@@ -97,11 +118,13 @@
             </div>
             <div class="d-flex my-xl-auto right-content">
                 <div class="pr-1 mb-xl-0">
-                    <a type="button" href="{{ url('treasury_bills/create') }}" class="btn btn-danger btn-icon ml-2 add"><i class="mdi mdi-plus"></i></a>
+                    <button type="button" class="btn btn-danger btn-icon ml-2 add" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter"><i class="mdi mdi-plus"></i></button>
                 </div>
             </div>
         </div>
         <!-- breadcrumb -->
+
+        @include('back.extra_expenses.form')
 
 
         <div class="row row-sm">
@@ -113,16 +136,10 @@
                                 <thead>
                                     <tr>
                                         <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0" >تاريخ المعاملة</th>
-                                        <th class="border-bottom-0" >تاريخ اخر</th>
-                                        <th class="border-bottom-0">الجهة</th>
-                                        <th class="border-bottom-0">نوع المعاملة</th>
-                                        <th class="border-bottom-0">خزينة المعاملة</th>
-                                        <th class="border-bottom-0">مبلغ المعاملة</th>
-                                        <th class="border-bottom-0">علية / لية</th>
-                                        <th class="border-bottom-0">مبلغ الخزينة بعد</th>
-                                        <th class="border-bottom-0">موظف</th>
+                                        <th class="border-bottom-0" >نوع المصروف</th>
+                                        <th class="border-bottom-0" >سعر المصروف</th>
                                         <th class="border-bottom-0">ملاحظات</th>
+                                        <th class="border-bottom-0">التحكم</th>
                                     </tr>
                                 </thead>                                
                             </table>

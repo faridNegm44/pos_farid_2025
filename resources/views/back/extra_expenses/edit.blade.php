@@ -13,33 +13,26 @@
             success: function(res){
                 if(res.notAuth){
                     alertify.dialog('alert')
-						.set({transition:'slide',message: `
-							<div style="text-align: center;">
-								<p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
-									صلاحية غير متوفرة 🔐⚠️
-								</p>
-								<p>${res.notAuth}</p>
-							</div>
-						`, 'basic': true})
-						.show();  
+                        .set({transition:'slide',message: `
+                            <div style="text-align: center;">
+                                <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                    صلاحية غير متوفرة 🔐⚠️
+                                </p>
+                                <p>${res.notAuth}</p>
+                            </div>
+                        `, 'basic': true})
+                        .show();  
                     $(".modal").modal('hide');  
 
                 }else{
-                    document.querySelector("#res_id").value = res_id;
-
                     $.each(res , function(index, value){                    
                         $(`.modal form #${index}`).val(value);
                     });
+
+                    $('#amount').val( res.amount ? display_number_js(res.amount) : 0 );
+    
+                    document.querySelector("#res_id").value = res_id;
                     
-                    $(`.modal form #code`).val(res.code);
-                    $("#debtor_value").css('display', 'none');
-                    $("#creditor_value").css('display', 'none');
-                    $("#hide_cash").toggle(res.type_payment === 'آجل');
-
-                    $(`#image_preview_form`).attr('src', `{{ url('back/images/clients') }}/${res.image}`);
-                    document.querySelector("#image_preview_form").src = `{{ url('back/images/clients') }}/${res.image}`;
-                    document.querySelector("#image_hidden").value = res.image;
-
                     alertify.set('notifier','position', 'top-center');
                     alertify.set('notifier','delay', 2);
                     alertify.success("تم استرجاع البيانات بنجاح");
@@ -78,28 +71,24 @@
                 $('.dataInput:first').select().focus();
                 document.querySelector('.modal #update').disabled = false;
                 document.querySelector('.spinner_request2').style.display = 'none';                
-                
+
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 3);
                 alertify.error("عذرًا، حدث خطأ أثناء العملية ⚠️ يُرجى المحاولة مرة أخرى 🔄");
             },
             success: function(res){
+                $('#example1').DataTable().ajax.reload( null, false );
+                $(".modal form bold[class=text-danger]").css('display', 'none');
+        
+                $(".dataInput").val('');
+                $(".modal").modal('hide');
+
                 document.querySelector('.modal #update').disabled = false;
                 document.querySelector('.spinner_request2').style.display = 'none';
 
-                if(res.errorChangeTypePayment){
-                    alert(res.errorChangeTypePayment);
-                }else{
-                    $('#example1').DataTable().ajax.reload( null, false );
-                    $(".modal form bold[class=text-danger]").css('display', 'none');
-            
-                    $(".dataInput").val('');
-                    $(".modal").modal('hide');
-    
-                    alertify.set('notifier','position', 'top-center');
-                    alertify.set('notifier','delay', 3);
-                    alertify.success("تم التعديل بنجاح");
-                }
+                alertify.set('notifier','position', 'top-center');
+                alertify.set('notifier','delay', 3);
+                alertify.success("تم التعديل بنجاح");
             }
         });
     });

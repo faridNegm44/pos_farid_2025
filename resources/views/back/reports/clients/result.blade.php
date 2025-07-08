@@ -70,7 +70,7 @@
                                 <th class="border-bottom-0">نوع الحركة</th>
                                 <th class="border-bottom-0">قيمة الحركة</th>
                                 <th class="border-bottom-0">الجهة</th>
-                                <th class="border-bottom-0">علي الجهة / لها</th>
+                                <th class="border-bottom-0">علية / لية</th>
                                 <th class="border-bottom-0">مبلغ الخزينة بعد</th>
                                 <th class="border-bottom-0" >مستخدم</th>
                                 <th class="border-bottom-0">ملاحظات</th>

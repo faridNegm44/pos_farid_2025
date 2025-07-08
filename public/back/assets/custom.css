@@ -177,19 +177,22 @@ table .edit, table .delete, table .show, table .crm_info, table .print, table .v
 
 .ajs-success{
     
-    width: 320px !important;
+    width: 400px !important;
+    min-width: 400px !important;
     background: rgb(77, 124, 91) !important;
 }
 
 .ajs-error{
     
-    width: 320px !important;
+    width: 400px !important;
+    min-width: 400px !important;
     background: rgb(155, 56, 64) !important;
 }
 
 .ajs-warning{
     
-    width: 320px !important;
+    width: 400px !important;
+    min-width: 400px !important;
     background: orange !important;
 }
 

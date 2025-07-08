@@ -134,6 +134,64 @@ class ClientsController extends Controller
         }   
     }
 
+
+    public function store_client_from_pos_page(Request $request)
+    {
+        if (request()->ajax()){
+            $this->validate($request ,[
+                    'client_modal_name' => 'required|string|unique:clients_and_suppliers,name|max:255',
+                    'client_modal_phone' => 'nullable|numeric',
+                    'client_modal_address' => 'nullable|string',
+                    'client_modal_type_payment' => 'required|in:كاش,آجل',
+                ],[
+                    'required' => 'حقل :attribute إلزامي.',
+                    'string' => 'حقل :attribute يجب ان يكون من نوع نص.',
+                    'unique' => 'حقل :attribute مستخدم من قبل.',
+                    'numeric' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'integer' => 'حقل :attribute يجب ان يكون من نوع رقم.',
+                    'in' => 'القيمة المختارة في :attribute غير مسموح بها. يُرجى اختيار قيمة من الخيارات المتاحة فقط.',
+                ],[
+                    'client_modal_name' => 'إسم العميل',                
+                    'client_modal_phone' => 'عنوان العميل',                
+                    'client_modal_address' => 'تلفون العميل',                
+                    'client_modal_type_payment' => 'طريقة التعامل',                
+                ]
+            );
+
+            DB::transaction(function () {
+                $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'رصيد اول عميل')->max('num_order');
+
+                $getId = DB::table('clients_and_suppliers')->insertGetId([
+                    'client_supplier_type' => 3,
+                    'code' => ($this->latestId+1),
+                    'name' => request('client_modal_name'),
+                    'phone' => request('client_modal_phone'),
+                    'address' => request('client_modal_address'),
+                    'type_payment' => request('client_modal_type_payment'),
+                    'status' => 1,
+                    'created_at' => now()
+                ]);
+                
+                DB::table('treasury_bill_dets')->insert([
+                    'num_order' => ($lastNumId+1), 
+                    'date' => Carbon::now(),
+                    'treasury_id' => 0, 
+                    'treasury_type' => 'رصيد اول عميل',
+                    'bill_id' => 0,
+                    'bill_type' => 'رصيد اول عميل', 
+                    'client_supplier_id' => $getId, 
+                    'amount_money' => 0,
+                    'remaining_money' => 0,
+                    'user_id' => auth()->user()->id, 
+                    'year_id' => $this->currentFinancialYear(),
+                    'created_at' => now()
+                ]);
+            });
+
+        }
+    }
+
+    
     public function edit($id)
     {
         if((userPermissions()->clients_update)){

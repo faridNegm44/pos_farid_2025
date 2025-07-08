@@ -16,7 +16,7 @@
             error: function(res){
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 4);
-                alertify.error("هناك شيئ ما خطأ");
+                alertify.error("عذرًا، حدث خطأ أثناء العملية ⚠️ يُرجى المحاولة مرة أخرى 🔄");
 
                 document.querySelector('.modal #save').disabled = false;
                 document.querySelector('.spinner_request').style.display = 'none';                

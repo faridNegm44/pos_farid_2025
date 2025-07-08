@@ -15,7 +15,11 @@ class RolesPermissions extends Model
 
         
         //////////////////////////// start second  ////////////////////////////
-        'total_sell_bill_today_view', 'total_profit_today_view', 'total_money_on_financial_treasury_view', 'top_products_view', 'top_clients_view', 'profit_view'
+        'total_sell_bill_today_view', 'total_profit_today_view', 'total_money_on_financial_treasury_view', 'top_products_view', 'top_clients_view', 'profit_view',
         //////////////////////////// end second  ////////////////////////////
+        
+        //////////////////////////// start third  ////////////////////////////
+        'tax_bill_view', 'discount_bill_view', 'cost_price_view'
+        //////////////////////////// end third  ////////////////////////////
     ];
 }

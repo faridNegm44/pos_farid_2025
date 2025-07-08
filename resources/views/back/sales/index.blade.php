@@ -70,11 +70,12 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'action', name: 'action', orderable: false},
+                    {data: 'date', name: 'date'},
                     {data: 'clientName', name: 'clientName'},
+                    {data: 'clientPhone', name: 'clientPhone'},
                     {data: 'treasuryName', name: 'treasuryName'},
                     {data: 'total_bill', name: 'total_bill'},
                     {data: 'count_items', name: 'count_items'},
-                    {data: 'date', name: 'date'},
                     {data: 'notes', name: 'notes'},
                     {data: 'userName', name: 'userName'},
                     {data: 'financialName', name: 'financialName'},
@@ -131,11 +132,12 @@
                             <tr>
                                 <th class="border-bottom-0 nowrap_thead">#</th>
                                 <th class="border-bottom-0 nowrap_thead">التحكم</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ</th>
                                 <th class="border-bottom-0 nowrap_thead" >عميل</th>
+                                <th class="border-bottom-0 nowrap_thead" >تليفون</th>
                                 <th class="border-bottom-0 nowrap_thead" >خزينة</th>
                                 <th class="border-bottom-0 nowrap_thead" >اجمالي الفاتورة</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 60px !important;min-width: 60px !important;">ع العناصر</th>
-                                <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ</th>
                                 <th class="border-bottom-0 nowrap_thead" >ملاحظات</th>
                                 <th class="border-bottom-0 nowrap_thead" >مستخدم</th>
                                 <th class="border-bottom-0 nowrap_thead" >السنة</th>

@@ -1,309 +1,220 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>{{ $pageNameAr }} {{ $saleBill[0]->id }} - {{ $saleBill[0]->clientName }} - {{ $saleBill[0]->created_at }}</title>
-  <style>
-    body {
-      /*font-family: 'Tahoma', sans-serif;*/
-      /*font-family: 'Courier New', monospace;*/
-      margin: 20px;
-      margin-bottom: 35px;
-      color: #000;
-      
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {{--<title>{{ $nameAr }} - {{ $find[0]->first_name }} {{ $find[0]->last_name }} - {{ \Carbon\Carbon::parse($find[0]->orderCreatedAt)->format('d-m-Y h:i a') }}</title>--}}
+    <title>{{ $pageNameAr }} {{ $saleBill[0]->id }} - {{ $saleBill[0]->clientName }} - {{ $saleBill[0]->created_at }}</title>
 
-    }
+    <link rel="icon" href="{{ url('back') }}/images/settings/fiv.png" type="image/x-icon"/>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
-    /*td:nth-child(3),
-    td:nth-child(4),
-    td:nth-child(5),
-    th:nth-child(3),
-    th:nth-child(4),
-    th:nth-child(5) {
-        font-family: 'Roboto Mono', monospace;
-    }*/
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600&display=swap" rel="stylesheet">
 
-    .header, .customer_info, .invoice_info {
-      margin-bottom: 10px;
-    }
+    <style>
+        .panel-default {
+            border: 0;
+        }
+        .heading_table{
+            border: 1px dotted;
+            margin: 10px auto 20px;
+            box-shadow: 7px 7px 5px 0px rgb(182 182 182 / 75%);
+        }
+        th, td{
+            padding: 2px 0 !important;
+        }
+        .company_info {
+            margin-top: 15px;
+            text-align: left;
+            font-size: 7px;
+            padding: 4px 0 0 !important;
+        }
+        th, td {
+            padding: 0 !important;
+        }
+        
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #000;
-      padding-bottom: 3px;
-    }
+            @page {
+                margin: 5px;
+            }
 
-    .header .logo img{
-      width: 50px;
-      height: 50px;
-      background-color: #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      font-size: 14px;
-    }
+            body {
+            margin: 5px !important;
+            padding: 5px !important;
+            }
 
-    .header .place_info {
-      flex: 1;
-      text-align: center;
-      margin: 0 5px;
-    }
+            .table_info thead th {
+                background-color: #a5a5a5 !important;
+            }
 
-    .place_info h2 {
-      margin: 0;
-      font-size: 18px;
-      text-decoration: underline;
-      margin-bottom: 4px;
-    }
+            .totals_section .final_total {
+                background-color: #a5a5a5 !important;
+            }
 
-    .place_info p {
-      margin: 1px 0;
-      font-size: 11px;
-    }
+            .header {
+                page-break-before: avoid;
+            }
 
-    .customer_info, .invoice_info {
-      font-size: 12px;
-      /*border: 1px dashed #000;*/
-      padding: 0 8px;
-    }
-
-    .invoice_info {
-      display: flex;
-      justify-content: space-between;
-      
-      border: 1px dashed #000;
-      border-radius: 5px;
-      padding: 4px 8px;
-    }
-    
-    .date_info {
-      
-      font-size: 9px;
-      text-align: center;
-      padding-top: 5px;
-      font-family: 'Roboto Mono', monospace;
-    }
-
-    .table_info table,
-    .table_info th,
-    .table_info td {
-      border: 1px solid #000;
-      border-collapse: collapse;
-      text-align: center;
-      font-size: 11px;
-      padding: 1px 3px;
-    }
-
-    .table_info thead th {
-      background-color: #dee2e6;
-    }
-
-    .totals_section {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .totals_section table {
-      width: 100%;
-      /*border-collapse: collapse;*/
-    }
-
-    .totals_section td {
-      /*padding: 4px 8px;*/
-      border: 1px solid #000;
-      text-align: right;
-    }
-
-    .totals_section td.label {
-      
-      font-size: 11px;
-    }
-
-    .totals_section td.value {
-      font-size: 13px;
-      
-    }
-
-    .policy_section {
-      margin-top: 15px;
-      border: 1px dashed #000;
-      border-radius: 8px;
-      padding: 0 8px;
-      font-size: 11.5px;
-      line-height: 1.5;
-    }
-    
-    .footer_section {
-        text-align: center;
-        margin-top: 10px;
-        /*border: 1px dashed #000;*/
-        /*padding: 0 8px;*/
-        font-size: 12px;
-    }
-
-    .company_info {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 8px;
-      border-top: 2px solid #000;
-      border-bottom: 1px solid #ccc;
-      padding: 4px 0;
-    }
-
-    .table_info thead th {
-        background-color: #a5a5a5 !important;
-    }
-
-    .totals_section .final_total {
-    background-color: #a5a5a5 !important;
-    }
-    
-    @media print {
-      body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-
-      @page {
-        margin: 5px;
-      }
-
-    body {
-      margin: 5px !important;
-      padding: 5px !important;
-    }
-
-      .table_info thead th {
-        background-color: #a5a5a5 !important;
-      }
-
-      .totals_section .final_total {
-        background-color: #a5a5a5 !important;
-      }
-
-      .header {
-        page-break-before: avoid;
-      }
-    }
-  </style>
+            th, td {
+                padding: 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div style="border: 1px solid #000;padding: 10px;">
 
-  <!-- Header -->
-  <div class="header">
-    {{--<div class="logo">
-        @if (GeneralSettingsInfo()->fav_icon)
-            <img src="{{ url('back/images/settings/'.GeneralSettingsInfo()->fav_icon) }}" />
-        @endif
-    </div>--}}
-    <div class="place_info">
-      <h2>{{ GeneralSettingsInfo()->app_name }}</h2>
-      <p>{{ GeneralSettingsInfo()->address }}</p>
-      <p>{{ GeneralSettingsInfo()->phone1 }} - {{ GeneralSettingsInfo()->phone2 ?? GeneralSettingsInfo()->phone1 }}</p>
+        <div class="">
+            <div class="invoice-title">
+                <h4 class="text-center" style="font-weight: bold;font-size: 15px;margin: 3px !important;">
+                    <b style="display: block;">{{ GeneralSettingsInfo()->app_name }}</b>
+                    رقم الفاتورة: {{ $saleBill[0]->id }}
+                </h4>
+            </div>
+            <br>
+            
+            <div class="row">
+                <div class="col-xs-5 text-right">       
+                    <ul style="font-size: 12px;">             
+                        <li>اسم البائع: <b>{{ auth()->user()->name  }}</b></li>
+                        <li>رقم فني التركيب: <b>0123456789</b></li>
+                        <li>تاريخ الطباعة: <b style="font-size: 9px;">{{ date('Y-m-d h:i:s a') }}</b></li>  
+                    </ul>
+                </div>
+            
+                <div class="col-xs-2 text-center">
+                    <img src="{{ url('back/images/settings/'.GeneralSettingsInfo()->logo) }}" alt="" style="width: 120px;height: 100px;margin-top: -12px;margin-bottom: 10px;">
+                </div>
+            
+                <div class="col-xs-5 text-right">
+                    <ul style="font-size: 12px;">
+                        <li>عنوان: <b>{{ GeneralSettingsInfo()->address }}</b></li>
+                        <li>رقم المعرض: <b>{{ GeneralSettingsInfo()->phone1 }}</b></li>
+                        <li>تاريخ الفاتورة: <b style="font-size: 9px;">{{ \Carbon\Carbon::parse($saleBill[0]->created_at)->format('Y-m-d h:i:s a') }}</b></li>                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        {{-- start table client info --}}
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">الإسم</th>
+                    {{--<th class="text-center">المحافظة</th>--}}
+                    <th class="text-center">العنوان</th>
+                    <th class="text-center">الهاتف</th>
+                    <th class="text-center">عدد الأصناف</th>
+                    {{--<th class="text-center">طريقة الدفع</th>--}}
+                    {{--<th class="text-center">ملاحظات</th>--}}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center" style="font-weight: bold;">{{ $saleBill[0]->clientName }}</td>
+                    {{--<td class="text-center" style="font-weight: bold;">{{ $find[0]->city }}</td>--}}
+                    <td class="text-center">{{ $saleBill[0]->clientAddress }}</td>
+                    <td class="text-center">{{ $saleBill[0]->clientPhone }}</td>                
+                    <td class="text-center">{{ display_number( $saleBill[0]->count_items ) }}</td>
+                    {{--<td class="text-center">{{ $find[0]->payment_method }}</td>--}}
+                    {{--<td class="text-center">{{ $find[0]->notes }}</td>--}}
+                </tr>
+            </tbody>
+        </table>
+        {{-- end table client info --}}
+
+
+        {{-- start table bill products  --}}
+        <table class="table table-bordered table-striped text-center" style="font-size: 12px;">
+            <thead class="">
+                <tr>
+                    <th class="text-center" style="width: 35% !important;">اسم المنتج</th>
+                    <th class="text-center">وحدة المنتج</th>
+                    <th class="text-center">الكمية</th>
+                    <th class="text-center">السعر قبل</th>
+                    <th class="text-center">السعر بعد</th>
+                    <th class="text-center">الإجمالي</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($saleBill as $product)
+                    <tr>
+                        <td class="text-center">{{ $product->productName }}</td>
+                        <td class="text-center">{{ $product->unitName }}</td>
+                        <td>{{ display_number( $product->product_bill_quantity ) }}</td>
+                        <td>
+                            @if ($product->sell_price_small_unit == $product->current_sell_price_in_sale_bill)
+                                {{ display_number( $product->sell_price_small_unit ) }}
+                            @else
+                                {{ display_number( $product->current_sell_price_in_sale_bill ) }}
+                            @endif
+                        </td>
+                        <td></td>
+                        <td>{{ display_number( $product->productTotalAfter ) }}</td>
+                    </tr>
+                @endforeach
+        </table>
+        {{-- end table bill products  --}}
+
+
+        <table class="table table-bordered table-striped text-center" style="font-size: 12px;">
+            <thead class="">
+                <tr>
+                    <th class="text-center">إجمالي الفاتورة قبل</th>                    
+                    @if ($saleBill[0]->extra_money)
+                        <th class="text-center">مصاريف اضافية</th>
+                    @endif
+                    <th class="text-center">إجمالي الفاتورة بعد</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ display_number( $saleBill[0]->total_bill_before ) }} جنية</td>
+                    @if ($saleBill[0]->extra_money)
+                        <td>{{ display_number( $saleBill[0]->extra_money ) }} جنية</td>
+                    @endif
+
+                    <td style="font-weight: bold;">{{ display_number( $saleBill[0]->total_bill_after ) }} جنية</td>
+                </tr>
+            </tbody>
+        </table>
+
+        {{-- سياسة وشروط الشركة --}}
+            <ol>
+                <p style="font-weight: bold;margin-bottom: 5px;">سياسة وشروط الشركة</p>
+                <li>الاستبدال والاسترجاع خلال 14 يوم من تاريخ استلام المنتج</li>
+                <li>لا يجوز استبدال او استرجاع المنتج إذا لم يكن المنتج في نفس حالة وقت البيع</li>
+                <li>لا يجوز استبدال او استرجاع المنتج الذي تم تصنيعه خصيصًا للعميل</li>
+                <li>ضمان 3 سنوات على جميع منتجاتنا</li>
+                <li>الضمان شامل الكهرباء واللون فقط</li>
+                <li>صيانة المنتج من خلال مقرنا فقط</li>
+                <li>استرجاع او استبدال المنتج من خلال مقرنا فقط وذلك للتأكد من صحة المنتج</li>
+            </ol>
+            <hr>
+        {{-- سياسة وشروط الشركة --}}
+        
+
+        <div class="text-center" style="font-weight: bold;font-size: 11px;padding-bottom: 20px;">
+            <p style="padding: 0 0 3px !important;margin: 0 !important;">للتحويل انستاباي / 01002101763</p>
+            <p style="margin: 0 !important;">للتحويل فودافون كاش علي الأرقام التالية / 01014490673 / 01027453730</p>
+        </div>
+        
+        <!-- Company Info -->
+        <div class="company_info">
+            <span>كيوبكس تك للبرمجيات</span>
+            <span>01117903055 - 01012775704</span>
+        </div>
     </div>
-  </div>
 
-  <!-- Customer Info -->
-  <div class="customer_info">
-    <span>اسم العميل: {{ $saleBill[0]->clientName }}</span>
-    <br />
-    <span>عنوان العميل: {{ $saleBill[0]->clientAddress }}</span>
-    <br />
-    <span>تليفون العميل: {{ $saleBill[0]->clientPhone }}</span>
-    <br />
-  </div>
-
-  <!-- Invoice Info -->
-  <div class="invoice_info">
-    <div>رقم الفاتورة: {{ $saleBill[0]->id }}</div>
-    <div>عدد السلع والخدمات: {{ display_number( $saleBill[0]->count_items ) }}</div>
-  </div>
-
-  <!-- Table -->
-  <div class="table_info">
-    <table style="width: 100%;">
-        <thead>
-          <tr>
-            <th>السلعة/الخدمة</th>
-            <th>الوحدة</th>
-            <th>الكمية</th>
-            <th>السعر</th>
-            <th>الإجمالي</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach ($saleBill as $product)
-            <tr>
-              <td>{{ $product->productName }}</td>
-              <td>{{ $product->unitName }}</td>
-              <td>{{ display_number( $product->product_bill_quantity ) }}</td>
-              <td>
-                @if ($product->sell_price_small_unit == $product->current_sell_price_in_sale_bill)
-                  {{ display_number( $product->sell_price_small_unit ) }}
-                  @else
-                  {{ display_number( $product->current_sell_price_in_sale_bill ) }}
-                  @endif
-              </td>
-              <td>{{ display_number( $product->productTotalAfter ) }}</td>
-            </tr>  
-          @endforeach
-          
-        </tbody>
-      </table>      
-  </div>
-
-  <!-- Totals -->
-  <div class="totals_section">
-    <table>
-      <tr>
-        <td class="label">الإجمالي قبل</td>
-        <td class="value">{{ display_number( $saleBill[0]->total_bill_before ) }} جنية</td>
-      </tr>
-      @if ($saleBill[0]->extra_money)
-        <tr>
-          <td class="label">مصاريف اضافية</td>
-          <td class="value">{{ display_number( $saleBill[0]->extra_money ) }} جنية</td>
-        </tr>
-      @endif
-      @if ($saleBill[0]->total_bill_before != $saleBill[0]->total_bill_after)
-        <tr>
-          <td class="label">قيمة الخصم</td>
-          <td class="value">{{ display_number( $saleBill[0]->total_bill_before - $saleBill[0]->total_bill_after ) }} جنية</td>
-        </tr>
-      @endif
-      <tr>
-        <td class="label final_total" style="font-size: 14px;">الإجمالي بعد</td>
-        <td class="value" style="font-size: 18px;">{{ display_number( $saleBill[0]->total_bill_after ) }} جنية</td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="date_info">
-    <div>تاريخ الفاتورة: {{ \Carbon\Carbon::parse($saleBill[0]->created_at)->format('Y-m-d h:i:s a') }}</div>
-    <div>تاريخ الطباعة: {{ date('Y-m-d h:i:s a') }}</div>
-  </div>
-
-  <!-- Policy -->
-  @if(GeneralSettingsInfo()->policy)
-    <div class="policy_section">
-        {!! GeneralSettingsInfo()->policy !!}
-    </div>
-  @endif
-  
-  @if(GeneralSettingsInfo()->footer_text)
-    <div class="footer_section">
-        {{ GeneralSettingsInfo()->footer_text }}
-    </div>
-  @endif
-
-  <!-- Company Info -->
-  <div class="company_info">
-    كيوبكس تك للبرمجيات
-    <strong>01117903055 - 01012775704</strong>
-  </div>
-
+    <script> window.print(); </script>
 </body>
 </html>

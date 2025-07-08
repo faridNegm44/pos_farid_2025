@@ -82,7 +82,7 @@
                 
                 alertify.set('notifier','position', 'top-center');
                 alertify.set('notifier','delay', 3);
-                alertify.error("هناك شيئ ما خطأ");
+                alertify.error("عذرًا، حدث خطأ أثناء العملية ⚠️ يُرجى المحاولة مرة أخرى 🔄");
             },
             success: function(res){
                 $('#example1').DataTable().ajax.reload( null, false );
