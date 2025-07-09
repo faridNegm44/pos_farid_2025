@@ -92,7 +92,9 @@
                       <th>اسم المنتج</th>
                       <th>كمية بالوحدة ك</th>
                       <th>كمية بالوحدة ص</th>
-                      <th>سعر التكلفة</th>
+                      @if (userPermissions()->cost_price_view)
+                        <th>سعر التكلفة</th>
+                      @endif
                       <th>سعر البيع</th>
                       <th>الضريبة</th>
                       <th>الخصم</th>
@@ -111,7 +113,9 @@
                                 {{ $product->bigUnitName ? $product->bigUnitName : $product->smallUnitName }}
                             </td>
                             <td>{{ display_number( $product->product_bill_quantity ) }} {{ $product->smallUnitName }}</td>
-                            <td>{{ display_number( $product->last_cost_price_small_unit ) }}</td>
+                            @if (userPermissions()->cost_price_view)
+                                <td>{{ display_number( $product->last_cost_price_small_unit ) }}</td>
+                            @endif
                             <td>{{ display_number( $product->sell_price_small_unit ) }}</td>
                             <td>{{ display_number( $product->tax ) }}</td>
                             <td>{{ display_number( $product->discount ) }}</td>

@@ -183,9 +183,9 @@ class SaleBillController extends Controller
 
                 if(request('amount_paid') === null || floatval(request('amount_paid')) !== $calcTotalProductsAfter){
                     return response()->json(['errorClientPayment' => '⚠️ عذرًا، هذا العميل غير مصرح له بالشراء الآجل.
-💵 يجب أن يكون المبلغ المدفوع مساويًا لقيمة الفاتورة المستحقة بالكامل.']);
+                💵 يجب أن يكون المبلغ المدفوع مساويًا لقيمة الفاتورة المستحقة بالكامل.']);
                 }else{
-                    DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
+                    $response = DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
                         $lastNumId = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->max('num_order');
                         $saleBillId = DB::table('sale_bills')->insertGetId([
                             'custom_bill_num' => request('custom_bill_num'),
@@ -303,7 +303,10 @@ class SaleBillController extends Controller
                             'created_at' => now()
                         ]);
                         
+                        return response()->json(['bill_id' => $saleBillId]);
                     });
+
+                    return $response;
                 }
                 
 
@@ -311,7 +314,7 @@ class SaleBillController extends Controller
                 ///////////////////////////////////////////////////////////////////////////////  لو العميل اجل
                 ///////////////////////////////////////////////////////////////////////////////  لو العميل اجل
                 
-                DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
+                $response = DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
                     $lastNumId = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->max('num_order');
                 
                     $saleBillId = DB::table('sale_bills')->insertGetId([
@@ -448,12 +451,15 @@ class SaleBillController extends Controller
                             ]);
                         }
                     // end check if paied money of this bill or not لو دفعت فلوس للعميل هخصمها 
+
+                    return response()->json(['bill_id' => $saleBillId]);
                 });
+
+                return $response;
             }    
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // نهاية التاكد من ان حاله العميل كاش او اجل
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         }
     }
 
@@ -584,12 +590,12 @@ class SaleBillController extends Controller
                 
                 if($res->total_bill_before != $res->total_bill_after){
                     $total_bill.= "
-                        <span class='badge badge-danger text-white' style='font-size: 100% !important;'>قبل  ".display_number($res->total_bill_before)."</span>
+                        <span class='badge badge-danger text-white' style='font-size: 90% !important;'>قبل  ".display_number($res->total_bill_before)."</span>
                     ";
 
-                    $total_bill .=  "<span style='font-size: 15px !important;'>بعد ".display_number($res->total_bill_after)."</span>";
+                    $total_bill .=  "<span class='badge badge-success text-white' style='font-size: 12px !important;'>بعد ".display_number($res->total_bill_after)."</span>";
                 }else{
-                    $total_bill .=  "<span style='font-size: 15px !important;'>".display_number($res->total_bill_after)."</span>";
+                    $total_bill .=  "<span class='badge badge-success text-white' style='font-size: 12px !important;'>".display_number($res->total_bill_after)."</span>";
                 }
                 
                 

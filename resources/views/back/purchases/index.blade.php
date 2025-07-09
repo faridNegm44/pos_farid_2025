@@ -66,6 +66,7 @@
                 dataType: 'json',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'action', name: 'action', orderable: false},
                     {data: 'date', name: 'date'},
                     {data: 'supplierName', name: 'supplierName'},
                     {data: 'treasuryName', name: 'treasuryName'},
@@ -75,7 +76,6 @@
                     {data: 'notes', name: 'notes'},
                     {data: 'userName', name: 'userName'},
                     {data: 'financialName', name: 'financialName'},
-                    {data: 'action', name: 'action', orderable: false},
                 ],
                 dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
                     "<'row'<'col-sm-12'tr>>" +
@@ -128,6 +128,7 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
+                                <th class="border-bottom-0">التحكم</th>
                                 <th class="border-bottom-0" >تاريخ</th>
                                 <th class="border-bottom-0" >مورد</th>
                                 <th class="border-bottom-0" >خزينة</th>
@@ -137,7 +138,6 @@
                                 <th class="border-bottom-0" >ملاحظات</th>
                                 <th class="border-bottom-0" >مستخدم</th>
                                 <th class="border-bottom-0" >السنة</th>
-                                <th class="border-bottom-0">التحكم</th>
                             </tr>
                         </thead>                                
                     </table>

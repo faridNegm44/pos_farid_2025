@@ -44,9 +44,18 @@
                 $(`#showProductsModal #header #total_bill_before`).text( display_number_js(res[0].total_bill_before) );
                 $(`#showProductsModal #header #total_bill_after`).text( display_number_js(res[0].total_bill_after) );
 
-
+                
                 // start loop to bill products
                 $.each(res, function(index2, value2){
+
+                    if(@json(userPermissions()->cost_price_view)){
+                        var cost_price_permission  = `
+                            <td>${display_number_js( value2.last_cost_price_small_unit )}</td>
+                        `;
+                    }else{
+                        var cost_price_permission  = '';
+                    }
+
                     $('#showProductsModal #content tbody').append(`
                         <tr>
                             <td>${value2.product_id}</td>
@@ -55,8 +64,8 @@
                                 ${display_number_js( value2.bigUnitName ? (value2.product_bill_quantity / value2.small_unit_numbers).toFixed(2) : value2.product_bill_quantity )} 
                                 ${value2.bigUnitName ? value2.bigUnitName : value2.smallUnitName}
                             </td>
-                            <td>${display_number_js( value2.product_bill_quantity )} ${value2.smallUnitName}</td>
-                            <td>${display_number_js( value2.last_cost_price_small_unit )}</td>
+                            <td>${ display_number_js( value2.product_bill_quantity )} ${value2.smallUnitName}</td>
+                            ${cost_price_permission}
                             <td>
                                 ${
                                     value2.sell_price_small_unit == value2.current_sell_price_in_sale_bill 

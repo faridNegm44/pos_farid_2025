@@ -429,6 +429,18 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
     // Get Info Of client || supplier || treasury || store || product || transfer || expense || extra expenses
 
 
+    // start ايصال استلام نقدية
+    // receipts Routes
+    Route::group(['prefix' => 'receipts'] , function (){
+        Route::get('/' , 'ReceiptsController@index');
+        Route::post('/store' , 'ReceiptsController@store');
+        Route::get('/getCurrentRemainingMoney/{clientOrSupplier}' , 'ReceiptsController@getCurrentRemainingMoney');
+        
+        Route::get('datatable' , 'ReceiptsController@datatable');
+
+        Route::get('print_receipt/{id}', 'ReceiptsController@print_receipt'); // طباعة ريسيت فاتورة البيع
+    });
+    // end ايصال استلام نقدية
 
 
     // start taswea تسويه العملاء والموردين والشركاء والأصناف

@@ -126,8 +126,8 @@
                             <i class="fas fa-star require_input"></i>
                             <select class="form-control" id="treasury_type" name="treasury_type" required>
                                 <option value="" selected>نوع المعاملة</option>                              
-                                <option value="اذن توريد نقدية">اذن توريد نقدية</option>
-                                <option value="اذن صرف نقدية">اذن صرف نقدية</option>
+                                <option value="اذن توريد نقدية">اذن استلام نقدية</option>
+                                <option value="اذن صرف نقدية">اذن دفع نقدية</option>
                                 {{--<option value="اذن ارتجاع نقدية">اذن ارتجاع نقدية</option>--}}
                             </select>
                             <bold id="errors-treasury_type" style="display: none;"></bold>

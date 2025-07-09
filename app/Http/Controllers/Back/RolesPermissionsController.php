@@ -161,7 +161,8 @@ class RolesPermissionsController extends Controller
             // end second            
         ]);
         
-        return redirect()->to('/roles_permissions');
+        return redirect()->back();
+        //return redirect()->to('/roles_permissions');
     }
 
     public function edit($id)
@@ -294,7 +295,8 @@ class RolesPermissionsController extends Controller
             // end second            
         ]);
         
-        return redirect()->to('roles_permissions');
+        return redirect()->back();
+        //return redirect()->to('roles_permissions');
     }
 
     public function destroy($id, Request $request)

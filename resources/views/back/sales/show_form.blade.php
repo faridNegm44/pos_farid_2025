@@ -52,7 +52,9 @@
                       <th>اسم المنتج</th>
                       <th>كمية بالوحدة ك</th>
                       <th>كمية بالوحدة ص</th>
-                      <th>سعر التكلفة</th>
+                      @if (userPermissions()->cost_price_view)
+                        <th>سعر التكلفة</th>
+                      @endif
                       <th>سعر البيع</th>
                       <th>الخصم</th>
                       <th>الضريبة</th>

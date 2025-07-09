@@ -179,16 +179,17 @@
         
                             <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #cccccc;background-color: #ededed;">
                                 <div class="row">
+                                    @if (userPermissions()->tax_bill_view)                                        
+                                        <p class="col-lg-6 col-12">
+                                            <label for="">
+                                                ضريبة ق م (%)
+                                                <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
+                                            </label>
+                                            <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
+                                        </p>
+                                    @endif                                    
                                                                         
-                                    <p class="col-lg-3 col-12">
-                                        <label for="">
-                                            ضريبة ق م (%)
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
-                                        </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
-                                    </p>
-        
-                                    <p class="col-lg-3 col-12">
+                                    <p class="col-lg-6 col-12">
                                         <label for="">
                                             خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
@@ -196,22 +197,29 @@
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" />
                                     </p>
                                     
-                                    <p class="col-lg-6 col-12">
-                                        <label for="">
+                                    <div class="col-12">
+                                        <label for="extra_expense_type" class="form-label">
                                             مصاريف إضافية
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
                                         </label>
-                                        <span class="row">
-                                            <select class="col-8 form-control" name="extra_expense_type" id="extra_expense_type">
-                                                <option value="" selected>اختر مصروف اضافي</option>                                            
-                                                @foreach ($extra_expenses as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->expense_type }}</option>                                            
-                                                @endforeach
-                                            </select>
-
-                                            <input autocomplete="off" type="text" class="col-4 form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" />
-                                        </span>
-                                    </p>
+                                    
+                                        <div class="row">
+                                            <div class="col-md-7 mb-2">
+                                                <select class="form-control" name="extra_expense_type" id="extra_expense_type">
+                                                    <option value="" selected>اختر مصروف إضافي</option>
+                                                    @foreach ($extra_expenses as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->expense_type }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                    
+                                            <div class="col-md-5">
+                                                <input autocomplete="off" type="text" class="form-control text-center numValid focus_input" 
+                                                       id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 
                                     <p class="col-6" id="countTableTr" style="font-size: 13px;">
                                         عدد العناصر:
@@ -248,7 +256,7 @@
                                         </th>
                                         <th style="width: 10%;">ك المخزن</th>
                                         <th style="width: 10%;">س بيع</th>
-                                        <th style="width: 10%;">خصم%</th>
+                                        <th style="width: 10%;">خصم%</th>                                                                                        
                                         <th style="width: 10%;">ضريبة%</th>
                                         <th style="width: 15%;max-width: 100%;">الإجمالي</th>
                                     </tr>
@@ -507,7 +515,7 @@
 
 
 
-            // بدايه اختيار سلعة/خدمة من selectize واضافته في في جدول العملاء
+            // بدايه اختيار سلعة/خدمة من selectize واضافته في في جدول العملاء            
             $('#products_selectize').change(function() {
                 
                 var productId = $(this).val();
@@ -532,6 +540,37 @@
                     var tax = productData.prod_tax == null ? 0 : display_number_js(productData.prod_tax); // ضريبة المنتج
                     
                     var quantity_all = display_number_js(productData.quantity_small_unit); // كميه المخزن
+
+                    
+                    // بدايه التاكد لو في صلاحيه للمستخدم ع الخصم
+                    if(@json(userPermissions()->discount_bill_view)){
+                        var discount_permissions = `
+                            <td>
+                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="${discount}">
+                            </td>`;
+                    }else{
+                        var discount_permissions = `
+                            <td>
+                                <input type="text" disabled class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" value="${discount}">
+                            </td>`;
+                    }
+                    // نهاية التاكد لو في صلاحيه للمستخدم ع الخصم
+
+                    // بدايه التاكد لو في صلاحيه للمستخدم ع الضريبة
+                    if(@json(userPermissions()->tax_bill_view)){
+                        var tax_permissions = `
+                            <td>
+                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}">
+                            </td>`;
+                    }else{
+                        var tax_permissions = `
+                            <td>
+                                <input type="text" disabled class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" value="${tax}">
+                            </td>`;
+                    }
+                    // نهاية التاكد لو في صلاحيه للمستخدم ع الضريبة
+
+
 
 
                     // التاكد من ان كميه النتج في المخزن اكبر من 0
@@ -588,8 +627,10 @@
                                     <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
                                     <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
                                 </td>
-                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="${discount}"></td>
-                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}"></td>
+                                
+                                ${discount_permissions}
+                                ${tax_permissions}
+
                                 <td><input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total[]" value="0"></td>
                                 </tr>
                             `);
@@ -766,8 +807,9 @@
             alertify.confirm(
                 'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
                 `<div style="text-align: center;">
-                    <p style="">
-                        هل انت متأكد من حفظ الفاتورة الحالية
+                    <p>
+                        💾 هل أنت متأكد من <strong>حفظ الفاتورة الحالية</strong>؟<br>
+                        ⚠️ تأكد من صحة البيانات قبل المتابعة.
                     </p>
                 </div>`,
                 function(){
@@ -814,23 +856,10 @@
                                 alert(res.sale_quantity_big_than_stock)
                             
                             }else{
-                                alertify.confirm(
-                                    'رائع <i class="fas fa-check-double text-success" style="margin: 0px 3px;"></i>', 
-                                    `<span class="text-center">
-                                        <span class="text-danger">تمت اضافة فاتورة المبيعات بنجاح</span>
-                                        <strong class="d-block">هل تريد اضافه فاتورة مبيعات أخري</strong>
-                                    </span>`, 
-                                function(){                                
-                                    location.reload();
-    
-                                }, function(){ 
-                                    window.location.href = "{{ url('sales') }}";
-                                }).set({
-                                    labels:{
-                                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
-                                        cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
-                                    }
-                                });
+                                alertify.success("✔ تم الحفظ بنجاح...");
+                                setTimeout(function () {
+                                    window.location.href = "{{ url('sales/create') }}";
+                                }, 500);
                             }
                         }
                     });
@@ -847,6 +876,93 @@
     </script>
     {{--  end when click finally_save_bill_btn to save bill --}}
     
+
+
+    {{--  start when click finally_save_bill_and_print_btn to save bill and print --}}
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+
+        $(document).on('click', '#finally_save_bill_and_print_btn', function(){
+            alertify.confirm(
+                'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
+                `<div style="text-align: center;">
+                    <p>🧾 هل أنت متأكد من حفظ الفاتورة الحالية وبدء عملية <strong>الطباعة</strong>؟<br>
+                    ⚠️ تأكد من صحة البيانات قبل المتابعة.</p>
+                </div>`,
+                function(){
+                    
+                    $.ajax({
+                        url: `{{ url('sales/store') }}`,
+                        type: 'post',
+                        processData: false,
+                        contentType: false,
+                        data: new FormData($('form')[0]),
+                        beforeSend:function () {
+                            $('form [id^=errors]').text('');
+                            $("#products_table tbody input, select").css('border', '');
+                            $(".tooltip-msg").remove();
+                        },
+                        error: function(res){
+                            console.log(res.responseJSON.errors);
+
+                            $('#modal_save_bill').removeClass('show').hide();
+                            $('.modal-backdrop').remove(); // إزالة الخلفية السوداء
+                            $('body').removeClass('modal-open'); // إصلاح الـ scroll
+
+                            $.each(res.responseJSON.errors, function (index , value) {
+                                let splitRes = index.split('.');
+                                let inputName = splitRes[0];
+                                let inputNumber = splitRes[1];
+
+                                let row = $("#products_table tbody tr").eq(inputNumber);
+                                row.find(`.${inputName}`)
+                                .css('border', '2px solid red')
+                                .after(`
+                                    <i class="fas fa-info-circle text-danger tooltip-msg" data-bs-toggle="tooltip" title="${value}"></i>
+                                `);
+
+                                $(`form #errors-${index}`).show().text(value);
+                            });
+                        },
+                        success: function(res){
+
+                            if(res.errorClientPayment){  // لمعرفه نوع التعامل مع العميل سواء كاش او اجل
+                                alert(res.errorClientPayment);
+
+                            }else if(res.sale_quantity_big_than_stock){ // لو كميه المنتج المباعه اكبر من المتوفره ف المخزن
+                                alert(res.sale_quantity_big_than_stock)
+                            
+                            }else if(res.bill_id) {
+                                alertify.success("✔ تم الحفظ بنجاح، جاري فتح صفحة الطباعة...");
+                                setTimeout(function () {
+                                    window.open(`{{ url('sales/report/print_receipt') }}/${res.bill_id}`, '_blank');
+                                    window.location.href = "{{ url('sales/create') }}";
+                                }, 500);
+
+                            } else {
+                                alert("⚠️ لم يتم استلام bill_id من السيرفر!");
+                            }
+                        }
+                    });
+
+                }, function(){
+
+                }).set({
+                    labels:{
+                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                        cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                    }
+                });
+            });
+    </script>
+    
+    {{--  end when click finally_save_bill_and_print_btn to save bill and print --}}
+
 
 
 

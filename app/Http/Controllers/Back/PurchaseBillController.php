@@ -453,7 +453,7 @@ class PurchaseBillController extends Controller
             })
             ->addColumn('date', function($res){
                 $dates = Carbon::parse($res->created_at)->format('d-m-Y')
-                        .' <span style="margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
+                        .' <span class="badge badge-dark text-white" style="margin: 0 7px;font-size: 100% !important;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
                 if($res->custom_date){
                     $dates.= 'تاريخ اخر '.Carbon::parse($res->custom_date)->format('Y-m-d');
                 }
@@ -481,18 +481,19 @@ class PurchaseBillController extends Controller
                         </span>';
             })
             ->addColumn('action', function($res){
-                return '
+                return '                        
+                        <a type="button" href="'.url('purchases_return/'.$res->id).'" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
+                            <i class="fas fa-reply"></i>
+                        </a>
+
+                        <button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
+                            <i class="fas fa-print"></i>
+                        </button>
+
                         <button type="button" class="btn btn-sm btn-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
                             <i class="fas fa-eye"></i>
                         </button>
                         
-                        <button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
-                            <i class="fas fa-print"></i>
-                        </button>
-                        
-                        <a type="button" href="'.url('purchases_return/'.$res->id).'" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
-                            <i class="fas fa-reply"></i>
-                        </a>
                 ';
             })
             ->rawColumns(['id', 'supplierName', 'treasuryName', 'total_bill', 'bill_discount', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])

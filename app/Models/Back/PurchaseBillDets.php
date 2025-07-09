@@ -9,5 +9,5 @@ class PurchaseBillDets extends Model
 {
     use HasFactory;
     protected $table = 'purchase_bills';
-    protected $fillable = ['type', 'num_order', 'custom_bill_num', 'supplier_id', 'treasury_id', 'custom_date', 'user_id', 'year_id', 'notes'];
+    protected $fillable = ['receipt_number', 'client_id', 'amount', 'amount_in_words', 'payment_type', 'cheque_number', 'cheque_bank', 'cheque_date', 'receipt_date','status', 'notes', 'user_id'];
 }

@@ -180,6 +180,9 @@
                             <li aria-haspopup="true"><a href="{{ url('/transfer_between_storages') }}" class="slide-item text-dark">التحويل من خزنة لأخري</a></li>
                             
                             <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('receipts') }}" class="slide-item text-dark">ايصال استلام نقدية / شيكات</a></li>
+
+                            <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('report/profits') }}" class="slide-item text-dark">تقرير الربحية</a></li>
                         </ul>
                     </li>

@@ -44,6 +44,14 @@
 
                 // start loop to bill products
                 $.each(res, function(index2, value2){
+                    if(@json(userPermissions()->cost_price_view)){
+                        var cost_price_permission  = `
+                            <td>${display_number_js( value2.last_cost_price_small_unit )}</td>
+                        `;
+                    }else{
+                        var cost_price_permission  = '';
+                    }
+
                     $('#showProductsModal #content tbody').append(`
                         <tr>
                             <td>${value2.product_id}</td>
@@ -53,7 +61,7 @@
                                 ${value2.bigUnitName ? value2.bigUnitName : value2.smallUnitName}
                             </td>
                             <td>${display_number_js( value2.product_bill_quantity )} ${value2.smallUnitName}</td>
-                            <td>${display_number_js( value2.last_cost_price_small_unit )}</td>
+                            ${cost_price_permission}
                             <td>${display_number_js( value2.sell_price_small_unit )}</td>
                             <td>${display_number_js( value2.tax )}</td>
                             <td>${display_number_js( value2.discount )}</td>
