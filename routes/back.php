@@ -435,6 +435,8 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/' , 'ReceiptsController@index');
         Route::post('/store' , 'ReceiptsController@store');
         Route::get('/getCurrentRemainingMoney/{clientOrSupplier}' , 'ReceiptsController@getCurrentRemainingMoney');
+        Route::get('/take_money/{id}/{treasury}' , 'ReceiptsController@take_money');
+        Route::get('/destroy/{id}' , 'ReceiptsController@destroy');
         
         Route::get('datatable' , 'ReceiptsController@datatable');
 

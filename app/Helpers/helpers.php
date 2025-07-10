@@ -6,6 +6,28 @@ use App\Models\Back\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+// start convertAmountToArabicWords
+//if (!function_exists('convertAmountToArabicWords')) {
+//    function convertAmountToArabicWords($amount)
+//    {
+//        require_once base_path('vendor/ar-php/arabic/Arabic.php');
+
+//        $Arabic = new Arabic('Numbers');
+
+//        $whole = floor($amount);
+//        $fraction = round(($amount - $whole) * 100);
+
+//        $text = $Arabic->int2str($whole) . ' جنيهاً';
+
+//        if ($fraction > 0) {
+//            $text .= ' و' . $Arabic->int2str($fraction) . ' قرشاً';
+//        }
+
+//        return 'مبلغ وقدره فقط: ' . $text;
+//    }
+//}
+// end convertAmountToArabicWords
+
 
 // start get curren financial year where status 1 => السنوات المالية
     function getFinancialYear(){

@@ -16,8 +16,8 @@
 @section('footer')
     <script>
         flatpickr(".datePicker", {
-            enableTime: true,
-            dateFormat: "Y-m-d h:i:S K", 
+            enableTime: false,
+            dateFormat: "Y-m-d", 
             time_24hr: false
         });
     </script>
@@ -79,6 +79,7 @@
                     {data: 'id', name: 'id'},
                     {data: 'action', name: 'action'},
                     {data: 'created_at', name: 'created_at'},
+                    {data: 'receipt_date', name: 'receipt_date'},
                     {data: 'clientSupplierName', name: 'clientSupplierName'},
                     {data: 'clientSupplierStatus', name: 'clientSupplierStatus'},
                     {data: 'amount', name: 'amount'},
@@ -194,6 +195,9 @@
     
     {{-- add, edit, delete => script --}}
     @include('back.receipts.add')
+    @include('back.receipts.edit')
+    @include('back.receipts.delete')
+    @include('back.receipts.take_money_js')
 @endsection
 
 
@@ -215,6 +219,7 @@
         </div>
         <!-- breadcrumb -->
 
+        @include('back.receipts.takeMoneyModal')
         @include('back.receipts.form')
 
         <div class="row row-sm">
@@ -227,7 +232,8 @@
                                     <tr>
                                         <th class="border-bottom-0 nowrap_thead">#</th>
                                         <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">التحكم</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 150px !important;min-width: 150px !important;">تاريخ الإيصال</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ الإيصال</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 70px !important;min-width: 70px !important;">تاريخ اخر</th>
                                         <th class="border-bottom-0 nowrap_thead" style="width: 150px !important;min-width: 150px !important;">اسم الجهة</th>
                                         <th class="border-bottom-0 nowrap_thead">نوع الجهة</th>
                                         <th class="border-bottom-0 nowrap_thead">مبلغ الايصال</th>

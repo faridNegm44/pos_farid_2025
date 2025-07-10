@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2025 at 09:14 AM
+-- Generation Time: Jul 10, 2025 at 10:02 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -482,7 +482,7 @@ CREATE TABLE `receipts` (
   `cheque_number` varchar(255) DEFAULT NULL,
   `cheque_bank` varchar(255) DEFAULT NULL,
   `cheque_date` date DEFAULT NULL,
-  `receipt_date` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp() COMMENT 'تاريخ تحرير الإيصال',
+  `receipt_date` datetime DEFAULT NULL ON UPDATE current_timestamp() COMMENT 'تاريخ تحرير الإيصال',
   `status` enum('جاري التحصيل','تم التحصيل','ملغى') NOT NULL DEFAULT 'جاري التحصيل' COMMENT 'حالة الإيصال',
   `notes` text DEFAULT NULL,
   `user_id` int(11) NOT NULL,
@@ -496,10 +496,15 @@ CREATE TABLE `receipts` (
 --
 
 INSERT INTO `receipts` (`id`, `payer_type`, `payer_id`, `amount`, `amount_in_words`, `payment_type`, `cheque_number`, `cheque_bank`, `cheque_date`, `receipt_date`, `status`, `notes`, `user_id`, `year_id`, `created_at`, `updated_at`) VALUES
-(1, 'عميل', 2, 1000.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, NULL, 'جاري التحصيل', NULL, 1, 1, '2025-07-09 17:04:24', NULL),
-(2, 'عميل', 2, 999.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-09 07:03:39', 'جاري التحصيل', NULL, 1, 1, '2025-07-01 07:03:36', NULL),
-(3, 'عميل', 10, 10.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-09 07:03:43', 'جاري التحصيل', 'ملاااااااحظات', 1, 1, '2025-07-30 07:03:41', NULL),
-(4, 'مورد', 4, 12.70000000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-09 07:03:47', 'جاري التحصيل', NULL, 1, 1, '2025-07-21 07:03:44', NULL);
+(1, 'عميل', 2, 1000.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, NULL, 'ملغى', NULL, 1, 1, '2025-07-09 17:04:24', NULL),
+(2, 'عميل', 2, 999.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-09 20:03:07', 'تم التحصيل', NULL, 1, 1, '2025-07-01 07:03:36', NULL),
+(3, 'عميل', 10, 10.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-09 20:03:46', 'تم التحصيل', 'ملاااااااحظات', 1, 1, '2025-07-30 07:03:41', NULL),
+(4, 'مورد', 4, 12.70000000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-09 14:58:36', 'ملغى', NULL, 1, 1, '2025-07-21 07:03:44', NULL),
+(5, 'عميل', 1, 800.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, NULL, 'تم التحصيل', NULL, 1, 1, '2025-07-09 08:53:59', NULL),
+(13, 'عميل', 8, 99.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-09 12:30:35', 'تم التحصيل', NULL, 1, 1, '2025-07-09 09:29:43', NULL),
+(14, 'عميل', 6, 8888.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-09 12:30:29', 'ملغى', 'notesssssssssssss', 1, 1, '2025-07-09 09:30:03', NULL),
+(15, 'عميل', 2, 3528.75990000000000000000, NULL, 'كاش', NULL, NULL, NULL, '2025-07-10 09:55:57', 'تم التحصيل', NULL, 1, 1, '2025-07-10 04:53:31', NULL),
+(16, 'عميل', 2, 0.00000000000000000000, NULL, 'كاش', NULL, NULL, NULL, NULL, 'جاري التحصيل', NULL, 1, 1, '2025-07-10 07:05:33', NULL);
 
 -- --------------------------------------------------------
 
@@ -618,7 +623,7 @@ CREATE TABLE `roles_permissions` (
 --
 
 INSERT INTO `roles_permissions` (`id`, `role_name`, `financialYears_create`, `financialYears_update`, `financialYears_view`, `stores_create`, `stores_update`, `stores_view`, `stores_delete`, `financial_treasury_create`, `financial_treasury_update`, `financial_treasury_view`, `financial_treasury_delete`, `units_create`, `units_update`, `units_view`, `units_delete`, `companies_create`, `companies_update`, `companies_view`, `companies_delete`, `productsCategories_create`, `productsCategories_update`, `productsCategories_view`, `productsCategories_delete`, `products_sub_category_create`, `products_sub_category_update`, `products_sub_category_view`, `products_sub_category_delete`, `products_create`, `products_update`, `products_view`, `products_delete`, `products_report_view`, `taswea_products_create`, `taswea_products_view`, `transfer_between_stores_create`, `transfer_between_stores_view`, `clients_create`, `clients_update`, `clients_view`, `clients_delete`, `clients_report_view`, `clients_account_statement_view`, `suppliers_create`, `suppliers_update`, `suppliers_view`, `suppliers_delete`, `suppliers_report_view`, `suppliers_account_statement_view`, `taswea_client_supplier_create`, `taswea_client_supplier_view`, `partners_create`, `partners_update`, `partners_view`, `partners_delete`, `partners_report_view`, `partners_account_statement_view`, `taswea_partners_create`, `taswea_partners_view`, `sales_create`, `sales_return`, `sales_view`, `sales_return_view`, `products_stock_alert_view`, `purchases_create`, `purchases_return`, `purchases_view`, `purchases_return_view`, `treasury_bills_create`, `treasury_bills_view`, `treasury_bills_report_view`, `transfer_between_storages_create`, `transfer_between_storages_view`, `expenses_create`, `expenses_view`, `expenses_delete`, `expenses_report_view`, `users_create`, `users_update`, `users_view`, `users_delete`, `settings_update`, `settings_view`, `roles_permissions_create`, `roles_permissions_update`, `roles_permissions_view`, `roles_permissions_delete`, `total_sell_bill_today_view`, `total_profit_today_view`, `total_money_on_financial_treasury_view`, `top_products_view`, `top_clients_view`, `profit_view`, `tax_bill_view`, `discount_bill_view`, `cost_price_view`, `receipts_create`, `receipts_update`, `receipts_view`, `receipts_delete`, `created_at`, `updated_at`) VALUES
-(1, 'سوبر ادمن', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '2025-06-12 13:04:40', '2025-07-08 08:22:20'),
+(1, 'سوبر ادمن', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '2025-06-12 13:04:40', '2025-07-09 08:27:52'),
 (2, 'موظف مبيعات', 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-06-13 12:49:53', '2025-06-30 09:24:17'),
 (3, 'موظف مشتريات', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-06-13 12:50:10', '2025-06-13 12:50:10'),
 (5, 'فففففففف', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-07-02 08:12:50', '2025-07-02 08:59:35'),
@@ -698,7 +703,8 @@ INSERT INTO `sale_bills` (`id`, `custom_bill_num`, `client_id`, `treasury_id`, `
 (46, NULL, 2, NULL, NULL, NULL, 1.000, 11.00000000000000000000, 11.45760000000000000000, NULL, 1, 1, NULL, '2025-07-08 09:14:01', NULL),
 (47, NULL, 2, NULL, NULL, NULL, 1.000, 11.00000000000000000000, 11.45760000000000000000, NULL, 1, 1, NULL, '2025-07-08 09:17:52', NULL),
 (48, NULL, 2, NULL, 0.458, NULL, 1.000, 11.00000000000000000000, 11.00000000000000000000, NULL, 1, 1, NULL, '2025-07-08 09:21:12', NULL),
-(49, NULL, 2, NULL, NULL, NULL, 1.000, 11.00000000000000000000, 11.45760000000000000000, NULL, 1, 1, NULL, '2025-07-08 09:21:58', NULL);
+(49, NULL, 2, NULL, NULL, NULL, 1.000, 11.00000000000000000000, 11.45760000000000000000, NULL, 1, 1, NULL, '2025-07-08 09:21:58', NULL),
+(50, NULL, 2, NULL, NULL, NULL, 1.000, 15.00000000000000000000, 15.62400000000000000000, NULL, 1, 1, NULL, '2025-07-09 08:28:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -843,7 +849,8 @@ INSERT INTO `store_dets` (`id`, `num_order`, `type`, `year_id`, `bill_id`, `prod
 (42, 30, 'اضافة فاتورة مبيعات', 1, 46, 1, 11.00000000000000000000, 11.00000000000000000000, 8.00000000000000000000, 8.00000000000000000000, 1.000, 37.000, 12.000, 7.000, NULL, 11.00000000000000000000, 11.45760000000000000000, NULL, NULL, 0.000, NULL, '2025-07-08 09:14:01', NULL),
 (43, 31, 'اضافة فاتورة مبيعات', 1, 47, 1, 11.00000000000000000000, 11.00000000000000000000, 8.00000000000000000000, 8.00000000000000000000, 1.000, 36.000, 12.000, 7.000, NULL, 11.00000000000000000000, 11.45760000000000000000, NULL, NULL, 0.000, NULL, '2025-07-08 09:17:52', NULL),
 (44, 32, 'اضافة فاتورة مبيعات', 1, 48, 1, 11.00000000000000000000, 11.00000000000000000000, 8.00000000000000000000, 8.00000000000000000000, 1.000, 35.000, 12.000, 7.000, NULL, 11.00000000000000000000, 11.45760000000000000000, NULL, NULL, 0.000, NULL, '2025-07-08 09:21:12', NULL),
-(45, 33, 'اضافة فاتورة مبيعات', 1, 49, 1, 11.00000000000000000000, 11.00000000000000000000, 8.00000000000000000000, 8.00000000000000000000, 1.000, 34.000, 12.000, 7.000, NULL, 11.00000000000000000000, 11.45760000000000000000, NULL, NULL, 0.000, NULL, '2025-07-08 09:21:58', NULL);
+(45, 33, 'اضافة فاتورة مبيعات', 1, 49, 1, 11.00000000000000000000, 11.00000000000000000000, 8.00000000000000000000, 8.00000000000000000000, 1.000, 34.000, 12.000, 7.000, NULL, 11.00000000000000000000, 11.45760000000000000000, NULL, NULL, 0.000, NULL, '2025-07-08 09:21:58', NULL),
+(46, 34, 'اضافة فاتورة مبيعات', 1, 50, 1, 15.00000000000000000000, 11.00000000000000000000, 8.00000000000000000000, 8.00000000000000000000, 1.000, 33.000, 12.000, 7.000, NULL, 15.00000000000000000000, 15.62400000000000000000, NULL, NULL, 0.000, NULL, '2025-07-09 08:28:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -1032,7 +1039,11 @@ INSERT INTO `treasury_bill_dets` (`id`, `num_order`, `date`, `treasury_id`, `tre
 (70, 27, '2025-07-08', 0, 'اضافة فاتورة مبيعات', 46, 'اضافة فاتورة مبيعات', 2, NULL, 0.00000000000000000000, NULL, 4478.22070000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-08 09:14:01', NULL),
 (71, 28, '2025-07-08', 0, 'اضافة فاتورة مبيعات', 47, 'اضافة فاتورة مبيعات', 2, NULL, 0.00000000000000000000, NULL, 4489.67830000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-08 09:17:52', NULL),
 (72, 29, '2025-07-08', 0, 'اضافة فاتورة مبيعات', 48, 'اضافة فاتورة مبيعات', 2, NULL, 0.00000000000000000000, NULL, 4500.67830000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-08 09:21:12', NULL),
-(73, 30, '2025-07-08', 0, 'اضافة فاتورة مبيعات', 49, 'اضافة فاتورة مبيعات', 2, NULL, 0.00000000000000000000, NULL, 4512.13590000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-08 09:21:58', NULL);
+(73, 30, '2025-07-08', 0, 'اضافة فاتورة مبيعات', 49, 'اضافة فاتورة مبيعات', 2, NULL, 0.00000000000000000000, NULL, 4512.13590000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-08 09:21:58', NULL),
+(74, 31, '2025-07-09', 0, 'اضافة فاتورة مبيعات', 50, 'اضافة فاتورة مبيعات', 2, NULL, 0.00000000000000000000, NULL, 4527.75990000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-09 08:28:13', NULL),
+(76, 4, '2025-07-09', 4, 'اذن توريد نقدية', 0, '0', 2, NULL, 7999.00000000000000000000, 999.00000000000000000000, 3528.75990000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-09 17:03:07', NULL),
+(77, 5, '2025-07-09', 4, 'اذن توريد نقدية', 0, '0', 10, NULL, 8009.00000000000000000000, 10.00000000000000000000, -10.00000000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-09 17:03:46', NULL),
+(78, 6, '2025-07-10', 4, 'اذن توريد نقدية', 0, '0', 2, NULL, 11537.75990000000000000000, 3528.75990000000000000000, 0.00000000000000000000, 0.00, NULL, NULL, NULL, 1, 1, '2025-07-10 06:55:57', NULL);
 
 -- --------------------------------------------------------
 
@@ -1093,7 +1104,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `login_barcode`, `phone`, `role`, `theme`, `address`, `nat_id`, `birth_date`, `image`, `gender`, `status`, `last_login_time`, `note`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-06-25 12:02:48', NULL, NULL, NULL, NULL, '2025-06-25 09:02:48'),
+(1, 'فريد نجم', 'farid@gmail.com', '$2y$10$3P02z1BASW2XAhJ59IDObOimzTd42yTafpx2D3Q0Duyy79hdJAgPe', NULL, '01000', 1, 1, 'Elnozha2 22', NULL, '2025-02-19', '1739973719.png', 'ذكر', 1, '2025-07-09 10:19:07', NULL, NULL, NULL, NULL, '2025-07-09 07:19:07'),
 (2, 'Asmaa Negm', 'asmaa@gmail.com', '$2y$10$4jTJP/oP3HUdRUS5hEmH6e94eu7LKeOfMWjXJZBLLkFHAw4fvi4QW', NULL, NULL, 3, 1, NULL, NULL, NULL, '1749319463.jpeg', 'انثي', 0, NULL, NULL, NULL, NULL, NULL, '2025-06-13 12:55:15'),
 (3, 'aaaaa', 'a@sd', '$2y$10$CVvWhLkNjtwTQrIFf.9vg.quhHQT/Ur5yxgwgQAjNXtXPdG2IKrfm', NULL, '111111', 1, 1, NULL, '111111', NULL, '1749319525.jpg', 'ذكر', 1, NULL, NULL, NULL, NULL, NULL, '2025-06-07 18:05:25');
 
@@ -1409,7 +1420,7 @@ ALTER TABLE `purchase_return_bills`
 -- AUTO_INCREMENT for table `receipts`
 --
 ALTER TABLE `receipts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `roles_permissions`
@@ -1421,7 +1432,7 @@ ALTER TABLE `roles_permissions`
 -- AUTO_INCREMENT for table `sale_bills`
 --
 ALTER TABLE `sale_bills`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -1439,7 +1450,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `store_dets`
 --
 ALTER TABLE `store_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `taswea_client_supplier`
@@ -1475,7 +1486,7 @@ ALTER TABLE `taswea_reasons_to_client_supplier`
 -- AUTO_INCREMENT for table `treasury_bill_dets`
 --
 ALTER TABLE `treasury_bill_dets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `units`

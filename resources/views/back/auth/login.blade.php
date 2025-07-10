@@ -88,7 +88,7 @@
 										<div class="col-md-10 col-lg-10 col-xl-9 mx-auto">
 											<div class="card-sigin">
 												<div class="" style="margin-bottom: 2rem !important; text-align: center;">
-													<img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="sign-favicon ht-120 pd-10" alt="{{ GeneralSettingsInfo()->app_name }}" style="width: 170px;height: 70px;">
+													<img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="sign-favicon ht-120 pd-10" alt="{{ GeneralSettingsInfo()->app_name }}" style="width: 170px;height: 170px;">
 
 													<h1 class="main-logo1 mr-1 mr-0 my-auto" style="font-size: 25px !important;text-decoration: underline;">{{ GeneralSettingsInfo()->app_name }}</h1>
 												</div>

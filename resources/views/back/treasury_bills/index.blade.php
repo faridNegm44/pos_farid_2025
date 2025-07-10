@@ -112,17 +112,17 @@
                             <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
                                 <thead>
                                     <tr>
-                                        <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0" >تاريخ المعاملة</th>
-                                        <th class="border-bottom-0" >تاريخ اخر</th>
-                                        <th class="border-bottom-0">الجهة</th>
-                                        <th class="border-bottom-0">نوع المعاملة</th>
-                                        <th class="border-bottom-0">خزينة المعاملة</th>
-                                        <th class="border-bottom-0">مبلغ المعاملة</th>
-                                        <th class="border-bottom-0">علية / لية</th>
-                                        <th class="border-bottom-0">مبلغ الخزينة بعد</th>
-                                        <th class="border-bottom-0">موظف</th>
-                                        <th class="border-bottom-0">ملاحظات</th>
+                                        <th class="border-bottom-0 nowarp_thead">#</th>
+                                        <th class="border-bottom-0 nowarp_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ المعاملة</th>
+                                        <th class="border-bottom-0 nowarp_thead">تاريخ اخر</th>
+                                        <th class="border-bottom-0 nowarp_thead" style="width: 150px !important;min-width: 150px !important;">الجهة</th>
+                                        <th class="border-bottom-0 nowarp_thead">نوع المعاملة</th>
+                                        <th class="border-bottom-0 nowarp_thead">خزينة المعاملة</th>
+                                        <th class="border-bottom-0 nowarp_thead">مبلغ المعاملة</th>
+                                        <th class="border-bottom-0 nowarp_thead">علية / لية</th>
+                                        <th class="border-bottom-0 nowarp_thead">مبلغ الخزينة بعد</th>
+                                        <th class="border-bottom-0 nowarp_thead">موظف</th>
+                                        <th class="border-bottom-0 nowarp_thead">ملاحظات</th>
                                     </tr>
                                 </thead>                                
                             </table>

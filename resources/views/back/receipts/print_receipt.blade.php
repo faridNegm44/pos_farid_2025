@@ -21,7 +21,7 @@
         }
         .receipt-container {
           border: 2px solid black;
-          padding: 20px;
+          padding: 40px 20px;
           width: 700px;
           margin: auto;
           position: relative;
@@ -36,7 +36,7 @@
           content: "";
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
-          background: rgba(255, 255, 255, 0.9);
+          background: rgba(255, 255, 255, 0.8);
           z-index: 0;
         }
     
@@ -74,19 +74,21 @@
         }
 
         @media print {
-            body {
-                -webkit-print-color-adjust: exact; /* Chrome, Safari */
-                print-color-adjust: exact;         /* Firefox */
-            }
+          body {
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+              margin: 0 !important;
+              padding: 0 !important;
+          }
 
-            .receipt-container {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                background-image: url("{{ asset('back/images/settings/' . GeneralSettingsInfo()->logo) }}") !important;
-                background-repeat: no-repeat !important;
-                background-position: center !important;
-                background-size: 300px !important;
-            }
+          .receipt-container {
+              margin: 0 auto !important;
+              padding: 20px 10px !important;
+              background-image: url("{{ asset('back/images/settings/' . GeneralSettingsInfo()->logo) }}") !important;
+              background-repeat: no-repeat !important;
+              background-position: center !important;
+              background-size: 300px !important;
+          }
         }
 
     </style>
@@ -108,7 +110,7 @@
             </div>
             <div class="row">
             <span class="bold">نقدًا / شيك رقم:</span> ........................................ 
-            <span class="bold">بتاريخ:</span> .... / .... / ........ 
+            <span class="bold">بتاريخ:</span> ........ / .... / ....  
             <span class="bold">مسحوب على بنك:</span> ........................................
             </div>
     
@@ -123,6 +125,6 @@
         </div>
         </div>
 
-    {{--<script> window.print(); </script>--}}
+    <script> window.print(); </script>
 </body>
 </html>

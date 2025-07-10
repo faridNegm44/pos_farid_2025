@@ -190,10 +190,23 @@ class TreasuryBillsController extends Controller
                         ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'treasury_bill_dets.client_supplier_id')
                         ->leftJoin('clients_and_suppliers_types', 'clients_and_suppliers_types.id', 'clients_and_suppliers.client_supplier_type')
                         ->select(
-                            'treasury_bill_dets.id', 'treasury_bill_dets.num_order', 'treasury_bill_dets.date', 'treasury_bill_dets.treasury_type', 'treasury_bill_dets.treasury_money_after', 'treasury_bill_dets.amount_money', 'treasury_bill_dets.remaining_money', 'treasury_bill_dets.notes', 'treasury_bill_dets.created_at', 
+                            'treasury_bill_dets.id', 
+                            'treasury_bill_dets.num_order', 
+                            'treasury_bill_dets.date', 
+                            'treasury_bill_dets.treasury_type', 
+                            'treasury_bill_dets.treasury_money_after', 
+                            'treasury_bill_dets.amount_money', 
+                            'treasury_bill_dets.remaining_money', 
+                            'treasury_bill_dets.notes', 
+                            'treasury_bill_dets.created_at', 
+                            
                             'financial_treasuries.name as treasuryName',
+                            
+                            'clients_and_suppliers.id as clientSupplierId',
                             'clients_and_suppliers.name as cleintOrSupplierName',
                             'clients_and_suppliers_types.name as cleintOrSupplierTypeName',
+                            'clients_and_suppliers.phone as clientSupplierPhone',
+                            
                             'users.name as userName',
                         )
                         ->orderBy('treasury_bill_dets.created_at', 'desc')
@@ -206,10 +219,8 @@ class TreasuryBillsController extends Controller
                 return $res->num_order;
             })
             ->addColumn('created_at', function($res){
-                if($res->created_at){
-                    return Carbon::parse($res->created_at)->format('d-m-Y')
-                            .' <p style="margin: 0 7px;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</p>';
-                }
+                return Carbon::parse($res->created_at)->format('d-m-Y')
+                        .' <span class="badge badge-dark text-white" style="margin: 0 7px;font-size: 100% !important;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
             })
             ->addColumn('date', function($res){
                 if(Carbon::parse($res->date)->format('d-m-Y') != Carbon::parse($res->created_at)->format('d-m-Y')){
@@ -217,17 +228,19 @@ class TreasuryBillsController extends Controller
                 }
             })
             ->addColumn('client_supplier', function($res){
-                return '<strong class="text-primary">'.$res->cleintOrSupplierName.'</strong>';
+                $checkPhone = $res->clientSupplierPhone ? ' - '.$res->clientSupplierPhone : '';
+                
+                return '<strong class="text-primary">'. '( ' . $res->clientSupplierId . ' )' .' - '. $res->cleintOrSupplierName . $checkPhone .'</strong>';
             })
             ->addColumn('treasury_type', function($res){
                 if($res->treasury_type === 'اذن توريد نقدية'){
-                    return "<span class='bg rounded bg-success text-white' style='padding: 0 4px;'>".$res->treasury_type."</span>";
+                    return "<span class='badge badge-success' style='font-size: 100% !important;'>".$res->treasury_type."</span>";
                     
                 }elseif($res->treasury_type === 'اذن صرف نقدية'){
-                    return "<span class='bg rounded bg-danger text-white' style='padding: 0 4px;'>".$res->treasury_type."</span>";
+                    return "<span class='badge badge-danger' style='font-size: 100% !important;'>".$res->treasury_type."</span>";
 
                 }elseif($res->treasury_type === 'اذن ارتجاع نقدية'){
-                    return "<span class='bg rounded bg-dark text-white' style='padding: 0 4px;'>".$res->treasury_type."</span>";
+                    return "<span class='badge badge-dark' style='font-size: 100% !important;'>".$res->treasury_type."</span>";
                 }
             })
             ->addColumn('treasury', function($res){
@@ -238,20 +251,20 @@ class TreasuryBillsController extends Controller
             })
             ->addColumn('remaining_money', function($res){
                 if($res->remaining_money < 0){
-                    return '<strong class="bg rounded bg-secondary text-white" style="font-size: 13px;padding: 0 4px;">'.display_number($res->remaining_money).'</strong>';
+                    return '<strong class="bg rounded bg-warning" style="font-size: 12px;padding: 0 4px;">'.display_number($res->remaining_money).'</strong>';
                 }else{
-                    return '<strong style="font-size: 13px;padding: 0 4px">'.display_number($res->remaining_money).'</strong>';
+                    return '<strong style="font-size: 12px;padding: 0 4px">'.display_number($res->remaining_money).'</strong>';
                 }
             })
             ->addColumn('amount_money', function($res){
                 if($res->treasury_type === 'اذن توريد نقدية'){
-                    return '<strong class="bg rounded bg-success text-white" style="font-size: 13px;padding: 0 4px">'.display_number($res->amount_money).'</strong>';
+                    return '<strong class="badge badge-success " style="font-size: 100% !important;">'.display_number($res->amount_money).'</strong>';
                     
                 }elseif($res->treasury_type === 'اذن صرف نقدية'){
-                    return '<strong class="bg rounded bg-danger text-white" style="font-size: 13px;padding: 0 4px">'.display_number($res->amount_money).'</strong>';
+                    return '<strong class="badge badge-danger " style="font-size: 100% !important;">'.display_number($res->amount_money).'</strong>';
 
                 }elseif($res->treasury_type === 'اذن ارتجاع نقدية'){
-                    return '<strong class="bg rounded bg-dark text-white" style="font-size: 13px;padding: 0 4px">'.display_number($res->amount_money).'</strong>';
+                    return '<strong class="badge badge-dark " style="font-size: 100% !important;">'.display_number($res->amount_money).'</strong>';
                 }
             })            
             ->addColumn('user', function($res){

@@ -124,7 +124,7 @@ class SaleBillController extends Controller
                             
                 $sale_quantity = (float) request('sale_quantity')[$index];
                 $sellPrice = (float) request('sellPrice')[$index];
-                $discount = (float) request('prod_discount')[$index];
+                $discount = (float) request('prod_discount')[$index] ;
                 $tax = (float) request('prod_tax')[$index];                    
 
                 

@@ -93,78 +93,97 @@
 
 
 
-		<div class="container">
-			<div class="row g-3 justify-content-center">
-		  
-			  <div class="col-md-2 col-12">
-				<div class="card text-center dashboard-card border">
-				  <div class="card-body" style="padding: 0.45rem; !important;">
-					<a href="{{ url('sales') }}" target="_blank" class="text-decoration-none text-primary">
-					  <i class="fas fa-cash-register fa-2x mb-2 d-block"></i>
-					  <span class="fw-bold tx-12">فواتير المبيعات</span>
-					</a>
-				  </div>
-				</div>
+		<div class="row g-3 justify-content-center">
+	  
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="فواتير المبيعات">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 0.45rem; !important;">
+				<a href="{{ url('sales') }}" target="_blank" class="text-decoration-none">
+				  <i class="fas fa-cash-register fa-2x mb-1 d-block"></i>
+				  <span class="fw-bold tx-9">فواتير المبيعات</span>
+				</a>
 			  </div>
-		 
-			  <div class="col-md-2 col-12">
-				<div class="card text-center dashboard-card border">
-				  <div class="card-body" style="padding: 0.45rem; !important;">
-					<a href="{{ url('treasury_bills') }}" target="_blank" class="text-decoration-none text-success">
-						<i class="fas fa-coins fa-2x mb-2 d-block"></i>
-						<span class="fw-bold tx-12">معاملات الخزائن المالية</span>
-					</a>
-				  </div>
-				</div>
-			  </div>
-		 
-			  <div class="col-md-2 col-12">
-				<div class="card text-center dashboard-card border">
-				  <div class="card-body" style="padding: 0.45rem; !important;">
-					<a href="{{ url('purchases') }}" target="_blank" class="text-decoration-none text-danger">
-					  <i class="fas fa-cart-arrow-down fa-2x mb-2 d-block"></i>
-					  <span class="fw-bold tx-12">فواتير المشتريات</span>
-					</a>
-				  </div>
-				</div>
-			  </div>
-		  
-			  <div class="col-md-2 col-12">
-				<div class="card text-center dashboard-card border">
-				  <div class="card-body" style="padding: 0.45rem; !important;">
-					<a href="{{ url('products') }}" target="_blank" class="text-decoration-none text-warning">
-					  <i class="fas fa-boxes fa-2x mb-2 d-block"></i>
-					  <span class="fw-bold tx-12">الأصناف</span>
-					</a>
-				  </div>
-				</div>
-			  </div>
-		  
-			  <div class="col-md-2 col-12">
-				<div class="card text-center dashboard-card border">
-				  <div class="card-body" style="padding: 0.45rem; !important;">
-					<a href="{{ url('clients') }}" target="_blank" class="text-decoration-none text-info">
-						<i class="fas fa-user-alt fa-2x mb-2 d-block"></i>
-						<span class="fw-bold tx-12">العملاء</span>
-					</a>					
-				  </div>
-				</div>
-			  </div>
-		  
-			  <div class="col-md-2 col-12">
-				<div class="card text-center dashboard-card border">
-				  <div class="card-body" style="padding: 0.45rem; !important;">
-					<a href="{{ url('transfer_between_storages') }}" target="_blank" class="text-decoration-none text-dark">
-					  <i class="fas fa-money-bill-wave fa-2x mb-2 d-block"></i>
-					  <span class="fw-bold tx-12">التحويل من خزنة لأخري</span>
-					</a>
-				  </div>
-				</div>
-			  </div>
-		  
 			</div>
+		  </div>
+	 
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="حركات الخزينة">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 0.45rem; !important;">
+				<a href="{{ url('treasury_bills') }}" target="_blank" class="text-decoration-none">
+					<i class="fas fa-coins fa-2x mb-1 d-block"></i>
+					<span class="fw-bold tx-9">حركات الخزينة</span>
+				</a>
+			  </div>
+			</div>
+		  </div>
+	 
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="فواتير المشتريات">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 0.45rem; !important;">
+				<a href="{{ url('purchases') }}" target="_blank" class="text-decoration-none">
+				  <i class="fas fa-cart-arrow-down fa-2x mb-1 d-block"></i>
+				  <span class="fw-bold tx-9">فواتير المشتريات</span>
+				</a>
+			  </div>
+			</div>
+		  </div>
+	  
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="الأصناف">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 0.45rem; !important;">
+				<a href="{{ url('products') }}" target="_blank" class="text-decoration-none">
+				  <i class="fas fa-boxes fa-2x mb-1 d-block"></i>
+				  <span class="fw-bold tx-9">الأصناف</span>
+				</a>
+			  </div>
+			</div>
+		  </div>
+	  
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="العملاء">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 0.45rem; !important;">
+				<a href="{{ url('clients') }}" target="_blank" class="text-decoration-none">
+					<i class="fas fa-user-alt fa-2x mb-1 d-block"></i>
+					<span class="fw-bold tx-9">العملاء</span>
+				</a>					
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="كشف حساب عميل">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 0.45rem; !important;">
+				<a href="{{ url('clients/report/account_statement') }}" target="_blank" class="text-decoration-none">
+					<i class="fas fa-file-pdf fa-2x mb-1 d-block"></i>
+					<span class="fw-bold tx-9">كشف حساب عميل</span>
+				</a>					
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="ايصالات / شيكات">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 0.45rem; !important;">
+				<a href="{{ url('receipts') }}" target="_blank" class="text-decoration-none">
+					<i class="fas fa-receipt fa-2x mb-1 d-block"></i>
+					<span class="fw-bold tx-9">ايصالات / شيكات</span>
+				</a>					
+			  </div>
+			</div>
+		  </div>
+	  
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="التحويل بين الخزن">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 0.45rem; !important;">
+				<a href="{{ url('transfer_between_storages') }}" target="_blank" class="text-decoration-none">
+				  <i class="fas fa-money-bill-wave fa-2x mb-1 d-block"></i>
+				  <span class="fw-bold tx-9">التحويل بين الخزن</span>
+				</a>
+			  </div>
+			</div>
+		  </div>
+	  
 		</div>
-
 		<hr style="border: 1px solid !important;margin-bottom: 30px !important;">
 
 
