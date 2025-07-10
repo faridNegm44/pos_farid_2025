@@ -78,7 +78,7 @@
 
             .form-control:disabled, .form-control[readonly] {
                 border: 0px solid !important;
-                background: transparent !important;
+                /*background: transparent !important;*/
             }
             .dark_theme{
                 display: none;
@@ -244,17 +244,17 @@
     
                         <div class="col-lg-8" style="height: 70vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat;">
                             <table class="table table-hover table-bordered" id="products_table">
-                                <thead class="text-center thead-dark">
+                                <thead class="bg bg-black-5">
                                     <tr>
                                         <th>#</th>
                                         <th>حذف</th>
                                         <th style="width: 25%;max-width: 100%;">السلعة/الخدمة</th>
                                         <th style="width: 10%;">الوحدة</th>
+                                        <th style="width: 10%;">ك المخزن</th>
                                         <th style="width: 10%;">
                                             ك مباعة
                                             <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى إتمام عملية البيع باستخدام الوحدة الصغرى للمنتج، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
                                         </th>
-                                        <th style="width: 10%;">ك المخزن</th>
                                         <th style="width: 10%;">س بيع</th>
                                         <th style="width: 10%;">خصم%</th>                                                                                        
                                         <th style="width: 10%;">ضريبة%</th>
@@ -551,7 +551,7 @@
                     }else{
                         var discount_permissions = `
                             <td>
-                                <input type="text" disabled class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" value="${discount}">
+                                <input readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="${discount}">
                             </td>`;
                     }
                     // نهاية التاكد لو في صلاحيه للمستخدم ع الخصم
@@ -565,7 +565,7 @@
                     }else{
                         var tax_permissions = `
                             <td>
-                                <input type="text" disabled class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" value="${tax}">
+                                <input readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}">
                             </td>`;
                     }
                     // نهاية التاكد لو في صلاحيه للمستخدم ع الضريبة
@@ -617,10 +617,11 @@
                                     ${smallUnitName}
                                     <input autocomplete="off" type='hidden' class='small_unit_numbers' value='${small_unit_numbers}' />      
                                 </td>
-                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity[]" value="1"></td>                                
                                 <td>
                                     <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="${quantity_all}">                    
                                 </td>
+                                <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity[]" value="1">
+                                </td>                                                                
                                 <td>
                                     <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">  
                                     

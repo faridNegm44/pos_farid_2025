@@ -3,7 +3,7 @@
         $(".exampleModalCenter #save").click(function(e){
             e.preventDefault();
             document.querySelector('.exampleModalCenter #save').disabled = true;        
-            document.querySelector('.spinner_request').setAttribute("style", "display: inline-block;");
+            document.querySelector('.exampleModalCenter .spinner_request').setAttribute("style", "display: inline-block;");
 
             
             const amount = $("#amount").val();
@@ -16,7 +16,7 @@
                 alertify.error("اختر الجهة أولاً، ثم 💵 أدخل مبلغ المطالبة أو الدفعة");
 
                 document.querySelector('.exampleModalCenter #save').disabled = false;
-                document.querySelector('.spinner_request').style.display = 'none';               
+                document.querySelector('.exampleModalCenter .spinner_request').style.display = 'none';               
 
             }else{
 
@@ -38,7 +38,7 @@
                                 });               
                                 
                                 document.querySelector('.exampleModalCenter #save').disabled = false;
-                                document.querySelector('.spinner_request').style.display = 'none';                
+                                document.querySelector('.exampleModalCenter .spinner_request').style.display = 'none';                
             
                                 alertify.set('notifier','position', 'top-center');
                                 alertify.set('notifier','delay', 3);
@@ -56,7 +56,7 @@
                                             </div>
                                         `, 'basic': true})
                                         .show();  
-                                    $(".exampleModalCenter").exampleModalCenter('hide');  
+                                    $(".exampleModalCenter").modal('hide');  
         
                                 }else{
                                     $(".exampleModalCenter form bold[class=text-danger]").css('display', 'none');
@@ -71,12 +71,12 @@
                                 }
                                 
                                 document.querySelector('.exampleModalCenter #save').disabled = false;
-                                document.querySelector('.spinner_request').style.display = 'none';
+                                document.querySelector('.exampleModalCenter .spinner_request').style.display = 'none';
                             }
                         });
                     } else {
                         document.querySelector('.exampleModalCenter #save').disabled = false;
-                        document.querySelector('.spinner_request').style.display = 'none';  
+                        document.querySelector('.exampleModalCenter .spinner_request').style.display = 'none';  
                     }
                     
                 }else{
@@ -95,7 +95,7 @@
                             });               
                             
                             document.querySelector('.exampleModalCenter #save').disabled = false;
-                            document.querySelector('.spinner_request').style.display = 'none';                
+                            document.querySelector('.exampleModalCenter .spinner_request').style.display = 'none';                
         
                             alertify.set('notifier','position', 'top-center');
                             alertify.set('notifier','delay', 3);
@@ -113,7 +113,7 @@
                                         </div>
                                     `, 'basic': true})
                                     .show();  
-                                $(".exampleModalCenter").exampleModalCenter('hide');  
+                                $(".exampleModalCenter").modal('hide');  
     
                             }else{
                                 $(".exampleModalCenter form bold[class=text-danger]").css('display', 'none');
@@ -128,7 +128,7 @@
                             }
                             
                             document.querySelector('.exampleModalCenter #save').disabled = false;
-                            document.querySelector('.spinner_request').style.display = 'none';
+                            document.querySelector('.exampleModalCenter .spinner_request').style.display = 'none';
                         }
                     });
                 }

@@ -107,7 +107,7 @@
 
         {{-- start table client info --}}
         <table class="table table-striped table-bordered">
-            <thead>
+            <thead class="bg bg-black-5">
                 <tr>
                     <th class="text-center">الإسم</th>
                     {{--<th class="text-center">المحافظة</th>--}}
@@ -135,7 +135,7 @@
 
         {{-- start table bill products  --}}
         <table class="table table-bordered table-striped text-center" style="font-size: 12px;">
-            <thead class="">
+            <thead class="bg bg-black-5">
                 <tr>
                     <th class="text-center" style="width: 35% !important;">اسم المنتج</th>
                     <th class="text-center">وحدة المنتج</th>
@@ -167,7 +167,7 @@
 
 
         <table class="table table-bordered table-striped text-center" style="font-size: 12px;">
-            <thead class="">
+            <thead class="bg bg-black-5">
                 <tr>
                     <th class="text-center">إجمالي الفاتورة قبل</th>                    
                     @if ($saleBill[0]->extra_money)

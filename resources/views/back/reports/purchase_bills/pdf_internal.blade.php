@@ -86,7 +86,7 @@
         <br>
         <div>
             <table class="table-bordered" style="width: 100%;text-align: center;">
-                <thead>
+                <thead class="bg bg-black-5">
                     <tr>
                       <th>رقم المنتج</th>
                       <th>اسم المنتج</th>

@@ -6,9 +6,8 @@ use App\Models\Back\RolesPermissions;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Session;
-use Hash;
-use DB;
+use Illuminate\Support\Facades\DB;
+
 
 class RolesPermissionsController extends Controller
 {
@@ -55,7 +54,7 @@ class RolesPermissionsController extends Controller
             'role_name.unique' => 'اسم الإذن مستخدم من قبل',
         ]);
 
-        RolesPermissions::create([
+        DB::table('roles_permissions')->insert([
             // start first
             'role_name' => request('role_name'),
             'financialYears_create' => request('financialYears_create') ? 1 : 0, 
@@ -159,6 +158,15 @@ class RolesPermissionsController extends Controller
             'top_clients_view' => request('top_clients_view') ? 1 : 0,
             'profit_view' => request('profit_view') ? 1 : 0,
             // end second            
+            
+            
+            // start third
+            'receipts_create' => request('receipts_create') ? 1 : 0,
+            'receipts_update' => request('receipts_update') ? 1 : 0,
+            'receipts_view' => request('receipts_view') ? 1 : 0,
+            'receipts_delete' => request('receipts_delete') ? 1 : 0,
+            'receipts_take_money' => request('receipts_take_money') ? 1 : 0,
+            // end third            
         ]);
         
         return redirect()->back();
@@ -180,8 +188,6 @@ class RolesPermissionsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $find = RolesPermissions::findOrFail($id);
-
         $this->validate($request , [
             'role_name' => 'required|max:100|unique:roles_permissions,role_name,'.$id,
         ],[
@@ -189,7 +195,7 @@ class RolesPermissionsController extends Controller
             'role_name.unique' => 'اسم الإذن مستخدم من قبل',
         ]);
 
-        $find->update([
+        DB::table('roles_permissions')->where('id', $id)->update([
             // start first
             'role_name' => request('role_name'),
             'financialYears_create' => request('financialYears_create') ? 1 : 0, 
@@ -292,7 +298,16 @@ class RolesPermissionsController extends Controller
             'top_products_view' => request('top_products_view') ? 1 : 0,
             'top_clients_view' => request('top_clients_view') ? 1 : 0,
             'profit_view' => request('profit_view') ? 1 : 0,
-            // end second            
+            // end second       
+            
+            
+            // start third
+            'receipts_create' => request('receipts_create') ? 1 : 0,
+            'receipts_update' => request('receipts_update') ? 1 : 0,
+            'receipts_view' => request('receipts_view') ? 1 : 0,
+            'receipts_delete' => request('receipts_delete') ? 1 : 0,
+            'receipts_take_money' => request('receipts_take_money') ? 1 : 0,
+            // end third                 
         ]);
         
         return redirect()->back();

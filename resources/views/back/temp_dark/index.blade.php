@@ -1229,7 +1229,7 @@
                                         <h4 class="card-title mb-4">Latest Transaction</h4>
                                         <div class="table-responsive">
                                             <table class="table align-middle table-nowrap mb-0">
-                                                <thead class="table-light">
+                                                <thead class="bg bg-black-5">
                                                     <tr>
                                                         <th style="width: 20px;">
                                                             <div class="form-check font-size-16 align-middle">
@@ -1445,7 +1445,7 @@
 
                                 <div class="table-responsive">
                                     <table class="table align-middle table-nowrap">
-                                        <thead>
+                                        <thead class="bg bg-black-5">
                                             <tr>
                                                 <th scope="col">Product</th>
                                                 <th scope="col">Product Name</th>

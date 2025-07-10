@@ -115,7 +115,7 @@
                         {{-- table --}}        
                         <div style="overflow-x: auto;">
                             <table id="datatable" class="table table-hover dt-responsive w-100 table-striped table-bordered">
-                                <thead class="table-light">                                
+                                <thead class="bg bg-black-5">                                
                                     <tr>
                                         <th>صورة</th>
                                         <th>المستخدم</th>

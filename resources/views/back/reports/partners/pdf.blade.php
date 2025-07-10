@@ -80,7 +80,7 @@
 
         <div>
             <table class="table-bordered" style="width: 100%;text-align: center;">
-                <thead>
+                <thead class="bg bg-black-5">
                     <tr>
                         {{--<th class="border-bottom-0">رقم الحركة</th>--}}
                         <th>تاريخ الحركة</th>

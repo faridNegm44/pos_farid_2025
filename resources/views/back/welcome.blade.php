@@ -97,10 +97,10 @@
 	  
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="فواتير المبيعات">
 			<div class="card text-center dashboard-card border">
-			  <div class="card-body" style="padding: 0.45rem; !important;">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('sales') }}" target="_blank" class="text-decoration-none">
 				  <i class="fas fa-cash-register fa-2x mb-1 d-block"></i>
-				  <span class="fw-bold tx-9">فواتير المبيعات</span>
+				  <span class="fw-bold tx-8">فواتير المبيعات</span>
 				</a>
 			  </div>
 			</div>
@@ -108,10 +108,10 @@
 	 
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="حركات الخزينة">
 			<div class="card text-center dashboard-card border">
-			  <div class="card-body" style="padding: 0.45rem; !important;">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('treasury_bills') }}" target="_blank" class="text-decoration-none">
 					<i class="fas fa-coins fa-2x mb-1 d-block"></i>
-					<span class="fw-bold tx-9">حركات الخزينة</span>
+					<span class="fw-bold tx-8">حركات الخزينة</span>
 				</a>
 			  </div>
 			</div>
@@ -119,10 +119,10 @@
 	 
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="فواتير المشتريات">
 			<div class="card text-center dashboard-card border">
-			  <div class="card-body" style="padding: 0.45rem; !important;">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('purchases') }}" target="_blank" class="text-decoration-none">
 				  <i class="fas fa-cart-arrow-down fa-2x mb-1 d-block"></i>
-				  <span class="fw-bold tx-9">فواتير المشتريات</span>
+				  <span class="fw-bold tx-8">فواتير المشتريات</span>
 				</a>
 			  </div>
 			</div>
@@ -130,10 +130,10 @@
 	  
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="الأصناف">
 			<div class="card text-center dashboard-card border">
-			  <div class="card-body" style="padding: 0.45rem; !important;">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('products') }}" target="_blank" class="text-decoration-none">
 				  <i class="fas fa-boxes fa-2x mb-1 d-block"></i>
-				  <span class="fw-bold tx-9">الأصناف</span>
+				  <span class="fw-bold tx-8">الأصناف</span>
 				</a>
 			  </div>
 			</div>
@@ -141,10 +141,10 @@
 	  
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="العملاء">
 			<div class="card text-center dashboard-card border">
-			  <div class="card-body" style="padding: 0.45rem; !important;">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('clients') }}" target="_blank" class="text-decoration-none">
 					<i class="fas fa-user-alt fa-2x mb-1 d-block"></i>
-					<span class="fw-bold tx-9">العملاء</span>
+					<span class="fw-bold tx-8">العملاء</span>
 				</a>					
 			  </div>
 			</div>
@@ -152,10 +152,10 @@
 		  
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="كشف حساب عميل">
 			<div class="card text-center dashboard-card border">
-			  <div class="card-body" style="padding: 0.45rem; !important;">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('clients/report/account_statement') }}" target="_blank" class="text-decoration-none">
 					<i class="fas fa-file-pdf fa-2x mb-1 d-block"></i>
-					<span class="fw-bold tx-9">كشف حساب عميل</span>
+					<span class="fw-bold tx-8">كشف حساب عميل</span>
 				</a>					
 			  </div>
 			</div>
@@ -163,10 +163,10 @@
 		  
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="ايصالات / شيكات">
 			<div class="card text-center dashboard-card border">
-			  <div class="card-body" style="padding: 0.45rem; !important;">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('receipts') }}" target="_blank" class="text-decoration-none">
 					<i class="fas fa-receipt fa-2x mb-1 d-block"></i>
-					<span class="fw-bold tx-9">ايصالات / شيكات</span>
+					<span class="fw-bold tx-8">ايصالات / شيكات</span>
 				</a>					
 			  </div>
 			</div>
@@ -174,10 +174,10 @@
 	  
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="التحويل بين الخزن">
 			<div class="card text-center dashboard-card border">
-			  <div class="card-body" style="padding: 0.45rem; !important;">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('transfer_between_storages') }}" target="_blank" class="text-decoration-none">
 				  <i class="fas fa-money-bill-wave fa-2x mb-1 d-block"></i>
-				  <span class="fw-bold tx-9">التحويل بين الخزن</span>
+				  <span class="fw-bold tx-8">التحويل بين الخزن</span>
 				</a>
 			  </div>
 			</div>
@@ -356,7 +356,7 @@
 
 					@if (count(topProductsInSales()) > 0 )
 						<table class="table table-bordered table-hover text-center">
-							<thead class="thead-dark">
+							<thead class="bg bg-black-5">
 								<tr>
 									<th scope="col">#</th>
 									<th scope="col">اسم العميل</th>
@@ -397,7 +397,7 @@
 
 					@if (count(topProductsInSales()) > 0 )
 						<table class="table table-bordered table-hover text-center">
-							<thead class="thead-dark">
+							<thead class="bg bg-black-5">
 								<tr>
 									<th scope="col">#</th>
 									<th scope="col">اسم السلعة/الخدمة</th>
@@ -438,7 +438,7 @@
 					@if (count(getLastSaleBills()) > 0 )
 						<div class="table-responsive country-table">
 							<table class="table table-bordered table-hover text-center">
-								<thead class="thead-dark">
+								<thead class="bg bg-black-5">
 									<tr>
 										<th class="">#</th>
 										<th class="wd-lg-20p">ت الفاتورة</th>

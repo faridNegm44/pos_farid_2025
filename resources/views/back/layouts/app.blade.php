@@ -87,14 +87,16 @@
 
     <style>
         @font-face {
-            font-family: "4_F4";
-            src: url("{{ asset('back/fonts/4_F4.ttf') }}");
+            font-family: '4_F4';
+            src: url("{{ asset('back/fonts/4_F4.ttf') }}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
-        body{
-            /* font-family: Arial, Helvetica, sans-serif, serif; */
-            font-family: "4_F4", serif;        
-        }   
 
+        body {
+            font-family: '4_F4', serif;
+        }
+    
         .nowrap_thead{
             white-space: nowrap;
         }
@@ -174,6 +176,16 @@
         }
         ::-webkit-scrollbar-thumb:horizontal:hover {
             background: #666;
+        }
+        table.dataTable thead th, table.dataTable thead td {
+            padding: 7px 18px !important;
+        }
+        table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc{
+            background-color: #d36b0969;
+            color: #fff;
+        }
+        table.dataTable tbody td.sorting_1{
+            background-color: #c9640517;
         }
     </style>
 </head>

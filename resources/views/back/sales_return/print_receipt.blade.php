@@ -225,7 +225,7 @@
   <!-- Table -->
   <div class="table_info">
     <table style="width: 100%;">
-        <thead>
+      <thead class="bg bg-black-5">
           <tr>
             <th>السلعة/الخدمة</th>
             <th>الوحدة</th>

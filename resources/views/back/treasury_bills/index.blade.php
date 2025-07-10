@@ -110,17 +110,17 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
-                                <thead>
+                                <thead class="bg bg-black-5">
                                     <tr>
                                         <th class="border-bottom-0 nowarp_thead">#</th>
                                         <th class="border-bottom-0 nowarp_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ المعاملة</th>
-                                        <th class="border-bottom-0 nowarp_thead">تاريخ اخر</th>
+                                        <th class="border-bottom-0 nowarp_thead" style="width: 80px !important;min-width: 80px !important;">تاريخ اخر</th>
                                         <th class="border-bottom-0 nowarp_thead" style="width: 150px !important;min-width: 150px !important;">الجهة</th>
-                                        <th class="border-bottom-0 nowarp_thead">نوع المعاملة</th>
-                                        <th class="border-bottom-0 nowarp_thead">خزينة المعاملة</th>
-                                        <th class="border-bottom-0 nowarp_thead">مبلغ المعاملة</th>
-                                        <th class="border-bottom-0 nowarp_thead">علية / لية</th>
-                                        <th class="border-bottom-0 nowarp_thead">مبلغ الخزينة بعد</th>
+                                        <th class="border-bottom-0 nowarp_thead" style="width: 80px !important;min-width: 80px !important;">نوع المعاملة</th>
+                                        <th class="border-bottom-0 nowarp_thead" style="width: 80px !important;min-width: 80px !important;">خزينة المعاملة</th>
+                                        <th class="border-bottom-0 nowarp_thead" style="width: 80px !important;min-width: 80px !important;">مبلغ المعاملة</th>
+                                        <th class="border-bottom-0 nowarp_thead" style="width: 50px !important;min-width: 50px !important;">علية / لية</th>
+                                        <th class="border-bottom-0 nowarp_thead" style="width: 80px !important;min-width: 80px !important;">مبلغ الخزينة بعد</th>
                                         <th class="border-bottom-0 nowarp_thead">موظف</th>
                                         <th class="border-bottom-0 nowarp_thead">ملاحظات</th>
                                     </tr>

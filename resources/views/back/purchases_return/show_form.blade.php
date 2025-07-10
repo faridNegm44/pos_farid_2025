@@ -43,7 +43,7 @@
 
               <div id="content">
                 <table class="table table-bordered table-striped text-center">
-                  <thead class="thead-dark">
+                  <thead class="bg bg-black-5">
                     <tr>
                       <th>رقم المنتج</th>
                       <th>اسم المنتج</th>

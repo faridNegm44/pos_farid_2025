@@ -216,7 +216,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
-                                <thead>
+                                <thead class="bg bg-black-5">
                                     <tr>
                                         <th class="border-bottom-0 nowrap_thead">الرقم الأساسي</th>
                                         <th class="border-bottom-0 nowrap_thead">الرقم المرجعى</th>

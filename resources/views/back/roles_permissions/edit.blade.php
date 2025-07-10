@@ -80,7 +80,7 @@
                     
                     
                     // start third add
-                        'tax_bill', 'discount_bill', 'cost_price'
+                        'tax_bill', 'discount_bill', 'cost_price', 'receipts'
                     // end third add
                     
                 ];
@@ -103,7 +103,7 @@
 
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover nowrap">
-                            <thead>
+                            <thead class="bg bg-black-5">
                                 <tr>
                                     <td style="color: #fff !important;padding: 10px;">#</td>
                                     <td style="color: #fff !important;padding: 10px;">الأسم</td>
@@ -263,6 +263,17 @@
                                                             id="{{ $model }}_delete" />
                                                         <label class="form-check-label badge badge-danger rounded-pill"
                                                             for="{{ $model }}_delete">حذف</label>
+                                                    </div>
+                                                @endif
+
+                                                @if($model == 'receipts')
+                                                    <div class="form-check me-3 me-lg-5" id="{{ $model }}_take_money_div" style="width: 170px !important;">
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_take_money"
+                                                            {{ old(''.$model.'_take_money') ? 'checked' : '' }}
+                                                            {{ $find[''.$model.'_take_money'] == 1 ? 'checked' : '' }}
+                                                            id="{{ $model }}_take_money" />
+                                                        <label class="form-check-label badge badge-primary-transparent rounded-pill"
+                                                            for="{{ $model }}_take_money">تحصيل الايصال</label>
                                                     </div>
                                                 @endif
                                             </div>

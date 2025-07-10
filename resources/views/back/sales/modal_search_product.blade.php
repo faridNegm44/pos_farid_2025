@@ -40,7 +40,7 @@
 
                 <div id="table" class="table-responsive text-sm-center">
                     <table class="table table-bordered table-hover">
-                        <thead class="thead-dark">
+                        <thead class="bg bg-black-5">
                             <tr>
                                 <th>#</th>
                                 <th>الكود</th>

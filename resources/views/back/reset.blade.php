@@ -64,7 +64,7 @@
 
                         <div class="">
                             <table class="table table-responsive table-striped table-bordered text-center" id="productTable" style="">
-                                <thead>
+                                <thead class="bg bg-black-5">
                                     <tr>
                                         <th>#</th>
                                         <th>أصناف ف</th>

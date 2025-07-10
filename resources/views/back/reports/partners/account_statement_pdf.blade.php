@@ -79,7 +79,7 @@
             @include('back.layouts.header_report')
 
             <table width="100%" border="1" cellpadding="10" cellspacing="0">
-                <thead>
+                <thead class="bg bg-black-5">
                     <tr class="partner_info_tr">
                         <th>اسم الشريك</th>
                         <th>رقم التليفون</th>

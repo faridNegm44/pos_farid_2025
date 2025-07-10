@@ -114,6 +114,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 
 .form-control:disabled, .form-control[readonly] {
     border: 1px solid gray !important;
+    background: #bfbfbf7a !important;
 }
 
 div.dataTables_wrapper div.dataTables_info{

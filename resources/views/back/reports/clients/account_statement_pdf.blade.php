@@ -79,7 +79,7 @@
             @include('back.layouts.header_report')
 
             <table width="100%" border="1" cellpadding="10" cellspacing="0">
-                <thead>
+                <thead class="bg bg-black-5">
                     <tr class="client_info_tr">
                         <th>اسم العميل</th>
                         <th>رقم التليفون</th>
@@ -239,7 +239,7 @@
                         <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
 
                         <table border="1" width="100%" style="border-collapse: collapse;margin-top: 10px;">
-                            <thead>
+                            <thead class="bg bg-black-5">
                                 <tr>
                                     <th>كود المنتج</th>
                                     <th>اسم المنتج</th>
@@ -301,7 +301,7 @@
                         <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
 
                         <table border="1" width="100%" style="border-collapse: collapse;margin-top: 10px;">
-                            <thead>
+                            <thead class="bg bg-black-5">
                                 <tr>
                                     <th>كود المنتج</th>
                                     <th>اسم المنتج</th>

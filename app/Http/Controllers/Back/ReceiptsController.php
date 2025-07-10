@@ -52,7 +52,6 @@ class ReceiptsController extends Controller
                     'amount' => 'رصيد الجهة الجديد',                
                 ]);
 
-
                 DB::table('receipts')->insert([
                     'payer_type' => request('payer_type'),
                     'payer_id' => request('payer_id'),
@@ -111,59 +110,62 @@ class ReceiptsController extends Controller
     
     
     public function take_money(Request $request, $id, $treasury){
-        //if((userPermissions()->receipts_take_money)){
-            
-            DB::transaction(function () use($id, $treasury){
-                $find = DB::table('receipts')->where('id', $id)->first();
-                
-                $lastNumId = DB::table('treasury_bill_dets')
-                                ->where('treasury_type', 'اذن توريد نقدية')
-                                ->max('num_order');
-    
-                $lastRecordTreasury = DB::table('treasury_bill_dets')
-                                        ->where('treasury_id', $treasury)
-                                        ->orderBy('id', 'desc')
-                                        ->select('treasury_money_after')
-                                        ->first();
+        if((userPermissions()->receipts_take_money)){    
 
-                $lastRecordOfUser = DB::table('treasury_bill_dets')
-                                                ->where('client_supplier_id', $find->payer_id)
-                                                ->orderBy('id', 'desc')
-                                                ->first();
-                
-                $userValue = ( $lastRecordOfUser->remaining_money - $find->amount );    
-                $treasuryValue = ( $find->amount + $lastRecordTreasury->treasury_money_after );
-                
-                DB::table('treasury_bill_dets')->insert([
-                    'num_order' => ($lastNumId+1), 
-                    'date' => request('date') ?? Carbon::now(),
-                    'treasury_id' => $treasury, 
-                    'treasury_type' => 'اذن توريد نقدية', 
-                    'bill_id' => 0,
-                    'bill_type' => 0, 
-                    'client_supplier_id' => $find->payer_id,
-                    'partner_id' => null, 
-                    'treasury_money_after' => $treasuryValue, 
-                    'amount_money' => $find->amount, 
-                    'remaining_money' => $userValue, 
-                    'commission_percentage' => 0, 
-                    'transaction_from' => null, 
-                    'transaction_to' => null, 
-                    'notes' => request('notes'), 
-                    'user_id' => auth()->user()->id, 
-                    'year_id' => $this->currentFinancialYear(),
-                    'created_at' => now()
-                ]);
-                
-                DB::table('receipts')->where('id', $id)->update([
-                    'status' => 'تم التحصيل',
-                ]);
+            if(request()->ajax()){
+                DB::transaction(function () use($id, $treasury){
+                    $find = DB::table('receipts')->where('id', $id)->first();
+                    
+                    $lastNumId = DB::table('treasury_bill_dets')
+                                    ->where('treasury_type', 'اذن توريد نقدية')
+                                    ->max('num_order');
         
-            });
+                    $lastRecordTreasury = DB::table('treasury_bill_dets')
+                                            ->where('treasury_id', $treasury)
+                                            ->orderBy('id', 'desc')
+                                            ->select('treasury_money_after')
+                                            ->first();
+    
+                    $lastRecordOfUser = DB::table('treasury_bill_dets')
+                                                    ->where('client_supplier_id', $find->payer_id)
+                                                    ->orderBy('id', 'desc')
+                                                    ->first();
+                    
+                    $userValue = ( $lastRecordOfUser->remaining_money - $find->amount );    
+                    $treasuryValue = ( $find->amount + $lastRecordTreasury->treasury_money_after );
+                    
+                    DB::table('treasury_bill_dets')->insert([
+                        'num_order' => ($lastNumId+1), 
+                        'date' => request('date') ?? Carbon::now(),
+                        'treasury_id' => $treasury, 
+                        'treasury_type' => 'اذن توريد نقدية', 
+                        'bill_id' => 0,
+                        'bill_type' => 0, 
+                        'client_supplier_id' => $find->payer_id,
+                        'partner_id' => null, 
+                        'treasury_money_after' => $treasuryValue, 
+                        'amount_money' => $find->amount, 
+                        'remaining_money' => $userValue, 
+                        'commission_percentage' => 0, 
+                        'transaction_from' => null, 
+                        'transaction_to' => null, 
+                        'notes' => request('notes'), 
+                        'user_id' => auth()->user()->id, 
+                        'year_id' => $this->currentFinancialYear(),
+                        'created_at' => now()
+                    ]);
+                    
+                    DB::table('receipts')->where('id', $id)->update([
+                        'status' => 'تم التحصيل',
+                    ]);
+            
+                });
+    
+            }
 
-        //}else{
-        //    return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
-        //}  
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
     
     
@@ -248,11 +250,7 @@ class ReceiptsController extends Controller
             ->addColumn('action', function($res){                                
                 $checkButtons = '';
                 if($res->status == 'جاري التحصيل'){
-                    $checkButtons .= '
-                                    <button type="button" class="btn btn-sm btn-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                                        <i class="fas fa-marker"></i>
-                                    </button>                                                                    
-                                    
+                    $checkButtons .= '                                    
                                     <button class="btn btn-sm btn-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" >
                                         <i class="fa fa-trash"></i>
                                     </button>                                    
@@ -268,6 +266,10 @@ class ReceiptsController extends Controller
                                     </button>';
                 
                 return $checkButtons;
+
+                //<button type="button" class="btn btn-sm btn-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                //    <i class="fas fa-marker"></i>
+                //</button>                    
             })
             ->rawColumns(['productName', 'status', 'created_at', 'receipt_date', 'amount', 'userName', 'notes', 'financialName', 'action'])
             ->toJson();
