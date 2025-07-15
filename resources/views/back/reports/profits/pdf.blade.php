@@ -1,150 +1,153 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $pageNameAr }} - {{ date('d-m-Y') }} - {{ date('h:i a') }}</title>
-
+    <title>تقرير الربحية - {{ date('d-m-Y H:i:s') }}</title>
     <link rel="icon" href="{{ url('back') }}/images/settings/fiv.png" type="image/x-icon"/>
-
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600&display=swap" rel="stylesheet">
-
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        th, td{
+        body {background: #fff; }
+        .summary-cards { display: flex; justify-content: space-between; margin: 20px 0 30px 0; gap: 10px; flex-wrap: wrap; }
+        .card {
+            flex: 1 1 18%;
+            background: #f7f7f7;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px #0001;
+            padding: 18px 10px 10px 10px;
             text-align: center;
-            padding: 1px;
-            font-size: 12px;
+            min-width: 150px;
+            margin-bottom: 10px;
         }
-
-        .itemsSearch{
-            margin: 0 10px;
-        }
-        .itemsSearch span{
-            
-        }
-
-        @media print {
-            tr:nth-child(even) {
-                background-color: #f2f2f2 !important;
-                -webkit-print-color-adjust: exact;
-            }
-
-            tr:nth-child(odd) {
-                background-color: #ffffff !important;
-                -webkit-print-color-adjust: exact;
-            }
-
-            tr.gray {
-                background-color: #d8d8d8 !important;
-                -webkit-print-color-adjust: exact;
-            }
-            
-        }
-
-        /*@media print {
-            td.gray {
-                background-color: gray !important;
-                -webkit-print-color-adjust: exact;
-            }
-        }*/
+        .card .icon { font-size: 28px; margin-bottom: 5px; display: block; }
+        .card.sales { border-top: 4px solid #4caf50; }
+        .card.purchases { border-top: 4px solid #2196f3; }
+        .card.expenses { border-top: 4px solid #ff9800; }
+        .card.returns { border-top: 4px solid #9c27b0; }
+        .card.net-profit { border-top: 4px solid #e91e63; }
+        .card.profit-margin { border-top: 4px solid #30f0e0; }
+        .card.net-profit.positive { background: #e8f5e9; }
+        .card.net-profit.negative { background: #ffebee; }
+        .card.profit-margin.positive { background: #e8f5e9; }
+        .card.profit-margin.negative { background: #ffebee; }
+        .summary-table th, .summary-table td { text-align: center; font-size: 14px; }
+        .summary-table { margin-top: 20px; }
+        .notes-box { background: #f1f8e9; border: 1px solid #cddc39; border-radius: 6px; padding: 10px 15px; margin: 20px 0; font-size: 15px; }
+        @media print { .summary-cards { flex-wrap: wrap; } }
     </style>
 </head>
 <body style="padding: 5px 10px;">
-    <div style="padding: 5px 10px;border: 1px solid #000;">
-        <div class="">
-            <div class="invoice-title">
-                <h4 class="text-center" style="">
-                    {{ $pageNameAr }}
-                </h4>
+    <div style="padding: 15px; border: 1px solid #000;">
+
+        @include('back.layouts.header_report')
+        
+        <h3 class="text-center" style="margin: 10px 0 0 0; font-weight: bold; letter-spacing: 1px;">تقرير الربحية</h3>
+        <br>
+        
+        @if($from || $to)
+            <div style="border: 1px solid #2196f3; background: #e3f2fd; border-radius: 6px; padding: 8px 15px; margin-bottom: 15px;">
+                <strong>الفترة:</strong>
+                @if($from) من: {{ $from }} @endif
+                @if($to) إلى: {{ $to }} @endif
             </div>
-            <hr>
-
-            @include('back.layouts.header_report')
-        </div>
-
-        @if ($treasury_id || $treasury_type || $from || $to)
-            <hr style="margin: 0 0 10px !important;"> 
-            <div style="margin-bottom: 10px;">
-                <div>
-                    @if ($treasury_id)
-                        <span class="itemsSearch">خزينة الحركة: {{ $results[0]->treasury_name }}</span>
-                    @endif
-                    @if ($treasury_type)
-                        <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
-                    @endif
-                    @if ($from)
-                        <span class="itemsSearch">تاريخ من: <span>{{ $from }}</span></span>
-                    @endif
-                    @if ($to)
-                        <span class="itemsSearch">تاريخ الي: <span>{{ $to }}</span></span>
-                    @endif
-                </div>
+        @else
+            <div style="border: 1px solid #bdbdbd; background: #f5f5f5; border-radius: 6px; padding: 8px 15px; margin-bottom: 15px;">
+                <strong>تقرير عام (كل الفترات)</strong>
             </div>
         @endif
-
-        <div>
-            <table class="table-bordered" style="width: 100%;text-align: center;">
-                <thead class="bg bg-black-5">
-                    <tr class="gray">
-                        <th>رقم الحركة</th>
-                        <th >تاريخ الحركة</th>
-                        <th >تاريخ اخر</th>
-                        <th>خزينة الحركة</th>
-                        <th>نوع الحركة</th>
-                        <th>قيمة الحركة</th>
-                        <th>علية / لية</th>
-                        <th>مبلغ الخزينة بعد</th>
-                        <th >مستخدم</th>
-                        <th>ملاحظات</th>
-                    </tr>
-                </thead>                               
-                
-                <tbody>
-                    @foreach ($results as $result)    
-                        <tr>
-                            <td>{{ $result->id }}</td>
-                            <td>
-                                {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
-                            </td>
-                            <td>
-                                @if(Carbon\Carbon::parse($result->created_at)->format('d-m-Y') != Carbon\Carbon::parse($result->date)->format('d-m-Y'))
-                                    <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->date)->format('d-m-Y') }}</span>
-                                @endif                                        
-                            </td>
-                            <td>{{ $result->treasury_name }}</td>
-                            <td>
-                                @if ($result->treasury_type === 'مصروف')
-                                    {{ $result->treasury_type }}
-                                    <p>- {{ $result->expensesTitle }}</p>
-                                @else
-                                    {{ $result->treasury_type }}
-                                @endif
-                            </td>
-                            <td>{{ display_number($result->amount_money) }}</td>
-                            <td>
-                                @if ($result->treasury_type === 'رصيد اول خزنة' || $result->treasury_type === 'مصروف' || $result->treasury_type === 'تحويل بين خزنتين')
-                                    لاتوجد جهة
-                                @else
-                                    {{ display_number($result->remaining_money) }}
-                                @endif
-                            </td>
-                            <td>{{ display_number($result->treasury_money_after) }}</td>
-                            <td>{{ $result->user_name }}</td>
-                            <td>{{ $result->notes }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="summary-cards">
+            <div class="card sales">
+                <span class="icon">💰</span>
+                <div>إجمالي المبيعات</div>
+                {{--<div style="font-size: 18px; font-weight: bold;">10.0000</div>--}}
+                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalSales) }}</div>
+            </div>
+            <div class="card purchases">
+                <span class="icon">🛒</span>
+                <div>إجمالي تكلفة السلع / الخدمات</div>
+                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalCost) }}</div>
+                {{--<div style="font-size: 18px; font-weight: bold;">{{ display_number($total_purchases ?? 0) }}</div>--}}
+            </div>
+            <div class="card expenses">
+                <span class="icon">💸</span>
+                <div>إجمالي المصروفات</div>
+                {{--<div style="font-size: 18px; font-weight: bold;">10.0000</div>--}}
+                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalExpenses) }}</div>
+            </div>
+            {{--<div class="card returns">
+                <span class="icon">↩️</span>
+                <div>إجمالي المرتجعات</div>
+                <div style="font-size: 18px; font-weight: bold;">10.0000</div>
+                <div style="font-size: 18px; font-weight: bold;">{{ display_number($total_returns) }}</div>
+            </div>--}}
+            <div class="card net-profit {{ $netProfit >= 0 ? 'positive' : 'negative' }}">
+                <span class="icon">📈</span>
+                <div>صافي الربح</div>
+                {{--<div style="font-size: 18px; font-weight: bold;">10.0000</div>--}}
+                <div style="font-size: 20px; font-weight: bold; color: {{ $netProfit >= 0 ? '#388e3c' : '#c62828' }};">
+                    {{ display_number($netProfit) }}
+                </div>
+            </div>
+            <div class="card profit-margin">
+                <span class="icon">📊</span>
+                <div>نسبة الربح</div>
+                <div style="font-size: 20px; font-weight: bold; color: {{ $profitPercent >= 0 ? '#388e3c' : '#c62828' }};">
+                    {{ display_number($profitPercent ?? 0) }}%
+                </div>
+            </div>
         </div>
 
-        @include('back.layouts.footer_report')
-        <script> window.print(); </script>
+
+        {{--<table class="table table-bordered summary-table">
+            <thead>
+                <tr style="background: #d0d0d0;">
+                    <th>البند</th>
+                    <th>القيمة</th>
+                    <th>ملاحظات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>إجمالي المبيعات</td>
+                    <td>10.0000</td>
+                    <td>{{ display_number($total_sales) }}</td>
+                    <td>كل الفواتير المباعة خلال الفترة</td>
+                </tr>
+                <tr>
+                    <td>إجمالي المشتريات</td>
+                    <td>10.0000</td>
+                    <td>{{ display_number($total_purchases ?? 0) }}</td>
+                    <td>كل فواتير الشراء خلال الفترة</td>
+                </tr>
+                <tr>
+                    <td>إجمالي المصروفات</td>
+                    <td>10.0000</td>   
+                    <td>{{ display_number($total_expenses) }}</td>
+                    <td>جميع المصروفات المسجلة</td>
+                </tr>
+                <tr>
+                    <td>إجمالي المرتجعات</td>
+                    <td>10.0000</td>
+                    <td>{{ display_number($total_returns) }}</td>
+                    <td>مرتجعات المبيعات والمشتريات</td>
+                </tr>
+                <tr style="background: #f3e5f5; font-weight: bold;">
+                    <td>صافي الربح</td>
+                    <td>10.0000</td>
+                    <td style="color: {{ $net_profit >= 0 ? '#388e3c' : '#c62828' }};">{{ display_number($net_profit) }}</td>
+                    <td>{{ $net_profit >= 0 ? 'ربح' : 'خسارة' }}</td>
+                </tr>
+            </tbody>
+        </table>--}}
+
+        {{--@if(isset($notes) && $notes)
+            <div class="notes-box">
+                <strong>ملاحظات:</strong> {{ $notes }}
+            </div>
+        @endif--}}
+
+        {{--<script>window.print();</script>--}}
     </div>
 </body>
-</html>
+</html> 

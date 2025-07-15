@@ -198,14 +198,14 @@
                                     </p>
                                     
                                     <div class="col-12">
-                                        <label for="extra_expense_type" class="form-label">
+                                        <label for="extra_money_type" class="form-label">
                                             مصاريف إضافية
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
                                         </label>
                                     
                                         <div class="row">
                                             <div class="col-md-7 mb-2">
-                                                <select class="form-control" name="extra_expense_type" id="extra_expense_type">
+                                                <select class="form-control" name="extra_money_type" id="extra_money_type">
                                                     <option value="" selected>اختر مصروف إضافي</option>
                                                     @foreach ($extra_expenses as $item)
                                                         <option value="{{ $item->id }}">{{ $item->expense_type }}</option>
@@ -226,13 +226,13 @@
                                         <span style="font-size: 16px;">0</span>
                                     </p>
                                     <p class="col-6" style="font-size: 13px;font-size: 14px;">
-                                        م الفرعي: 
+                                        الإجمالي قبل: 
                                         <span style="font-size: 16px;" class="subtotal">0</span>
                                     </p>
 
                                     <p class="col-lg-12">
                                         <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
-                                            <span style="font-size: 12px;">الإجمالي: </span>
+                                            <span style="font-size: 12px;">الإجمالي المستحق: </span>
                                             <span style="font-size: 24px;" class="total_bill_after">0.00</span>
                                         </div>
                                     </p>
@@ -542,6 +542,20 @@
                     var quantity_all = display_number_js(productData.quantity_small_unit); // كميه المخزن
 
                     
+                    // بدايه التاكد لو في صلاحيه للمستخدم ع تغيير سعر البيع
+                    if(@json(userPermissions()->sale_price_view)){
+                        var sale_price_permissions = `
+                            <td>
+                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">  
+                            </td>`;
+                    }else{
+                        var sale_price_permissions = `
+                            <td>
+                                <input readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">  
+                            </td>`;
+                    }
+                    // نهاية التاكد لو في صلاحيه للمستخدم ع تغيير سعر البيع
+
                     // بدايه التاكد لو في صلاحيه للمستخدم ع الخصم
                     if(@json(userPermissions()->discount_bill_view)){
                         var discount_permissions = `
@@ -561,11 +575,15 @@
                         var tax_permissions = `
                             <td>
                                 <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}">
+                                <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
+                                <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
                             </td>`;
                     }else{
                         var tax_permissions = `
                             <td>
                                 <input readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}">
+                                <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
+                                <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
                             </td>`;
                     }
                     // نهاية التاكد لو في صلاحيه للمستخدم ع الضريبة
@@ -621,14 +639,9 @@
                                     <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="${quantity_all}">                    
                                 </td>
                                 <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity[]" value="1">
-                                </td>                                                                
-                                <td>
-                                    <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">  
-                                    
-                                    <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
-                                    <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
-                                </td>
-                                
+                                </td>                                                        
+
+                                ${sale_price_permissions}                                                                    
                                 ${discount_permissions}
                                 ${tax_permissions}
 
@@ -754,9 +767,9 @@
     
     
     
-    {{-- start when change extra_expense_type --}}
+    {{-- start when change extra_money_type --}}
     <script>
-        $(document).on('input', '#extra_expense_type', function () {
+        $(document).on('input', '#extra_money_type', function () {
             const thisVal = $(this).val();
 
             if(thisVal){
@@ -778,14 +791,14 @@
             }
         });
     </script>
-    {{-- end when change extra_expense_type --}}
+    {{-- end when change extra_money_type --}}
 
     
 
     {{-- start when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
     <script>
         $(document).ready(function () {
-            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #bill_discount, #extra_money, #extra_expense_type', function () {
+            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #bill_discount, #extra_money, #extra_money_type', function () {
                 calcTotal();
                 //$("#overlay_page").fadeIn();
                 //$("#overlay_page").fadeOut();

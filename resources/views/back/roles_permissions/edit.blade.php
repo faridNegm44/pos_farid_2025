@@ -80,7 +80,7 @@
                     
                     
                     // start third add
-                        'tax_bill', 'discount_bill', 'cost_price', 'receipts'
+                        'tax_bill', 'discount_bill', 'cost_price', 'sale_price', 'receipts'
                     // end third add
                     
                 ];
@@ -162,6 +162,7 @@
                                                     $model != 'tax_bill' &&
                                                     $model != 'discount_bill' &&
                                                     $model != 'cost_price' &&
+                                                    $model != 'sale_price' &&
                                                     
                                                     $model != 'expenses_report' 
                                                 )
@@ -208,6 +209,7 @@
                                                     $model != 'tax_bill' &&
                                                     $model != 'discount_bill' &&
                                                     $model != 'cost_price' &&
+                                                    $model != 'sale_price' &&
                                                     $model != 'expenses_report' 
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_update_div">
@@ -254,6 +256,7 @@
                                                     $model != 'tax_bill' &&
                                                     $model != 'discount_bill' &&
                                                     $model != 'cost_price' &&
+                                                    $model != 'sale_price' &&
                                                     $model != 'settings'
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_delete_div">

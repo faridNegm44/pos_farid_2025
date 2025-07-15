@@ -97,8 +97,9 @@
     <div class="receipt-container">
         <div class="receipt-content">
             <div class="header">
-            <h2>{{ GeneralSettingsInfo()->app_name }}</h2>
-            <h3>إيصال استلام نقدية / شيكات</h3>
+              <h3>{{ GeneralSettingsInfo()->app_name }}</h3>
+              <h4>إيصال استلام نقدية</h4>
+              {{--<h3>إيصال استلام نقدية / شيكات</h3>--}}
             </div>
     
             <div class="row"><span class="bold">إيصال رقم:</span> {{ $receiptBill->id }}</div>
@@ -106,15 +107,17 @@
     
             <div class="row"><span class="bold">استلمنا من السادة:</span> {{ $receiptBill->clientSupplierName }}</div>
             <div class="row"><span class="bold">مبلغ وقدره فقط:</span> 
-                <span style="font-size: 16px;border: 1px solid;padding: 2px 13px;border-radius: 2px">{{ display_number($receiptBill->amount) }}</span>
+                <span style="font-size: 16px;border: 1px solid;padding: 2px 13px;border-radius: 2px">{{ display_number($receiptBill->amount) }}</span> جنيهاً لا غير.
             </div>
-            <div class="row">
-            <span class="bold">نقدًا / شيك رقم:</span> ........................................ 
-            <span class="bold">بتاريخ:</span> ........ / .... / ....  
-            <span class="bold">مسحوب على بنك:</span> ........................................
-            </div>
+            {{--<div class="row">
+              <span class="bold">نقدًا / شيك رقم:</span> ........................................ 
+              <span class="bold">بتاريخ:</span> ........ / .... / ....  
+              <span class="bold">مسحوب على بنك:</span> ........................................
+            </div>--}}
     
-            <div class="row"><span class="bold">وذلك قيمة:</span> .............................................................................................................................................
+            <div class="row">
+              <span class="bold">وذلك قيمة:</span> تسوية مالية نقدية متعلقة بحساب الجهة. مع خالص الشكر لتعاونكم معنا.
+              {{--<div class="row"><span class="bold">وذلك قيمة:</span> .............................................................................................................................................--}}
             </div>
     
             {{--<div class="row"><span class="bold">المبلغ بالأرقام:</span> ........................................ قرش / جنيه</div>--}}

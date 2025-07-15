@@ -40,6 +40,9 @@
                             <li aria-haspopup="true"><a href="{{ url('transfer_between_stores') }}" class="slide-item text-dark">تحويلات السلع والخدمات بين المخازن</a></li>
                             
                             <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('inventories') }}" class="slide-item text-dark">إدارة الجرد</a></li>
+                            
+                            <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('extra_expenses') }}" class="slide-item text-dark">المصاريف الإضافية علي الفواتير</a></li>
                         </ul>
                     </li>                    
@@ -184,6 +187,9 @@
 
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('report/profits') }}" class="slide-item text-dark">تقرير الربحية</a></li>
+
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('clients/report/clients_debt') }}" class="slide-item text-dark">تقرير مديونية العملاء</a></li>
                         </ul>
                     </li>
 

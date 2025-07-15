@@ -157,6 +157,13 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
             Route::get('account_statement' , 'ReportsClientsController@account_statement'); // خاص بكشف الحساب
             Route::get('account_statement/pdf' , 'ReportsClientsController@account_statement_pdf'); // خاص بكشف الحساب pdf
         });
+
+        // تقرير مديونيه العملاء لهم- عليهم 
+        Route::group(['prefix' => 'report/clients_debt'] , function (){
+            Route::get('/' , 'ReportsClientsDeptController@index');
+            Route::get('result' , 'ReportsClientsDeptController@result');
+            Route::get('result/pdf' , 'ReportsClientsDeptController@result_pdf');
+        });
     });
 
     // suppliers Routes
@@ -429,6 +436,21 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
     // Get Info Of client || supplier || treasury || store || product || transfer || expense || extra expenses
 
 
+    // 🧾 إدارة الجرد
+    Route::group(['prefix' => 'inventories'] , function (){
+        Route::get('/' , 'InventoriesController@index');
+        Route::post('/store' , 'InventoriesController@store');
+        Route::get('/edit/{id}' , 'InventoriesController@edit');
+        Route::post('/update/{id}' , 'InventoriesController@update');
+        Route::get('/destroy/{id}' , 'InventoriesController@destroy');
+        
+        Route::get('datatable' , 'InventoriesController@datatable');
+    });
+    
+    // 🧾 إدارة الجرد
+
+
+    
     // start ايصال استلام نقدية
     // receipts Routes
     Route::group(['prefix' => 'receipts'] , function (){
@@ -475,7 +497,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
 
     // end taswea تسويه العملاء والموردين والشركاء والأصناف 
 
-
+            
 
 
 

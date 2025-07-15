@@ -187,12 +187,14 @@ class SaleBillController extends Controller
                 }else{
                     $response = DB::transaction(function() use($calcTotalProductsAfter, $calcTotalProductsBefore){
                         $lastNumId = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->max('num_order');
+                        
                         $saleBillId = DB::table('sale_bills')->insertGetId([
                             'custom_bill_num' => request('custom_bill_num'),
                             'client_id' => request('client_id'),
                             'treasury_id' => request('treasury_id'),
                             'bill_discount' => request('bill_discount'),
                             'extra_money' => request('extra_money'),
+                            'extra_money_type' => request('extra_money_type'),
                             'count_items' => count(request('prod_name')),
                             'total_bill_before' => $calcTotalProductsBefore,
                             'total_bill_after' => $calcTotalProductsAfter,
@@ -202,7 +204,7 @@ class SaleBillController extends Controller
                             'notes' => request('notes'),
                             'created_at' => now()
                         ]);
-                        
+
                         foreach( request('prod_name')  as $index => $product_id ){
                             $lastProductQuantity = DB::table('store_dets')
                                         ->where('product_id', $product_id)
@@ -323,6 +325,7 @@ class SaleBillController extends Controller
                         'treasury_id' => request('treasury_id'),
                         'bill_discount' => request('bill_discount'),
                         'extra_money' => request('extra_money'),
+                        'extra_money_type' => request('extra_money_type'),
                         'count_items' => count(request('prod_name')),
                         'total_bill_before' => $calcTotalProductsBefore,
                         'total_bill_after' => $calcTotalProductsAfter,
@@ -667,6 +670,7 @@ class SaleBillController extends Controller
                     ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'sale_bills.treasury_id')
                     ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
                     ->leftJoin('financial_years', 'financial_years.id', 'sale_bills.year_id')
+                    ->leftJoin('extra_expenses', 'extra_expenses.id', 'sale_bills.extra_money_type')
                     ->leftJoin('users', 'users.id', 'sale_bills.user_id')
                     ->where('store_dets.type', 'اضافة فاتورة مبيعات')
                     ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
@@ -677,11 +681,11 @@ class SaleBillController extends Controller
                         'store_dets.product_id', 
                         'store_dets.current_sell_price_in_sale_bill', 
                         'store_dets.sell_price_small_unit', 
+                        'store_dets.discount', 
+                        'store_dets.tax', 
                         'store_dets.product_bill_quantity', 
                         'store_dets.total_before as productTotalBefore', 
                         'store_dets.total_after as productTotalAfter', 
-                        'store_dets.product_id', 
-                        'store_dets.product_id',  
 
                         'treasury_bill_dets.treasury_type',
                         'treasury_bill_dets.bill_type',
@@ -700,6 +704,7 @@ class SaleBillController extends Controller
                         'financial_years.name as financialName',
 
                         'units.name as unitName', 
+                        'extra_expenses.expense_type as extraExpensesName', 
 
                         'users.name as userName',
                     )

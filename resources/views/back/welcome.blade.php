@@ -142,6 +142,17 @@
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="العملاء">
 			<div class="card text-center dashboard-card border">
 			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
+				<a href="{{ url('expenses') }}" target="_blank" class="text-decoration-none">
+					<i class="fas fa-wallet fa-2x mb-1 d-block"></i>
+					<span class="fw-bold tx-8">المصروفات</span>
+				</a>					
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="العملاء">
+			<div class="card text-center dashboard-card border">
+			  <div class="card-body" style="padding: 1rem 0 !important;height: 90px !important;">
 				<a href="{{ url('clients') }}" target="_blank" class="text-decoration-none">
 					<i class="fas fa-user-alt fa-2x mb-1 d-block"></i>
 					<span class="fw-bold tx-8">العملاء</span>
@@ -205,7 +216,7 @@
 									</span>
 									<h4 class="text-white mb-0">
 										<a class="text-white" href="{{ url('sales') }}" target="_blank">
-											{{ display_number( totalSalesToday() ) }}
+											{{ display_number( totalProfitToday()['totalProductsSellPriceToday'] ?? 0 ) }}
 										</a>
 									</h4>
 								</div>
@@ -215,7 +226,7 @@
 				</div>
 			</div>
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
-				<div class="card bg-success-gradient text-white">
+				<div class="card text-white {{ totalProfitToday()['roundedProfit'] > 0 ? 'bg-success-gradient' : 'bg-dark' }} ">
 					<div class="card-body">
 						<div class="row">
 							<div class="col-3">
@@ -230,7 +241,8 @@
 									</span>
 									<h4 class="text-white mb-0">
 										<a class="text-white" href="{{ url('report/profits') }}" target="_blank">
-											{{  totalProfitToday()['profit'] ? floor( display_number( totalProfitToday()['profit'] ) * 100 ) / 100 : 0 }}
+											{{--{{  totalProfitToday()['profit'] ? floor( display_number( totalProfitToday()['profit'] ) * 100 ) / 100 : 0 }}--}}
+											{{ display_number( totalProfitToday()['roundedProfit'] ) }}
 										</a>
 										
 									</h4>
@@ -265,6 +277,66 @@
 					</div>
 				</div>
 			</div>
+
+			@if( totalClientsDebts() )
+				<div class="col-lg-6 col-xl-2 col-md-6 col-12">
+					<div class="card bg-danger-gradient text-white">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-3">
+									<div class="icon1 mt-2 text-center">
+										<i class="fas fa-user-clock tx-40"></i>
+									</div>
+								</div>
+								<div class="col-9">
+									<div class="mt-0 text-center">
+										<span class="text-white" style="font-size: 11px;">
+											<a class="text-white" href="{{ url('clients/report/clients_debt') }}" target="_blank">
+												ديون العملاء (عليهم فلوس)
+											</a>
+										</span>
+										<h4 class="text-white mb-0">
+											<a class="text-white" href="{{ url('clients/report/clients_debt') }}" target="_blank">
+												{{ display_number( totalClientsDebts() ) }}
+											</a>
+										</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			@endif
+
+			{{--<div class="col-lg-6 col-xl-2 col-md-6 col-12">
+				<div class="card bg-primary-gradient text-white">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-3">
+								<div class="icon1 mt-2 text-center">
+									<i class="fas fa-truck-loading tx-40"></i>
+								</div>
+							</div>
+							<div class="col-9">
+								<div class="mt-0 text-center">
+									<span class="text-white" style="font-size: 11px;">
+										<a class="text-white" href="{{ url('suppliers/report/debts') }}" target="_blank">
+											ديون علينا  (لصالح الموردين)
+										</a>
+									</span>
+									<h4 class="text-white mb-0">
+										<a class="text-white" href="{{ url('suppliers/report/debts') }}" target="_blank">
+											1000
+										</a>
+									</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>--}}
+
+
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
 				<div class="card bg-warning-gradient text-white">
 					<div class="card-body">
@@ -288,6 +360,33 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
+				<div class="card bg-secondary text-white">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-3">
+								<div class="icon1 mt-2 text-center">
+									<i class="fas fa-cash-register tx-40"></i>
+								</div>
+							</div>
+							<div class="col-9">
+								<div class="mt-0 text-center">
+									<span class="text-white" style="font-size: 11px;">
+										<a class="text-white">رصيد الخزن</a>									
+									</span>
+									<h4 class="text-white mb-0">
+										<a class="text-white">
+											{{ display_number( totalFinancialTreasury() ) }}
+										</a>
+									</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
 				<div class="card bg-danger text-white">
 					<div class="card-body">
@@ -313,31 +412,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
-				<div class="card bg-dark text-white">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-3">
-								<div class="icon1 mt-2 text-center">
-									<i class="fas fa-cash-register tx-40"></i>
-								</div>
-							</div>
-							<div class="col-9">
-								<div class="mt-0 text-center">
-									<span class="text-white" style="font-size: 11px;">
-										<a class="text-white">رصيد الخزن</a>									
-									</span>
-									<h4 class="text-white mb-0">
-										<a class="text-white">
-											{{ display_number( totalFinancialTreasury() ) }}
-										</a>
-									</h4>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 		</div>
 		{{-- end first section --}}
 		

@@ -185,7 +185,7 @@
             color: #fff;
         }
         table.dataTable tbody td.sorting_1{
-            background-color: #c9640517;
+            background-color: #c964053a;
         }
     </style>
 </head>

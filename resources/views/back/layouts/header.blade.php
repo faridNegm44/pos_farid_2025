@@ -6,8 +6,8 @@
             <a class="header-brand" href="{{ url('') }}">
                 <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-dark">
                 <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-logo">
-                <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->fav_icon) }}" class="desktop-logo-1">
-                <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->fav_icon) }}" class="desktop-logo-dark">
+                <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-logo-1">
+                <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-logo-dark">
             </a>         
 
             {{--<div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">--}}

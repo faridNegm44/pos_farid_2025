@@ -37,7 +37,9 @@ class SalesReturnBillController extends Controller
                                     })
                                     ->select('financial_treasuries.*', 'treasury_bill_dets.treasury_money_after')
                                     ->get();    
-
+                                    
+        $extra_expenses = DB::table('extra_expenses')->orderBy('expense_type', 'asc')->get();
+        
         $find = DB::table('sale_bills')
                     ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
                     ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'sale_bills.id')
@@ -92,7 +94,7 @@ class SalesReturnBillController extends Controller
                                         ->where('client_supplier_id', $find[0]->client_id)
                                         ->orderBy('id', 'desc')
                                         ->value('remaining_money');
-            return view('back.sales_return.create' , compact('pageNameAr' , 'pageNameEn', 'clients', 'treasuries', 'find', 'userInfo'));
+            return view('back.sales_return.create' , compact('pageNameAr' , 'pageNameEn', 'clients', 'treasuries', 'extra_expenses', 'find', 'userInfo'));
         }
 
     }

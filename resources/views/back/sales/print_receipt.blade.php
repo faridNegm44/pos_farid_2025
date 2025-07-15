@@ -35,36 +35,38 @@
         th, td {
             padding: 0 !important;
         }
-        
+
+        #total_tr{
+            font-size: 18px;
+            background: #00000030 !important;
+        }
+
         @media print {
             body {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-
-            @page {
+            /*@page {
                 margin: 5px;
-            }
-
-            body {
-            margin: 5px !important;
-            padding: 5px !important;
-            }
-
+            }*/
             .table_info thead th {
                 background-color: #a5a5a5 !important;
             }
-
             .totals_section .final_total {
                 background-color: #a5a5a5 !important;
             }
-
             .header {
                 page-break-before: avoid;
             }
-
             th, td {
                 padding: 0 !important;
+            }
+            #total_tr {
+                background-color: #999 !important;
+                color: white !important;
+                font-weight: bold;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
@@ -158,35 +160,76 @@
                                 {{ display_number( $product->current_sell_price_in_sale_bill ) }}
                             @endif
                         </td>
-                        <td></td>
+                        <td>
+                            @php
+                                $price = $product->current_sell_price_in_sale_bill;
+                                $discountPercent = $product->discount;
+                                $taxPercent = $product->tax;
+
+                                $discountValue = $price * ($discountPercent / 100);
+                                $priceAfterDiscount = $price - $discountValue;
+
+                                $taxValue = $priceAfterDiscount * ($taxPercent / 100);
+                                $finalPrice = $priceAfterDiscount + $taxValue;
+                            @endphp
+
+                            {{ $finalPrice }}
+                        </td>
                         <td>{{ display_number( $product->productTotalAfter ) }}</td>
                     </tr>
                 @endforeach
         </table>
         {{-- end table bill products  --}}
 
-
-        <table class="table table-bordered table-striped text-center" style="font-size: 12px;">
-            <thead class="bg bg-black-5">
-                <tr>
-                    <th class="text-center">إجمالي الفاتورة قبل</th>                    
-                    @if ($saleBill[0]->extra_money)
-                        <th class="text-center">مصاريف اضافية</th>
-                    @endif
-                    <th class="text-center">إجمالي الفاتورة بعد</th>
-                </tr>
-            </thead>
+        <table class="table table-bordered w-50 m-auto">
             <tbody>
                 <tr>
-                    <td>{{ display_number( $saleBill[0]->total_bill_before ) }} جنية</td>
-                    @if ($saleBill[0]->extra_money)
-                        <td>{{ display_number( $saleBill[0]->extra_money ) }} جنية</td>
-                    @endif
+                    <th class="text-right" style="padding-right: 10px !important;">إجمالي الأصناف قبل</th>
+                    <td class="text-right" style="padding-right: 10px !important;">
+                        @php
+                            $total_bill_before = display_number( $saleBill[0]->total_bill_before ); 
+                            $extra_money = $saleBill[0]->extra_money ? display_number( $saleBill[0]->extra_money ) : 0; 
+                        @endphp
 
-                    <td style="font-weight: bold;">{{ display_number( $saleBill[0]->total_bill_after ) }} جنية</td>
+                        {{ $total_bill_before }} جنيه
+                    </td>
+                </tr>
+                @if ($saleBill[0]->total_bill_before != $saleBill[0]->total_bill_after)
+                    <tr>
+                        <th class="text-right" style="padding-right: 10px !important;">قيمة خصم الأصناف</th>
+                        <td class="text-right" style="padding-right: 10px !important;">
+
+                            {{ display_number( $saleBill[0]->total_bill_before - (  $saleBill[0]->total_bill_after - $saleBill[0]->extra_money ?? 0 ) - $saleBill[0]->bill_discount ) }} جنية
+                        </td>
+                    </tr>
+                    @if ($saleBill[0]->bill_discount)
+                        <tr>
+                            <th class="text-right" style="padding-right: 10px !important;">خصم إضافي علي الفاتورة</th>
+                            <td class="text-right" style="padding-right: 10px !important;">
+
+                                {{ display_number( $saleBill[0]->bill_discount ) }} جنية
+                            </td>
+                        </tr>
+                    @endif
+                @endif
+                @if ($saleBill[0]->extra_money)
+                    @php
+                        $checkExtraMoney = $saleBill[0]->extraExpensesName ? ' ( ' .$saleBill[0]->extraExpensesName . ' )' : '';
+                    @endphp
+                    <tr>
+                        <th class="text-right" style="padding-right: 10px !important;">مصاريف أخري {{ $checkExtraMoney }}</th>
+                        <td class="text-right" style="padding-right: 10px !important;">{{ display_number( $saleBill[0]->extra_money ) }} جنيه</td>
+                    </tr>
+                @endif
+                <tr id="total_tr">
+                    <th class="text-right" style="padding-right: 10px !important;">إجمالي الفاتورة بعد</th>
+                    <td class="text-right" style="padding-right: 10px !important;font-weight: bold;">
+                        {{ display_number( $saleBill[0]->total_bill_after ) }} جنيه
+                    </td>
                 </tr>
             </tbody>
         </table>
+    
 
         {{-- سياسة وشروط الشركة --}}
             <ol>

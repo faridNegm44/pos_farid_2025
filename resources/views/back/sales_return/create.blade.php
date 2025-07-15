@@ -165,16 +165,17 @@
         
                             <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #cccccc;background-color: #ededed;">
                                 <div class="row">
+                                    @if (userPermissions()->tax_bill_view)                                        
+                                        <p class="col-lg-6 col-12">
+                                            <label for="">
+                                                ضريبة ق م (%)
+                                                <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
+                                            </label>
+                                            <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
+                                        </p>
+                                    @endif                                    
                                                                         
-                                    <p class="col-lg-4 col-12">
-                                        <label for="">
-                                            ضريبة ق م (%)
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
-                                        </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
-                                    </p>
-        
-                                    <p class="col-lg-4 col-12">
+                                    <p class="col-lg-6 col-12">
                                         <label for="">
                                             خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
@@ -182,13 +183,29 @@
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" />
                                     </p>
                                     
-                                    <p class="col-lg-4 col-12">
-                                        <label for="">
+                                    <div class="col-12">
+                                        <label for="extra_money_type" class="form-label">
                                             مصاريف إضافية
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" />
-                                    </p>
+                                    
+                                        <div class="row">
+                                            <div class="col-md-7 mb-2">
+                                                <select class="form-control" name="extra_money_type" id="extra_money_type">
+                                                    <option value="" selected>اختر مصروف إضافي</option>
+                                                    @foreach ($extra_expenses as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->expense_type }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                    
+                                            <div class="col-md-5">
+                                                <input autocomplete="off" type="text" class="form-control text-center numValid focus_input" 
+                                                       id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 
                                     <p class="col-6" id="countTableTr" style="font-size: 13px;">
                                         عدد العناصر:

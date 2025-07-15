@@ -251,8 +251,8 @@ class ReceiptsController extends Controller
                 $checkButtons = '';
                 if($res->status == 'جاري التحصيل'){
                     $checkButtons .= '                                    
-                                    <button class="btn btn-sm btn-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" >
-                                        <i class="fa fa-trash"></i>
+                                    <button class="btn btn-sm btn-danger delete" data-placement="top" data-toggle="tooltip" title="الغاء الايصال" res_id="'.$res->id.'" >
+                                        <i class="fas fa-ban"></i>
                                     </button>                                    
                                     
                                     <button type="button" class="btn btn-sm btn-success show take_money" data-effect="effect-scale" data-toggle="modal" href="#takeMoneyModal" data-placement="top" data-toggle="tooltip" title="تحصيل الايصال" res_id="'.$res->id.'">

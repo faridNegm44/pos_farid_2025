@@ -146,6 +146,7 @@ class RolesPermissionsController extends Controller
             'tax_bill_view' => request('tax_bill_view') ? 1 : 0,
             'discount_bill_view' => request('discount_bill_view') ? 1 : 0,
             'cost_price_view' => request('cost_price_view') ? 1 : 0,
+            'sale_price_view' => request('sale_price_view') ? 1 : 0,
             'created_at' => now(),
             // end first
             
@@ -287,6 +288,7 @@ class RolesPermissionsController extends Controller
             'tax_bill_view' => request('tax_bill_view') ? 1 : 0,
             'discount_bill_view' => request('discount_bill_view') ? 1 : 0,
             'cost_price_view' => request('cost_price_view') ? 1 : 0,
+            'sale_price_view' => request('sale_price_view') ? 1 : 0,
             'updated_at' => now(),
             // end first
             

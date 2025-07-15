@@ -61,6 +61,29 @@ use Illuminate\Support\Facades\DB;
 
 
 // start show الارقام العشريه
+//if (!function_exists('display_number')) {
+//    function display_number($number) {
+//        // تأكد أنه رقم
+//        if (!is_numeric($number)) {
+//            return $number;
+//        }
+
+//        if (strpos($number, '.') !== false) {
+//            // إذا كانت فقط .00 أو أصفار بعد الفاصلة
+//            if (preg_match('/\.0+$/', $number)) {
+//                return number_format((int)$number);
+//            }
+
+//            // إزالة الأصفار الزائدة بعد الفاصلة بدون تقريب
+//            $trimmed = rtrim(rtrim($number, '0'), '.');
+//            return number_format($trimmed, strlen(substr(strrchr($trimmed, '.'), 1)), '.', ',');
+//        }
+
+//        // رقم صحيح بدون فاصل عشري
+//        return number_format($number);
+//    }
+//}
+
 if (!function_exists('display_number')) {
     function display_number($number) {
         // تأكد أنه رقم
@@ -68,19 +91,24 @@ if (!function_exists('display_number')) {
             return $number;
         }
 
-        if (strpos($number, '.') !== false) {
-            // إذا كانت فقط .00 أو أصفار بعد الفاصلة
-            if (preg_match('/\.0+$/', $number)) {
-                return number_format((int)$number);
-            }
+        // تحويل إلى سلسلة نصية للتحقق من الفاصلة العشرية
+        $number_str = (string)$number;
 
-            // إزالة الأصفار الزائدة بعد الفاصلة بدون تقريب
-            $trimmed = rtrim(rtrim($number, '0'), '.');
-            return number_format($trimmed, strlen(substr(strrchr($trimmed, '.'), 1)), '.', ',');
+        if (strpos($number_str, '.') !== false) {
+            // فصل الأجزاء قبل وبعد الفاصلة
+            $parts = explode('.', $number_str);
+            $integer_part = $parts[0];
+            $decimal_part = substr($parts[1], 0, 2); // أخذ منزلتين عشريتين فقط
+            
+            // إعادة تجميع الرقم مع منزلتين عشريتين
+            $trimmed_number = $integer_part . '.' . $decimal_part;
+            
+            // تنسيق الرقم مع الفواصل كآلاف
+            return number_format((float)$trimmed_number, strlen($decimal_part), '.', ',');
         }
 
         // رقم صحيح بدون فاصل عشري
-        return number_format($number);
+        return number_format((float)$number);
     }
 }
 // end show الارقام العشريه
@@ -201,14 +229,6 @@ function totalExpensesToday(){
 
 
 
-// start count total sales today => اجمالي مبيعات اليوم 
-function totalSalesToday(){
-    $totalSales = DB::table('sale_bills')->whereDate('created_at', Carbon::today())->sum('total_bill_after'); 
-    return $totalSales;
-}
-// end count total sales today => اجمالي مبيعات اليوم 
-
-
 // start => حساب الربحيه اليوم
 function totalProfitToday(){
     $totalProductsSellPriceToday = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->whereDate('created_at', Carbon::today())->sum('total_after'); 
@@ -225,11 +245,14 @@ function totalProfitToday(){
                     });
     
     $profit = ($totalProductsSellPriceToday - $totalProductsCostPriceToday) - totalExpensesToday();
-    
+    $roundedProfit = floor($profit * 100) / 100;
+
+
     return [
         'totalProductsSellPriceToday' => $totalProductsSellPriceToday,
         'totalProductsCostPriceToday' => $totalProductsCostPriceToday,
-        'profit' => $profit
+        'profit' => $profit,
+        'roundedProfit' => $roundedProfit
     ];
 }
 // end => حساب الربحيه اليوم
@@ -272,6 +295,27 @@ function totalFinancialTreasury(){
     return $latestBalances;
 }
 // end count total financial_treasury => حساب اجمالي الفلوس في جميع الخزائن
+
+
+
+// start count totalClientsDebts => حساب اجمالي مديونيات العملاء
+function totalClientsDebts(){
+    return DB::table('treasury_bill_dets as t1')
+                        ->join('clients_and_suppliers', 'clients_and_suppliers.id', 't1.client_supplier_id')
+                        ->select(
+                            't1.*', 
+                            'clients_and_suppliers.code as clientCode', 
+                            'clients_and_suppliers.name as clientName', 
+                            'clients_and_suppliers.phone as clientPhone', 
+                            'clients_and_suppliers.client_supplier_type',
+                        )
+                        ->whereIn('clients_and_suppliers.client_supplier_type', [3, 4])
+                        ->whereRaw('t1.id = (SELECT MAX(id) FROM treasury_bill_dets WHERE client_supplier_id = t1.client_supplier_id)')
+                        ->orderBy('t1.id', 'asc')
+                        ->where('t1.remaining_money', '>', 0)
+                        ->sum('t1.remaining_money'); 
+}
+// end count totalClientsDebts => حساب اجمالي مديونيات العملاء
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// نهاية احصائيات الصفحة الرئيسية /////////////////////////////////
