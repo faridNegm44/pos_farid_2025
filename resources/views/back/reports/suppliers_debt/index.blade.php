@@ -76,7 +76,7 @@
         
         <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
             <div class="card-body">
-                <form method="get" action="{{ url('clients/report/clients_debt/result') }}">
+                <form method="get" action="{{ url('suppliers/report/suppliers_debt/result') }}">
                     @csrf
                     <div class="row justify-content-center">
                         
@@ -84,8 +84,8 @@
                             <label for="balance_type">نوع الرصيد</label>
                             <div>
                                 <select name="balance_type" id="balance_type" class="form-control">
-                                    <option value="debtor">🟩 عليهم فلوس (مدينين)</option>
                                     <option value="creditor">🟥 لهم فلوس (دائنين)</option>
+                                    <option value="debtor">🟩 عليهم فلوس (مدينين)</option>
                                 </select>
                             </div>
                             <bold class="text-danger" id="errors-balance_type" style="display: none;"></bold>

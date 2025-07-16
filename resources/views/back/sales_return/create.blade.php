@@ -110,14 +110,14 @@
 
         @include('back.layouts.calc')
     
-        {{--@include('back.sales.modal_search_product')--}}
-        {{--@include('back.sales.modal_dismissal_notices')--}}
+        {{--@include('back.sales_return.modal_search_product')--}}
+        {{--@include('back.sales_return.modal_dismissal_notices')--}}
     
         
         
         <form>
             @csrf
-            @include('back.sales.modal_save_bill')
+            @include('back.sales_return.modal_save_bill')
             
 
             <div class="container-fluid">
@@ -180,7 +180,7 @@
                                             خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" />
+                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" value="{{ display_number( $find[0]->bill_discount ) }}"/>
                                     </p>
                                     
                                     <div class="col-12">
@@ -194,14 +194,20 @@
                                                 <select class="form-control" name="extra_money_type" id="extra_money_type">
                                                     <option value="" selected>اختر مصروف إضافي</option>
                                                     @foreach ($extra_expenses as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->expense_type }}</option>
+                                                        <option value="{{ $item->id }}" 
+                                                            {{ $find[0]->extra_money_type ? 
+                                                                    $find[0]->extra_money_type ==  $item->id ? 'selected' : ''  
+                                                                :  ''
+                                                            }} 
+                                                        >
+                                                        {{ $item->expense_type }}
+                                                    </option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                     
                                             <div class="col-md-5">
-                                                <input autocomplete="off" type="text" class="form-control text-center numValid focus_input" 
-                                                       id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" />
+                                                <input autocomplete="off" type="text" class="form-control text-center numValid focus_input"  id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ display_number( $find[0]->extra_money ) }}"/>
                                             </div>
                                         </div>
                                     </div>
@@ -209,17 +215,17 @@
                                 
                                     <p class="col-6" id="countTableTr" style="font-size: 13px;">
                                         عدد العناصر:
-                                        <span style="font-size: 16px;">0</span>
+                                        <span style="font-size: 16px;">{{ display_number( $find[0]->count_items ) }}</span>
                                     </p>
                                     <p class="col-6" style="font-size: 13px;font-size: 14px;">
-                                        م الفرعي: 
-                                        <span style="font-size: 16px;" class="subtotal">0</span>
+                                        الإجمالي قبل: 
+                                        <span style="font-size: 16px;" class="subtotal">{{ display_number( $find[0]->total_bill_before ) }}</span>
                                     </p>
 
                                     <p class="col-lg-12">
                                         <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
-                                            <span style="font-size: 12px;">الإجمالي: </span>
-                                            <span style="font-size: 24px;" class="total_bill_after">0.00</span>
+                                            <span style="font-size: 12px;">الإجمالي المستحق: </span>
+                                            <span style="font-size: 24px;" class="total_bill_after">{{ display_number( $find[0]->total_bill_after ) }}</span>
                                         </div>
                                     </p>
                                 </div>
@@ -233,17 +239,17 @@
                                 <thead class="bg bg-black-5">
                                     <tr>
                                         <th>#</th>
-                                        <th style="width: 25%;">السلعة/الخدمة</th>
-                                        <th style="width: 10%;">الوحدة</th>
-                                        <th style="width: 8%;">ك المخزن</th>
-                                        <th style="width: 8%;">
+                                        <th class="nowarp_thead" style="width: 250px !important;min-width: 250px !important;">السلعة/الخدمة</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الوحدة</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ك المخزن</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">
                                             ك مباعة
                                             <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى إتمام عملية البيع باستخدام الوحدة الصغرى للمنتج، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
                                         </th>
-                                        <th style="width: 10%;">س بيع</th>
-                                        <th style="width: 8%;">خصم%</th>
-                                        <th style="width: 8%;">ضريبة %</th>
-                                        <th style="width: 10%;">الإجمالي</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">خصم%</th>                                                                                        
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ضريبة%</th>
+                                        <th class="nowarp_thead" style="width: 150px !important;min-width: 150px !important;">الإجمالي</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
@@ -265,7 +271,11 @@
                                                 <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput product_new_qty" name="product_new_qty[]" value="{{ display_number( $item->product_bill_quantity ) }}">
                                             </td>
                                             <td>
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput" value="{{ display_number( $item->sell_price_small_unit ) }}">                                    
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput" value="{{ 
+                                                                    $item->current_sell_price_in_sale_bill != $item->sell_price_small_unit ? 
+                                                                        display_number( $item->current_sell_price_in_sale_bill ) : 
+                                                                        display_number( $item->sell_price_small_unit ) 
+                                                                }}">                                    
                                             </td>
                                             <td>
                                                 <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input" value="{{ display_number( $item->discount ) }}">
@@ -307,7 +317,7 @@
                         <span class="d-none d-lg-inline">حفظ مرتجع الفاتورة</span>
                     </button>
     
-                    <button class="col-lg-2 col-12 btn btn-danger-gradient btn-rounded mb-2 refresh_page">
+                    <button class="col-lg-2 col-12 btn btn-danger-gradient btn-rounded mb-2 return_bill">
                         <i class="fas fa-reply"></i> 
                         <span class="d-none d-lg-inline">إرجاع الفاتورة كاملة</span>
                     </button>
@@ -385,7 +395,28 @@
 
 
     @include('back.bills_css_js.css_js.main_js')
-    @include('back.layouts.refresh_page')
+
+    <script>
+        $(".return_bill").on("click", function(){
+            alertify.confirm(
+            'تحذير !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
+            `<div style="text-align: center;">
+                <p style="">
+                    هل أنت متأكد من إرجاع الفاتورة كاملة؟ 🧾↩️
+                </p>
+            </div>`,
+            function(){
+                location.reload();
+            }, function(){
+    
+            }).set({
+                labels:{
+                    ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                    cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                }
+            });
+        });
+    </script>
 
     
     {{-- start function calcTotal --}}
@@ -522,7 +553,7 @@
                 'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
                 `<div style="text-align: center;">
                     <p style="">
-                        هل انت متأكد من حفظ الفاتورة الحالية
+                        هل انت متأكد من حفظ مرتجعات الفاتورة الحالية 🧾↩️
                     </p>
                 </div>`,
                 function(){

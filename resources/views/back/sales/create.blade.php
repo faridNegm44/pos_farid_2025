@@ -246,19 +246,19 @@
                             <table class="table table-hover table-bordered" id="products_table">
                                 <thead class="bg bg-black-5">
                                     <tr>
-                                        <th>#</th>
-                                        <th>حذف</th>
-                                        <th style="width: 25%;max-width: 100%;">السلعة/الخدمة</th>
-                                        <th style="width: 10%;">الوحدة</th>
-                                        <th style="width: 10%;">ك المخزن</th>
-                                        <th style="width: 10%;">
+                                        <th class="nowarp_thead">#</th>
+                                        <th class="nowarp_thead">حذف</th>
+                                        <th class="nowarp_thead" style="width: 250px !important;min-width: 250px !important;">السلعة/الخدمة</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الوحدة</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ك المخزن</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">
                                             ك مباعة
                                             <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى إتمام عملية البيع باستخدام الوحدة الصغرى للمنتج، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
                                         </th>
-                                        <th style="width: 10%;">س بيع</th>
-                                        <th style="width: 10%;">خصم%</th>                                                                                        
-                                        <th style="width: 10%;">ضريبة%</th>
-                                        <th style="width: 15%;max-width: 100%;">الإجمالي</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">خصم%</th>                                                                                        
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ضريبة%</th>
+                                        <th class="nowarp_thead" style="width: 150px !important;min-width: 150px !important;">الإجمالي</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center"></tbody>

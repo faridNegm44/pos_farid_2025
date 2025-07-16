@@ -58,6 +58,7 @@ class SalesReturnBillController extends Controller
                         
                         'store_dets.product_id',
                         'store_dets.sell_price_small_unit',
+                        'store_dets.current_sell_price_in_sale_bill',
                         'store_dets.last_cost_price_small_unit',
                         'store_dets.avg_cost_price_small_unit',
                         'store_dets.product_bill_quantity',
@@ -78,7 +79,10 @@ class SalesReturnBillController extends Controller
                         'products.small_unit_numbers',
                         'small_unit.name as smallUnitName',
                         'big_unit.name as bigUnitName',
+                        
                         'clients_and_suppliers.name as clientName',
+                        'clients_and_suppliers.type_payment',
+                        
                         'financial_treasuries.name as treasuryName',
                         'financial_years.name as financialName',
                         'users.name as userName',
@@ -94,6 +98,7 @@ class SalesReturnBillController extends Controller
                                         ->where('client_supplier_id', $find[0]->client_id)
                                         ->orderBy('id', 'desc')
                                         ->value('remaining_money');
+
             return view('back.sales_return.create' , compact('pageNameAr' , 'pageNameEn', 'clients', 'treasuries', 'extra_expenses', 'find', 'userInfo'));
         }
 

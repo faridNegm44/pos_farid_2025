@@ -97,7 +97,7 @@
                     <table class="table table-bordered table-hover text-center text-md-nowrap" id="example1">
                         <thead class="bg bg-black-5">
                             <tr>
-                                <th class="border-bottom-0">العميل</th>
+                                <th class="border-bottom-0">المورد</th>
                                 <th class="border-bottom-0">الهاتف</th>
                                 <th class="border-bottom-0">الرصيد المتبقي</th>
                                 <th class="border-bottom-0">آخر معاملة</th>
@@ -110,7 +110,7 @@
                             @forelse($results as $row)
                                 @php
                                     $query = http_build_query([
-                                        'client_id' => $row->client_supplier_id,
+                                        'supplier_id' => $row->client_supplier_id,
                                         'treasury_type' => '',
                                         'from' => '',
                                         'to' => ''
@@ -118,11 +118,11 @@
                                 @endphp
                                 <tr>
                                     <td>
-                                        <a href="{{ url('clients/report/account_statement/pdf') . '?' . $query }}" target="_blank">
-                                            {{ $row->clientName }}
+                                        <a href="{{ url('suppliers/report/account_statement/pdf') . '?' . $query }}" target="_blank">
+                                            {{ $row->supplierName }}
                                         </a>
                                     </td>
-                                    <td>{{ $row->clientPhone }}</td>
+                                    <td>{{ $row->supplierPhone }}</td>
                                     <td class="{{ $row->remaining_money < 0 ? 'text-danger' : 'text-primary' }}">
                                         {{ display_number($row->remaining_money) }} جنيه
                                     </td>

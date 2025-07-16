@@ -190,6 +190,9 @@
 
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('clients/report/clients_debt') }}" class="slide-item text-dark">تقرير مديونية العملاء</a></li>
+
+                            <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('suppliers/report/suppliers_debt') }}" class="slide-item text-dark">تقرير مديونية الموردين</a></li>
                         </ul>
                     </li>
 

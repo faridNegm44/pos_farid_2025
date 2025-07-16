@@ -308,33 +308,35 @@
 				</div>
 			@endif
 
-			{{--<div class="col-lg-6 col-xl-2 col-md-6 col-12">
-				<div class="card bg-primary-gradient text-white">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-3">
-								<div class="icon1 mt-2 text-center">
-									<i class="fas fa-truck-loading tx-40"></i>
+			@if( totalSuppliersDebts() )
+				<div class="col-lg-6 col-xl-2 col-md-6 col-12">
+					<div class="card bg-primary-gradient text-white">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-3">
+									<div class="icon1 mt-2 text-center">
+										<i class="fas fa-truck-loading tx-40"></i>
+									</div>
 								</div>
-							</div>
-							<div class="col-9">
-								<div class="mt-0 text-center">
-									<span class="text-white" style="font-size: 11px;">
-										<a class="text-white" href="{{ url('suppliers/report/debts') }}" target="_blank">
-											ديون علينا  (لصالح الموردين)
-										</a>
-									</span>
-									<h4 class="text-white mb-0">
-										<a class="text-white" href="{{ url('suppliers/report/debts') }}" target="_blank">
-											1000
-										</a>
-									</h4>
+								<div class="col-9">
+									<div class="mt-0 text-center">
+										<span class="text-white" style="font-size: 11px;">
+											<a class="text-white" href="{{ url('suppliers/report/suppliers_debt') }}" target="_blank">
+												ديون علينا  (لصالح الموردين)
+											</a>
+										</span>
+										<h4 class="text-white mb-0">
+											<a class="text-white" href="{{ url('suppliers/report/suppliers_debt') }}" target="_blank">
+												{{ display_number( totalSuppliersDebts() ) }}
+											</a>
+										</h4>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>--}}
+			@endif
 
 
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">

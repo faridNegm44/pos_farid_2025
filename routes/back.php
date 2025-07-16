@@ -185,6 +185,13 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
             Route::get('account_statement' , 'ReportsSuppliersController@account_statement'); // خاص بكشف الحساب
             Route::get('account_statement/pdf' , 'ReportsSuppliersController@account_statement_pdf'); // خاص بكشف الحساب pdf
         });
+
+        // تقرير مديونيه الموردين لهم- عليهم 
+        Route::group(['prefix' => 'report/suppliers_debt'] , function (){
+            Route::get('/' , 'ReportsSuppliersDeptController@index');
+            Route::get('result' , 'ReportsSuppliersDeptController@result');
+            Route::get('result/pdf' , 'ReportsSuppliersDeptController@result_pdf');
+        });
     });
     
     // partners Routes
