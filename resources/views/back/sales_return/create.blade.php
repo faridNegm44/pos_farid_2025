@@ -3,8 +3,8 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <head>
 
-		<meta charset="UTF-8">
-		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+        <meta charset="UTF-8">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
         <!-- Title -->
@@ -83,18 +83,43 @@
             .dark_theme{
                 display: none;
             }
-            /*#amount_paid{
-                display: none;
-            }*/
-
             @media (max-width: 991px) {
                 #top_section {
                     margin-top: 30px;
                 }
             }
 
+            .custom_check {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 18px;
+                height: 18px;
+                border: 2px solid transparent;
+                border-radius: 4px;
+                background-color: transparent;
+                cursor: pointer;
+                transition: all 0.3s;
+                position: relative;
+            }
+
+            .custom_check:checked {
+                background-color: #c0180c; /* الخلفية عند التحديد */
+                border-color: #c0180c;
+            }
+
+            .custom_check:checked::after {
+                content: '';
+                position: absolute;
+                top: 3px;
+                left: 5px;
+                width: 4px;
+                height: 8px;
+                border: solid white;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
         </style>
-	</head>
+    </head>
 
     @include('back.bills_css_js.css_js.main_css')
 
@@ -213,14 +238,37 @@
                                     </div>
                                     
                                 
-                                    <p class="col-6" id="countTableTr" style="font-size: 13px;">
-                                        عدد العناصر:
-                                        <span style="font-size: 16px;">{{ display_number( $find[0]->count_items ) }}</span>
-                                    </p>
-                                    <p class="col-6" style="font-size: 13px;font-size: 14px;">
-                                        الإجمالي قبل: 
-                                        <span style="font-size: 16px;" class="subtotal">{{ display_number( $find[0]->total_bill_before ) }}</span>
-                                    </p>
+                                    <ul class="row" style="font-size: 11px;">
+                                        <li class="col-6 mb-2">
+                                            العناصر:
+                                            <strong style="font-size: 16px; color: #007bff;">
+                                                {{ display_number($find[0]->count_items) }}
+                                            </strong>
+                                        </li>
+
+                                        <li class="col-6 mb-2">
+                                            المبيعات:
+                                            <strong style="font-size: 16px; color: #28a745;">
+                                                {{ display_number($find[0]->total_bill_before) }}
+                                            </strong>
+                                        </li>
+
+                                        <li class="col-6 mb-2">
+                                            المرتجعات:
+                                            <strong style="font-size: 16px; color: #dc3545;">
+                                                {{ display_number($find[0]->total_returns ?? 0) }}
+                                            </strong>
+                                        </li>
+
+                                        <li class="col-6 mb-2">
+                                            الصافي:
+                                            <strong style="font-size: 16px; color: #ffc107;">
+                                                {{ display_number(($find[0]->total_bill_before ?? 0) - ($find[0]->total_returns ?? 0)) }}
+                                            </strong>
+                                        </li>
+                                    </ul>
+
+
 
                                     <p class="col-lg-12">
                                         <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
@@ -239,6 +287,7 @@
                                 <thead class="bg bg-black-5">
                                     <tr>
                                         <th>#</th>
+                                        <th class="nowarp_thead" style="width: 60px !important;min-width: 60px !important;">تم التعديل</th>
                                         <th class="nowarp_thead" style="width: 250px !important;min-width: 250px !important;">السلعة/الخدمة</th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الوحدة</th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ك المخزن</th>
@@ -252,10 +301,14 @@
                                         <th class="nowarp_thead" style="width: 150px !important;min-width: 150px !important;">الإجمالي</th>
                                     </tr>
                                 </thead>
+
                                 <tbody class="text-center">
                                     @foreach ($find as $item)    
                                         <tr id="tr_{{ $item->product_id }}">
                                             <th>{{ $item->product_id }}</th>
+                                            <td>
+                                                <input type="checkbox" class="row_changed_checkbox custom_check" disabled style="margin-left:5px; width:19px; height:19px;">
+                                            </td>
                                             <td class="prod_name">
                                                 {{ $item->productNameAr }}
                                                 <input autocomplete="off" type='hidden' name="prod_name[]" value="{{ $item->product_id }}" />
@@ -268,20 +321,20 @@
                                                 <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="{{ display_number( $item->quantity_small_unit ) }}">                    
                                             </td>
                                             <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput product_new_qty" name="product_new_qty[]" value="{{ display_number( $item->product_bill_quantity ) }}">
+                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity[]" value="{{ display_number( $item->product_bill_quantity ) }}" >
                                             </td>
                                             <td>
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput" value="{{ 
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" value="{{ 
                                                                     $item->current_sell_price_in_sale_bill != $item->sell_price_small_unit ? 
                                                                         display_number( $item->current_sell_price_in_sale_bill ) : 
                                                                         display_number( $item->sell_price_small_unit ) 
                                                                 }}">                                    
                                             </td>
                                             <td>
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input" value="{{ display_number( $item->discount ) }}">
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" value="{{ display_number( $item->discount ) }}">
                                             </td>
                                             <td>
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input" value="{{ display_number( $item->tax ) }}">
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" value="{{ display_number( $item->tax ) }}">
                                             </td>
                                             <td>
                                                 <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total[]" value="{{ display_number( $item->total_after ) }}">
@@ -396,81 +449,89 @@
 
     @include('back.bills_css_js.css_js.main_js')
 
-    <script>
-        $(".return_bill").on("click", function(){
-            alertify.confirm(
-            'تحذير !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
-            `<div style="text-align: center;">
-                <p style="">
-                    هل أنت متأكد من إرجاع الفاتورة كاملة؟ 🧾↩️
-                </p>
-            </div>`,
-            function(){
-                location.reload();
-            }, function(){
-    
-            }).set({
-                labels:{
-                    ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
-                    cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
-                }
+    {{-- start when click return_bill --}}
+        <script>
+            $(".return_bill").on("click", function(){
+                alertify.confirm(
+                'تحذير !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
+                `<div style="text-align: center;">
+                    <p style="">
+                        هل أنت متأكد من إرجاع الفاتورة كاملة؟ 🧾↩️
+                    </p>
+                </div>`,
+                function(){
+                    $('.row_changed_checkbox').each(function() {
+                        $(this).prop('checked', true); // تحديد كل صنف في الفاتورة
+                        $(this).closest('tr').css('background-color', '#f8d7da'); // تغيير لون الخلفية للصف المحدد
+                    });
+
+
+                }, function(){
+        
+                }).set({
+                    labels:{
+                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                        cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                    }
+                });
             });
-        });
-    </script>
+        </script>
+    {{-- end when click return_bill --}}
 
     
+
     {{-- start function calcTotal --}}
-    <script>
-        function calcTotal() {
-            let subTotal = 0;
-            let total = 0;
+        <script>
+            function calcTotal() {
+                let subTotal = 0;
+                let total = 0;
 
-            $('#products_table tbody tr').each(function() {
-                let row = $(this).closest('tr');
+                $('#products_table tbody tr').each(function() {
+                    let row = $(this).closest('tr');
 
-                let sellPrice = parseFloat(row.find('.sellPrice').val()) || 0;  // سعر القطعة
-                let sale_quantity = parseInt(row.find('.sale_quantity').val()) || 0;  // الكمية المشتراة
-                let discount = parseFloat(row.find('.prod_discount').val()) || 0; // نسبة الخصم (%)
-                let tax = parseFloat(row.find('.prod_tax').val()) || 0; // نسبة الضريبة (%)
-
-
-                // 1. حساب إجمالي السعر قبل الخصم والضريبة
-                let totalBeforeDiscount = sellPrice * sale_quantity;
-
-                // 2. حساب الخصم
-                let discountAmount = (totalBeforeDiscount * discount) / 100;
-                let totalAfterDiscount = totalBeforeDiscount - discountAmount;
-
-                // 3. حساب الضريبة
-                let taxAmount = (totalAfterDiscount * tax) / 100;
-                let totalAfterTax = totalAfterDiscount + taxAmount;
-                
-                // 5. تحديث إجمالي الصف
-                row.find('.prod_total').val( totalAfterTax );
-
-                total += totalAfterTax;
-                subTotal += totalBeforeDiscount;
-            });
-
-            let bill_discount = $("#bill_discount").val(); 
-            let extra_money = $("#extra_money").val(); 
-
-            let afterDiscountBill = total - bill_discount;    
-            let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money);    
-
-            // عرض الإجمالي الكلي في الـ div
-            $('.subtotal').text( parseFloat(subTotal).toLocaleString() + ' جنية');
-            $('.total_bill_after').text( parseFloat(afterExtraMoney).toLocaleString() + ' جنية');
-            $('#remaining').text( parseFloat(afterExtraMoney).toLocaleString() + ' جنية');
+                    let sellPrice = parseFloat(row.find('.sellPrice').val()) || 0;  // سعر القطعة
+                    let sale_quantity = parseInt(row.find('.sale_quantity').val()) || 0;  // الكمية المشتراة
+                    let discount = parseFloat(row.find('.prod_discount').val()) || 0; // نسبة الخصم (%)
+                    let tax = parseFloat(row.find('.prod_tax').val()) || 0; // نسبة الضريبة (%)
 
 
-            //if(bill_discount > total){
-            //    alert('❌ لا يمكن أن يكون خصم الفاتورة أكبر من إجمالي السلع والخدمات بعد الخصومات.');
-            //    $("#bill_discount").val(0);
-            //    afterDiscountBill = total;
-            //}
-        }
-    </script>
+                    // 1. حساب إجمالي السعر قبل الخصم والضريبة
+                    let totalBeforeDiscount = sellPrice * sale_quantity;
+
+                    // 2. حساب الخصم
+                    let discountAmount = (totalBeforeDiscount * discount) / 100;
+                    let totalAfterDiscount = totalBeforeDiscount - discountAmount;
+
+                    // 3. حساب الضريبة
+                    let taxAmount = (totalAfterDiscount * tax) / 100;
+                    let totalAfterTax = totalAfterDiscount + taxAmount;
+                    
+                    // 5. تحديث إجمالي الصف
+                    row.find('.prod_total').val(display_number_js( totalAfterTax.toFixed(3) ) );
+
+                    total += totalAfterTax;
+                    subTotal += totalBeforeDiscount;
+                });
+
+                let bill_discount = $("#bill_discount").val(); 
+                let extra_money = $("#extra_money").val(); 
+
+                let afterDiscountBill = total - bill_discount;    
+                let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money);    
+
+                // عرض الإجمالي الكلي في الـ div
+                $('.subtotal').text( parseFloat(subTotal).toLocaleString() + ' جنية');
+                $('.total_bill_after').text( afterExtraMoney + ' جنية');
+                $('#remaining').text( parseFloat(afterExtraMoney).toLocaleString() + ' جنية'); 
+
+
+                //if(bill_discount > total){
+                //    alert('❌ لا يمكن أن يكون خصم الفاتورة أكبر من إجمالي السلع والخدمات بعد الخصومات.');
+                //    $("#bill_discount").val(0);
+                //    afterDiscountBill = total;
+                //}
+            }
+        </script>
     {{-- end function calcTotal --}}
 
     
@@ -493,11 +554,40 @@
     </script>
     {{-- end when change tax_bill update prod_tax value --}}
     
+    
+    
+    {{-- start when change extra_money_type --}}
+        <script>
+            $(document).on('input', '#extra_money_type', function () {
+                const thisVal = $(this).val();
+
+                if(thisVal){
+                    $.ajax({
+                        type: "GET",
+                        url: `{{ url('get_info/extra_expenses') }}/${thisVal}`,
+                        success: function(res){
+                            alertify.set('notifier','position', 'bottom-center');
+                            alertify.set('notifier','delay', 3);
+                            alertify.success("تم استدعاء سعر هذا المصروف الإضافي بنجاح 💰");
+                            
+                            $('#extra_money').val( res.amount ? display_number_js(res.amount) : 0 );
+
+                            calcTotal();
+                        }
+                    });       
+                }else{
+                    $('#extra_money').val('');
+                }
+            });
+        </script>
+    {{-- end when change extra_money_type --}}
+
+    
 
     {{-- start when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
     <script>
         $(document).ready(function () {
-            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #bill_discount, #extra_money', function () {
+            $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #bill_discount, #extra_money, #extra_money_type', function () {
                 calcTotal();
                 //$("#overlay_page").fadeIn();
                 //$("#overlay_page").fadeOut();
@@ -505,6 +595,81 @@
         });
     </script>
     {{-- end when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
+
+
+
+
+    {{-- عند تحميل الصفحة، احفظ القيم الأصلية في data-original--}}
+        <script>
+            $(document).ready(function () {
+                $('#products_table tbody tr').each(function () {
+                    var row = $(this);
+                    row.find('.sellPrice').attr('data-original', row.find('.sellPrice').val());
+                    row.find('.sale_quantity').attr('data-original', row.find('.sale_quantity').val());
+                    row.find('.prod_discount').attr('data-original', row.find('.prod_discount').val());
+                    row.find('.prod_tax').attr('data-original', row.find('.prod_tax').val());
+                });
+
+                // عند تغيير أي قيمة في الصف، يتم تفعيل أو إلغاء تفعيل الـ checkbox
+                $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax', function () {
+                    var row = $(this).closest('tr');
+                    var checkbox = row.find('.row_changed_checkbox');
+
+                    // القيم الحالية
+                    var currentValues = {
+                        sellPrice: row.find('.sellPrice').val(),
+                        sale_quantity: row.find('.sale_quantity').val(),
+                        prod_discount: row.find('.prod_discount').val(),
+                        prod_tax: row.find('.prod_tax').val()
+                    };
+
+                    // القيم الأصلية (من attributes)
+                    var originalValues = {
+                        sellPrice: row.find('.sellPrice').attr('data-original'),
+                        sale_quantity: row.find('.sale_quantity').attr('data-original'),
+                        prod_discount: row.find('.prod_discount').attr('data-original'),
+                        prod_tax: row.find('.prod_tax').attr('data-original')
+                    };
+
+
+
+                    
+
+
+                    // تحقق إذا كانت القيم الحالية = الأصلية
+                    if (
+                        currentValues.sellPrice == originalValues.sellPrice &&
+                        currentValues.sale_quantity == originalValues.sale_quantity &&
+                        currentValues.prod_discount == originalValues.prod_discount &&
+                        currentValues.prod_tax == originalValues.prod_tax
+                    ) {
+                        checkbox.prop('checked', false);
+                        $(this).closest('tr').css('background-color', ''); 
+                    } else {
+                        checkbox.prop('checked', true);
+                        $(this).closest('tr').css('background-color', '#f589894d');
+                    }
+
+                    // التاكد من ان الكميه المرتجعه لا تتجاوز كميه الفاتورة
+                    if(currentValues.sale_quantity > originalValues.sale_quantity){
+                        row.find('.sale_quantity').val(originalValues.sale_quantity);
+
+                        alertify.set('notifier', 'position', 'bottom-center');
+                        alertify.set('notifier', 'delay', 4);
+                        alertify.error(`❌ الكمية المرتجعة (${currentValues.sale_quantity}) لا يمكن أن تتجاوز الكمية في الفاتورة (${originalValues.sale_quantity})`);
+                        
+                        checkbox.prop('checked', false);
+                        $(this).closest('tr').css('background-color', ''); 
+
+                        calcTotal();   
+                    }
+                    // التاكد من ان الكميه المرتجعه لا تتجاوز كميه الفاتورة
+
+                });
+            });
+        </script>
+    {{-- عند تحميل الصفحة، احفظ القيم الأصلية في data-original--}}
+
 
 
 
@@ -537,6 +702,8 @@
     {{--end when change clients or suppliers --}}
 
 
+    
+
 
 
     {{--  start when click finally_save_bill_btn to save bill --}}
@@ -547,24 +714,29 @@
             }
         });
 
-
         $(document).on('click', '#finally_save_bill_btn', function(){
+            let checkedCount = $('.row_changed_checkbox:checked').length;
+
+            if (checkedCount === 0) {
+                alertify.set('notifier', 'position', 'bottom-center');
+                alertify.set('notifier', 'delay', 3);
+                alertify.error("❌ لا يوجد أصناف تم تعديلها في الفاتورة");
+                return false;
+            }
+
             alertify.confirm(
                 'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
                 `<div style="text-align: center;">
-                    <p style="">
-                        هل انت متأكد من حفظ مرتجعات الفاتورة الحالية 🧾↩️
-                    </p>
+                    <p>هل انت متأكد من حفظ مرتجعات الفاتورة الحالية 🧾↩️</p>
                 </div>`,
                 function(){
-                    
                     $.ajax({
                         url: `{{ url('sales/store') }}`,
-                        type: 'post',
+                        type: 'POST',
+                        data: new FormData($('form')[0]),
                         processData: false,
                         contentType: false,
-                        data: new FormData($('form')[0]),
-                        beforeSend:function () {
+                        beforeSend: function () {
                             $('form [id^=errors]').text('');
                             $("#products_table tbody input, select").css('border', '');
                             $(".tooltip-msg").remove();
@@ -573,80 +745,59 @@
                             console.log(res.responseJSON.errors);
 
                             $('#modal_save_bill').removeClass('show').hide();
-                            $('.modal-backdrop').remove(); // إزالة الخلفية السوداء
-                            $('body').removeClass('modal-open'); // إصلاح الـ scroll
+                            $('.modal-backdrop').remove();
+                            $('body').removeClass('modal-open');
 
-                            $.each(res.responseJSON.errors, function (index , value) {
-                                let splitRes = index.split('.');
-                                let inputName = splitRes[0];
-                                let inputNumber = splitRes[1];
-
+                            $.each(res.responseJSON.errors, function (index, value) {
+                                let [inputName, inputNumber] = index.split('.');
                                 let row = $("#products_table tbody tr").eq(inputNumber);
                                 row.find(`.${inputName}`)
-                                .css('border', '2px solid red')
-                                .after(`
-                                    <i class="fas fa-info-circle text-danger tooltip-msg" data-bs-toggle="tooltip" title="${value}"></i>
-                                `);
-
-                                $(`form #errors-${index}`).show().text(value);
+                                    .css('border', '2px solid red')
+                                    .after(`
+                                        <i class="fas fa-info-circle text-danger tooltip-msg" data-bs-toggle="tooltip" title="${value}"></i>
+                                    `);
+                                $(`#errors-${index}`).show().text(value);
                             });
                         },
                         success: function(res){
-
-                            if(res.errorClientPayment){  // لمعرفه نوع التعامل مع العميل سواء كاش او اجل
+                            if (res.errorClientPayment) {
                                 alert(res.errorClientPayment);
-
-                            }else if(res.sale_quantity_big_than_stock){ // لو كميه المنتج المباعه اكبر من المتوفره ف المخزن
-                                alert(res.sale_quantity_big_than_stock)
-                            
-                            }else{
+                            } else if (res.sale_quantity_big_than_stock) {
+                                alert(res.sale_quantity_big_than_stock);
+                            } else {
                                 alertify.confirm(
                                     'رائع <i class="fas fa-check-double text-success" style="margin: 0px 3px;"></i>', 
                                     `<span class="text-center">
                                         <span class="text-danger">تمت اضافة فاتورة المبيعات بنجاح</span>
                                         <strong class="d-block">هل تريد اضافه فاتورة مبيعات أخري</strong>
-                                    </span>`, 
-                                function(){                                
-                                    location.reload();
-    
-                                }, function(){ 
-                                    window.location.href = "{{ url('sales') }}";
-                                }).set({
-                                    labels:{
-                                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                                    </span>`,
+                                    function(){ location.reload(); },
+                                    function(){ window.location.href = "{{ url('sales') }}"; }
+                                ).set({
+                                    labels: {
+                                        ok: "نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
                                         cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
                                     }
                                 });
                             }
                         }
                     });
-
-                }, function(){
-
-                }).set({
-                    labels:{
-                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
-                        cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
-                    }
-                });
+                },
+                function() {}
+            ).set({
+                labels: {
+                    ok: "نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                    cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                }
             });
+        });
     </script>
+
     {{--  end when click finally_save_bill_btn to save bill --}}
     
 
     {{-- start general scripts --}}
     <script>
-
-        // start show div amount paid after select clients and treasury
-        $(document).on('input', '#treasuries, #clients', function(){
-            if( $('#treasuries').val() && $('#clients').val() ){
-                $("#amount_paid").fadeIn();
-
-            }else{            
-                $("#amount_paid").fadeOut();
-            }
-        });
-        
         $(document).on('input', '#clients', function(){
             if( $(this).val() ){
                 $("#modal_save_bill_footer").fadeIn();

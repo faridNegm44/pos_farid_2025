@@ -11,7 +11,7 @@
             <!-- Modal Body -->
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-5">
                         <div class="">
                             <label for="treasuries">خزائن النظام</label>
                             <div>    
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     
-                    <div class="col-lg-6">    
+                    <div class="col-lg-7">    
                         <ul class="list-unstyled" style=" padding: 0 !important;">
                             <li class="bg-success-gradient p-2 mb-2 rounded" style="color: #000;padding-bottom: 3px !important;">
                                 <span style="width: 110px;">إجمالي المرتجع:</span> <span style="margin: 0 10px;font-size: 20px;position: relative;top: -4px;" class="total_bill_after">0</span>
@@ -68,6 +68,7 @@
                                     <th>نوع الحساب</th>
                                     <th>عليه</th>
                                     <th>له</th>
+                                    <th>الفرق</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -75,6 +76,7 @@
                                     <td id="accountType">{{ $find[0]->type_payment }}</td>
                                     <td id="on_him">{{ $userInfo >= 0 ? display_number( floor( $userInfo * 100 ) / 100 ) : 0 }}</td>
                                     <td id="for_him">{{ $userInfo < 0 ? display_number( floor( $userInfo * 100 ) / 100 ) : 0 }}</td>
+                                    <td id="diff">100</td>
                                   </tr>
                                 </tbody>
                             </table>  

@@ -718,7 +718,7 @@
                 let totalAfterTax = totalAfterDiscount + taxAmount;
                 
                 // 5. تحديث إجمالي الصف
-                row.find('.prod_total').val( totalAfterTax.toFixed(3) );
+                row.find('.prod_total').val(display_number_js( totalAfterTax.toFixed(3) ) );
 
                 total += totalAfterTax;
                 subTotal += totalBeforeDiscount;
