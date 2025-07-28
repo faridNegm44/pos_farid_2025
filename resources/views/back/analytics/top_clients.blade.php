@@ -20,9 +20,9 @@
                 ajax: `{{ url($pageNameEn) }}`,
                 dataType: 'json',
                 columns: [
-                    {data: 'productId', name: 'productId'},
-                    {data: 'productNameAr', name: 'productNameAr'},
-                    {data: 'total_product', name: 'total_product'},
+                    {data: 'client_id', name: 'client_id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'client_total', name: 'client_total'},
                 ],
                 "bDestroy": true,
                 order: [[2, 'desc']],
@@ -60,8 +60,8 @@
                                 <thead class="bg bg-black-5">
                                     <tr>
                                         <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0" >اسم السلعة/الخدمة</th>
-                                        <th class="border-bottom-0">الكمية</th>
+                                        <th class="border-bottom-0" >اسم العميل</th>
+                                        <th class="border-bottom-0">إجمالي المشتريات</th>
                                     </tr>
                                 </thead>                                
                             </table>

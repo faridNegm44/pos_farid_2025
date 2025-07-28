@@ -61,56 +61,58 @@ use Illuminate\Support\Facades\DB;
 
 
 // start show الارقام العشريه
-if (!function_exists('display_number')) {
-    function display_number($number) {
-        // تأكد أنه رقم
-        if (!is_numeric($number)) {
-            return $number;
-        }
 
-        if (strpos($number, '.') !== false) {
-            // إذا كانت فقط .00 أو أصفار بعد الفاصلة
-            if (preg_match('/\.0+$/', $number)) {
-                return number_format((int)$number);
+    //if (!function_exists('display_number')) {
+    //    function display_number($number) {
+    //        // تأكد أنه رقم
+    //        if (!is_numeric($number)) {
+    //            return $number;
+    //        }
+
+    //        if (strpos($number, '.') !== false) {
+    //            // إذا كانت فقط .00 أو أصفار بعد الفاصلة
+    //            if (preg_match('/\.0+$/', $number)) {
+    //                return number_format((int)$number);
+    //            }
+
+    //            // إزالة الأصفار الزائدة بعد الفاصلة بدون تقريب
+    //            $trimmed = rtrim(rtrim($number, '0'), '.');
+    //            return number_format($trimmed, strlen(substr(strrchr($trimmed, '.'), 1)), '.', ',');
+    //        }
+
+    //        // رقم صحيح بدون فاصل عشري
+    //        return number_format($number);
+    //    }
+    //}
+
+    if (!function_exists('display_number')) {
+        function display_number($number) {
+            // تأكد أنه رقم
+            if (!is_numeric($number)) {
+                return $number;
             }
 
-            // إزالة الأصفار الزائدة بعد الفاصلة بدون تقريب
-            $trimmed = rtrim(rtrim($number, '0'), '.');
-            return number_format($trimmed, strlen(substr(strrchr($trimmed, '.'), 1)), '.', ',');
+            // تحويل إلى سلسلة نصية للتحقق من الفاصلة العشرية
+            $number_str = (string)$number;
+
+            if (strpos($number_str, '.') !== false) {
+                // فصل الأجزاء قبل وبعد الفاصلة
+                $parts = explode('.', $number_str);
+                $integer_part = $parts[0];
+                $decimal_part = substr($parts[1], 0, 2); // أخذ منزلتين عشريتين فقط
+                
+                // إعادة تجميع الرقم مع منزلتين عشريتين
+                $trimmed_number = $integer_part . '.' . $decimal_part;
+                
+                // تنسيق الرقم مع الفواصل كآلاف
+                return number_format((float)$trimmed_number, strlen($decimal_part), '.', ',');
+            }
+
+            // رقم صحيح بدون فاصل عشري
+            return number_format((float)$number);
         }
-
-        // رقم صحيح بدون فاصل عشري
-        return number_format($number);
     }
-}
 
-//if (!function_exists('display_number')) {
-//    function display_number($number) {
-//        // تأكد أنه رقم
-//        if (!is_numeric($number)) {
-//            return $number;
-//        }
-
-//        // تحويل إلى سلسلة نصية للتحقق من الفاصلة العشرية
-//        $number_str = (string)$number;
-
-//        if (strpos($number_str, '.') !== false) {
-//            // فصل الأجزاء قبل وبعد الفاصلة
-//            $parts = explode('.', $number_str);
-//            $integer_part = $parts[0];
-//            $decimal_part = substr($parts[1], 0, 2); // أخذ منزلتين عشريتين فقط
-            
-//            // إعادة تجميع الرقم مع منزلتين عشريتين
-//            $trimmed_number = $integer_part . '.' . $decimal_part;
-            
-//            // تنسيق الرقم مع الفواصل كآلاف
-//            return number_format((float)$trimmed_number, strlen($decimal_part), '.', ',');
-//        }
-
-//        // رقم صحيح بدون فاصل عشري
-//        return number_format((float)$number);
-//    }
-//}
 // end show الارقام العشريه
 
 
@@ -199,6 +201,8 @@ function topProductsInSales(){
 // end get last 5 products top sales => الأصناف الأكثر مبيعا
 
 
+
+
 // start get last 5 clients top purchases => العملاء الأكثر شراءا
 function topClientsPurchases(){
     $topClients = DB::table('sale_bills')
@@ -229,7 +233,7 @@ function totalExpensesToday(){
 
 
 
-// start => حساب الربحيه اليوم
+// start => حساب الربحيه اليوم - إجمالي المبيعات اليوم
 function totalProfitToday(){
     $totalProductsSellPriceToday = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->whereDate('created_at', Carbon::today())->sum('total_after'); 
     
@@ -255,7 +259,7 @@ function totalProfitToday(){
         'roundedProfit' => $roundedProfit
     ];
 }
-// end => حساب الربحيه اليوم
+// end => حساب الربحيه اليوم - إجمالي المبيعات اليوم
 
 
 

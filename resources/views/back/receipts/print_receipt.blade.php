@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{--<title>{{ $pageNameAr }} {{ $receiptBill[0]->id }} - {{ $receiptBill[0]->clientSupplierName }} - {{ $receiptBill[0]->created_at }}</title>--}}
 
-    <link rel="icon" href="{{ url('back') }}/images/settings/fiv.png" type="image/x-icon"/>
+    <link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>

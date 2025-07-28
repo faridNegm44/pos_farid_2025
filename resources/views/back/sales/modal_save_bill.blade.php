@@ -1,67 +1,55 @@
 <div class="modal fade" id="modal_save_bill" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
-
+        <div class="modal-content" style="border-radius: 18px; box-shadow: 0 4px 24px #b0ddc460; border: 2px solid #669f7c; background: #f6fbf8;">
             <!-- Modal Header -->
-            <div class="modal-header" style="position: relative;">
-                <h6 class="modal-title">
-                    حفظ فاتورة المبيعات
-                    <span style="color: red;font-size: 11px;margin: 0 5px;">
-                        ( يجب اختيار عميل وخزينة لعرض خانة المبلغ المستحق دفعة )
+            <div class="modal-header" style="position: relative; background: #669f7c; color: #fff; border-radius: 16px 16px 0 0; border-bottom: 2px solid #eeb50a;">
+                <h5 class="modal-title" style="font-weight: bold; letter-spacing: 1px;">
+                    <i class="fas fa-save"></i> حفظ فاتورة المبيعات
+                    <span style="color: #ffe5e5;font-size: 12px;margin: 0 5px;">
+                        (يجب اختيار عميل وخزينة لعرض خانة المبلغ المستحق دفعة)
                     </span>
-                </h6>
-                <button type="button" class="close" data-dismiss="modal" style="position: absolute;left: 4px;color: red;">&times;</button>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" style="position: absolute;left: 4px;color: #fff;opacity: 0.8;font-size: 2rem;">&times;</button>
             </div>
-
             <!-- Modal Body -->
             <div class="modal-body">
-                <div class="row">
+                <div class="row g-3">
+                    <!-- Col 1 -->
                     <div class="col-lg-4">
-                        <div class="">
-                            <label for="treasuries">خزائن النظام</label>
-                            <div>    
-                                <select name="treasury_id" class="form-control treasuries" id="treasuries">
-                                    <option value="" selected>اختر خزينة</option>
-                                    @foreach ($treasuries as $treasury)
-                                      <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ display_number($treasury->treasury_money_after) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="mb-3">
+                            <label for="treasuries" class="form-label" style="color:#437a5a;font-weight:bold;">خزائن النظام</label>
+                            <select name="treasury_id" class="form-control treasuries" id="treasuries" style="border: 1.5px solid #669f7c; background: #fff; color: #437a5a; font-weight: bold;">
+                                <option value="" selected>اختر خزينة</option>
+                                @foreach ($treasuries as $treasury)
+                                  <option value="{{ $treasury->id }}">{{ $treasury->name }} - {{ display_number($treasury->treasury_money_after) }}</option>
+                                @endforeach
+                            </select>
                             <bold class="text-danger" id="errors-treasuries" style="display: none;"></bold>
                         </div>
-                        
-                        <div id="amount_paid">
-                            <label for="amount_paid">المبلغ المدفوع</label>
-                            <div>    
-                                <input type="text" name="amount_paid" class="form-control focus_input numValid amount_paid" placeholder="المبلغ المدفوع" style="font-size: 18px !important;text-align: center;">
-                            </div>
+                        <div id="amount_paid" class="mb-3">
+                            <label for="amount_paid" class="form-label" style="color:#437a5a;font-weight:bold;">المبلغ المدفوع</label>
+                            <input type="text" name="amount_paid" class="form-control focus_input numValid amount_paid" placeholder="المبلغ المدفوع" style="font-size: 18px !important;text-align: center; border: 1.5px solid #eeb50a; background: #fffbe7; color: #b94a00; font-weight: bold;">
                             <bold class="text-danger" id="errors-amount_paid" style="display: none;"></bold>
                         </div>
-                        
-                        <div class="">
-                            <label for="custom_date">تاريخ الفاتورة</label>
-                            <div>    
-                                <input type="date" name="custom_date" class="form-control custom_date" id="custom_date" placeholder="تاريخ الفاتورة">
-                            </div>
+                        <div class="mb-3">
+                            <label for="custom_date" class="form-label" style="color:#437a5a;font-weight:bold;">تاريخ الفاتورة</label>
+                            <input type="date" name="custom_date" class="form-control custom_date" id="custom_date" placeholder="تاريخ الفاتورة" style="border: 1.5px solid #669f7c;">
                             <bold class="text-danger" id="errors-custom_date" style="display: none;"></bold>
                         </div>
-                        
-                        <div class="" style="margin-bottom: 15px;">
-                            <label for="notes">ملاحظات</label>
-                            <div>    
-                                <input type="text" name="notes" class="form-control notes" id="notes" placeholder="ملاحظات">
-                            </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label" style="color:#437a5a;font-weight:bold;">ملاحظات</label>
+                            <input type="text" name="notes" class="form-control notes" id="notes" placeholder="ملاحظات" style="border: 1.5px solid #b0ddc4;">
                             <bold class="text-danger" id="errors-notes" style="display: none;"></bold>
                         </div>
                     </div>
-                    
-                    <div class="col-lg-4">    
-                        <div style="border: 1px solid;padding: 30px 15px;border-radius: 10px;text-align: center;">
-                            <table class="table table-bordered table-striped text-center" id="client_table_info">
-                                <p class="text-start fs-5">
-                                    بيانات العميل: 
-                                    <span style="margin: 0 3px;display: inline;font-size: 15px;" class="text-danger" id="client_name"></span>
-                                </p>
+                    <!-- Col 2 -->
+                    <div class="col-lg-4">
+                        <div style="border: 2px solid #b0ddc4; background: #fff; padding: 24px 10px 18px 10px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px #b0ddc420;">
+                            <div class="mb-2 text-start fs-5" style="font-weight: bold; color: #437a5a;">
+                                <i class="fas fa-user-tie text-warning"></i> بيانات العميل:
+                                <span style="margin: 0 3px;display: inline;font-size: 15px;" class="text-danger" id="client_name"></span>
+                            </div>
+                            <table class="table table-bordered table-striped text-center mb-0" id="client_table_info" style="background: #f6fbf8;">
                                 <thead class="bg bg-black-5">
                                   <tr>
                                     <th>نوع الحساب</th>
@@ -76,47 +64,44 @@
                                     <td id="for_him">0</td>
                                   </tr>
                                 </tbody>
-                            </table>  
+                            </table>
                         </div>
                     </div>
-                    
-                    <div class="col-lg-4" style="margin-top: 11px;">    
-                        {{-- style="margin-bottom: 10px;display: none;" --}}
-                        <ul class="list-unstyled" style=" padding: 0 !important;">
-                            <li class="alert alert-outline-info p-2 mb-2 rounded" style="color: #000;padding-bottom: 3px !important;">
-                                <span style="width: 110px;"> إجمالي قبل:</span> <span style="margin: 0 10px;font-size: 15px;position: relative;top: -4px;text-decoration: line-through;" class="subtotal">0</span>
+                    <!-- Col 3 -->
+                    <div class="col-lg-4" style="margin-top: 11px;">
+                        <ul class="list-unstyled" style="padding: 0 !important;">
+                            <li class="alert alert-outline-info p-2 mb-2 rounded d-flex justify-content-between align-items-center" style="color: #000; background: #eaf7f0; border: 1.5px solid #669f7c;">
+                                <span><i class="fas fa-calculator text-secondary"></i> إجمالي قبل:</span>
+                                <span class="subtotal" style="margin: 0 10px;font-size: 15px;position: relative;top: -4px;text-decoration: line-through; color: #2980b9; font-weight: bold;">0</span>
                             </li>
-                            
-                            <li class="bg-success-gradient p-2 mb-2 rounded" style="color: #000;padding-bottom: 3px !important;">
-                                <span style="width: 110px;">المستحق دفعة:</span> <span style="margin: 0 10px;font-size: 20px;position: relative;top: -4px;" class="total_bill_after">0</span>
-                            </li>                            
-                                                            
-                            <li class="bg-warning-gradient p-2 mb-2 rounded" style="color: #000;padding-bottom: 3px !important;">
-                                <span style="width: 110px;">إجمالي المدفوع:</span> <span id="total_paid" style="margin: 0 10px;font-size: 15px;position: relative;top: -4px;">0 جنية</span>
+                            <li class="p-2 mb-2 rounded d-flex justify-content-between align-items-center" style="background: linear-gradient(90deg, #eaf7f0 60%, #eeb50a 100%); color: #3d2c13; border: 1.5px solid #eeb50a;">
+                                <span><i class="fas fa-money-bill-wave text-success"></i> المستحق دفعة:</span>
+                                <span class="total_bill_after" style="margin: 0 10px;font-size: 20px;position: relative;top: -4px; font-weight: bold; color: #b94a00;">0</span>
                             </li>
-                            
-                            <li class="bg-danger-gradient p-2 mb-2 rounded" style="color: #000;padding-bottom: 3px !important;">
-                                <span style="width: 110px;">المتبقي:</span> <span id="remaining" style="margin: 0 10px;font-size: 15px;position: relative;top: -4px;">0</span>
+                            <li class="p-2 mb-2 rounded d-flex justify-content-between align-items-center" style="background: #fffbe7; color: #b94a00; border: 1.5px solid #eeb50a;">
+                                <span><i class="fas fa-coins text-warning"></i> إجمالي المدفوع:</span>
+                                <span id="total_paid" style="margin: 0 10px;font-size: 15px;position: relative;top: -4px; font-weight: bold;">0 جنية</span>
+                            </li>
+                            <li class="p-2 mb-2 rounded d-flex justify-content-between align-items-center" style="background: #ffeaea; color: #b94a00; border: 1.5px solid #e74c3c;">
+                                <span><i class="fas fa-exclamation-triangle text-danger"></i> المتبقي:</span>
+                                <span id="remaining" style="margin: 0 10px;font-size: 15px;position: relative;top: -4px; font-weight: bold;">0</span>
                             </li>
                         </ul>
-                    </div>                
-
+                    </div>
+                    <!-- Footer -->
                     <div class="col-12" style="margin-top: 25px;" id="modal_save_bill_footer">
-                        <h3 class="alert-danger text-center" style="padding: 10px 20px;margin: 5px auto;display: none;">يجب اصلاح جميع أخطاء الفاتورة قبل الحفظ</h3>
-                        <div class="row justify-content-center">
-                            <button class="col-lg-4 col-12 btn btn-success-gradient btn-rounded" id="finally_save_bill_btn" style="font-size: 14px;color: #000;">
-                                حفظ الفاتورة                            
+                        <h3 class="alert-danger text-center" style="padding: 10px 20px;margin: 5px auto;display: none; border-radius: 8px;">يجب اصلاح جميع أخطاء الفاتورة قبل الحفظ</h3>
+                        <div class="row justify-content-center g-2">
+                            <button class="col-lg-4 col-12 btn btn-success-gradient btn-rounded" id="finally_save_bill_btn" style="font-size: 15px;color: #000; font-weight: bold;">
+                                <i class="fas fa-save"></i> حفظ الفاتورة                            
                             </button>
-            
-                            <button class="col-lg-4 col-12 btn btn-primary-gradient btn-rounded" id="finally_save_bill_and_print_btn" style="font-size: 14px;color: #000;">
-                                حفظ وطباعة
+                            <button class="col-lg-4 col-12 btn btn-primary-gradient btn-rounded" id="finally_save_bill_and_print_btn" style="font-size: 15px;color: #000; font-weight: bold;">
+                                <i class="fas fa-print"></i> حفظ وطباعة
                             </button>
-
-                            <button class="col-lg-4 col-12 btn btn-secondary-gradient btn-rounded" style='font-size: 14px;color: #000;' data-dismiss="modal">
-                                إغلاق
+                            <button class="col-lg-4 col-12 btn btn-secondary-gradient btn-rounded" style='font-size: 15px;color: #000; font-weight: bold;' data-dismiss="modal">
+                                <i class="fas fa-times"></i> إغلاق
                             </button>
                         </div>
-
                     </div>
                 </div>
             </div>

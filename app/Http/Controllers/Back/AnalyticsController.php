@@ -34,7 +34,7 @@ class AnalyticsController extends Controller
                         'products.nameAr as productNameAr',
                         'products.id as productId',
                     )
-                    ->orderBy('total_product', 'desc')
+                    //->orderBy('total_product', 'desc')
                     ->get();
 
         return DataTables::of($all)
@@ -49,6 +49,47 @@ class AnalyticsController extends Controller
     }
     /////////////////////////////////////////////////////////////////////////////////////// 
     ////////////////////////// End Analytics ( Top Products ) ////////////////////////// 
+    ////////////////////////////////////////////////////////////////////////////////////// 
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////// 
+    ////////////////////////// Start Analytics ( Top Clients ) ///////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////// 
+    public function index_top_clients()
+    {            
+        $pageNameAr = 'العملاء الأكثر والأقل شراءً ';
+        $pageNameEn = 'analytics/datatable_top_clients';
+
+        return view('back.analytics.top_clients' , compact('pageNameAr' , 'pageNameEn'));                           
+    }
+
+    public function datatable_top_clients()
+    {
+        $all = DB::table('sale_bills')
+                    ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                    ->groupBy('sale_bills.client_id')
+                    ->select(
+                        'client_id', 
+                        DB::raw('SUM(total_bill_after) as client_total'),
+                        'clients_and_suppliers.name'
+                    )
+                    ->get();
+
+        return DataTables::of($all)
+            ->addColumn('name', function($res){
+                return '<strong>'.$res->name.'</strong>';
+            })
+            ->addColumn('client_total', function($res){
+                return '<strong>'.round($res->client_total, 2).'</strong>';
+            })
+            ->rawColumns(['name', 'client_total'])
+            ->toJson();
+    }
+    /////////////////////////////////////////////////////////////////////////////////////// 
+    ////////////////////////// End Analytics ( Top Clients ) /////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////// 
 
 }

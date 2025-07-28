@@ -149,6 +149,9 @@
                             <li aria-haspopup="true"><a href="#" class="slide-item text-dark">تصدير ديون العملاء إلي ملف إكسيل</a></li>--}}
 
                             <hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('sales/sales-summary/report') }}" class="slide-item text-dark">تقرير إجمالي المبيعات خلال فترة</a></li>
+
+                            <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('products/report/stock_alert') }}" class="slide-item text-dark">كشكول النواقص</a></li>
 
                             {{--<li aria-haspopup="true"><a href="{{ url('/') }}" class="slide-item text-dark">فاتورة مبيعات</a></li>

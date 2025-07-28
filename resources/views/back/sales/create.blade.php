@@ -3,8 +3,8 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <head>
 
-		<meta charset="UTF-8">
-		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+        <meta charset="UTF-8">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
         <!-- Title -->
@@ -94,7 +94,7 @@
             }
 
         </style>
-	</head>
+    </head>
 
     @include('back.bills_css_js.css_js.main_css')
 
@@ -141,7 +141,7 @@
                         </div>
                         
                         <div class="col-lg-1" style="margin-bottom: 8px;">
-                            <input type="text" class="form-control" id="custom_bill_num" name="custom_bill_num" placeholder="رقم فاتورة مخصص" value="">
+                            <input type="text" class="form-control" id="custom_bill_num" name="custom_bill_num" placeholder="رقم مخصص" value="">
                         </div>
                         
                         
@@ -165,84 +165,77 @@
                     <div class="row"> 
     
                         <div class="col-lg-4 product-selection p-3 total_info" style="background: #70a584;">
-                            <div class="text-center" style="text-decoration: underline;background: rgb(66 112 81);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                            <div class="text-center mb-2" style="text-decoration: underline;background: #315c3a;color: #FFF;padding: 7px 10px;border-radius: 5px;margin: 0 auto;">
                                 {{ $pageNameAr }}
                                 <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ ($lastBillNum+1) }}</span>
                             </div>
-                            
-                            <div class="text-center" id="date_time" style="font-size: 25px !important;margin-top: 10px;">
-                                <span class="badge badge-light" id="date"></span>
-                                <span class="badge badge-danger mx-2" id="time"></span>
+                            <div class="text-center" id="date_time" style="font-size: 22px !important;margin-top: 8px;">
+                                <span class="badge bg-light text-dark" id="date"></span>
+                                <span class="badge bg-success mx-2" id="time"></span>
                             </div>
-        
                             <br>
-        
-                            <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #cccccc;background-color: #ededed;">
-                                <div class="row">
-                                    @if (userPermissions()->tax_bill_view)                                        
-                                        <p class="col-lg-6 col-12">
-                                            <label for="">
-                                                ضريبة ق م (%)
+                            <div class="total-bar p-2" style="border: 2px solid #b0ddc4; background: #f6fbf8; border-radius: 8px;">
+                                <div class="row g-2 align-items-center">
+                                    @if (userPermissions()->tax_bill_view)
+                                        <div class="col-lg-6 col-12 mb-2">
+                                            <label for="tax_bill" style="font-size:13px; color:#437a5a; font-weight: bold;">
+                                                <i class="fas fa-percent text-success"></i> ضريبة ق م
                                                 <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
                                             </label>
-                                            <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
-                                        </p>
-                                    @endif                                    
-                                                                        
-                                    <p class="col-lg-6 col-12">
-                                        <label for="">
-                                            خصم قيمة
+                                            <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 13px; background: #fff; border: 1.5px solid #669f7c; color: #437a5a; font-weight: bold;" />
+                                        </div>
+                                    @endif
+                                    <div class="col-lg-6 col-12 mb-2">
+                                        <label for="bill_discount" style="font-size:13px; color:#437a5a; font-weight: bold;">
+                                            <i class="fas fa-tags text-warning"></i> خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" />
-                                    </p>
-                                    
-                                    <div class="col-12">
-                                        <label for="extra_money_type" class="form-label">
-                                            مصاريف إضافية
+                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 13px; background: #fff; border: 1.5px solid #eeb50a; color: #b94a00; font-weight: bold;" />
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <label for="extra_money_type" class="form-label" style="color:#437a5a; font-weight: bold;">
+                                            <i class="fas fa-wallet text-info"></i> مصاريف إضافية
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
                                         </label>
-                                    
-                                        <div class="row">
-                                            <div class="col-md-7 mb-2">
-                                                <select class="form-control" name="extra_money_type" id="extra_money_type">
+                                        <div class="row g-2">
+                                            <div class="col-md-7">
+                                                <select class="form-control" name="extra_money_type" id="extra_money_type" style="border: 1.5px solid #669f7c;">
                                                     <option value="" selected>اختر مصروف إضافي</option>
                                                     @foreach ($extra_expenses as $item)
                                                         <option value="{{ $item->id }}">{{ $item->expense_type }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
-                                    
                                             <div class="col-md-5">
-                                                <input autocomplete="off" type="text" class="form-control text-center numValid focus_input" 
-                                                       id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" />
+                                                <input autocomplete="off" type="text" class="form-control text-center numValid focus_input" id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 13px; background: #fff; border: 1.5px solid #669f7c; color: #437a5a; font-weight: bold;" />
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                
-                                    <p class="col-6" id="countTableTr" style="font-size: 13px;">
-                                        عدد العناصر:
-                                        <span style="font-size: 16px;">0</span>
-                                    </p>
-                                    <p class="col-6" style="font-size: 13px;font-size: 14px;">
-                                        الإجمالي قبل: 
-                                        <span style="font-size: 16px;" class="subtotal">0</span>
-                                    </p>
-
-                                    <p class="col-lg-12">
-                                        <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
-                                            <span style="font-size: 12px;">الإجمالي المستحق: </span>
-                                            <span style="font-size: 24px;" class="total_bill_after">0.00</span>
+                                    <div class="col-12 mb-1" id="countTableTr" style="font-size: 14px; color:#437a5a; font-weight: bold;">
+                                        <i class="fas fa-list-ol text-primary"></i> عدد العناصر:
+                                        <span style="font-size: 18px; color:#e67e22; font-weight: bold;">0</span>
+                                    </div>
+                                    <div class="col-12 mb-2" style="font-size: 14px; color:#437a5a; font-weight: bold;">
+                                        <i class="fas fa-calculator text-secondary"></i> الإجمالي قبل:
+                                        <span style="font-size: 18px; color:#2980b9; font-weight: bold;" class="subtotal">1200.80</span>
+                                        <span style="font-size: 15px; color: #7a5a1a;">جنيه</span>
+                                    </div>
+                                    <div class="col-12">
+                                        <div style="width: 98%;background: linear-gradient(90deg, #eaf7f0 60%, #eeb50a 100%);color: #3d2c13;padding: 14px 0 10px 0; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px #eeb50a40; border: 1.5px solid #eeb50a; margin: auto;">
+                                            <span style="font-size: 15px; font-weight: bold; letter-spacing: 1px; color: #7a5a1a;">
+                                                 الإجمالي المستحق:
+                                            </span>
+                                            <span class="total_bill_after" style="font-size: 28px; font-weight: bold; color: #b94a00; margin: 0 10px; letter-spacing: 1px;">0.00</span>
+                                            <span style="font-size: 15px; color: #7a5a1a;">جنيه</span>
                                         </div>
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
     
     
     
-                        <div class="col-lg-8" style="height: 70vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat;">
+                        <div class="col-lg-8" style="height: 70vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center center;">
                             <table class="table table-hover table-bordered" id="products_table">
                                 <thead class="bg bg-black-5">
                                     <tr>
@@ -257,7 +250,7 @@
                                         </th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">خصم%</th>                                                                                        
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ضريبة%</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;display: none;">ضريبة%</th>
                                         <th class="nowarp_thead" style="width: 150px !important;min-width: 150px !important;">الإجمالي</th>
                                     </tr>
                                 </thead>
@@ -573,14 +566,14 @@
                     // بدايه التاكد لو في صلاحيه للمستخدم ع الضريبة
                     if(@json(userPermissions()->tax_bill_view)){
                         var tax_permissions = `
-                            <td>
+                            <td style="display: none;">
                                 <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}">
                                 <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
                                 <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
                             </td>`;
                     }else{
                         var tax_permissions = `
-                            <td>
+                            <td style="display: none;">
                                 <input readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}">
                                 <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
                                 <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
@@ -731,8 +724,8 @@
             let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money);    
 
             // عرض الإجمالي الكلي في الـ div
-            $('.subtotal').text( parseFloat(subTotal).toLocaleString() + ' جنية');
-            $('.total_bill_after').text( afterExtraMoney + ' جنية');
+            $('.subtotal').text( parseFloat(subTotal).toLocaleString());
+            $('.total_bill_after').text( afterExtraMoney);
             $('#remaining').text( parseFloat(afterExtraMoney).toLocaleString() + ' جنية'); 
 
 

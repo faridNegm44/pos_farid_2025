@@ -46,7 +46,7 @@
         $(document).on('click', '#print_report', function(e) {
             e.preventDefault();
             let formData = $("form").serialize();
-            let printUrl = "{{ url('expenses/report/result/pdf') }}?" + formData;
+            let printUrl = "{{ url('sales/sales-summary/report/result/pdf') }}?" + formData;
 
             window.open(printUrl);
         });
@@ -74,24 +74,25 @@
             </div>
         @endif
         
-        <div class="card bg" style="padding: 20px 0 !important;background-image: linear-gradient(to left, #dfe2e6, #4e9eb5) !important;" style="padding: 20px 0 !important;">
+        <div class="card bg" style="padding: 20px 0 !important;background-image: linear-gradient(to left, #dfe2e6, #4e9eb5) !important;">
             <div class="card-body">
-                <form method="get" action="{{ url('expenses/report/result') }}">
+                <form>
                     @csrf
-                    <div class="row justify-content-center">
+                    <div class="row justify-content-center">          
                         <div class="col-md-2">
-                            <label for="treasury">الخزن المالية</label>
+                            <label for="print_products" style="font-weight: bold;">
+                                🖨️ طباعة الأصناف
+                            </label>
                             <div>
-                                <select  name="treasury" class="treasury selectize" id="treasury">
-                                    <option value="" selected>اختر خزينة</option>                              
-                                    @foreach ($treasuries as $treasury)
-                                      <option value="{{ $treasury->id }}">{{ $treasury->id }} - {{ $treasury->name }}</option>                              
-                                    @endforeach
+                                <select name="print_products" class="print_products form-control" id="print_products">
+                                    <option value="لاء">❌ لا</option>                              
+                                    <option value="نعم">✅ نعم</option>                              
                                 </select>
                             </div>
-                            <bold class="text-danger" id="errors-treasury" style="display: none;"></bold>
-                        </div>    
-                                        
+                            <small id="errors-print_products" class="text-danger" style="display: none;"></small>
+                        </div>
+    
+
                         <div class="col-md-2">
                             <label for="from">من</label>
                             <div>
@@ -104,14 +105,6 @@
                             <label for="to">الي</label>
                             <div>
                                 <input type="text" class="form-control dataInput datePicker" placeholder="الي" id="to" name="to">
-                            </div>
-                            <bold class="text-danger" id="errors-to" style="display: none;"></bold>
-                        </div>    
-
-                        <div class="col-md-1">
-                            <label for="to">عرض</label>
-                            <div>
-                                <button type="submit" class="btn btn-primary btn-block" style="height: 30px;padding: 0 20px !important;">عرض</button>
                             </div>
                             <bold class="text-danger" id="errors-to" style="display: none;"></bold>
                         </div>    

@@ -1,7 +1,7 @@
 @extends('back.layouts.app')
 
 @section('title')
-    الرئيسية
+	الرئيسية
 @endsection
 
 @section('header')
@@ -15,8 +15,8 @@
 			padding: 5px !important;
 		}
 		.ajs-success, .ajs-error{
-            min-width: 450px !important;
-        }
+			min-width: 450px !important;
+		}
 		.dashboard-card {
 			transition: all 0.3s ease-in-out;
 			cursor: pointer;
@@ -32,7 +32,11 @@
 		.dashboard-card:hover i {
 			transform: scale(1.2) translateY(-3px);
 		}
-
+		#first_section .card:hover {
+			transform: scale(1.1) translateY(-6px);
+			box-shadow: 10px 8px 16px rgba(0, 0, 0, 0.15);
+			transition: transform 0.5s ease;
+		}
 		.dashboard-card i {
 			transition: transform 0.3s ease;
 		}
@@ -77,14 +81,14 @@
 @section('content')
 	<div class="container-fluid">
 		<!-- breadcrumb -->
-        <div class="breadcrumb-header justify-content-between">
-            <div class="my-auto">
-                {{--<div class="d-flex">
-                    <h4 class="content-title mb-0 my-auto">{{ auth()->user()->name }}</h4>
-                </div>--}}
-            </div>
-        </div>
-        <!-- breadcrumb -->
+		<div class="breadcrumb-header justify-content-between">
+			<div class="my-auto">
+				{{--<div class="d-flex">
+					<h4 class="content-title mb-0 my-auto">{{ auth()->user()->name }}</h4>
+				</div>--}}
+			</div>
+		</div>
+		<!-- breadcrumb -->
 
 
 		{{--<h1>
@@ -212,10 +216,10 @@
 							<div class="col-9">
 								<div class="mt-0 text-center">
 									<span class="text-white" style="font-size: 11px;">
-										<a class="text-white" href="{{ url('sales') }}" target="_blank">إجمالي المبيعات اليوم</a>
+										<a class="text-white">إجمالي المبيعات اليوم</a>
 									</span>
 									<h4 class="text-white mb-0">
-										<a class="text-white" href="{{ url('sales') }}" target="_blank">
+										<a class="text-white">
 											{{ display_number( totalProfitToday()['totalProductsSellPriceToday'] ?? 0 ) }}
 										</a>
 									</h4>
@@ -290,9 +294,9 @@
 								</div>
 								<div class="col-9">
 									<div class="mt-0 text-center">
-										<span class="text-white" style="font-size: 11px;">
+										<span class="text-white" style="font-size: 10px;">
 											<a class="text-white" href="{{ url('clients/report/clients_debt') }}" target="_blank">
-												ديون العملاء (عليهم فلوس)
+												ديون لينا (علي العملاء)
 											</a>
 										</span>
 										<h4 class="text-white mb-0">
@@ -320,7 +324,7 @@
 								</div>
 								<div class="col-9">
 									<div class="mt-0 text-center">
-										<span class="text-white" style="font-size: 11px;">
+										<span class="text-white" style="font-size: 10px;">
 											<a class="text-white" href="{{ url('suppliers/report/suppliers_debt') }}" target="_blank">
 												ديون علينا  (لصالح الموردين)
 											</a>
@@ -426,7 +430,7 @@
 			{{-- العملاء الأكثر شراءً --}}
 			<div class="col-md-12 col-lg-3 col-xl-3">
 				<div class="card card-dashboard-eight pb-2">
-					<span class="d-block mg-b-10 tx-12 text-danger">
+					<span class="d-block mg-b-10 tx-10 text-danger">
 						🛍️ العملاء الأكثر شراءً
 						<a href="{{ url('analytics/top_clients') }}" target="_blank" class="btn btn-sm btn-outline-info">تفاصيل أكثر 🔍</a>
 					</span>
@@ -441,13 +445,21 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach (topClientsPurchases() as $client)
-									<tr>
-										<th scope="row">{{ $client->client_id }}</th>
-										<td>{{ $client->name }}</td>
-										<td>{{ display_number($client->client_total) }}</td>
-									</tr>									
-								@endforeach							
+								@foreach (topClientsPurchases() as $k => $client)
+									<tr @if($k==0) style="background:#e3f7e3;font-weight:bold;" @endif>
+										<th scope="row">
+											<span class="badge badge-info" style="font-size:110% !important;">{{ $client->client_id }}</span>
+										</th>
+										<td>
+											<span class="badge badge-secondary"></span> {{ $client->name }}
+										</td>
+										<td>
+											<span class="badge badge-success" style="font-size:110% !important;">
+												<i class="fas fa-shopping-basket"></i> {{ display_number($client->client_total) }}
+											</span>
+										</td>
+									</tr>
+								@endforeach                           
 							</tbody>
 						</table>	
 
@@ -467,7 +479,7 @@
 			{{-- السلعة/الخدمات الأكثر مبيعاً --}}
 			<div class="col-md-12 col-lg-3 col-xl-3">
 				<div class="card card-dashboard-eight pb-2">
-					<span class="d-block mg-b-10 tx-12 text-danger">
+					<span class="d-block mg-b-10 tx-10 text-danger">
 						🛒 السلع/الخدمات الأكثر مبيعاً
 						<a href="{{ url('analytics/top_products') }}" target="_blank" class="btn btn-sm btn-outline-info ">تفاصيل أكثر 🔍</a>
 					</span>
@@ -482,13 +494,21 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach (topProductsInSales() as $product)
-									<tr>
-										<th scope="row">{{ $product->productId }}</th>
-										<td>{{ $product->productNameAr }}</td>
-										<td>{{ display_number($product->total_product) }}</td>
-									</tr>									
-								@endforeach							
+								@foreach (topProductsInSales() as $k => $product)
+									<tr @if($k==0) style="background:#e3f7e3;font-weight:bold;" @endif>
+										<th scope="row">
+											<span class="badge badge-info" style="font-size:110% !important;">{{ $product->productId }}</span>
+										</th>
+										<td>
+											<span class="badge badge-secondary"></span> {{ $product->productNameAr }}
+										</td>
+										<td>
+											<span class="badge badge-success" style="font-size:110% !important;">
+												<i class="fas fa-chart-line"></i> {{ display_number($product->total_product) }}
+											</span>
+										</td>
+									</tr>
+								@endforeach                           
 							</tbody>
 						</table>	
 
@@ -507,7 +527,7 @@
 			{{-- أخر فواتير بيع تمت --}}
 			<div class="col-md-12 col-lg-6 col-xl-6">
 				<div class="card card-table-two">
-					<span class="tx-12 tx-muted mb-3 text-danger">
+					<span class="tx-10 tx-muted mb-3 text-danger">
 						📋 أحدث فواتير البيع
 						<a href="{{ url('sales') }}" target="_blank" class="btn btn-sm btn-outline-info">تفاصيل أكثر 🔍</a>
 					</span>
@@ -517,44 +537,49 @@
 							<table class="table table-bordered table-hover text-center">
 								<thead class="bg bg-black-5">
 									<tr>
-										<th class="">#</th>
-										<th class="wd-lg-20p">ت الفاتورة</th>
-										<th class="wd-lg-25p">العميل</th>
-										<th class="">عدد</th>
-										<th class="wd-lg-20p ">إجمالي</th>
-										<th class="">عرض</th>
+										<th>#</th>
+										<th>ت الفاتورة</th>
+										<th>العميل</th>
+										<th>عدد</th>
+										<th>إجمالي</th>
+										<th>عرض</th>
 									</tr>
 								</thead>
 								<tbody>
 									@foreach (getLastSaleBills() as $item)
 										<tr>
-											<td>{{ $item->id }}</td>
-											<td style="font-size: 9px !important;">
-												{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}
-												<span style="margin: 0 2px;color: red;">
-													{{ \Carbon\Carbon::parse($item->created_at)->format('h:i:s a') }}
-												</span>
+											<td>
+												<span class="badge badge-info" style="font-size: 110% !important;">{{ $item->id }}</span>
 											</td>
-											<td><a href="{{ url('sales/report/print_receipt/'.$item->id) }}" class="tx-primary">{{ $item->clientName }}</a></td>
-											<td class="tx-medium tx-danger">{{ display_number( $item->count_items ) }}</td>
-											<td class="tx-medium tx-inverse">	
-												@if ($item->total_bill_before == $item->total_bill_after)
-													<span class="" style="font-size: 12px !important;">
-														{{ display_number( $item->total_bill_after ) }}
-													</span>
-													
-												@else
-													<span class="text-muted" style="font-size: 10px !important;">
-														قبل: {{ display_number( $item->total_bill_before ) }}
-													</span>
-
-													<span class="" style="font-size: 12px !important;">
-														بعد: {{ display_number( $item->total_bill_after ) }}
-													</span>
-												@endif											
+											<td style="font-size: 10px !important;">
+												<div style="display:flex;align-items:center;gap:7px;justify-content:center;">
+													<span class="badge badge-dark text-white" style="font-size: 100% !important;"><i class="fas fa-calendar-alt"></i> {{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</span>
+													<span class="badge badge-secondary text-white" style="font-size: 100% !important;"><i class="fas fa-clock"></i> {{ \Carbon\Carbon::parse($item->created_at)->format('h:i:s a') }}</span>
+												</div>
 											</td>
 											<td>
-												<a target="_blank" class="btn btn-sm btn-outline-primary" href="{{ url('sales/report/print_receipt/'.$item->id) }}" style="height: 20px;line-height: 10px;">عرض</a>
+												<a href="{{ url('sales/report/print_receipt/'.$item->id) }}" class="tx-primary">
+													<span class="badge badge-secondary"><i class="fas fa-user"></i></span> {{ $item->clientName }}
+												</a>
+											</td>
+											<td>
+												<span class="badge badge-dark">{{ number_format( $item->count_items ) }}</span>
+											</td>
+											<td>
+												@if ($item->total_bill_before == $item->total_bill_after)
+													<span class="badge badge-success text-white" style="font-size: 95% !important;padding:7px 12px;"><i class="fas fa-receipt"></i> {{ display_number( $item->total_bill_after ) }}</span>
+												@else
+													<div style="display:flex;align-items:center;gap:7px;justify-content:center;">
+														<span class="badge badge-danger text-white" style="font-size: 95% !important;padding:7px 12px;"><i class="fas fa-arrow-down"></i> قبل: {{ display_number( $item->total_bill_before ) }}</span>
+
+														<span class="badge badge-success text-white" style="font-size: 95% !important;padding:7px 12px;"><i class="fas fa-arrow-up"></i> بعد: {{ display_number( $item->total_bill_after ) }}</span>
+													</div>
+												@endif
+											</td>
+											<td>
+												<a target="_blank" class="btn btn-sm btn-outline-primary" href="{{ url('sales/report/print_receipt/'.$item->id) }}" style="height: 20px;line-height: 10px;">
+													<i class="fas fa-eye"></i> عرض
+												</a>
 											</td>
 										</tr>
 									@endforeach

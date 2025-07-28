@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{--<title>{{ $nameAr }} - {{ $find[0]->first_name }} {{ $find[0]->last_name }} - {{ \Carbon\Carbon::parse($find[0]->orderCreatedAt)->format('d-m-Y h:i a') }}</title>--}}
-    <title>{{ $pageNameAr }} {{ $saleBill[0]->id }} - {{ $saleBill[0]->clientName }} - {{ $saleBill[0]->created_at }}</title>
+    <title>
+        {{ $pageNameAr }} 
+        {{ $saleBill[0]->id }} 
+        {{ $saleBill[0]->status == 'فاتورة ملغاة' ? ' - ' .$saleBill[0]->status : '' }} - 
+        {{ $saleBill[0]->clientName }} - 
+        {{ $saleBill[0]->created_at }}
+    </title>
 
-    <link rel="icon" href="{{ url('back') }}/images/settings/fiv.png" type="image/x-icon"/>
+    <link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -78,7 +84,28 @@
             <div class="invoice-title">
                 <h4 class="text-center" style="font-weight: bold;font-size: 15px;margin: 3px !important;">
                     <b style="display: block;">{{ GeneralSettingsInfo()->app_name }}</b>
-                    رقم الفاتورة: {{ $saleBill[0]->id }}
+                    @php
+                        $bill_status_raw = $saleBill[0]->status;
+                        $bill_status = $bill_status_raw;
+                        $status_color = '';
+                        $status_style = '';
+                        
+                        if($bill_status_raw == 'فاتورة ملغاة') {
+                            $status_color = 'danger';
+                            $status_style = 'background: linear-gradient(90deg,#ffbcbc 0%,#ffeded 100%); color:#b30000; font-weight:bold; padding:2px 8px; border-radius:6px;';
+                        } elseif($bill_status_raw == 'فاتورة نشطة') {
+                            $status_color = 'success';
+                            $status_style = 'background: linear-gradient(90deg,#c6f7d4 0%,#eafff2 100%); color:#008c3c; font-weight:bold; padding:2px 8px; border-radius:6px;';
+                        } elseif($bill_status_raw == 'فاتورة معلقة') {
+                            $status_color = 'warning';
+                            $status_style = 'background: linear-gradient(90deg,#fff3cd 0%,#fffbe6 100%); color:#b8860b; font-weight:bold; padding:2px 8px; border-radius:6px;';
+                        } else {
+                            $status_color = 'info';
+                            $status_style = 'background: linear-gradient(90deg,#d1ecf1 0%,#f8f9fa 100%); color:#0c5460; font-weight:bold; padding:2px 8px; border-radius:6px;';
+                        }
+                        $bill_status = '<span class="text-' . $status_color . '" style="' . $status_style . '">' . $bill_status_raw . '</span>';
+                    @endphp
+                    رقم الفاتورة: {{ $saleBill[0]->id }} {!! $bill_status_raw == 'فاتورة ملغاة' ? ' - '. $bill_status : '' !!}
                 </h4>
             </div>
             <br>
@@ -87,7 +114,7 @@
                 <div class="col-xs-5 text-right">       
                     <ul style="font-size: 12px;">             
                         <li>اسم البائع: <b>{{ auth()->user()->name  }}</b></li>
-                        <li>رقم فني التركيب: <b>0123456789</b></li>
+                        <li>رقم فني التركيب: <b>01002101763</b></li>
                         <li>تاريخ الطباعة: <b style="font-size: 9px;">{{ date('Y-m-d h:i:s a') }}</b></li>  
                     </ul>
                 </div>
@@ -109,28 +136,22 @@
 
         {{-- start table client info --}}
         <table class="table table-striped table-bordered">
-            <thead class="bg bg-black-5">
-                <tr>
-                    <th class="text-center">الإسم</th>
-                    {{--<th class="text-center">المحافظة</th>--}}
-                    <th class="text-center">العنوان</th>
-                    <th class="text-center">الهاتف</th>
-                    <th class="text-center">عدد الأصناف</th>
-                    {{--<th class="text-center">طريقة الدفع</th>--}}
-                    {{--<th class="text-center">ملاحظات</th>--}}
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-center" style="font-weight: bold;">{{ $saleBill[0]->clientName }}</td>
-                    {{--<td class="text-center" style="font-weight: bold;">{{ $find[0]->city }}</td>--}}
-                    <td class="text-center">{{ $saleBill[0]->clientAddress }}</td>
-                    <td class="text-center">{{ $saleBill[0]->clientPhone }}</td>                
-                    <td class="text-center">{{ display_number( $saleBill[0]->count_items ) }}</td>
-                    {{--<td class="text-center">{{ $find[0]->payment_method }}</td>--}}
-                    {{--<td class="text-center">{{ $find[0]->notes }}</td>--}}
-                </tr>
-            </tbody>
+        <thead style="background: linear-gradient(90deg,#f8f9fa 0%,#e9ecef 100%);">
+            <tr>
+                <th class="text-center" style="font-size:15px;color:#333;border-right:2px solid #bbb;">الإسم</th>
+                <th class="text-center" style="font-size:15px;color:#333;border-right:2px solid #bbb;">العنوان</th>
+                <th class="text-center" style="font-size:15px;color:#333;border-right:2px solid #bbb;">الهاتف</th>
+                <th class="text-center" style="font-size:15px;color:#333;">عدد الأصناف</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color:#f7f7f7;">
+                <td class="text-center" style="font-weight: bold;font-size:14px;">{{ $saleBill[0]->clientName }}</td>
+                <td class="text-center" style="font-size:13px;">{{ $saleBill[0]->clientAddress }}</td>
+                <td class="text-center" style="font-size:13px;">{{ $saleBill[0]->clientPhone }}</td>
+                <td class="text-center" style="font-size:13px;">{{ display_number( $saleBill[0]->count_items ) }}</td>
+            </tr>
+        </tbody>
         </table>
         {{-- end table client info --}}
 
@@ -197,7 +218,7 @@
                 @if ($saleBill[0]->total_bill_before != $saleBill[0]->total_bill_after)
                     <tr>
                         <th class="text-right" style="padding-right: 10px !important;">قيمة خصم الأصناف</th>
-                        <td class="text-right" style="padding-right: 10px !important;">
+                        <td class="text-right" style="padding-right: 10px !important;"> - 
 
                             {{ display_number( $saleBill[0]->total_bill_before - (  $saleBill[0]->total_bill_after - $saleBill[0]->extra_money ?? 0 ) - $saleBill[0]->bill_discount ) }} جنية
                         </td>
@@ -205,7 +226,7 @@
                     @if ($saleBill[0]->bill_discount)
                         <tr>
                             <th class="text-right" style="padding-right: 10px !important;">خصم إضافي علي الفاتورة</th>
-                            <td class="text-right" style="padding-right: 10px !important;">
+                            <td class="text-right" style="padding-right: 10px !important;"> - 
 
                                 {{ display_number( $saleBill[0]->bill_discount ) }} جنية
                             </td>
@@ -248,7 +269,7 @@
 
         <div class="text-center" style="font-weight: bold;font-size: 11px;padding-bottom: 20px;">
             <p style="padding: 0 0 3px !important;margin: 0 !important;">للتحويل انستاباي / 01002101763</p>
-            <p style="margin: 0 !important;">للتحويل فودافون كاش علي الأرقام التالية / 01014490673 / 01027453730</p>
+            <p style="margin: 0 !important;">للتحويل فودافون كاش علي الأرقام التالية / 01014490673</p>
         </div>
         
         <!-- Company Info -->
@@ -257,6 +278,15 @@
             <span>01117903055 - 01012775704</span>
         </div>
     </div>
+
+
+    <script>
+        let $saleBill = @json($saleBill[0]->status);
+        if($saleBill == 'فاتورة ملغاة') {
+            alert('⚠️ لا يمكن تنفيذ عملية الطباعة، حيث أن هذه الفاتورة تم إلغاؤها سابقًا.');
+            window.close();
+        }
+    </script>
 
     <script> window.print(); </script>
 </body>

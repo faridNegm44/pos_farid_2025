@@ -370,18 +370,26 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/edit/{id}' , 'SaleBillController@edit');
         Route::get('/show/{id}' , 'SaleBillController@show');
         Route::post('/update/{id}' , 'SaleBillController@update');
-        Route::get('/destroy/{id}' , 'SaleBillController@destroy');
+
+        Route::get('/destroy_bill/{id}' , 'SaleBillController@destroy_bill'); //  حذف الفاتورة كاملة
+        Route::post('/update_product_from_bill/{id}' , 'SaleBillController@update_product_from_bill'); // تعديل صنف من أصناف الفاتورة
+        Route::get('/destroy_product_from_bill/{id}' , 'SaleBillController@destroy_product_from_bill'); // حذف صنف من أصناف الفاتورة
         
         Route::get('datatable' , 'SaleBillController@datatable');
         
         //تقرير عن فواتير مبيعات  
         Route::group(['prefix' => 'report'] , function (){
-            Route::get('/' , 'ReportsSaleBillsController@index');
-            Route::get('result' , 'ReportsSaleBillsController@result');
-            Route::get('result/pdf' , 'ReportsSaleBillsController@result_pdf');
-            Route::get('result/pdf/{id}' , 'ReportsSaleBillsController@result_pdf_internal');
-            
+            //Route::get('/' , 'ReportsSaleBillsController@index');
+            //Route::get('result' , 'ReportsSaleBillsController@result');
+            //Route::get('result/pdf' , 'ReportsSaleBillsController@result_pdf');
+            Route::get('result/pdf/{id}' , 'ReportsSaleBillsController@result_pdf_internal');            
             Route::get('print_receipt/{id}', 'SaleBillController@print_receipt'); // طباعة ريسيت فاتورة البيع
+        });
+        
+        //تقرير عن فواتير مبيعات  
+        Route::group(['prefix' => 'sales-summary/report'] , function (){
+            Route::get('/' , 'ReportsSaleBillsController@index');
+            Route::get('result/pdf' , 'ReportsSaleBillsController@sales_summary_result_pdf');
         });
     });
 
@@ -513,6 +521,12 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         // start المنتجات الأكثر والأقل مبيعاً
         Route::get('top_products' , 'AnalyticsController@index_top_products');
         Route::get('datatable_top_products' , 'AnalyticsController@datatable_top_products');
+        // end المنتجات الأكثر والأقل مبيعاً
+        
+        
+        // start المنتجات الأكثر والأقل مبيعاً
+        Route::get('top_clients' , 'AnalyticsController@index_top_clients');
+        Route::get('datatable_top_clients' , 'AnalyticsController@datatable_top_clients');
         // end المنتجات الأكثر والأقل مبيعاً
     });
     

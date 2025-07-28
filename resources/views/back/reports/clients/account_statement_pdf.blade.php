@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $pageNameAr }} - {{ $results[0]->clientName }} - {{ date('d-m-Y H-i-s') }}</title>
 
-    <link rel="icon" href="{{ url('back') }}/images/settings/fiv.png" type="image/x-icon"/>
+    <link rel="icon" href="{{ asset('back') }}/assets/img/brand/favicon.png" type="image/x-icon"/>
 
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>

@@ -480,12 +480,14 @@ class SaleBillController extends Controller
                     ->leftJoin('users', 'users.id', 'sale_bills.user_id')
                     ->where('sale_bills.id', $id)
                     ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                    ->where('store_dets.status', 'نشط')
                     ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
                     ->orWhere('treasury_bill_dets.bill_type', 'اذن توريد نقدية')
                     ->select(
                         'sale_bills.*',
                         
                         'store_dets.product_id',
+                        'store_dets.status as store_det_status',
                         'store_dets.sell_price_small_unit',
                         'store_dets.current_sell_price_in_sale_bill',
                         'store_dets.last_cost_price_small_unit',
@@ -520,133 +522,611 @@ class SaleBillController extends Controller
     }
 
 
-
-
     
     public function edit($id)
-    {
-        if(request()->ajax()){
-            $find = PurchaseBill::where('id', $id)->first();
-            return response()->json($find);
-        }
-        return view('back.welcome');
-    }
+    {                                       
+        $pageNameAr = ' تعديل فاتورة مبيعات رقم # ';
+        $pageNameEn = 'edit';
+        $clients = ClientsAndSuppliers::where('client_supplier_type', 3)
+                                    ->orWhere('client_supplier_type', 4)
+                                    ->orderBy('name', 'asc')
+                                    ->get();
 
-    public function update(Request $request, $id)
-    {
-        if (request()->ajax()){
-            $find = PurchaseBill::where('id', $id)->first();
-
-            $this->validate($request , [
-                'name' => 'required|string|unique:purchases,name,'.$id,
-            ],[
-                'name.required' => 'إسم الوحدة مطلوب',
-                'name.string' => 'حقل إسم الوحدة يجب ان يكون من نوع نص',
-                'name.unique' => 'إسم الوحدة مستخدم من قبل',                
-            ]);
-
-            $find->update($request->all());
-        }   
-    }
-
-
-    public function datatable()
-    {
-        $all = DB::table('sale_bills')
+        $treasuries = FinancialTreasury::where('status', 1)
+                                    ->leftJoin('treasury_bill_dets', function ($join) {
+                                        $join->on('treasury_bill_dets.treasury_id', '=', 'financial_treasuries.id')
+                                            ->whereRaw('treasury_bill_dets.id = (select max(id) from treasury_bill_dets where treasury_bill_dets.treasury_id = financial_treasuries.id)');
+                                    })
+                                    ->select('financial_treasuries.*', 'treasury_bill_dets.treasury_money_after')
+                                    ->get();    
+                                    
+        $extra_expenses = DB::table('extra_expenses')->orderBy('expense_type', 'asc')->get();
+        
+        $find = DB::table('sale_bills')
+                    ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
                     ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'sale_bills.id')
+                    ->leftJoin('products', 'products.id', 'store_dets.product_id')
+                    ->leftJoin('units as small_unit', 'small_unit.id', 'products.smallUnit')
+                    ->leftJoin('units as big_unit', 'big_unit.id', 'products.bigUnit')
                     ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'sale_bills.treasury_id')
                     ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
                     ->leftJoin('financial_years', 'financial_years.id', 'sale_bills.year_id')
                     ->leftJoin('users', 'users.id', 'sale_bills.user_id')
+                    ->where('sale_bills.id', $id)
+                    ->where('store_dets.type', 'اضافة فاتورة مبيعات')
                     ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
                     ->select(
                         'sale_bills.*',
+                        
+                        'store_dets.id as store_det_id',
+                        'store_dets.product_id',
+                        'store_dets.sell_price_small_unit',
+                        'store_dets.current_sell_price_in_sale_bill',
+                        'store_dets.last_cost_price_small_unit',
+                        'store_dets.avg_cost_price_small_unit',
+                        'store_dets.product_bill_quantity',
+                        'store_dets.quantity_small_unit',
+                        'store_dets.tax',
+                        'store_dets.discount',
+                        'store_dets.bonus',
+                        'store_dets.total_before',
+                        'store_dets.total_after',
+
+                        'treasury_bill_dets.treasury_type',
+                        'treasury_bill_dets.bill_type',
+                        'treasury_bill_dets.treasury_money_after',
+                        'treasury_bill_dets.amount_money',
+                        'treasury_bill_dets.remaining_money',
+                        
+                        'products.nameAr as productNameAr',
+                        'products.small_unit_numbers',
+                        'small_unit.name as smallUnitName',
+                        'big_unit.name as bigUnitName',
+                        
                         'clients_and_suppliers.name as clientName',
-                        'clients_and_suppliers.phone as clientPhone',
+                        'clients_and_suppliers.type_payment',
+                        
                         'financial_treasuries.name as treasuryName',
                         'financial_years.name as financialName',
                         'users.name as userName',
                     )
                     ->get();
 
+        //return $find;
+        
+        if(count($find) == 0){
+            return redirect('/');
+        }else{
+            $userInfo = DB::table('treasury_bill_dets')
+                                        ->where('client_supplier_id', $find[0]->client_id)
+                                        ->orderBy('id', 'desc')
+                                        ->value('remaining_money');
+
+            return view('back.sales.edit' , compact('pageNameAr' , 'pageNameEn', 'clients', 'treasuries', 'extra_expenses', 'find', 'userInfo'));
+        }
+
+    }
+
+
+
+
+    //////////////////////////////////////////////  حذف فاتورة مبيعات كامله  //////////////////////////////////////////////
+    //////////////////////////////////////////////  حذف فاتورة مبيعات كامله  //////////////////////////////////////////////
+    public function destroy_bill($id)
+    {
+        if(request()->ajax()){
+            $rows = DB::table('store_dets')
+                        ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')
+                        ->join('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                        ->select(
+                            'store_dets.*', 
+
+                            'clients_and_suppliers.id as client_id', 
+                            'clients_and_suppliers.name as client_name', 
+                            'clients_and_suppliers.type_payment', 
+
+                            'sale_bills.total_bill_after', 
+                        )
+                        ->where('store_dets.bill_id', $id)
+                        ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                        ->get();
+
+
+                        //dd($rows[0]->last_cost_price_small_unit);
+
+
+            DB::transaction(function() use($rows, $id) {
+                DB::table('sale_bills')->where('id', $id)->update(['status' => 'فاتورة ملغاة']);
+
+                foreach($rows as $row){
+                    DB::table('store_dets')->where('id', $row->id)->update(['status' => 'فاتورة ملغاة']);                  
+
+                    // إعادة حساب متوسط التكلفة وآخر سعر تكلفة للمنتج بعد الحذف
+                    $lastRowInfoToProduct = DB::table('store_dets')
+                                                ->where('product_id', $row->product_id)
+                                                ->orderBy('id', 'desc')
+                                                ->first();
+                    
+                    // تفاصيل اخر سعر تكلفة للمنتج                                
+                    $last_cost_price_small_unit = $lastRowInfoToProduct->last_cost_price_small_unit;
+                    $quantity_small_unit = $lastRowInfoToProduct->quantity_small_unit;
+                    $totalRemainingQuantity = ($last_cost_price_small_unit * $quantity_small_unit);             
+
+                    // تفاصيل الكميه المباعه
+                    $last_cost_price_small_unit_saled = $row->last_cost_price_small_unit;
+                    $product_bill_quantity = $row->product_bill_quantity;
+                    $totalSaledQuantity = ($last_cost_price_small_unit_saled * $product_bill_quantity);             
+                    
+                    $avg_cost_price_small_unit = ($totalRemainingQuantity + $totalSaledQuantity) / ($quantity_small_unit + $product_bill_quantity);
+
+
+                    // إضافة صف جديد بنفس البيانات مع إعادة الكمية للمخزن وحالة "نشط"
+                    DB::table('store_dets')->insert([
+                        'num_order' => $row->num_order,
+                        'type' => $row->type,
+                        'year_id' => $row->year_id,
+                        'bill_id' => $row->bill_id,
+                        'product_id' => $row->product_id,
+                        'current_sell_price_in_sale_bill' => $row->current_sell_price_in_sale_bill,
+                        'sell_price_small_unit' => $row->sell_price_small_unit,
+                        'last_cost_price_small_unit' => $row->last_cost_price_small_unit,
+                        'avg_cost_price_small_unit' => $avg_cost_price_small_unit,
+                        'product_bill_quantity' => $row->product_bill_quantity,
+                        'quantity_small_unit' => ( $lastRowInfoToProduct->quantity_small_unit + $row->product_bill_quantity),
+                        'tax' => $row->tax,
+                        'discount' => $row->discount,
+                        'bonus' => $row->bonus,
+                        'total_before' => $row->total_before,
+                        'total_after' => $row->total_after,
+                        'status' => 'نشط',
+                        'transfer_from' => $row->transfer_from,
+                        'transfer_to' => $row->transfer_to,
+                        'transfer_quantity' => $row->transfer_quantity,
+                        'date' => now(),
+                        'created_at' => now(),
+                    ]);
+                }
+        
+                // ارجاع اجمالي الفاتوره الي حساب العميل مره اخري                                        
+                $lastRecordClient = DB::table('treasury_bill_dets')->where('client_supplier_id', $rows[0]->client_id)->orderBy('id', 'desc')->first();
+                $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'اذن مرتجع نقدية لعميل')->max('num_order');
+            
+                DB::table('treasury_bill_dets')->insert([
+                    'num_order' => ($lastNumId+1), 
+                    'date' => Carbon::now(),
+                    'treasury_id' => 0, 
+                    'treasury_type' => 'اذن مرتجع نقدية لعميل', 
+                    'bill_id' => $id,
+                    'bill_type' => 'اذن مرتجع نقدية لعميل', 
+                    'client_supplier_id' => $rows[0]->client_id,
+                    'partner_id' => null, 
+                    'treasury_money_after' => 0, 
+                    'amount_money' => $rows[0]->total_bill_after, 
+                    'remaining_money' => ( $lastRecordClient->remaining_money - $rows[0]->total_bill_after ), 
+                    'commission_percentage' => 0, 
+                    'transaction_from' => null, 
+                    'transaction_to' => null, 
+                    'notes' => 'استرجاع إجمالي قيمة فاتورة بيع ملغاة لعميل '.$rows[0]->client_name,
+                    'user_id' => auth()->user()->id, 
+                    'year_id' => $this->currentFinancialYear(),
+                    'created_at' => now()
+                ]);           
+                
+            });
+            return response()->json(['success_delete' => 'تم حذف الفاتورة بنجاح وإعادة الكميات للمخزن وتحديث متوسطات الأسعار']);
+
+        }else{
+            return view('back.welcome');
+        }
+    }
+    
+    
+    
+    
+    //////////////////////////////////////////////  تعديل صنف واحد من فاتوره مبيعات  //////////////////////////////////////////////
+    //////////////////////////////////////////////  تعديل صنف واحد من فاتوره مبيعات  //////////////////////////////////////////////
+    public function update_product_from_bill(Request $request, $id)
+    {
+        if(request()->ajax()){
+            $row = DB::table('store_dets')
+                        ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')
+                        ->join('products', 'products.id', 'store_dets.product_id')
+                        ->join('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                        ->select(
+                            'store_dets.*', 
+
+                            'clients_and_suppliers.id as client_id', 
+                            'clients_and_suppliers.name as client_name', 
+                            'clients_and_suppliers.type_payment', 
+                            
+                            'products.nameAr as productNameAr', 
+
+                            //'sale_bills.bill_discount', 
+                            //'sale_bills.extra_money', 
+                            //'sale_bills.extra_money_type', 
+                            'sale_bills.total_bill_before', 
+                            'sale_bills.total_bill_after', 
+                        )
+                        ->where('store_dets.id', $id)
+                        ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                        ->first();
+
+
+                        //dd($row);
+
+
+            $originalSalePrice = (float) $row->current_sell_price_in_sale_bill; 
+            $originalDiscount = (float) $row->discount; 
+            $originalTax = (float) $row->tax; 
+            $originalBefore = (float) $row->total_before; 
+            $originalAfter = (float) $row->total_after; 
+            
+            $requestSalePrice = (float) request('rowSellPrice'); 
+            $requestDiscount = (float) request('rowProdDiscount'); 
+            $requestTax = (float) request('rowProdTax'); 
+
+            if($requestSalePrice != $originalSalePrice || $requestDiscount != $originalDiscount || $requestTax != $originalTax){
+
+                DB::transaction(function() use($row, $id, $requestSalePrice, $requestDiscount, $requestTax, $originalBefore, $originalAfter) {                                                     
+                    // حساب اجمالي الفاتوره مره اخري بعد التعديل
+                    $quantity = $row->product_bill_quantity;
+                    $unitPrice = $requestSalePrice;
+                    $discountPercentage = $requestDiscount;
+                    $taxPercentage = $requestTax;
+
+                    $totalBefore = $unitPrice * $quantity;
+                    $discountAmount = $totalBefore * ($discountPercentage / 100);
+                    $priceAfterDiscount = $totalBefore - $discountAmount;
+                    $taxAmount = $priceAfterDiscount * ($taxPercentage / 100);
+                    $totalAfterTax = $priceAfterDiscount + $taxAmount;
+
+                    $calcDiffBefore = $totalBefore - $originalBefore;
+                    $calcDiffAfter = $totalAfterTax - $originalAfter;
+
+
+                    // تحديث جدول store_dets ب العناصر المعدلة
+                    DB::table('store_dets')->where('id', $id)->update([
+                        'current_sell_price_in_sale_bill' => $requestSalePrice,
+                        'discount' => $requestDiscount,
+                        'tax' => $requestTax,
+                        'total_before' => $totalBefore,
+                        'total_after' => $totalAfterTax,
+                        'status' => 'تم تعديله',
+                        'updated_at' => now()
+                    ]);
+
+
+                    // تحديث جدول sale_bills ب اجمالي الفاتوره بعد التعديل
+                    DB::table('sale_bills')->where('id', $row->bill_id)->update([
+                        'status' => 'فاتورة معدلة',
+                        'total_bill_before' => $calcDiffBefore >= 0 ? $row->total_bill_after + $calcDiffBefore : $row->total_bill_after - $calcDiffBefore,
+                        'total_bill_after' => $calcDiffAfter >= 0 ? $row->total_bill_after + $calcDiffAfter : $row->total_bill_after - $calcDiffAfter,                    
+                    ]);
+
+
+                        
+                    // ارجاع اجمالي الفاتوره الي حساب العميل مره اخري                                        
+                    $lastRecordClient = DB::table('treasury_bill_dets')->where('client_supplier_id', $row->client_id)->orderBy('id', 'desc')->first();
+                    $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'اذن مرتجع نقدية لعميل')->max('num_order');
+
+
+                    $remaining_money = 0;
+                    if($calcDiffAfter >= 0){
+                        $remaining_money = $lastRecordClient->remaining_money + $calcDiffAfter;
+                    }else{
+                        $remaining_money = $lastRecordClient->remaining_money - $calcDiffAfter;
+                    }
+                
+                    DB::table('treasury_bill_dets')->insert([
+                        'num_order' => ($lastNumId+1), 
+                        'date' => Carbon::now(),
+                        'treasury_id' => 0, 
+                        'treasury_type' => 'اذن مرتجع نقدية لعميل', 
+                        'bill_id' => $id,
+                        'bill_type' => 'اذن مرتجع نقدية لعميل', 
+                        'client_supplier_id' => $row->client_id,
+                        'partner_id' => null, 
+                        'treasury_money_after' => 0, 
+                        'amount_money' => $calcDiffAfter, 
+                        'remaining_money' => $remaining_money, 
+                        'commission_percentage' => 0, 
+                        'transaction_from' => null, 
+                        'transaction_to' => null, 
+                        'notes' => 'تم تعديل سعر أو خصم أو ضريبة أحد الأصناف في فاتورة العميل ' . $row->client_name . '، وتم احتساب الفارق على حسابه.',
+                        'user_id' => auth()->user()->id, 
+                        'year_id' => $this->currentFinancialYear(),
+                        'created_at' => now()
+                    ]);           
+                });
+
+                return response()->json(['success_edit' => 'تم تعديل بيانات الصنف بنجاح وإعادة حساب إجمالي الفاتورة.']);                        
+
+            }else{
+                return response()->json([
+                    'no_edits' => "ℹ️ لم يتم إجراء أي تغييرات على <span class='text-danger' style='font-size: 110%;'>{$row->productNameAr}</span> 
+                        <p style='margin-top: 10px;'>البيانات الحالية مطابقة تمامًا لما تم إدخاله</p>
+                    "
+                ]);
+            } 
+        }else{
+            return view('back.welcome');
+        }
+    }
+    
+    
+    
+    
+    //////////////////////////////////////////////  حذف صنف واحد من فاتوره مبيعات  //////////////////////////////////////////////
+    //////////////////////////////////////////////  حذف صنف واحد من فاتوره مبيعات  //////////////////////////////////////////////
+    public function destroy_product_from_bill($id)
+    {
+        if(request()->ajax()){
+            $row = DB::table('store_dets')
+                        ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')
+                        ->join('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                        ->select(
+                            'store_dets.*', 
+
+                            'clients_and_suppliers.id as client_id', 
+                            'clients_and_suppliers.name as client_name', 
+                            'clients_and_suppliers.type_payment', 
+
+                            'sale_bills.bill_discount',
+                            'sale_bills.extra_money',
+                            'sale_bills.bill_discount',
+                            'sale_bills.total_bill_before',
+                            'sale_bills.total_bill_after',
+                        )
+                        ->where('store_dets.id', $id)
+                        ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                        ->first();
+
+
+                        //dd($row);
+
+
+            DB::transaction(function() use($row, $id) {
+                DB::table('store_dets')->where('id', $id)->update(['status' => 'تم حذفه']);
+
+                // إعادة حساب متوسط التكلفة وآخر سعر تكلفة للمنتج بعد الحذف
+                    $lastRowInfoToProduct = DB::table('store_dets')
+                                                ->where('product_id', $row->product_id)
+                                                ->orderBy('id', 'desc')
+                                                ->first();
+                    
+                    // تفاصيل اخر سعر تكلفة للمنتج                                
+                    $last_cost_price_small_unit = $lastRowInfoToProduct->last_cost_price_small_unit;
+                    $quantity_small_unit = $lastRowInfoToProduct->quantity_small_unit;
+                    $totalRemainingQuantity = ($last_cost_price_small_unit * $quantity_small_unit);             
+
+                    // تفاصيل الكميه المباعه
+                    $last_cost_price_small_unit_saled = $row->last_cost_price_small_unit;
+                    $product_bill_quantity = $row->product_bill_quantity;
+                    $totalSaledQuantity = ($last_cost_price_small_unit_saled * $product_bill_quantity);             
+                    
+                    $avg_cost_price_small_unit = ($totalRemainingQuantity + $totalSaledQuantity) / ($quantity_small_unit + $product_bill_quantity);
+                // إعادة حساب متوسط التكلفة وآخر سعر تكلفة للمنتج بعد الحذف
+                
+
+                // إضافة صف جديد بنفس البيانات مع إعادة الكمية للمخزن وحالة "نشط"
+                    DB::table('store_dets')->insert([
+                        'num_order' => $row->num_order,
+                        'type' => $row->type,
+                        'year_id' => $row->year_id,
+                        'bill_id' => $row->bill_id,
+                        'product_id' => $row->product_id,
+                        'current_sell_price_in_sale_bill' => $row->current_sell_price_in_sale_bill,
+                        'sell_price_small_unit' => $row->sell_price_small_unit,
+                        'last_cost_price_small_unit' => $row->last_cost_price_small_unit,
+                        'avg_cost_price_small_unit' => $avg_cost_price_small_unit,
+                        'product_bill_quantity' => $row->product_bill_quantity,
+                        'quantity_small_unit' => ( $lastRowInfoToProduct->quantity_small_unit + $row->product_bill_quantity),
+                        'tax' => $row->tax,
+                        'discount' => $row->discount,
+                        'bonus' => $row->bonus,
+                        'total_before' => $row->total_before,
+                        'total_after' => $row->total_after,
+                        'status' => 'نشط',
+                        'transfer_from' => $row->transfer_from,
+                        'transfer_to' => $row->transfer_to,
+                        'transfer_quantity' => $row->transfer_quantity,
+                        'date' => now(),
+                        'created_at' => now(),
+                    ]);
+                // إضافة صف جديد بنفس البيانات مع إعادة الكمية للمخزن وحالة "نشط"
+
+
+                
+                DB::table('sale_bills')->where('id', $row->bill_id)->update([
+                    'status' => 'فاتورة معدلة',
+                    'total_bill_before' => $row->total_bill_before - $row->total_before,
+                    'total_bill_after' => $row->total_bill_after - $row->total_after,                    
+                ]);
+
+                                
+                
+        
+                // ارجاع اجمالي الصنف المحذوف الي حساب العميل مره اخري                                        
+                //$lastRecordClient = DB::table('treasury_bill_dets')->where('client_supplier_id', $row[0]->client_id)->orderBy('id', 'desc')->first();
+                //$lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'اذن مرتجع نقدية لعميل')->max('num_order');
+            
+                //DB::table('treasury_bill_dets')->insert([
+                //    'num_order' => ($lastNumId+1), 
+                //    'date' => Carbon::now(),
+                //    'treasury_id' => 0, 
+                //    'treasury_type' => 'اذن مرتجع نقدية لعميل', 
+                //    'bill_id' => $id,
+                //    'bill_type' => 'اذن مرتجع نقدية لعميل', 
+                //    'client_supplier_id' => $row[0]->client_id,
+                //    'partner_id' => null, 
+                //    'treasury_money_after' => 0, 
+                //    'amount_money' => $row[0]->total_bill_after, 
+                //    'remaining_money' => ( $lastRecordClient->remaining_money - $row->total_after ), 
+                //    'commission_percentage' => 0, 
+                //    'transaction_from' => null, 
+                //    'transaction_to' => null, 
+                //    'notes' => 'استرجاع إجمالي قيمة فاتورة بيع ملغاة لعميل '.$row[0]->client_name,
+                //    'user_id' => auth()->user()->id, 
+                //    'year_id' => $this->currentFinancialYear(),
+                //    'created_at' => now()
+                //]);           
+
+
+
+
+
+                // بدايه توزيع خصم الفاتوره ع الاصناف => تخصم من اجمالي الصنف بعد ان وجدت
+                    //$totalProductBefore = $row->total_before;
+                    //$totalProductAfter = $row->total_after;
+                    //$totalBillBefore = $row->total_bill_before;
+                    //$totalBillAfter = $row->total_bill_after;
+                    //$billDiscount = $row->bill_discount;
+                    //$extraMoney = $row->extra_money;
+                    //$calcRatio = $totalProductAfter / $totalBillAfter;
+
+                    //$calcDiffDiscountRatio = $calcRatio * $billDiscount; // نسبه الخصم التي تخصم من الصنف عند حذقه موزعه بالتساوي علي اجمالي الفاتوره                
+                    ////$calcDiffExtraMoneyRatio = $calcRatio * $extraMoney; // نسبه المصاريف الاضافيه التي تخصم علي كل منتج عند حذفه موزعه بالتساوي علي اجمالي الفاتوره    
+
+                    //$totalProductBeforeDiscountAndExtraMoney = ($totalBillBefore - $totalProductBefore) - ($calcDiffDiscountRatio);
+                    //$totalProductAfterDiscountAndExtraMoney = ($totalBillAfter - $totalProductAfter) - ($calcDiffDiscountRatio);
+
+                    //dd($totalProductBeforeDiscountAndExtraMoney, $totalProductAfterDiscountAndExtraMoney);
+                // نهاية توزيع خصم الفاتوره ع الاصناف => تخصم من اجمالي الصنف بعد ان وجدت
+
+                
+            });
+            return response()->json(['success_delete' => 'تم حذف الصنف من الفاتورة بنجاح']);
+
+        }else{
+            return view('back.welcome');
+        }
+    }
+
+
+
+
+    //////////////////////////////////////////////  datatable  //////////////////////////////////////////////
+    //////////////////////////////////////////////  datatable  //////////////////////////////////////////////
+    public function datatable()
+    {
+        $all = DB::table('sale_bills')
+                ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'sale_bills.id')
+                ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'sale_bills.treasury_id')
+                ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                ->leftJoin('financial_years', 'financial_years.id', 'sale_bills.year_id')
+                ->leftJoin('users', 'users.id', 'sale_bills.user_id')
+                ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
+                ->select(
+                    'sale_bills.*',
+                    'clients_and_suppliers.name as clientName',
+                    'clients_and_suppliers.phone as clientPhone',
+                    'financial_treasuries.name as treasuryName',
+                    'financial_years.name as financialName',
+                    'users.name as userName',
+                )
+                ->get();
+
         return DataTables::of($all)
             ->addColumn('id', function($res){
-                $id = $res->id; 
-                        
+                $id = '<span class="badge badge-warning" style="font-size: 110% !important;font-weight: bold;">#'.$res->id.'</span>';
+
                 if($res->custom_bill_num &&  $res->custom_bill_num != $res->id ){
-                    $id .= "<div>اخر ( $res->custom_bill_num )</div>"; 
+                    $id .= "<div style='font-size:90%;color:#888;'>اخر <span class='badge badge-warning'>$res->custom_bill_num</span></div>";
                 }
-                
+
                 return $id;
             })
             ->addColumn('clientName', function($res){
-                return $res->clientName;
+                return '<span class="badge badge-secondary"><i class="fas fa-user"></i></span> <span style="font-weight:bold;">'.$res->clientName.'</span>';
             })
             ->addColumn('clientPhone', function($res){
-                return $res->clientPhone;
+                return '<span class="badge badge-light"><i class="fas fa-phone"></i></span> <span>'.$res->clientPhone.'</span>';
             })
             ->addColumn('treasuryName', function($res){
-                return $res->treasuryName;
+                return '<span class="badge badge-light"><i class="fas fa-university"></i></span> <span style="color:#007bff;font-weight:bold;">'.$res->treasuryName.'</span>';
             })
             ->addColumn('total_bill', function($res){
                 $total_bill = '';
-                
                 if($res->total_bill_before != $res->total_bill_after){
-                    $total_bill.= "
-                        <span class='badge badge-danger text-white' style='font-size: 90% !important;'>قبل  ".display_number($res->total_bill_before)."</span>
-                    ";
-
-                    $total_bill .=  "<span class='badge badge-success text-white' style='font-size: 12px !important;'>بعد ".display_number($res->total_bill_after)."</span>";
+                    $total_bill .= '<div style="display:flex;align-items:center;gap:7px;justify-content:center;">';
+                    $total_bill .= '<span class="badge badge-danger text-white" style="font-size: 95% !important;padding:7px 12px;"><i class="fas fa-arrow-down"></i> قبل: '.display_number($res->total_bill_before).'</span>';
+                    $total_bill .= '<span style="font-size:18px;color:#888;">→</span>';
+                    $total_bill .= '<span class="badge badge-success text-white" style="font-size: 95% !important;padding:7px 12px;"><i class="fas fa-arrow-up"></i> بعد: '.display_number($res->total_bill_after).'</span>';
+                    $total_bill .= '</div>';
                 }else{
-                    $total_bill .=  "<span class='badge badge-success text-white' style='font-size: 12px !important;'>".display_number($res->total_bill_after)."</span>";
+                    $total_bill .= '<span class="badge badge-success text-white" style="font-size: 95% !important;padding:7px 12px;"><i class="fas fa-receipt"></i> '.display_number($res->total_bill_after).'</span>';
                 }
-                
-                
+                // شريط حالة للمبلغ المدفوع مقابل الإجمالي (لو متاح)
+                if(isset($res->amount_paid) && $res->total_bill_after > 0){
+                    $percent = min(100, round(($res->amount_paid/$res->total_bill_after)*100));
+                    $total_bill .= '<div class="progress" style="height:7px;margin-top:3px;background:#eee;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width:'.$percent.'%"></div>
+                    </div>';
+                }
                 return $total_bill;
             })
             ->addColumn('count_items', function($res){
-                return display_number($res->count_items);
+                return '<span class="badge badge-dark"> '.number_format($res->count_items).'</span>';
             })
             ->addColumn('date', function($res){
-                $dates = Carbon::parse($res->created_at)->format('d-m-Y')
-                        .' <span class="badge badge-dark text-white" style="margin: 0 7px;font-size: 100% !important;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span> <br/>';
-                if($res->custom_date){
-                    $dates.= 'تاريخ اخر '.Carbon::parse($res->custom_date)->format('Y-m-d');
-                }
+                $dates = '<div style="display:flex;align-items:center;gap:10px;justify-content:center;">';
+                    $dates .= '<span class="badge badge-dark text-white" style="font-size: 100% !important;"><i class="fas fa-calendar-alt"></i> '.Carbon::parse($res->created_at)->format('d-m-Y').'</span>';
+                    $dates .= '<span class="badge badge-secondary text-white" style="font-size: 90% !important;"><i class="fas fa-clock"></i> '.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
+                $dates .= '</div>';
 
+                if($res->custom_date){
+                    $dates .= '<div class="badge badge-light">تاريخ آخر: '.Carbon::parse($res->custom_date)->format('Y-m-d').'</div>';
+                }
                 return $dates;
             })
             ->addColumn('financialName', function($res){
-                return $res->financialName;
+                return '<span class="badge badge-light"><i class="fas fa-coins"></i></span> '.$res->financialName;
             })
             ->addColumn('userName', function($res){
-                return $res->userName;
+                return '<span class="badge badge-light"><i class="fas fa-user-tie"></i></span> '.$res->userName;
             })
             ->addColumn('notes', function($res){
-                return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->notes.'">
-                            '.Str::limit($res->notes, 20).'
-                        </span>';
+                return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.e($res->notes).'" style="cursor:pointer;color:#007bff;" onclick="alert(\''.e($res->notes).'\')">
+                    <i class="fas fa-sticky-note"></i> '.Str::limit($res->notes, 20).'
+                </span>';
             })
             ->addColumn('action', function($res){
-                return '                        
-                        <a type="button" href="'.url('sales_return/'.$res->id).'" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
-                            <i class="fas fa-reply"></i>
-                        </a>
-                        
-                        <button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
-                        <i class="fas fa-print"></i>
-                        </button>
-                        
-                        <button type="button" class="btn btn-sm btn-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                ';
+                if($res->status == 'فاتورة ملغاة'){
+                    return '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;align-items:center;">
+                                <button type="button" class="btn btn-sm text-white" disabled style="opacity:0.7;cursor:not-allowed;background: red !important;">ملغاة</button>
 
-                //<button type="button" class="btn btn-sm btn-dark upload" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="تحميل الفاتورة على المنصة الإلكترونية" res_id="'.$res->id.'">
-                //    <i class="fas fa-file-upload"></i>
-                //</button>
+                                <button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-print"></i>
+                                </button>
+
+                                <button type="button" class="btn btn-sm btn-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>';
+                }
+                return '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;align-items:center;">'
+                            .'<a type="button" href="'.url('sales_return/'.$res->id).'" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
+                                <i class="fas fa-reply"></i>
+                            </a>'
+
+                            .'<button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
+                                <i class="fas fa-print"></i>
+                            </button>'
+
+                            .'<button type="button" class="btn btn-sm btn-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
+                                <i class="fas fa-eye"></i>
+                            </button>'
+
+                            .'<button type="button" class="btn btn-sm btn-outline-danger delete delete_bill" data-effect="effect-scale" data-toggle="tooltip" title="حذف الفاتورة نهائياً" res_id="'.$res->id.'">
+                                <i class="fas fa-trash-alt"></i> <span style="font-size:90%;font-weight:bold;">حذف</span>
+                            </button>'
+
+                            .'<a type="button" href="'.url('sales/edit/'.$res->id).'" class="btn btn-sm btn-outline-dark edit" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="تعديل الفاتورة" res_id="'.$res->id.'">
+                                <i class="fas fa-edit"></i> <span style="font-size:90%;font-weight:bold;">تعديل</span>
+                            </a>'
+                        .'</div>';
             })
-            ->rawColumns(['id', 'clientName', 'treasuryName', 'count_items', 'total_bill', 'date', 'notes', 'userName', 'financialName', 'action'])
+            ->rawColumns(['id', 'clientName', 'clientPhone', 'treasuryName', 'count_items', 'total_bill', 'date', 'notes', 'userName', 'financialName', 'action'])
             ->toJson();
     }
 
@@ -671,14 +1151,12 @@ class SaleBillController extends Controller
                     ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
                     ->leftJoin('financial_years', 'financial_years.id', 'sale_bills.year_id')
                     ->leftJoin('extra_expenses', 'extra_expenses.id', 'sale_bills.extra_money_type')
-                    ->leftJoin('users', 'users.id', 'sale_bills.user_id')
-                    ->where('store_dets.type', 'اضافة فاتورة مبيعات')
-                    ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
-                    ->orWhere('treasury_bill_dets.bill_type', 'اذن توريد نقدية')
+                    ->leftJoin('users', 'users.id', 'sale_bills.user_id')                    
                     ->select(
                         'sale_bills.*',
                         
                         'store_dets.product_id', 
+                        'store_dets.status as store_det_status', 
                         'store_dets.current_sell_price_in_sale_bill', 
                         'store_dets.sell_price_small_unit', 
                         'store_dets.discount', 
@@ -708,9 +1186,13 @@ class SaleBillController extends Controller
 
                         'users.name as userName',
                     )
+                    ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                    ->where('store_dets.status', 'نشط')
+                    ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
+                    ->orWhere('treasury_bill_dets.bill_type', 'اذن توريد نقدية')
                     ->get();
 
-                    // return $saleBill;
+                    // return count($saleBill);
 
         if(count($saleBill) > 0){
             return view('back.sales.print_receipt', compact('pageNameAr', 'pageNameEn', 'saleBill'));

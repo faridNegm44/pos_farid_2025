@@ -90,7 +90,7 @@
                     {data: 'last_cost_price_small_unit', name: 'last_cost_price_small_unit'},
                     {data: 'sell_price_small_unit', name: 'sell_price_small_unit'},
                     {data: 'prod_discount', name: 'prod_discount'},
-                    {data: 'prod_tax', name: 'prod_tax'},
+                    //{data: 'prod_tax', name: 'prod_tax'},
                     {data: 'units', name: 'units'},
                     {data: 'store_name', name: 'store_name'},
                     {data: 'category', name: 'category'},
@@ -201,7 +201,7 @@
                                 <th class="border-bottom-0 nowrap_thead">سعر التكلفة</th>
                                 <th class="border-bottom-0 nowrap_thead">سعر البيع</th>
                                 <th class="border-bottom-0 nowrap_thead">خصم</th>
-                                <th class="border-bottom-0 nowrap_thead">ضريبة</th>
+                                {{--<th class="border-bottom-0 nowrap_thead">ضريبة</th>--}}
                                 <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">الوحدات</th>
                                 <th class="border-bottom-0 nowrap_thead" >المخزن</th>
                                 <th class="border-bottom-0 nowrap_thead" >القسم</th>

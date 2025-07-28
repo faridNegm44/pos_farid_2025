@@ -15,6 +15,22 @@
             success: function(res){
                 $('#showProductsModal .modal-body').slideDown();
 
+                let bill_status = res[0].status;
+                if(bill_status == 'فاتورة ملغاة'){
+                    bill_status = `<span class="text-danger">${bill_status}</span>`;
+                }else if(bill_status == 'فاتورة نشطة'){
+                    bill_status = `<span class="text-success">${bill_status}</span>`;
+                }else{
+                    bill_status = `<span class="text-warning">${bill_status}</span>`;
+                }
+                
+                $("#showProductsModal #exampleModalLongTitle").html(`
+                    عرض فاتورة مبيعات رقم 
+                    ( ${res[0].id} ) - 
+                    ( ${res[0].clientName} ) - 
+                    ${bill_status}
+                     
+                `);
 
                 //console.log(display_number_js( res[0].total_bill_after ));
 

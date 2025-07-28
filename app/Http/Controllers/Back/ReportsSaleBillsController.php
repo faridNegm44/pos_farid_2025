@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
 use App\Models\Back\Expense;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -12,16 +13,13 @@ class ReportsSaleBillsController extends Controller
 {
     public function index()
     {                   
-        $pageNameAr = 'تقرير عن فواتير مبيعات';        
-        $treasuries = DB::table('financial_treasuries')->orderBy('name', 'asc')->get();        
-
-        //return $query;
-        return view('back.reports.expenses.index' , compact('pageNameAr', 'treasuries'));
+        $pageNameAr = 'تقرير إجمالي المبيعات خلال فترة';        
+        return view('back.reports.sales.index' , compact('pageNameAr'));
     }
 
     public function result(Request $request)
     {                   
-        $pageNameAr = 'تقرير عن فواتير مبيعات';      
+        $pageNameAr = 'تقرير إجمالي المبيعات خلال فترة';      
 
         $treasury = request('treasury');
         $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
@@ -58,7 +56,7 @@ class ReportsSaleBillsController extends Controller
         if($results->total() == 0){
             return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
         }else{
-            return view('back.reports.expenses.result' , compact('pageNameAr', 'results', 'treasury', 'from', 'to'));
+            return view('back.reports.sales.result' , compact('pageNameAr', 'results', 'treasury', 'from', 'to'));
         }
     }
     
@@ -110,13 +108,43 @@ class ReportsSaleBillsController extends Controller
                     )
                     ->get();
 
-//dd($find);
         if(count($find) == 0){
             return redirect('/');
         }else{
             return view('back.reports.sale_bills.pdf_internal' , compact('pageNameAr', 'find'));
         }
 
+    }
+    
+    public function sales_summary_result_pdf(Request $request)
+    {           
+        $pageNameAr = 'تقرير إجمالي المبيعات خلال فترة';      
+        $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
+        $to = $request->to ? date('Y-m-d H:i:s', strtotime($request->to)) : null;
+        $print_products = request('print_products') == 'نعم' ? true : false;
+
+        $totalSalesQuery = DB::table('sale_bills')
+                            ->join('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
+                            ->join('users', 'users.id', 'sale_bills.user_id')
+                            ->select(
+                                'sale_bills.*', 
+                                'clients_and_suppliers.name as clientName',
+                                'users.name as userName',
+                            )
+                            ->orderBy('sale_bills.id', 'asc');
+                    
+        if ($from && $to) {
+            $totalSalesQuery->whereBetween('sale_bills.created_at', [$from, $to]);
+        } elseif ($from) {
+            $totalSalesQuery->where('sale_bills.created_at', '>=', $from);
+        } elseif ($to) {
+            $totalSalesQuery->where('sale_bills.created_at', '<=', $to);
+        }
+
+        $saleBills = $totalSalesQuery->get();
+        //dd($saleBills->sum('total_bill_after'));        
+
+        return view('back.reports.sales.pdf' , compact('pageNameAr', 'saleBills', 'from', 'to', 'print_products'));
     }
     
 }

@@ -114,6 +114,7 @@ class TasweaProductsController extends Controller
                                 'store_dets.id as storeDetsId',
                                 'products.nameAr as productName',
                                 'users.name as userName',                                
+                                'taswea_reasons.name as reasonName',                                
                                 'financial_years.name as financialName',
                             )
                             ->orderBy('taswea_products.id', 'desc')

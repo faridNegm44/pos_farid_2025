@@ -359,71 +359,44 @@ class ClientsController extends Controller
 
         return DataTables::of($all)
             ->addColumn('code', function($res){
-                return  "<strong>#".$res->code."</strong>";
+                return  '<span class="badge badge-info" style="font-size:110% !important;">#'.$res->code.'</span>';
             })
             ->addColumn('name', function($res){
-                return  "<strong class='text-primary'>".$res->name."</strong>";
+                return  '<span class="badge badge-secondary"><i class="fas fa-user"></i></span> <span style="font-weight:bold;">'.$res->name.'</span>';
             })
             ->addColumn('type_name', function($res){
-                return $res->type_name;
+                return '<span class="badge badge-light"><i class="fas fa-users"></i></span> '.$res->type_name;
             })
             ->addColumn('address', function($res){
-                return '<span class="" data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->address.'">
-                            '.Str::limit($res->address, 20).'
+                return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->address.'" style="cursor:pointer;color:#007bff;">
+                            <i class="fas fa-map-marker-alt"></i> '.Str::limit($res->address, 20).'
                         </span>';
             })
-            //->addColumn('opening_creditor', function($res){
-            //    if($res->amount_money < 0){
-            //        return '<span style="color: red;font-size: 15px;">'.$res->amount_money.'</span>';
-            //    }else{
-            //        return 0;
-            //    }
-            //})
-            //->addColumn('opening_debtor', function($res){
-            //    if($res->amount_money > 0){
-            //        return '<span style="font-size: 15px;">'.$res->amount_money.'</span>';
-            //    }else{
-            //        return 0;
-            //    }
-            //})
-            //->addColumn('max_limit', function($res){
-            //    if($res->debit_limit){
-            //        return '<span class="text-danger">'.$res->debit_limit.'</span>';
-            //    }else{
-            //        return 0;
-            //    }
-            //})
             ->addColumn('notes', function($res){
-                return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->note.'">
-                            '.Str::limit($res->note, 20).'
-                        </span>';
+                return '<span data-bs-toggle="popover" data-bs-placement="bottom" title="'.$res->note.'" style="cursor:pointer;color:#007bff;">
+                    <i class="fas fa-sticky-note"></i> '.Str::limit($res->note, 20).'
+                </span>';
             })
             ->addColumn('created_at', function($res){
                 if($res->created_at){
-                    return Carbon::parse($res->created_at)->format('d-m-Y')
-                            .' <span style="margin: 0 7px;color: red;">'.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
+                    return '<span class="badge badge-dark text-white"><i class="fas fa-calendar-alt"></i> '.Carbon::parse($res->created_at)->format('d-m-Y').'</span> <span class="badge badge-secondary text-white"><i class="fas fa-clock"></i> '.Carbon::parse($res->created_at)->format('h:i:s a').'</span>';
                 }
             })
             ->addColumn('status', function($res){
                 if($res->status == 1){
-                    return '<span class="badge badge-success" style="width: 40px;">نشط</span>';
+                    return '<span class="badge badge-success" style="font-size:12px;"><i class="fas fa-check-circle"></i> نشط</span>';
                 }
                 else{
-                    return '<span class="badge badge-danger" style="width: 40px;">معطل</span>';
+                    return '<span class="badge badge-danger" style="font-size:12px;"><i class="fas fa-times-circle"></i> معطل</span>';
                 }
             })
             ->addColumn('action', function($res){
-                // if (auth()->user()->role_relation->users_update == 1 ){
-                // }
-                return '
-                            <button class="btn btn-sm btn-rounded btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                return '<button class="btn btn-sm btn-rounded btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
                                 <i class="fas fa-marker"></i>
                             </button>
-                            
                             <button class="btn btn-sm btn-rounded btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'" res_title="'.$res->name.'">
                                 <i class="fa fa-trash"></i>
-                            </button>
-                        ';
+                            </button>';
             })
             ->rawColumns(['code', 'name', 'type_name', 'phone', 'address', 'status', 'opening_creditor', 'opening_debtor', 'max_limit', 'notes', 'created_at', 'action'])
             ->toJson();

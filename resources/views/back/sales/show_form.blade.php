@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">عرض أصناف فاتورة بيع</h5>
+          <h5 class="modal-title" id="exampleModalLongTitle"></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -21,7 +21,7 @@
                       <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span></li>                      
                       <li><span>مصاريف إضافية:</span> <span class='header_span' id="extra_money"></span></li>                      
                       <li><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before"></span></li>
-                      <li><span>إجمالي فاتورة بعد:</span> <span class='header_span badge badge-danger' id="total_bill_after" style="font-size: 22px;padding: 3px 20px !important;"></span></li>
+                      <li><span>إجمالي فاتورة بعد:</span> <span class='header_span badge badge-primary' id="total_bill_after" style="font-size: 22px;padding: 3px 20px !important;"></span></li>
                       
                     </ul>
                   </div>

@@ -90,7 +90,7 @@
             </div>
         @endif
 
-        <div class="card bg bg-warning-gradient" style="padding: 20px 0 !important;">
+        <div class="card bg" style="padding: 20px 0 !important;background-image: linear-gradient(to left, #dfe2e6, #4e9eb5) !important;" style="padding: 20px 0 !important;">
             <div class="card-body">
                 <form method="get" action="{{ url('treasury_bills/report/result') }}">
                     @csrf

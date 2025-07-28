@@ -1,18 +1,13 @@
-<div class="row" style="margin-bottom: 10px;margin-bottom: 15px;">
+<div class="row" style="margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 10px;">
     <div class="col-xs-6 text-left">
-        <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->fav_icon) }}" alt="" style="width: 150px;height: 60px;margin-top: -12px; margin-bottom: 7px;">
-        <div>
-            <span>{{ GeneralSettingsInfo()->phone1  }}</span> 
-            <span style="margin: 0 10px;">{{ GeneralSettingsInfo()->phone2 ?? '' }}</span>
-        </div>
+        <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->fav_icon) }}" alt="Logo"
+             style="height: 60px;">
+        <div><strong>📞 هاتف:</strong> {{ GeneralSettingsInfo()->phone1 }} {{ GeneralSettingsInfo()->phone2 ? ' - ' . GeneralSettingsInfo()->phone2 : '' }}</div>
     </div>
 
-    <div class="col-xs-6 text-right">
-        <div style="padding-top: 10px;">
-            <div>المستخدم: {{ auth()->user()->name  }}</div>
-            تاريخ الطباعة: {{ date('Y-m-d') }} <span style="font-size: 16px;font-weight: bold;">{{ date('h:i a') }}</span>
-            <div>العنوان: {{ GeneralSettingsInfo()->address  }}</div>            
-        </div>
+    <div class="col-xs-6 text-right" style="padding-top: 10px;">
+        <div><strong>👤 المستخدم:</strong> {{ auth()->user()->name }}</div>
+        <div><strong>🗓️ تاريخ الطباعة:</strong> {{ date('Y-m-d') }} <span style="font-weight: bold;">{{ date('h:i A') }}</span></div>
+        <div><strong>📍 العنوان:</strong> {{ GeneralSettingsInfo()->address }}</div>
     </div>
-    
 </div>

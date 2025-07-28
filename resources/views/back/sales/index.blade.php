@@ -98,6 +98,7 @@
 
     {{-- add, edit, delete => script --}}
     @include('back.sales.show')
+    @include('back.sales.delete_bill')
 @endsection
 
 
@@ -131,16 +132,16 @@
                         <thead class="bg bg-black-5">
                             <tr>
                                 <th class="border-bottom-0 nowrap_thead">#</th>
-                                <th class="border-bottom-0 nowrap_thead">التحكم</th>
-                                <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ</th>
-                                <th class="border-bottom-0 nowrap_thead" >عميل</th>
-                                <th class="border-bottom-0 nowrap_thead" >تليفون</th>
-                                <th class="border-bottom-0 nowrap_thead" >خزينة</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 200px !important;min-width: 200px !important;">التحكم</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 90px !important;min-width: 90px !important;">تاريخ</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">عميل</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">تليفون</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">خزينة</th>
                                 <th class="border-bottom-0 nowrap_thead" >اجمالي الفاتورة</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 60px !important;min-width: 60px !important;">ع العناصر</th>
-                                <th class="border-bottom-0 nowrap_thead" >ملاحظات</th>
-                                <th class="border-bottom-0 nowrap_thead" >مستخدم</th>
-                                <th class="border-bottom-0 nowrap_thead" >السنة</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">ملاحظات</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">مستخدم</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">السنة</th>
                             </tr>
                         </thead>                                
                     </table>

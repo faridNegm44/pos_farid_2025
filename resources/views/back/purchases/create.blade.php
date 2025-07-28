@@ -3,8 +3,8 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <head>
 
-		<meta charset="UTF-8">
-		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+        <meta charset="UTF-8">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
         <!-- Title -->
@@ -101,7 +101,7 @@
                 }
             }
         </style>
-	</head>
+    </head>
 
     @include('back.bills_css_js.css_js.main_css')
 
@@ -141,7 +141,7 @@
                         </div>
                         
                         <div class="col-lg-1" style="margin-bottom: 8px;">
-                            <input type="text" class="form-control" id="custom_bill_num" name="custom_bill_num" placeholder="رقم فاتورة مخصص" value="">
+                            <input type="text" class="form-control" id="custom_bill_num" name="custom_bill_num" placeholder="رقم مخصص" value="">
                         </div>
                         
                         <div class="col-lg-7" style="margin-bottom: 8px;">
@@ -164,7 +164,7 @@
                     <div class="row"> 
     
                         <div class="col-lg-4 product-selection p-3 total_info" style="background: #bda17e;">
-                            <div class="text-center" style="text-decoration: underline;background: rgb(104 72 32);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                            <div class="text-center" style="text-decoration: underline;background: rgb(104 72 32);color: #fff;padding: 6px 10px;border-radius: 5px;margin: 0 auto;">
                                 {{ $pageNameAr }}
                                 <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ ($lastBillNum+1) }}</span>
                             </div>
@@ -178,72 +178,75 @@
                             <br>
         
                             <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #f3e5d3; ">
-                                <div class="row">
-                                    
-                                    <p class="col-lg-6 col-12">
-                                        <label for="">
-                                            ضريبة ق م (%)
+                                <div class="w-100 d-flex flex-wrap align-items-center justify-content-between gap-2" style="row-gap: 10px;">
+                                    <!-- ضريبة ق م (مخفي) -->
+                                    <div class="flex-grow-1" style="display:none; min-width: 160px;">
+                                        <label for="tax_bill" style="font-size:13px; color:#6d4c1c;">
+                                            <i class="fas fa-percent text-warning"></i> ضريبة ق م (%)
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
-                                    </p>
-        
-                                    <p class="col-lg-6 col-12">
-                                        <label for="">
+                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 13px;" />
+                                    </div>
+
+                                    <!-- خصم قيمة -->
+                                    <div class="flex-grow-1" style="min-width: 100%;">
+                                        <label for="discount_bill" style="font-size:13px; color:#6d4c1c;">
                                             خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="discount_bill" name="discount_bill" placeholder="خصم قيمة" style="font-size: 12px;" />
-                                    </p>
-                                    
-                                    {{--<p class="col-lg-4 col-12">
-                                        <label for="">
-                                            مصاريف إضافية
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
-                                        </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="extra_money" name="extra_money" placeholder="مصاريف إضافية" style="font-size: 12px;" />
-                                    </p>--}}
-                        
-                                    <p class="col-6" id="countTableTr" style="font-size: 13px;">
-                                        عدد العناصر:
-                                        <span style="font-size: 16px;">0</span>
-                                    </p>
-                                    <p class="col-6" style="font-size: 13px;font-size: 14px;">
-                                        م الفرعي: 
-                                        <span style="font-size: 16px;" class="subtotal">0</span>
-                                    </p>
+                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="discount_bill" name="discount_bill" placeholder="خصم قيمة" style="font-size: 15px; font-weight: bold; color: #e74c3c; background: #fffbe7; border: 1.5px solid #e1ab09;" />
+                                    </div>
 
-                                    <p class="col-lg-12">
-                                        <div style="width: 97%;background: #e1ab09;color: black;padding: 7px;text-align: center;margin: auto;">
-                                            <span style="font-size: 12px;">الإجمالي: </span>
-                                            <span style="font-size: 24px;" class="total_bill_after">0.00</span>
+                                    <!-- عدد العناصر -->
+                                    <div id="countTableTr" class="d-flex align-items-center flex-grow-1" style="background: #fffbe7; border-radius: 7px; padding: 8px 12px; min-width: 100%;">
+                                        <span class="badge bg-primary text-white me-2" style="font-size: 15px;"><i class="fas fa-list-ol"></i></span>
+                                        <span style="font-size: 14px; color: #6d4c1c;margin: 5px;">عدد العناصر:</span>
+                                        <span style="font-size: 20px; font-weight: bold; margin-right: 7px; color: #e67e22;" id="countTableTrSpan">0</span>
+                                    </div>
+
+                                    <!-- الإجمالي قبل -->
+                                    <div class="d-flex align-items-center flex-grow-1" style="background: #fffbe7; border-radius: 7px; padding: 8px 12px; min-width: 170px;">
+                                        <span class="badge bg-secondary text-white me-2" style="font-size: 15px;"><i class="fas fa-calculator"></i></span>
+                                        <span style="font-size: 14px; color: #6d4c1c;margin: 5px;">الإجمالي قبل:</span>
+                                        <span class="subtotal" style="font-size: 20px; font-weight: bold; margin: 0 7px 0 10px; color: #2980b9;">0</span>
+                                        <span style="font-size: 15px; color: #7a5a1a;">جنيه</span>
+                                    </div>
+
+                                    <!-- الإجمالي المستحق -->
+                                    <div class="flex-grow-1" style="min-width: 220px;">
+                                        <div style="background: linear-gradient(90deg, #f3e5d3 60%, #e1ab09 100%); color: #3d2c13; padding: 14px 0 10px 0; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px #e1ab0940; border: 1.5px solid #e1ab09;">
+                                            <span style="font-size: 16px; font-weight: bold; letter-spacing: 1px; color: #7a5a1a;">
+                                                 الإجمالي المستحق:
+                                            </span>
+                                            <span class="total_bill_after" style="font-size: 32px; font-weight: bold; color: #b94a00; margin: 0 10px; letter-spacing: 1px;">0.00</span>
+                                            <span style="font-size: 15px; color: #7a5a1a;">جنيه</span>
                                         </div>
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
     
     
     
-                        <div class="col-lg-8" style="height: 70vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat;">
+                        <div class="col-lg-8" style="height: 70vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center center;">
                             <table class="table table-hover table-bordered" id="products_table">
                                 <thead class="bg bg-black-5">
                                     <tr>
-                                        <th>#</th>
-                                        <th>حذف</th>
-                                        <th style="width: 20%;">السلعة/الخدمة</th>
-                                        <th style="width: 10%;">الوحدة ص</th>
-                                        <th style="width: 8%;">ك المخزن</th>
-                                        <th style="width: 8%;">
+                                        <th class="nowarp_thead">#</th>
+                                        <th class="nowarp_thead">حذف</th>
+                                        <th class="nowarp_thead" style="width: 250px !important;min-width: 250px !important;">السلعة/الخدمة</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الوحدة الصغري</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ك المخزن</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">
                                             ك جديدة
                                             <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى التأكد من إدخال الكمية الجديدة للمنتج باستخدام نفس الوحدة المحددة، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
                                         </th>
-                                        <th style="width: 10%;">س التكلفة</th>
-                                        <th style="width: 10%;">س بيع</th>
-                                        <th style="width: 8%;">خصم%</th>
-                                        <th style="width: 8%;">ضريبة %</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س التكلفة</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
+                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">خصم%</th>
+                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;display: none;">ضريبة %</th>
                                         {{--<th style="width: 8%;">بونص</th>--}}
-                                        <th style="width: 10%;">الإجمالي</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الإجمالي</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center"></tbody>
@@ -519,6 +522,7 @@
                     var smallUnit = productData.smallUnit; // الوحدة الصغري
                     var smallUnitName = productData.smallUnitName; // الوحدة الصغري
                     var small_unit_numbers = display_number_js(productData.small_unit_numbers); // الوحدة الصغري
+                    var prod_discount = display_number_js(productData.prod_discount); // خصم المنتج
                     
                     var bigUnit = productData.bigUnit; // الوحدة الكبري
                     var bigUnitName = productData.bigUnitName; // الوحدة الكبري
@@ -535,35 +539,53 @@
                         $('#products_table tbody').append(`
                                 <tr id="tr_${productId}">
                                     <th>${productId}</th>
+
                                     <td>
                                         <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();">
                                             <i class="fas fa-times"></i>
                                         </button>
                                     </td>
+
                                     <td class="prod_name">
                                         ${productName}
                                         <input autocomplete="off" type='hidden' name="prod_name[]" value="${productId}" />
                                     </td>
+
                                     <td class="">
                                         <span>${smallUnitName}</span>
                                         <input autocomplete="off" type='hidden' class='small_unit_numbers' value='${small_unit_numbers}' />      
                                     </td>
+
                                     <td>
                                         <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="${quantity_all}">                    
                                     </td>
-                                    <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput product_new_qty" name="product_new_qty[]" value="1"></td>
+
+                                    <td>
+                                        <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput product_new_qty" name="product_new_qty[]" value="1">
+                                    </td>
+                                    
                                     <td>
                                         <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput purchasePrice" name="purchasePrice[]" value="${purchasePrice}">
 
                                         <input autocomplete="off" type='hidden' class="last_cost_price_small_unit[]" value="${purchasePrice}" />
                                         <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
                                     </td>
+
                                     <td>
                                         <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">                                    
                                     </td>
-                                    <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="0"></td>
-                                    <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="0"></td>
-                                    <td><input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total[]" value="0"></td>
+
+                                    <td>
+                                        <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="${prod_discount}">
+                                    </td>
+
+                                    <td style="display: none;">
+                                        <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="0">
+                                    </td>
+
+                                    <td>
+                                        <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total[]" value="0">
+                                    </td>
                                 </tr>
                             `);
                                 //<td><input type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_bonus" name="prod_bonus[]" value="0"></td>
@@ -593,7 +615,7 @@
 
                         } else {
                             appendToProductsTable();
-                            $("#countTableTr span").text(countTableTr());
+                            $("#countTableTr #countTableTrSpan").text(countTableTr());
                             $("#products_selectize")[0].selectize.focus();
                             calcTotal();
                         }
@@ -651,8 +673,8 @@
             let afterDiscountBill = total - discount_bill;    
 
             // عرض الإجمالي الكلي في الـ div
-            $('.subtotal').text( parseFloat(subTotal).toLocaleString() + ' جنية');
-            $('.total_bill_after').text( parseFloat(afterDiscountBill).toLocaleString() + ' جنية');
+            $('.subtotal').text( parseFloat(subTotal).toLocaleString());
+            $('.total_bill_after').text( parseFloat(afterDiscountBill).toLocaleString());
         }
     </script>
     {{-- end function calcTotal --}}
@@ -714,11 +736,19 @@
 
 
         $(document).on('click', '#finally_save_bill_btn', function(){
+
+            if(countTableTr() < 1){
+                alertify.error("خطأ: أضف أصناف للفاتورة أولا");
+                return false;   
+            }
+
             alertify.confirm(
                 'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
                 `<div style="text-align: center;">
                     <p style="">
-                        هل انت متأكد من حفظ الفاتورة الحالية
+                        هل تريد حفظ فاتورة المشتريات؟ 
+                        <br />
+                        <span class="text-danger">⚠️ تأكد من صحة البيانات قبل الحفظ.</span>
                     </p>
                 </div>`,
                 function(){
@@ -789,6 +819,9 @@
                     }
                 });
             });
+
+
+
     </script>
     {{--  end when click finally_save_bill_btn to save bill --}}
     

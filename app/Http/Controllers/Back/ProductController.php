@@ -502,91 +502,60 @@ class ProductController extends Controller
 
         return DataTables::of($all)
             ->addColumn('id', function($res){
-                return '<strong>#'.$res->productId.'</strong>';
+                return '<span class="badge badge-info" style="font-size:110% !important;">#'.$res->productId.'</span>';
             })
             ->addColumn('name', function($res){
-                $names = "<div>
-                            <span style='margin: 0px 5px;'>"
-                                .$res->nameAr.
-                            "</span>
-                        </div>"; 
-                        
+                $names = '<span style="margin:0 5px;font-weight:bold;">'.$res->nameAr.'</span>';
                 if($res->nameEn){
-                    $names .= "<div>
-                                <span>أجنبي: </span>
-                                <span style='margin: 0px 5px;'>"
-                                    .$res->nameEn.
-                                "</span>
-                            </div>"; 
-                }        
-                
+                    $names .= '<div style="font-size:10px;color:#888;">أجنبي: <span style="margin:0 5px;">'.$res->nameEn.'</span></div>';
+                }
                 return $names;
             })
             ->addColumn('sell_price_small_unit', function($res){
-                return '<strong style="font-size: 15px;">'.display_number($res->sell_price_small_unit).'</strong>';
+                return '<span class="badge badge-success" style="font-size:13px;padding:5px 10px;"><i class="fas fa-tag"></i> '.display_number($res->sell_price_small_unit).'</span>';
             })
             ->addColumn('last_cost_price_small_unit', function($res){
-                return display_number($res->last_cost_price_small_unit);
+                return '<span class="badge badge-warning" style="font-size:12px;padding:4px 8px;"><i class="fas fa-money-bill-wave"></i> '.display_number($res->last_cost_price_small_unit).'</span>';
             })
             ->addColumn('prod_discount', function($res){
-                return display_number($res->prod_discount);
+                return '<span class="badge badge-danger" style="font-size:12px;"><i class="fas fa-percent"></i> '.display_number($res->prod_discount).'</span>';
             })
             ->addColumn('prod_tax', function($res){
-                return display_number($res->prod_tax);
+                return '<span class="badge badge-secondary" style="font-size:12px;"><i class="fas fa-coins"></i> '.display_number($res->prod_tax).'</span>';
             })
             ->addColumn('units', function($res){
-                $units = "<span>
-                            <span>صغري: </span>
-                            <span style='margin: 0px 3px;'>"
-                                .$res->small_unit_name. ' [ ' .display_number($res->small_unit_numbers). ' ]'.
-                            "</span>
-                        </span>"; 
-                        
+                $units = '<span class="badge badge-dark"><i class="fas fa-balance-scale-left"></i> صغري: '.$res->small_unit_name.' [ '.display_number($res->small_unit_numbers).' ]</span>';
                 if($res->big_unit_name){
-                    $units .= "<span class='text-muted'>
-                                <span>كبري: </span>
-                                <span style='margin: 0px 3px;'>"
-                                    .$res->big_unit_name.
-                                "</span>
-                            </span>"; 
-                }        
-                
+                    $units .= ' <span class="badge badge-light text-muted"><i class="fas fa-balance-scale-right"></i> كبري: '.$res->big_unit_name.'</span>';
+                }
                 return $units;
             })
             ->addColumn('category', function($res){
-                return '
-                            <span>'.$res->category_name.'</span>
-                            <span class="text-muted" style="margin: 0 3px;">'.$res->name_sub_category.'</span>
-                        ';
+                return '<span class="badge badge-primary"><i class="fas fa-layer-group"></i> '.$res->category_name.'</span> <span class="badge badge-light text-muted" style="margin:0 3px;">'.$res->name_sub_category.'</span>';
             })
             ->addColumn('quantity_small_unit', function($res){
-                return '<strong>'.display_number($res->quantity_small_unit). ' ' .$res->small_unit_name.'</strong>';
+                return '<span class="badge badge-info" style="font-size:13px;"><i class="fas fa-cubes"></i> '.number_format($res->quantity_small_unit).' '.$res->small_unit_name.'</span>';
             })
             ->addColumn('image', function($res){
-                return '
-                    <a class="spotlight" title="'.$res->nameAr.'" href="'.url('back/images/products/'.$res->image).'">
-                        <img src="'.url('back/images/products/'.$res->image).'" alt="'.$res->nameAr.'" style="width: 25px;height: 25px;border-radius: 5px;margin: 0px auto;display: block;">
-                    </a>
-                ';
+                return '<a class="spotlight" title="'.$res->nameAr.'" href="'.url('back/images/products/'.$res->image).'">
+                        <img src="'.url('back/images/products/'.$res->image).'" alt="'.$res->nameAr.'" style="width: 30px;height: 30px;border-radius: 7px;margin: 0px auto;display: block;border:2px solid #eee;">
+                    </a>';
             })
             ->addColumn('status', function($res){
                 if($res->status == 1){
-                    return '<span class="label text-success" style="position: relative;"><div class="dot-label bg-success ml-1" style="position: absolute;right: -17px;top: 7px;"></div>نشط</span>';
+                    return '<span class="badge badge-success" style="font-size:12px;"><i class="fas fa-check-circle"></i> نشط</span>';
                 }
                 else{
-                    return '<span class="label text-danger" style="position: relative;"><div class="dot-label bg-danger ml-1" style="position: absolute;right: -15px;top: 7px;"></div>معطل</span>';
+                    return '<span class="badge badge-danger" style="font-size:12px;"><i class="fas fa-times-circle"></i> معطل</span>';
                 }
             })
             ->addColumn('action', function($res){
-                return '
-                        <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->productId.'" product_name="'.$res->nameAr.'">
+                return '<button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->productId.'" product_name="'.$res->nameAr.'">
                             <i class="fa fa-trash"></i>
                         </button>
-                        
                         <button type="button" class="btn btn-sm btn-outline-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->productId.'">
                             <i class="fas fa-marker"></i>
-                        </button>
-                    ';
+                        </button>';
             })
             ->rawColumns(['id', 'name', 'sell_price_small_unit', 'last_cost_price_small_unit', 'prod_discount', 'prod_tax', 'units', 'category', 'quantity_small_unit', 'image', 'status', 'action'])
             ->toJson();
