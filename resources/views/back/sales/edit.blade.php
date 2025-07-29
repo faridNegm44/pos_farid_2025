@@ -812,7 +812,7 @@
                 function() {
                     $.ajax({
                         url: `{{ url('sales/update_product_from_bill') }}/${rowId}`,
-                        type: "POST",
+                        type: "GET",
                         data: {
                             rowId: rowId, 
                             rowSellPrice: rowSellPrice,
@@ -920,15 +920,11 @@
                                 }
 
                                 if(res.success_delete){
-                                    alertify.dialog('alert')
-                                    .set({transition:'slide',message: `
-                                        <div style='text-align:center;'>
-                                            <p>🗑️ تم حذف الصنف من الفاتورة بنجاح.</p>
-                                            <p>📦 تمت إعادة كمية الصنف إلى المخزن.</p>
-                                            <p>📊 تم تحديث متوسط السعر تلقائيًا.</p>
-                                        </div>
-                                    `, 'basic': true})
-                                    .show();
+                                    alert(
+                                        "🗑️ تم حذف الصنف من الفاتورة بنجاح.\n" +
+                                        "📦 تمت إعادة كمية الصنف إلى المخزن.\n" +
+                                        "📊 تم تحديث متوسط السعر تلقائيًا."
+                                    );
 
                                     location.reload();
                                 }

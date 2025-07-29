@@ -372,7 +372,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::post('/update/{id}' , 'SaleBillController@update');
 
         Route::get('/destroy_bill/{id}' , 'SaleBillController@destroy_bill'); //  حذف الفاتورة كاملة
-        Route::post('/update_product_from_bill/{id}' , 'SaleBillController@update_product_from_bill'); // تعديل صنف من أصناف الفاتورة
+        Route::get('/update_product_from_bill/{id}' , 'SaleBillController@update_product_from_bill'); // تعديل صنف من أصناف الفاتورة
         Route::get('/destroy_product_from_bill/{id}' , 'SaleBillController@destroy_product_from_bill'); // حذف صنف من أصناف الفاتورة
         
         Route::get('datatable' , 'SaleBillController@datatable');

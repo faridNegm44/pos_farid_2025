@@ -28,10 +28,10 @@
                             if(res.success_delete){
                                 alertify.dialog('alert')
                                 .set({transition:'slide',message: `
-                                    <div style='text-align:center;'>
-                                        <p>تم حذف الفاتورة بنجاح ✅</p>
-                                        <p>✨ تمت إعادة الكميات إلى المخزن 📦</p>
-                                        <p>📊 تم تحديث متوسطات الأسعار تلقائيًا 🔄   </p>
+                                    <div style='text-align:center;background: #ff000014;padding: 25px 5px;border-radius: 5px;'>
+                                        <p class="p-1">تم حذف الفاتورة بنجاح ✅</p>
+                                        <p class="p-1">✨ تمت إعادة الكميات إلى المخزن 📦</p>
+                                        <p class="p-1">📊 تم تحديث متوسطات الأسعار تلقائيًا 🔄   </p>
                                     </div>
                                 `, 'basic': true})
                                 .show();

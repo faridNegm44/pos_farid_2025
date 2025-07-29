@@ -72,8 +72,24 @@
                         var cost_price_permission  = '';
                     }
 
+                    let rowClass = '';
+                    const checkBillStatus = value2.status;
+
+                    if(checkBillStatus == 'فاتورة ملغاة'){
+                        rowClass = 'bg bg-danger-transparent';
+
+                    }else if(checkBillStatus == 'فاتورة نشطة'){                        
+                        rowClass = 'bg bg-success-transparent';
+
+                    }else if(checkBillStatus == 'فاتورة معدلة'){
+                        rowClass = 'bg bg-warning-transparent';
+                
+                    }else{
+                        rowClass = 'bg bg-info-transparent';
+                    }
+
                     $('#showProductsModal #content tbody').append(`
-                        <tr>
+                        <tr class="${rowClass}">
                             <td>${value2.product_id}</td>
                             <td>${value2.productNameAr}</td>
                             <td>

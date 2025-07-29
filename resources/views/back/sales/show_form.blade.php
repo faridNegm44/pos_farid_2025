@@ -45,26 +45,28 @@
               <br>
 
               <div id="content">
-                <table class="table table-bordered table-striped text-center">
-                  <thead class="bg bg-black-5">
-                    <tr>
-                      <th>رقم المنتج</th>
-                      <th>اسم المنتج</th>
-                      <th>كمية بالوحدة ك</th>
-                      <th>كمية بالوحدة ص</th>
-                      @if (userPermissions()->cost_price_view)
-                        <th>سعر التكلفة</th>
-                      @endif
-                      <th>سعر البيع</th>
-                      <th>الخصم</th>
-                      <th>الضريبة</th>
-                      <th>الإجمالي قبل</th>
-                      <th>الإجمالي بعد</th>
-                    </tr>
-                  </thead>
-
-                  <tbody></tbody>
-                </table>
+                <div class="table-responsive" style="width: 100%;">
+                  <table class="table table-bordered table-striped text-center">
+                    <thead class="bg bg-black-5">
+                      <tr>
+                        <th>رقم المنتج</th>
+                        <th>اسم المنتج</th>
+                        <th>كمية بالوحدة ك</th>
+                        <th>كمية بالوحدة ص</th>
+                        @if (userPermissions()->cost_price_view)
+                          <th>سعر التكلفة</th>
+                        @endif
+                        <th>سعر البيع</th>
+                        <th>الخصم</th>
+                        <th>الضريبة</th>
+                        <th>الإجمالي قبل</th>
+                        <th>الإجمالي بعد</th>
+                      </tr>
+                    </thead>
+  
+                    <tbody></tbody>
+                  </table>
+                </div>
                 
               </div>
           
