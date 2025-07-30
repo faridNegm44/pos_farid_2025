@@ -117,10 +117,10 @@ class ExtraExpensesController extends Controller
                         <i class="fas fa-marker"></i>
                     </button>
 
-                    <button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'"  expense_type="'.$res->expense_type.'">
-                        <i class="fa fa-trash"></i>
-                    </button>
                 ';
+                    //<button class="btn btn-sm btn-outline-danger delete" data-placement="top" data-toggle="tooltip" title="حذف" res_id="'.$res->id.'"  expense_type="'.$res->expense_type.'">
+                    //    <i class="fa fa-trash"></i>
+                    //</button>
         })
         ->rawColumns(['amount', 'action'])
         ->toJson();

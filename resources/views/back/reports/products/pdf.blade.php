@@ -54,22 +54,19 @@
         }*/
     </style>
 </head>
-<body style="padding: 5px 10px;">
-    <div style="padding: 5px 10px;border: 1px solid #000;">
-        <div class="">
-            <div class="invoice-title">
-                <h4 class="text-center" style="">
-                    {{ $pageNameAr }} ( {{ $product ? $results[0]->nameAr : 'جميع السلع والخدمات' }} )
-                </h4>
-            </div>
-            <hr>
+<body style=" background-color: #f9f9f9;">
+    <div style="padding: 20px; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <div style="border: 2px solid #dee2e6; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+            <h4 class="text-center" style="font-weight: bold; color: #343a40; margin: 0;">
+                🧾 {{ $pageNameAr }}
+            </h4>
+        </div>
 
             @include('back.layouts.header_report')
         </div>
 
         @if ($type || $from || $to)
-            <hr style="margin: 0 0 10px !important;"> 
-            <div style="margin-bottom: 10px;">
+            <div style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px;">
                 <div>
                     @if ($type)
                         <span class="itemsSearch">نوع الحركة: <span>{{ $type }}</span></span>
@@ -84,32 +81,31 @@
             </div>
         @endif
 
-        <div>
-            <table class="table-bordered" style="width: 100%;text-align: center;">
-                <thead class="bg bg-black-5">
-                    <tr class="gray">
-                        <th>رقم الحركة</th>
-                        <th>تاريخ الحركة</th>
-                        <th>اسم السلعة/الخدمة</th>
-                        <th>نوع الحركة</th>
-                        <th>مستخدم</th>
-                        <th>ملاحظات</th>
+        <div style="margin-top: 20px;">
+            <table class="table table-bordered" style="width: 100%; background: #fff; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+                <thead>
+                    <tr>
+                    <th style="padding: 0 8px !important; font-size: 13px;">رقم الحركة</th>
+                    <th style="padding: 0 8px !important; font-size: 13px;">تاريخ الحركة</th>
+                    <th style="padding: 0 8px !important; font-size: 13px;">اسم السلعة/الخدمة</th>
+                    <th style="padding: 0 8px !important; font-size: 13px;">نوع الحركة</th>
+                    <th style="padding: 0 8px !important; font-size: 13px;">مستخدم</th>
+                    <th style="padding: 0 8px !important; font-size: 13px;">ملاحظات</th>
                     </tr>
-                </thead>                               
-                
+                </thead>
                 <tbody>
-                    @foreach ($results as $result)    
-                        <tr>
-                            <td>{{ $result->id }}</td>
-                            <td>
-                                {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>                            
-                            </td>
-                            <td style="">{{ $result->nameAr }}</td>
-                            <td>{{ $result->type }}</td>                            
-                            <td>{{ $result->userName }}</td>
-                            <td>{{ $result->tasweaNotes }}</td>
-                        </tr>
+                    @foreach ($results as $result)
+                    <tr style="background: {{ $loop->even ? '#f8f9fa' : '#fff' }};">
+                        <td style="padding: 0 7px !important;">{{ $result->id }}</td>
+                        <td style="padding: 0 7px !important;">
+                        {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
+                        <span style="margin: 0 5px; color: #888;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
+                        </td>
+                        <td style="padding: 0 7px !important;">{{ $result->nameAr }}</td>
+                        <td style="padding: 0 7px !important;">{{ $result->type }}</td>
+                        <td style="padding: 0 7px !important;">{{ $result->userName }}</td>
+                        <td style="padding: 0 7px !important;">{{ $result->tasweaNotes }}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>

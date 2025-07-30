@@ -66,15 +66,13 @@
         }
     </style>
 </head>
-<body  style="padding: 5px 10px;">
-    <div class="container" style="padding: 5px 10px;border: 1px solid #000;">
-        <div class="">
-            <div class="invoice-title">
-                <h4 class="text-center" style="">
-                    {{ $pageNameAr }} - {{ $results[0]->clientName }}
-                </h4>
-            </div>
-            <hr>
+<body style=" background-color: #f9f9f9;">
+    <div style="padding: 20px; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <div style="border: 2px solid #dee2e6; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+            <h4 class="text-center" style="font-weight: bold; color: #343a40; margin: 0;">
+                🧾 {{ $pageNameAr }}
+            </h4>
+        </div>
 
             @include('back.layouts.header_report')
 
@@ -118,17 +116,17 @@
                 {{----------------------------------------------------------------------------------------}}
                 @if ($bill->treasury_type === 'رصيد اول عميل')
                     <div class="bill-container" style="padding: 0 10px;">
-                        <p style="font-size: 15px;">
-                            رقم الحركة: {{ $bill->id }}
-                            - ( {{ $bill->treasury_type }} )
-                        </p>
-                        <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
-                            {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
-                        </span>
-                        <span style="margin: 3px 10px;"><strong>المبلغ:</strong> {{ display_number($bill->remaining_money) }}</span>
-                        <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
-                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
+                    <p style="font-size: 15px;">
+                        رقم الحركة: {{ $bill->id }}
+                        - ( {{ $bill->treasury_type }} )
+                    </p>
+                    <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
+                        {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
+                        <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                    </span>
+                    <span style="margin: 3px 10px;"><strong>المبلغ:</strong> {{ display_number($bill->remaining_money) }}</span>
+                    <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                    <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end رصيد اول عميل  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}
@@ -140,27 +138,27 @@
                 {{----------------------------------------------------------------------------------------}}                
                 @elseif ($bill->treasury_type == 'اذن توريد نقدية' && $bill->bill_type == 0)
                     <div class="bill-container" style="padding: 10px;">
-                        <p style="font-size: 15px;">
-                            رقم الحركة: {{ $bill->id }}
-                            - ( {{ $bill->treasury_type }} )
-                        </p>
-                        <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
-                            {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
-                        </span>
-                        
-                        <span style="margin: 3px 10px;"><strong>خزينة المعاملة:</strong> {{ $bill->treasury_name }}</span>
+                    <p style="font-size: 15px;">
+                        رقم الحركة: {{ $bill->id }}
+                        - ( {{ $bill->treasury_type }} )
+                    </p>
+                    <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
+                        {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
+                        <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                    </span>
+                    
+                    <span style="margin: 3px 10px;"><strong>خزينة المعاملة:</strong> {{ $bill->treasury_name }}</span>
 
-                        <span style="margin: 3px 10px;">
-                            <strong>المبلغ المدفوع</strong>: {{ display_number($bill->amount_money) }}
-                        </span>
-                        <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
-                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
+                    <span style="margin: 3px 10px;">
+                        <strong>المبلغ المدفوع</strong>: {{ display_number($bill->amount_money) }}
+                    </span>
+                    <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                    <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end اذن توريد نقدية  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}          
 
-                
+            
 
 
 
@@ -168,22 +166,22 @@
                 {{----------------------------------------------------------------------------------------}}                
                 @elseif ($bill->treasury_type === 'اذن صرف نقدية')
                     <div class="bill-container" style="padding: 10px;">
-                        <p style="font-size: 15px;">
-                            رقم الحركة: {{ $bill->id }}
-                            - ( {{ $bill->treasury_type }} )
-                        </p>
-                        <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
-                            {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
-                        </span>
-                        
-                        <span style="margin: 3px 10px;"><strong>خزينة المعاملة:</strong> {{ $bill->treasury_name }}</span>
+                    <p style="font-size: 15px;">
+                        رقم الحركة: {{ $bill->id }}
+                        - ( {{ $bill->treasury_type }} )
+                    </p>
+                    <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
+                        {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
+                        <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                    </span>
+                    
+                    <span style="margin: 3px 10px;"><strong>خزينة المعاملة:</strong> {{ $bill->treasury_name }}</span>
 
-                        <span style="margin: 3px 10px;">
-                            <strong>المبلغ المصروف</strong>: {{ display_number($bill->amount_money) }}
-                        </span>
-                        <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
-                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
+                    <span style="margin: 3px 10px;">
+                        <strong>المبلغ المصروف</strong>: {{ display_number($bill->amount_money) }}
+                    </span>
+                    <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                    <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end اذن صرف نقدية  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}          
@@ -196,24 +194,49 @@
                 {{----------------------------------------------------------------------------------------}}                
                 @elseif ($bill->treasury_type === 'تسوية رصيد للجهة')
                     <div class="bill-container" style="padding: 10px;">
-                        <p style="font-size: 15px;">
-                            رقم الحركة: {{ $bill->id }}
-                            - ( {{ $bill->treasury_type }} )
-                        </p>
-                        <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
-                            {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
-                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
-                        </span>
+                    <p style="font-size: 15px;">
+                        رقم الحركة: {{ $bill->id }}
+                        - ( {{ $bill->treasury_type }} )
+                    </p>
+                    <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
+                        {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
+                        <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                    </span>
                     
-                        <span style="margin: 3px 10px;">
-                            <strong>الرصيد بعد التسوية</strong>: {{ display_number($bill->remaining_money) }}
-                        </span>
-                        <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
-                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
+                    <span style="margin: 3px 10px;">
+                        <strong>الرصيد بعد التسوية</strong>: {{ display_number($bill->remaining_money) }}
+                    </span>
+                    <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                    <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end تسوية رصيد للجهة  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}          
 
+
+
+
+
+                {{----------------------------- start اذن مرتجع نقدية لعميل  ------------------------------------}}
+                {{----------------------------------------------------------------------------------------}}
+                @elseif ($bill->treasury_type === 'اذن مرتجع نقدية لعميل')
+                    <div class="bill-container" style="padding: 10px; background-color: #f5f7fa; border: 1px solid #b6d4fe; border-radius: 8px; margin-bottom: 10px;">
+                    <p style="font-size: 15px; color: #0d6efd;">
+                        رقم الحركة: {{ $bill->id }}
+                        - ( {{ $bill->treasury_type }} )
+                    </p>
+                    <span style="margin: 3px 10px;"><strong>تاريخ المعاملة:</strong>
+                        {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
+                        <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                    </span>
+                    <span style="margin: 3px 10px;"><strong>خزينة المعاملة:</strong> {{ $bill->treasury_name }}</span>
+                    <span style="margin: 3px 10px;">
+                        <strong>المبلغ المرتجع</strong>: - {{ display_number($bill->amount_money) }}
+                    </span>
+                    <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                    <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
+                    </div>
+                {{----------------------------- end اذن مرتجع نقدية لعميل  ------------------------------------}}
+                {{----------------------------------------------------------------------------------------}}
 
 
 
@@ -240,45 +263,44 @@
 
                         <table border="1" width="100%" style="border-collapse: collapse;margin-top: 10px;">
                             <thead class="bg bg-black-5">
-                                <tr>
-                                    <th>كود المنتج</th>
-                                    <th>اسم المنتج</th>
-                                    <th>الكمية</th>
-                                    <th>السعر قبل الخصم</th>
-                                    <th>السعر بعد الخصم</th>
-                                    <th>الخصم</th>
-                                    <th>ضريبة القيمة المضافة</th>
-                                    <th>الإجمالي قبل </th>
-                                    <th>الإجمالي بعد </th>
-                                </tr>
+                            <tr>
+                                <th>كود المنتج</th>
+                                <th>اسم المنتج</th>
+                                <th>الكمية</th>
+                                <th>السعر قبل الخصم</th>
+                                <th>السعر بعد الخصم</th>
+                                <th>الخصم</th>
+                                <th>ضريبة القيمة المضافة</th>
+                                <th>الإجمالي قبل </th>
+                                <th>الإجمالي بعد </th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach ($bill->products as $product)
-                                    <tr>
-                                        <td>{{ $product->product_id }}</td>
-                                        <td>{{ $product->nameAr }}</td>
-                                        <td>{{ display_number($product->product_bill_quantity) }}</td>
-                                        <td>{{ display_number($product->sell_price_small_unit) }}</td>
-                                        <td>{{ display_number($product->sell_price_small_unit) }}</td>
-                                        <td>{{ display_number($product->discount) ?? 0 }}</td>
-                                        <td>{{ display_number($product->tax) ?? 0 }}</td>
-                                        <td>{{ display_number($product->total_before) }}</td>
-                                        <td>{{ display_number($product->total_after) }}</td>
-                                    </tr>
-                                @endforeach
+                            @foreach ($bill->products as $product)
+                                <tr>
+                                <td>{{ $product->product_id }}</td>
+                                <td>{{ $product->nameAr }}</td>
+                                <td>{{ display_number($product->product_bill_quantity) }}</td>
+                                <td>{{ display_number($product->sell_price_small_unit) }}</td>
+                                <td>{{ display_number($product->sell_price_small_unit) }}</td>
+                                <td>{{ display_number($product->discount) ?? 0 }}</td>
+                                <td>{{ display_number($product->tax) ?? 0 }}</td>
+                                <td>{{ display_number($product->total_before) }}</td>
+                                <td>{{ display_number($product->total_after) }}</td>
+                                </tr>
+                            @endforeach
                             </tbody>
 
                             <tfoot>
-                                <tr class="totals_bill_tr">
-                                    <th colspan="8">الإجمالي</th>
-                                    <th>{{ display_number( $bill->total_bill_after ) }}</th>
-                                </tr>
+                            <tr class="totals_bill_tr">
+                                <th colspan="8">الإجمالي</th>
+                                <th>{{ display_number( $bill->total_bill_after ) }}</th>
+                            </tr>
                             </tfoot>
                         </table>
                     </div>
-                    {{-------------------------------- end $bill->treasury_type === 'اذن توريد نقدية' && $bill->bill_type === 'اضافة فاتورة مبيعات'  ------------------------------------}}
-                    {{-----------------------------------------------------------------------------------------------}}  
-
+                {{-------------------------------- end $bill->treasury_type === 'اذن توريد نقدية' && $bill->bill_type === 'اضافة فاتورة مبيعات'  ------------------------------------}}
+                {{-----------------------------------------------------------------------------------------------}}  
 
 
 
@@ -302,56 +324,57 @@
 
                         <table border="1" width="100%" style="border-collapse: collapse;margin-top: 10px;">
                             <thead class="bg bg-black-5">
-                                <tr>
-                                    <th>كود المنتج</th>
-                                    <th>اسم المنتج</th>
-                                    <th>الكمية</th>
-                                    <th>السعر قبل الخصم</th>
-                                    <th>السعر بعد الخصم</th>
-                                    <th>الخصم</th>
-                                    <th>ضريبة القيمة المضافة</th>
-                                    <th>الإجمالي قبل </th>
-                                    <th>الإجمالي بعد </th>
-                                </tr>
+                            <tr>
+                                <th>كود المنتج</th>
+                                <th>اسم المنتج</th>
+                                <th>الكمية</th>
+                                <th>السعر قبل الخصم</th>
+                                <th>السعر بعد الخصم</th>
+                                <th>الخصم</th>
+                                <th>ضريبة القيمة المضافة</th>
+                                <th>الإجمالي قبل </th>
+                                <th>الإجمالي بعد </th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach ($bill->products as $product)
-                                    <tr>
-                                        <td>{{ $product->product_id }}</td>
-                                        <td>{{ $product->nameAr }}</td>
-                                        <td>{{ display_number($product->product_bill_quantity) }}</td>
-                                        <td>{{ display_number($product->sell_price_small_unit) }}</td>
-                                        <td>{{ display_number($product->sell_price_small_unit) }}</td>
-                                        <td>{{ display_number($product->discount) ?? 0 }}</td>
-                                        <td>{{ display_number($product->tax) ?? 0 }}</td>
-                                        <td>{{ display_number($product->total_before) }}</td>
-                                        <td>{{ display_number($product->total_after) }}</td>
-                                    </tr>
-                                @endforeach
+                            @foreach ($bill->products as $product)
+                                <tr>
+                                <td>{{ $product->product_id }}</td>
+                                <td>{{ $product->nameAr }}</td>
+                                <td>{{ display_number($product->product_bill_quantity) }}</td>
+                                <td>{{ display_number($product->sell_price_small_unit) }}</td>
+                                <td>{{ display_number($product->sell_price_small_unit) }}</td>
+                                <td>{{ display_number($product->discount) ?? 0 }}</td>
+                                <td>{{ display_number($product->tax) ?? 0 }}</td>
+                                <td>{{ display_number($product->total_before) }}</td>
+                                <td>{{ display_number($product->total_after) }}</td>
+                                </tr>
+                            @endforeach
                             </tbody>
 
                             <tfoot>
-                                <tr class="totals_bill_tr">
-                                    <th colspan="8">الإجمالي</th>
-                                    <th>{{ display_number( $bill->total_bill_after ) }}</th>
-                                </tr>
+                            <tr class="totals_bill_tr">
+                                <th colspan="8">الإجمالي</th>
+                                <th>{{ display_number( $bill->total_bill_after ) }}</th>
+                            </tr>
                             </tfoot>
                         </table>
                     </div>
                     {{----------------------------- end $bill->treasury_type === $bill->bill_type =>   ------------------------------------}}
                     {{-----------------------------------------------------------------------------------------------}}  
-                @endif
-                
+
+            @endif
+            
                 <p style="margin: 0 auto;text-align: center;border: 1px dotted #000;width: 35%;">
                     <strong>حالة العميل بعد الفاتورة:</strong> 
                     @if ($bill->remaining_money > 0)
-                        عليه: {{ display_number( $bill->remaining_money ) }} 
+                    عليه: {{ display_number( $bill->remaining_money ) }} 
 
                     @elseif ($bill->remaining_money < 0)
-                        لة: {{ display_number( $bill->remaining_money ) }}
+                    لة: {{ display_number( $bill->remaining_money ) }}
 
                     @else
-                        {{ display_number( $bill->remaining_money ) }}
+                    {{ display_number( $bill->remaining_money ) }}
                     @endif
                 </p>
 
@@ -361,21 +384,21 @@
 
         <div class="text-center" style="margin-top: 30px;">
             <h3 style="padding-top: 15px;">
-                @foreach ($results as $bill)
-                    @if ($loop->last)
-                        @if($bill->remaining_money === 0)
-                            لا توجد أي مستحقات مالية
+            @foreach ($results as $bill)
+                @if ($loop->last)
+                @if($bill->remaining_money === 0)
+                    لا توجد أي مستحقات مالية
 
-                        @elseif($bill->remaining_money > 0)
-                            الرصيد الحالي للعميل (علية):
-                            {{ display_number( $bill->remaining_money ) }}
+                @elseif($bill->remaining_money > 0)
+                    الرصيد الحالي للعميل (علية):
+                    {{ display_number( $bill->remaining_money ) }}
 
-                        @else
-                            الرصيد الحالي للعميل (لة):
-                            {{ display_number( $bill->remaining_money ) }}
-                        @endif
-                    @endif
-                @endforeach
+                @else
+                    الرصيد الحالي للعميل (لة):
+                    {{ display_number( $bill->remaining_money ) }}
+                @endif
+                @endif
+            @endforeach
             </h3>
         </div>
 

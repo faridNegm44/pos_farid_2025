@@ -48,7 +48,7 @@
     </style>
 </head>
 <body style=" background-color: #f9f9f9;">
-    <div style="padding: 20px; border: 1px solid #ccc; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+    <div style="padding: 20px; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
         <div style="border: 2px solid #dee2e6; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
             <h4 class="text-center" style="font-weight: bold; color: #343a40; margin: 0;">
                 🧾 {{ $pageNameAr }}

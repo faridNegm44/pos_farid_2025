@@ -36,8 +36,8 @@
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('taswea_products') }}" class="slide-item text-dark">تسوية كميات السلع والخدمات</a></li>
                             
-                            <hr class="navbar_hr"/>
-                            <li aria-haspopup="true"><a href="{{ url('transfer_between_stores') }}" class="slide-item text-dark">تحويلات السلع والخدمات بين المخازن</a></li>
+                            {{--<hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('transfer_between_stores') }}" class="slide-item text-dark">تحويلات السلع والخدمات بين المخازن</a></li>--}}
                             
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('inventories') }}" class="slide-item text-dark">إدارة الجرد</a></li>

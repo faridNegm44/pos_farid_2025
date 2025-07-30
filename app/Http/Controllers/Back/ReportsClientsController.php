@@ -165,6 +165,9 @@ class ReportsClientsController extends Controller
                         ->leftJoin('sale_bills', 'sale_bills.id', 'treasury_bill_dets.bill_id')
                         ->leftJoin('financial_years', 'financial_years.id', 'treasury_bill_dets.year_id')
                         ->leftJoin('users', 'users.id', 'treasury_bill_dets.user_id')
+                        
+                        //->whereIn('treasury_bill_dets.bill_type', ['اضافة فاتورة مبيعات', 'اذن توريد نقدية', 'اذن مرتجع نقدية لعميل'])
+                        
                         //->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
                         //->orWhere('treasury_bill_dets.bill_type', 'اذن توريد نقدية')
                         ->select(
@@ -215,6 +218,7 @@ class ReportsClientsController extends Controller
                                     ->where('store_dets.bill_id', $bill->saleBillId)
                                     ->join('products', 'products.id', 'store_dets.product_id')
                                     ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                                    ->whereIn('store_dets.status', ['فاتورة ملغاة', 'نشط', 'تم تعديله', 'تم حذفه'])
                                     ->select(
                                         'store_dets.product_id',
                                         'store_dets.sell_price_small_unit',

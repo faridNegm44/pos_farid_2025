@@ -81,6 +81,7 @@
                             @foreach ($results as $result)    
                                 @php
                                     $type = '';
+                                    $color = '#000';
 
                                     if($result->treasury_type == 'اذن توريد نقدية'){
                                         $type = '#8ae3aa';
@@ -89,13 +90,17 @@
                                     }elseif($result->treasury_type == 'رصيد اول عميل'){
                                         $type = '#fafafa';
                                     }elseif($result->treasury_type == 'تسوية رصيد للجهة'){
-                                        $type = '#f76d6d';
+                                        $type = '#ffb1b1';
+                                    }elseif($result->treasury_type == 'اذن مرتجع نقدية لعميل'){
+                                        $type = '#888';
+                                    }elseif($result->treasury_type == 'اضافة فاتورة مبيعات'){
+                                        $type = '#77aef6';
                                     }
                                     
                                 @endphp
 
 
-                                <tr style="background: {{ $type }};">
+                                <tr style="background: {{ $type }};color: {{ $color }}">
                                     {{--<td>{{ $result->id }}</td>--}}
                                     <td>
                                         {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}

@@ -117,6 +117,10 @@
                 border-width: 0 2px 2px 0;
                 transform: rotate(45deg);
             }
+
+            .ajs-error{
+                min-width: 500px !important;
+            }
         </style>
     </head>
 
@@ -308,10 +312,8 @@
                                         <th class="nowarp_thead" style="width: 220px !important;min-width: 220px !important;">السلعة/الخدمة</th>
                                         <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">الوحدة</th>
                                         <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك المخزن</th>
-                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">
-                                            ك مباعة
-                                            <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى إتمام عملية البيع باستخدام الوحدة الصغرى للمنتج، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
-                                        </th>
+                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك مباعة</th>
+                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك مرتجعة</th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">خصم%</th>                                                                                        
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;display: none;">ضريبة%</th>
@@ -324,7 +326,7 @@
                                         <tr id="tr_{{ $item->product_id }}">
                                             <th>{{ $item->product_id }}</th>
                                             <td>
-                                                <button type="button" class="btn btn-link p-0 return-row-btn" data-row-id="{{ $item->store_det_id }}" title="تعديل" style="color:#d84458;">
+                                                <button type="button" class="btn btn-link p-0 return-row-btn" data-row-id="{{ $item->store_det_id }}" title="إرجاع" style="color:#d84458;">
                                                     <i class="fas fa-reply fa-lg"></i>
                                                 </button>
                                             </td>
@@ -340,7 +342,10 @@
                                                 <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="{{ display_number( round($item->quantity_small_unit) ) }}">                    
                                             </td>
                                             <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity" value="{{ display_number(round($item->product_bill_quantity)) }}" >
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput" value="{{ display_number(round($item->product_bill_quantity)) }}" >
+                                            </td>
+                                            <td>
+                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity" value="0" >
                                             </td>
                                             <td>
                                                 <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice" value="{{ 
@@ -433,360 +438,6 @@
 
     @include('back.bills_css_js.css_js.main_js')
 
-
-    {{--  start search products by selectize #products_selectize --}}
-        <script>
-            $(document).ready(function() {
-                // بدايه الجزء الخاص بالبحث وعرض العملاء في selectize
-                $('#products_selectize').selectize({
-                    valueField: 'id',  // القيمة المخزنة عند الاختيار
-                    labelField: 'nameAr', // النص الظاهر للمستخدم
-                    searchField: ['id', 'nameAr', 'nameEn', 'natCode', 'shortCode'], // البحث في كل الحقول
-                    loadThrottle: 300, // تقليل عدد الطلبات عند البحث
-                    maxItems: 1, // اختيار عنصر واحد فقط
-                    create: false, // منع إضافة عناصر جديدة
-                    preload: 'focus', // تحميل البيانات عند التركيز على الحقل
-                    render: {
-                        option: function(item, escape) {
-                            const quantity = escape(item.quantity_small_unit);
-                            const disabled = quantity == 0 ? 'style="background:#f8d7da; color:#721c24; cursor: not-allowed;" disabled' : '';                        
-
-                            return `<option ${disabled}>
-                                        كود: ${escape(item.id)} - 
-                                        السلعة/الخدمة: ${escape(item.nameAr)} - 
-                                        س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } -                                 
-                                        كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
-                                    </option>`;
-                                    //${ escape(item.quantity_small_unit) == 0 ? '' : ' - كمية ك: ' + display_number_js( escape(item.quantity_small_unit) / escape(item.small_unit_numbers) ) + ' ' + escape(item.bigUnitName) }
-                        },
-                        item: function(item, escape) {
-                            return `<div>
-                                        كود: ${escape(item.id)} - 
-                                        السلعة/الخدمة: ${escape(item.nameAr)} - 
-                                        س بيع: ${ display_number_js( escape(item.sell_price_small_unit) ) } - 
-                                        كمية ص: ${ display_number_js( escape(item.quantity_small_unit) ) } ${ escape(item.smallUnitName) }
-                                    </div>`;
-                        }
-                    },
-                    load: function(query, callback) {
-                        if (!query.length) return callback();
-                        $.ajax({
-                            url: `{{ url('search_products_by_selectize') }}`, // رابط البحث
-                            type: 'GET',
-                            dataType: 'json',
-                            data: { data_input_search: query },
-                            success: function(response) {
-                                if (response.items && Array.isArray(response.items)) {
-                                    callback(response.items);
-                                } else {
-                                    console.error("البيانات غير صحيحة:", response);
-                                    callback([]);
-                                }
-                            },
-                            error: function(error) {
-                                console.error("خطأ في جلب البيانات:", error);
-                                callback([]);
-                            }
-                        });
-                    }
-                });
-                // نهاية الجزء الخاص بالبحث وعرض العملاء في selectize
-
-
-
-                // بدايه اختيار سلعة/خدمة من selectize واضافته في في جدول العملاء            
-                $('#products_selectize').change(function() {
-                    
-                    var productId = $(this).val();
-                    var selectizeInstance = $(this)[0].selectize; // الحصول على instance من selectize
-                    var selectedItem = selectizeInstance.getItem(productId); // الحصول على العنصر المحدد
-
-                    if (selectedItem) {
-                        var productData = selectizeInstance.options[productId]; // بيانات العنصر المحدد
-                        var productName = productData.nameAr; // اسم السلعة/الخدمة
-                        
-                        var smallUnit = productData.smallUnit; // الوحدة الصغري
-                        var smallUnitName = productData.smallUnitName; // الوحدة الصغري
-                        var small_unit_numbers = display_number_js(productData.small_unit_numbers); // الوحدة الصغري
-                        
-                        var bigUnit = productData.bigUnit; // الوحدة الكبري
-                        var bigUnitName = productData.bigUnitName; // الوحدة الكبري
-                        
-                        var sellPrice = productData.sell_price_small_unit == null ? 0 : display_number_js(productData.sell_price_small_unit); // سعر البيع
-                        var purchasePrice = productData.last_cost_price_small_unit == null ? 0 :  display_number_js(productData.last_cost_price_small_unit); // سعر الشراء
-                        var purchasePriceAvg = productData.avg_cost_price_small_unit == null ? 0 :  display_number_js(productData.last_cost_price_small_unit); // سعر الشراء
-                        var discount = productData.prod_discount == null ? 0 : display_number_js(productData.prod_discount); // خصم المنتج
-                        var tax = productData.prod_tax == null ? 0 : display_number_js(productData.prod_tax); // ضريبة المنتج
-                        
-                        var quantity_all = display_number_js(productData.quantity_small_unit); // كميه المخزن
-
-                        
-                        // بدايه التاكد لو في صلاحيه للمستخدم ع تغيير سعر البيع
-                        if(@json(userPermissions()->sale_price_view)){
-                            var sale_price_permissions = `
-                                <td>
-                                    <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">  
-                                </td>`;
-                        }else{
-                            var sale_price_permissions = `
-                                <td>
-                                    <input readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice[]" value="${sellPrice}">  
-                                </td>`;
-                        }
-                        // نهاية التاكد لو في صلاحيه للمستخدم ع تغيير سعر البيع
-
-                        // بدايه التاكد لو في صلاحيه للمستخدم ع الخصم
-                        if(@json(userPermissions()->discount_bill_view)){
-                            var discount_permissions = `
-                                <td>
-                                    <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="${discount}">
-                                </td>`;
-                        }else{
-                            var discount_permissions = `
-                                <td>
-                                    <input readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount[]" value="${discount}">
-                                </td>`;
-                        }
-                        // نهاية التاكد لو في صلاحيه للمستخدم ع الخصم
-
-                        // بدايه التاكد لو في صلاحيه للمستخدم ع الضريبة
-                        if(@json(userPermissions()->tax_bill_view)){
-                            var tax_permissions = `
-                                <td style="display: none;">
-                                    <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}">
-                                    <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
-                                    <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
-                                </td>`;
-                        }else{
-                            var tax_permissions = `
-                                <td style="display: none;">
-                                    <input readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax[]" value="${tax}">
-                                    <input autocomplete="off" type='hidden' class="last_cost_price_small_unit" name="last_cost_price_small_unit[]" value="${purchasePrice}" />
-                                    <input autocomplete="off" type='hidden' class="avg_cost_price_small_unit" name="avg_cost_price_small_unit[]" value="${purchasePriceAvg}" />
-                                </td>`;
-                        }
-                        // نهاية التاكد لو في صلاحيه للمستخدم ع الضريبة
-
-
-
-
-                        // التاكد من ان كميه النتج في المخزن اكبر من 0
-                        if (quantity_all == 0) {
-                            alertify.set('notifier', 'position', 'bottom-center');
-                            alertify.set('notifier', 'delay', 3);
-                            alertify.error("لا يمكن اختيار منتج غير متوفر في المخزن");
-                            selectizeInstance.clear();
-                            return;
-                        }
-                        // التاكد من ان كميه النتج في المخزن اكبر من 0
-
-
-                        //let bigAndSmallUnit = '';
-                        //if(bigUnit == 0){
-                        //    bigAndSmallUnit = `
-                        //        <span>${smallUnitName}</span>
-                        //        <input type="hidden" class='prod_units' value="${smallUnit}" name='prod_units[]'/>
-                        //    `;
-                        //}else{
-                        //    bigAndSmallUnit = `
-                        //        <select class='prod_units' name='prod_units[]'>
-                        //            <option class='small_unit_class' value='${smallUnit}'>${smallUnitName}</option>    
-                        //            <option class='big_unit_class' value='${bigUnit}'>${bigUnitName}</option>    
-                        //        </select>
-                        //    `;
-                        //}
-
-                        function appendToProductsTable() {
-
-                            $('#products_table tbody').append(`
-                                <tr id="tr_${productId}">
-                                    <th>${productId}</th>
-                                    <td>
-                                        <button class="btn btn-danger btn-sm remove_this_tr" onclick="removeThisTr('#pos_create #products_table'); new Audio('{{ url('back/sounds/failed.mp3') }}').play();">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </td>
-                                    <td class="prod_name">
-                                        ${productName}
-                                        <input autocomplete="off" type='hidden' name="prod_name[]" value="${productId}" />
-                                    </td>
-                                    <td class="">
-                                        ${smallUnitName}
-                                        <input autocomplete="off" type='hidden' class='small_unit_numbers' value='${small_unit_numbers}' />      
-                                    </td>
-                                    <td>
-                                        <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="${quantity_all}">                    
-                                    </td>
-                                    <td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity[]" value="1">
-                                    </td>                                                        
-
-                                    ${sale_price_permissions}                                                                    
-                                    ${discount_permissions}
-                                    ${tax_permissions}
-
-                                    <td><input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total[]" value="0"></td>
-                                    </tr>
-                                `);
-                                    //<td><input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_bonus" name="prod_bonus[]" value="0"></td>
-
-                            alertify.set('notifier', 'position', 'bottom-center');
-                            alertify.set('notifier', 'delay', 3);
-                            alertify.success("تم إضافة المنتج لأصناف الفاتورة");
-
-                            if(countTableTr() > 0){
-                                $("#save_bill").fadeIn();
-                            }
-
-                        }
-
-                        if (productId) {
-                            if ($(`#products_table tbody #tr_${productId}`).length > 0) {
-                                alertify.set('notifier', 'position', 'bottom-center');
-                                alertify.set('notifier', 'delay', 3);
-                                alertify.error("تم إضافة المنتج من قبل لأصناف الفاتورة");
-
-                                const sale_quantity = $(`#products_table tbody #tr_${productId} .sale_quantity`);
-                                const currentQty = parseInt(sale_quantity.val());
-                                sale_quantity.val(currentQty + 1);
-
-                                backgroundRedToSelectError(sale_quantity);
-                                calcTotal();
-
-                            } else {
-                                appendToProductsTable();
-                                $("#countTableTr span").text(countTableTr());
-                                $("#products_selectize")[0].selectize.focus();
-                                calcTotal();
-                            }
-                        }
-                        selectizeInstance.clear();
-                    }
-                });
-                // نهاية اختيار سلعة/خدمة من selectize واضافته في في جدول العملاء
-            });
-        </script>
-    {{--  end search products by selectize #products_selectize --}}
-
-    
-
-    {{-- start function calcTotal --}}
-        <script>
-            function calcTotal() {
-                let subTotal = 0;
-                let total = 0;
-
-                $('#products_table tbody tr').each(function() {
-                    let row = $(this).closest('tr');
-
-                    let sellPrice = parseFloat(row.find('.sellPrice').val()) || 0;  // سعر القطعة
-                    let sale_quantity = parseInt(row.find('.sale_quantity').val()) || 0;  // الكمية المشتراة
-                    let discount = parseFloat(row.find('.prod_discount').val()) || 0; // نسبة الخصم (%)
-                    let tax = parseFloat(row.find('.prod_tax').val()) || 0; // نسبة الضريبة (%)
-
-
-                    // 1. حساب إجمالي السعر قبل الخصم والضريبة
-                    let totalBeforeDiscount = sellPrice * sale_quantity;
-
-                    // 2. حساب الخصم
-                    let discountAmount = (totalBeforeDiscount * discount) / 100;
-                    let totalAfterDiscount = totalBeforeDiscount - discountAmount;
-
-                    // 3. حساب الضريبة
-                    let taxAmount = (totalAfterDiscount * tax) / 100;
-                    let totalAfterTax = totalAfterDiscount + taxAmount;
-                    
-                    // 5. تحديث إجمالي الصف
-                    row.find('.prod_total').val(display_number_js( totalAfterTax.toFixed(3) ) );
-
-                    total += totalAfterTax;
-                    subTotal += totalBeforeDiscount;
-                });
-
-                let bill_discount = $("#bill_discount").val(); 
-                let extra_money = $("#extra_money").val(); 
-
-                let afterDiscountBill = total - bill_discount;    
-                let afterExtraMoney = Number(afterDiscountBill) + Number(extra_money);    
-
-                // عرض الإجمالي الكلي في الـ div
-                $('.subtotal').text( parseFloat(subTotal).toLocaleString() + ' جنية');
-                $('.total_bill_after').text( afterExtraMoney + ' جنية');
-                $('#remaining').text( parseFloat(afterExtraMoney).toLocaleString() + ' جنية'); 
-
-
-                //if(bill_discount > total){
-                //    alert('❌ لا يمكن أن يكون خصم الفاتورة أكبر من إجمالي السلع والخدمات بعد الخصومات.');
-                //    $("#bill_discount").val(0);
-                //    afterDiscountBill = total;
-                //}
-            }
-        </script>
-    {{-- end function calcTotal --}}
-
-    
-
-    {{-- start when change tax_bill update prod_tax value --}}
-        <script>
-            $(document).on('input', '#tax_bill', function () {
-                const thisVal = $(this);
-                
-                if(countTableTr() == 0){
-                    thisVal.val('');
-                    alertify.set('notifier', 'position', 'bottom-center');
-                    alertify.set('notifier', 'delay', 3);
-                    alertify.error("خطأ: اضف أصناف أولا الي الفاتورة");
-                }else{
-                    $('.prod_tax').val( Number(thisVal.val()) );
-                    calcTotal();
-                }
-            });
-        </script>
-    {{-- end when change tax_bill update prod_tax value --}}
-    
-    
-    
-    {{-- start when change extra_money_type --}}
-        <script>
-            $(document).on('input', '#extra_money_type', function () {
-                const thisVal = $(this).val();
-
-                if(thisVal){
-                    $.ajax({
-                        type: "GET",
-                        url: `{{ url('get_info/extra_expenses') }}/${thisVal}`,
-                        success: function(res){
-                            alertify.set('notifier','position', 'bottom-center');
-                            alertify.set('notifier','delay', 3);
-                            alertify.success("تم استدعاء سعر هذا المصروف الإضافي بنجاح 💰");
-                            
-                            $('#extra_money').val( res.amount ? display_number_js(res.amount) : 0 );
-
-                            calcTotal();
-                        }
-                    });       
-                }else{
-                    $('#extra_money').val('');
-                }
-            });
-        </script>
-    {{-- end when change extra_money_type --}}
-
-    
-
-    {{-- start when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
-        <script>
-            $(document).ready(function () {
-                $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #bill_discount, #extra_money, #extra_money_type', function () {
-                    calcTotal();
-                    //$("#overlay_page").fadeIn();
-                    //$("#overlay_page").fadeOut();
-                });
-            });
-        </script>
-    {{-- end when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
-
-
-
     {{-- start general scripts --}}
         <script>
             ////////////////////////////// start when click return-row-btn تعديل صف من جدول الأصناف ////////////////////////////
@@ -843,6 +494,12 @@
                                         </div>
                                     `, 'basic': true})
                                     .show();
+                                }
+                                
+                                if(res.error_quantity_zero){
+                                    alertify.set('notifier','position','top-center');
+                                    alertify.set('notifier','delay',6);
+                                    alertify.error(`${res.error_quantity_zero}`);
                                 }
 
                                 if(res.success_edit){
