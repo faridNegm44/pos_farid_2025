@@ -14,7 +14,7 @@
                   <div class="col-md-6 col-12">
                     <ul class="invoice-info">
                       <li><span>رقم فاتورة:</span> <span class='header_span' id="id"></span></li>
-                      <li><span>رقم فاتورة مخصص:</span> <span class='header_span' id="custom_bill_num"></span></li>
+                      <li><span>رقم مخصص:</span> <span class='header_span' id="custom_bill_num"></span></li>
                       <li><span>نوع الإذن:</span> <span class='header_span' id="treasury_type"></span></li>
                       <li><span>عدد أصناف الفاتورة:</span> <span class='header_span' id="count_items"></span></li>
                       <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span></li>                      

@@ -14,7 +14,7 @@
                   <div class="col-md-6 col-12">
                     <ul class="invoice-info">
                       <li><span>رقم فاتورة:</span> <span class='header_span' id="id"></span></li>
-                      <li><span>رقم فاتورة مخصص:</span> <span class='header_span' id="custom_bill_num"></span></li>
+                      <li><span>رقم مخصص:</span> <span class='header_span' id="custom_bill_num"></span></li>
                       <li><span>اذن الخزينة:</span> <span class='header_span' id="treasury_type"></span></li>
                       <li><span>اذن الفاتورة:</span> <span class='header_span' id="bill_type"></span></li>
                       <li><span>عدد أصناف الفاتورة:</span> <span class='header_span' id="count_items"></span></li>
@@ -31,7 +31,7 @@
                       <li><span>العميل:</span> <span class='header_span' id="clientName"></span></li>
                       <li><span>الخزينة:</span> <span class='header_span' id="treasuryName"></span></li>
                       <li><span>مبلغ مدفوع:</span> <span class='header_span' id="amount_money"></span></li>
-                      <li><span>رصيد العميل بعد:</span> <span class='header_span' id="remaining_money"></span></li>
+                      {{--<li><span>رصيد العميل بعد:</span> <span class='header_span' id="remaining_money"></span></li>--}}
                       <li><span>رصيد الخزينة بعد:</span> <span class='header_span' id="treasury_money_after"></span></li>
                       <li><span>تاريخ الإنشاء:</span> <span class='header_span' id="created_at"></span></li>
                       <li><span>تاريخ آخر:</span> <span class='header_span' id="custom_date"></span></li>

@@ -122,7 +122,7 @@
 
     @include('back.bills_css_js.css_js.main_css')
 
-<body style="height: 100vh !important;overflow: auto;background: #b4c7e0 !important;">
+<body style="height: 100vh !important;overflow: auto;background: #d8c1e5 !important;">
 
     <div id="overlay_page"></div>
 
@@ -192,8 +192,8 @@
                 <div class="" id="main_content" style="padding: 18px;margin-bottom: 60px;">
                     <div class="row"> 
     
-                        <div class="col-lg-4 product-selection p-3 total_info" style="background: #748DAE;">
-                            <div class="text-center" style="text-decoration: underline;background: rgb(76 101 134);color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                        <div class="col-lg-4 product-selection p-3 total_info" style="background: #703591;">
+                            <div class="text-center" style="text-decoration: underline;background: #42175b;color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
                                 {{ $pageNameAr }}
                                 <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ $find[0]->id }}</span>
                             </div>
@@ -303,19 +303,19 @@
                             <table class="table table-hover table-bordered" id="products_table">                                
                                 <thead class="bg bg-black-5">
                                     <tr>
-                                        <th>#</th>
-                                        <th class="nowarp_thead" style="width: 60px !important;min-width: 60px !important;">التحكم</th>
-                                        <th class="nowarp_thead" style="width: 250px !important;min-width: 250px !important;">السلعة/الخدمة</th>
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الوحدة</th>
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ك المخزن</th>
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">
+                                        <th style="width: 20px !important;min-width: 20px !important;">#</th>
+                                        <th class="nowarp_thead" style="width: 30px !important;min-width: 30px !important;">التحكم</th>
+                                        <th class="nowarp_thead" style="width: 220px !important;min-width: 220px !important;">السلعة/الخدمة</th>
+                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">الوحدة</th>
+                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك المخزن</th>
+                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">
                                             ك مباعة
                                             <i class="fas fa-info-circle text-warning" data-bs-toggle="tooltip" title="⚠️ يُرجى إتمام عملية البيع باستخدام الوحدة الصغرى للمنتج، وذلك لضمان دقة العمليات الحسابية وسلامة بيانات الفاتورة."></i>
                                         </th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">خصم%</th>                                                                                        
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ضريبة%</th>
-                                        <th class="nowarp_thead" style="width: 150px !important;min-width: 150px !important;">الإجمالي</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;display: none;">ضريبة%</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الإجمالي</th>
                                     </tr>
                                 </thead>
 
@@ -324,11 +324,8 @@
                                         <tr id="tr_{{ $item->product_id }}">
                                             <th>{{ $item->product_id }}</th>
                                             <td>
-                                                <button type="button" class="btn btn-link p-0 delete-row-btn" data-row-id="{{ $item->store_det_id }}" title="حذف" style="color:#e74c3c;">
-                                                    <i class="fas fa-trash-alt fa-lg"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-link p-0 edit-row-btn" data-row-id="{{ $item->store_det_id }}" title="تعديل" style="color:#2980b9;">
-                                                    <i class="fas fa-edit fa-lg"></i>
+                                                <button type="button" class="btn btn-link p-0 return-row-btn" data-row-id="{{ $item->store_det_id }}" title="تعديل" style="color:#d84458;">
+                                                    <i class="fas fa-reply fa-lg"></i>
                                                 </button>
                                             </td>
                                             <td class="prod_name">
@@ -343,20 +340,20 @@
                                                 <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="{{ display_number( round($item->quantity_small_unit) ) }}">                    
                                             </td>
                                             <td>
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity" value="{{ display_number(round($item->product_bill_quantity)) }}" >
+                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity" value="{{ display_number(round($item->product_bill_quantity)) }}" >
                                             </td>
                                             <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice" value="{{ 
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice" value="{{ 
                                                                     $item->current_sell_price_in_sale_bill != $item->sell_price_small_unit ? 
                                                                         display_number( $item->current_sell_price_in_sale_bill ) : 
                                                                         display_number( $item->sell_price_small_unit ) 
                                                                 }}">                                    
                                             </td>
                                             <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount" value="{{ display_number( $item->discount ) }}">
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount" value="{{ display_number( $item->discount ) }}">
                                             </td>
-                                            <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax" value="{{ display_number( $item->tax ) }}">
+                                            <td style="display: none;">
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax" value="{{ display_number( $item->tax ) }}">
                                             </td>
                                             <td>
                                                 <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total" value="{{ display_number( $item->total_after ) }}">
@@ -792,18 +789,16 @@
 
     {{-- start general scripts --}}
         <script>
-            ////////////////////////////// start when click edit-row-btn تعديل صف من جدول الأصناف ////////////////////////////
-            $(document).on('click', '.edit-row-btn', function() {
+            ////////////////////////////// start when click return-row-btn تعديل صف من جدول الأصناف ////////////////////////////
+            $(document).on('click', '.return-row-btn', function() {
                 var rowId = $(this).data('row-id');
-                var rowSellPrice = $(this).closest('tr').find('.sellPrice').val();
-                var rowProdDiscount = $(this).closest('tr').find('.prod_discount').val();
-                var rowProdTax = $(this).closest('tr').find('.prod_tax').val();
+                var rowProductBillQuantity = $(this).closest('tr').find('.sale_quantity').val();
 
                 alertify.confirm(
                 'تحذير هام <i class="fas fa-exclamation-triangle text-warning" style="margin:0 3px;"></i>',
-                `<div style='text-align:center;background-color:#cde6f3; padding:15px; border-radius:5px;'>
+                `<div style='text-align:center;background-color:#e5d5ee; padding:15px; border-radius:5px;'>
                     <p class='text-danger' style='font-size:14px;'>
-                        هل أنت متأكد من تعديل بيانات هذا الصنف في الفاتورة الحالية؟ ✏️
+                        هل أنت متأكد من عمل مرتجع لهذا الصنف في الفاتورة الحالية؟ 🔄
                     </p>
                     <div style='margin-top: 10px !important;'>
                         ⚠️ هذا الإجراء لا يمكن التراجع عنه، وسيؤثر على حساب العميل 💰 ومخزون الصنف 📦.
@@ -811,19 +806,17 @@
                 </div>`,
                 function() {
                     $.ajax({
-                        url: `{{ url('sales/update_product_from_bill') }}/${rowId}`,
+                        url: `{{ url('sales/return_product_from_bill') }}/${rowId}`,
                         type: "GET",
                         data: {
                             rowId: rowId, 
-                            rowSellPrice: rowSellPrice,
-                            rowProdDiscount: rowProdDiscount,
-                            rowProdTax: rowProdTax,                        
+                            rowProductBillQuantity: rowProductBillQuantity,
                         },
                         success: function(res) {
                             if(res.notAuth){
                                 alertify.dialog('alert')
                                     .set({transition:'slide',message: `
-                                        <div style='text-align:center;'>
+                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ccacba;'>
                                             <p style='color:#e67e22;font-size:18px;margin-bottom:10px;'>صلاحية غير متوفرة 🔐⚠️</p>
                                             <p>${res.notAuth}</p>
                                         </div>
@@ -834,8 +827,19 @@
                                 if(res.no_edits){
                                     alertify.dialog('alert')
                                     .set({transition:'slide',message: `
-                                        <div style='text-align:center;'>
+                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ccacba;'>
                                             <p>${res.no_edits}</p>
+                                        </div>
+                                    `, 'basic': true})
+                                    .show();
+                                }
+                                
+                                if(res.error_quantity){
+                                    alertify.dialog('alert')
+                                    .set({transition:'slide',message: `
+                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ccacba;'>
+                                            <p class="p-1">⚠️ لا يمكن إتمام المرتجع!</p>
+                                            <p class="p-1">الكمية المرتجعة أكبر من الكمية المباعة في الفاتورة. 🧾📦</p>
                                         </div>
                                     `, 'basic': true})
                                     .show();
@@ -870,91 +874,7 @@
                     }
                 });
             });
-            ////////////////////////////// end when click edit-row-btn تعديل صف من جدول الأصناف ////////////////////////////
-           
-           
-           
-
-            //////////////////////////// start when click delete-row-btn حذف صنف من جدول الأصناف  ////////////////////////////
-            $(document).on('click', '.delete-row-btn', function() {
-                var rowId = $(this).data('row-id');
-
-                alertify.confirm(
-                'تحذير هام <i class="fas fa-exclamation-triangle text-warning" style="margin:0 3px;"></i>',
-                `<div style='text-align:center;background-color:#f8d7da; padding:15px; border-radius:5px;'>
-                    <p class='text-danger' style='font-size:14px;'>
-                        هل أنت متأكد من حذف هذا الصنف من الفاتورة نهائيًا؟ 🗑️
-                    </p>
-                    <div style='margin-top: 10px !important;'>
-                        ⚠️ هذا الإجراء لا يمكن التراجع عنه، وسيؤثر على حساب العميل 💰 ومخزون الصنف 📦.
-                    </div>
-                </div>`,
-                function() {
-                    $.ajax({
-                        url: `{{ url('sales/destroy_product_from_bill') }}/${rowId}`,
-                        type: "GET",
-                        success: function(res) {
-                            if(res.notAuth){
-                                alertify.dialog('alert')
-                                    .set({transition:'slide',message: `
-                                        <div style='text-align:center;'>
-                                            <p style='color:#e67e22;font-size:18px;margin-bottom:10px;'>صلاحية غير متوفرة 🔐⚠️</p>
-                                            <p>${res.notAuth}</p>
-                                        </div>
-                                    `, 'basic': true})
-                                    .show();
-                                $(".modal").modal('hide');
-                            }else{
-                                if(res.no_edits){
-                                    alertify.dialog('alert')
-                                    .set({transition:'slide',message: `
-                                        <div style='text-align:center;'>
-                                            <p>${res.no_edits}</p>
-                                        </div>
-                                    `, 'basic': true})
-                                    .show();
-                                }
-
-                                if(res.success_delete){
-                                    alert(
-                                        "🗑️ تم حذف الصنف من الفاتورة بنجاح.\n" +
-                                        "📦 تمت إعادة كمية الصنف إلى المخزن.\n" +
-                                        "📊 تم تحديث متوسط السعر تلقائيًا."
-                                    );
-
-                                    location.reload();
-                                }
-
-                                if(res.cannot_delete){
-                                    alertify.set('notifier','position','top-center');
-                                    alertify.set('notifier','delay',6);
-                                    alertify.warning('خطأ: لا يمكن حذف الفاتورة لارتباطها بسجلات أخرى.');
-                                }
-                            }
-                        },
-                        error: function(){
-                            alertify.error('حدث خطأ أثناء محاولة حذف الفاتورة');
-                        }
-                    });
-                    },
-                    function(){}
-                ).set({
-                    labels:{
-                        ok:"نعم <i class='fas fa-check text-success' style='margin:0 3px;'></i>",
-                        cancel:"لا <i class='fa fa-times text-light' style='margin:0 3px;'></i>"
-                    }
-                });
-            });
-            //////////////////////////// end when click delete-row-btn حذف صنف من جدول الأصناف  ////////////////////////////
-
-                
-
-
-
-
-
-
-
+            ////////////////////////////// end when click return-row-btn تعديل صف من جدول الأصناف ////////////////////////////
         </script>
     {{-- end general scripts --}}
     

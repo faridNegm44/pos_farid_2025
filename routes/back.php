@@ -364,15 +364,18 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
     Route::group(['prefix' => 'sales'] , function (){
         Route::get('/' , 'SaleBillController@index');
         Route::get('/create' , 'SaleBillController@create');
-       
         Route::post('/store' , 'SaleBillController@store');
-       
-        Route::get('/edit/{id}' , 'SaleBillController@edit');
         Route::get('/show/{id}' , 'SaleBillController@show');
+        
+        Route::get('/edit/{id}' , 'SaleBillController@edit');   
         Route::post('/update/{id}' , 'SaleBillController@update');
+        Route::get('/update_product_from_bill/{id}' , 'SaleBillController@update_product_from_bill'); // تعديل صنف من أصناف الفاتورة
+        
+        
+        Route::get('/return/{id}' , 'SaleBillController@edit');
+        Route::get('/return_product_from_bill/{id}' , 'SaleBillController@return_product_from_bill'); // ارجاع صنف من أصناف الفاتورة
 
         Route::get('/destroy_bill/{id}' , 'SaleBillController@destroy_bill'); //  حذف الفاتورة كاملة
-        Route::get('/update_product_from_bill/{id}' , 'SaleBillController@update_product_from_bill'); // تعديل صنف من أصناف الفاتورة
         Route::get('/destroy_product_from_bill/{id}' , 'SaleBillController@destroy_product_from_bill'); // حذف صنف من أصناف الفاتورة
         
         Route::get('datatable' , 'SaleBillController@datatable');

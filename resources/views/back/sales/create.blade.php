@@ -83,9 +83,9 @@
             .dark_theme{
                 display: none;
             }
-            /*#amount_paid{
+            #amount_paid{
                 display: none;
-            }*/
+            }
 
             @media (max-width: 991px) {
                 #top_section {
@@ -711,7 +711,7 @@
                 let totalAfterTax = totalAfterDiscount + taxAmount;
                 
                 // 5. تحديث إجمالي الصف
-                row.find('.prod_total').val(display_number_js( totalAfterTax.toFixed(3) ) );
+                row.find('.prod_total').val(display_number_js( totalAfterTax.toFixed(2) ) );
 
                 total += totalAfterTax;
                 subTotal += totalBeforeDiscount;
@@ -1054,6 +1054,27 @@
             }
         });
         //  end show div amount paid after select clients and treasury
+
+
+
+        // start when change amount_paid
+        //$("#amount_paid").on('input', function() {
+        //    const amountPaid = parseFloat($(this).val();
+        //    const totalBillAfter = parseFloat($('.total_bill_after').text();
+
+        //    let remaining = Number(totalBillAfter) - amountPaid;
+        //    $('#remaining').text( remaining ? remaining.toLocaleString() + ' جنية' : 0); 
+        //    $('#total_paid').text( amountPaid ? amountPaid.toLocaleString() + ' جنية' : 0); 
+
+
+        //    //if (remaining < 0) remaining = 0;
+            
+        //    //$('#total_paid').text(remaining.toLocaleString() + ' جنية'); 
+        //});
+        // end when change amount_paid
+
+
+
     </script>
     {{-- end general scripts --}}
 

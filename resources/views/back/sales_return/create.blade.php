@@ -157,7 +157,7 @@
                         </div>
                         
                         <div class="col-lg-6"> 
-                            <span id="custom_bill_num">{{ $find[0]->custom_bill_num ? 'رقم فاتورة مخصص: '.$find[0]->custom_bill_num : '' }}</span>
+                            <span id="custom_bill_num">{{ $find[0]->custom_bill_num ? 'رقم مخصص: '.$find[0]->custom_bill_num : '' }}</span>
                         </div>
                         
                         

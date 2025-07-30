@@ -28,7 +28,8 @@
                         </div>
                         <div id="amount_paid" class="mb-3">
                             <label for="amount_paid" class="form-label" style="color:#437a5a;font-weight:bold;">المبلغ المدفوع</label>
-                            <input type="text" name="amount_paid" class="form-control focus_input numValid amount_paid" placeholder="المبلغ المدفوع" style="font-size: 18px !important;text-align: center; border: 1.5px solid #eeb50a; background: #fffbe7; color: #b94a00; font-weight: bold;">
+                            
+                            <input type="text" name="amount_paid" min="0" class="form-control focus_input numValid amount_paid" placeholder="المبلغ المدفوع" style="font-size: 18px !important;text-align: center; border: 1.5px solid #eeb50a; background: #fffbe7; color: #b94a00; font-weight: bold;">
                             <bold class="text-danger" id="errors-amount_paid" style="display: none;"></bold>
                         </div>
                         <div class="mb-3">
@@ -82,7 +83,7 @@
                                 <span><i class="fas fa-coins text-warning"></i> إجمالي المدفوع:</span>
                                 <span id="total_paid" style="margin: 0 10px;font-size: 15px;position: relative;top: -4px; font-weight: bold;">0 جنية</span>
                             </li>
-                            <li class="p-2 mb-2 rounded d-flex justify-content-between align-items-center" style="background: #ffeaea; color: #b94a00; border: 1.5px solid #e74c3c;">
+                            <li class="p-2 mb-2 rounded justify-content-between align-items-center" style="background: #ffeaea; color: #b94a00; border: 1.5px solid #e74c3c;display: none;">
                                 <span><i class="fas fa-exclamation-triangle text-danger"></i> المتبقي:</span>
                                 <span id="remaining" style="margin: 0 10px;font-size: 15px;position: relative;top: -4px; font-weight: bold;">0</span>
                             </li>

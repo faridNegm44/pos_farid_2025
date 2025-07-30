@@ -56,7 +56,7 @@
         <div style="display: flex; flex-wrap: wrap;border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;padding-top: 3px;">
             <ul class="invoice-info" style="flex: 1 1 33.33%; max-width: 33.33%;">
                 <li><span>رقم فاتورة:</span> <span class='header_span' id="id"></span>{{ $find[0]->id }}</li>
-                <li><span>رقم فاتورة مخصص:</span> <span class='header_span' id="custom_bill_num"></span>{{ $find[0]->custom_bill_num }}</li>
+                <li><span>رقم مخصص:</span> <span class='header_span' id="custom_bill_num"></span>{{ $find[0]->custom_bill_num }}</li>
                 <li><span>اذن الخزينة:</span> <span class='header_span' id="treasury_type"></span>{{ $find[0]->treasury_type != $find[0]->bill_type ? $find[0]->treasury_type :  'لم يتم صرف مستحقات' }}</li>
                 <li><span>اذن الفاتورة:</span> <span class='header_span' id="bill_type"></span>{{ $find[0]->bill_type }}</li>
                 <li><span>عدد أصناف الفاتورة:</span> <span class='header_span' id="count_items"></span>{{ display_number($find[0]->count_items) }}</li>

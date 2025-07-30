@@ -41,11 +41,11 @@
                 $(`#showProductsModal #header #count_items`).text( display_number_js(res[0].count_items) );
                 $(`#showProductsModal .print`).attr('res_id', res[0].id);
                 
-                $(`#showProductsModal #header #remaining_money`).text(  
-                    res[0].remaining_money >= 0 ? 
-                        'علية ' + display_number_js(res[0].remaining_money) : 
-                        'لة ' + display_number_js(res[0].remaining_money) 
-                );
+                //$(`#showProductsModal #header #remaining_money`).text(  
+                //    res[0].remaining_money >= 0 ? 
+                //        'علية ' + display_number_js(res[0].remaining_money) : 
+                //        'لة ' + display_number_js(res[0].remaining_money) 
+                //);
 
 
 

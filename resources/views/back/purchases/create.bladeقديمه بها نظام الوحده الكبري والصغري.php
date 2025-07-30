@@ -136,7 +136,7 @@
                         </div>
                         
                         <div class="col-lg-1" style="margin-bottom: 8px;">
-                            <input type="text" class="form-control" id="custom_bill_num" name="custom_bill_num" placeholder="رقم فاتورة مخصص" value="">
+                            <input type="text" class="form-control" id="custom_bill_num" name="custom_bill_num" placeholder="رقم مخصص" value="">
                         </div>
                         
                         <div class="col-lg-7" style="margin-bottom: 8px;">
