@@ -15,20 +15,11 @@
             success: function(res){
                 $('#showProductsModal .modal-body').slideDown();
 
-                let bill_status = res[0].status;
-                if(bill_status == 'فاتورة ملغاة'){
-                    bill_status = `<span class="text-danger">${bill_status}</span>`;
-                }else if(bill_status == 'فاتورة نشطة'){
-                    bill_status = `<span class="text-success">${bill_status}</span>`;
-                }else{
-                    bill_status = `<span class="text-warning">${bill_status}</span>`;
-                }
-                
                 $("#showProductsModal #exampleModalLongTitle").html(`
                     عرض فاتورة مبيعات رقم 
                     ( ${res[0].id} ) - 
                     ( ${res[0].clientName} ) - 
-                    ${bill_status}
+                    ${res[0].status}
                      
                 `);
 
@@ -73,23 +64,44 @@
                     }
 
                     let rowClass = '';
+                    let rowClassProductStatus = '';
                     const checkBillStatus = value2.status;
+                    const checkProductStatus = value2.store_det_status;
 
                     if(checkBillStatus == 'فاتورة ملغاة'){
-                        rowClass = 'bg bg-danger-transparent';
+                        rowClass = '#F5CBCB';
 
                     }else if(checkBillStatus == 'فاتورة نشطة'){                        
-                        rowClass = 'bg bg-success-transparent';
+                        rowClass = '#A3DC9A';
 
                     }else if(checkBillStatus == 'فاتورة معدلة'){
-                        rowClass = 'bg bg-warning-transparent';
+                        rowClass = '#DCD0A8';
                 
                     }else{
-                        rowClass = 'bg bg-info-transparent';
+                        rowClass = '#63C8FF';
+                    }
+
+                    $('#showProductsModal .modal-header').css('background', `${rowClass}`);
+
+                    
+                    if(checkProductStatus == 'تم حذفه'){
+                        rowClassProductStatus = 'bg bg-danger-transparent';
+
+                    }else if(checkProductStatus == 'نشط'){                        
+                        rowClassProductStatus = 'bg bg-success-transparent';
+
+                    }else if(checkProductStatus == 'تم تعديله'){
+                        rowClassProductStatus = 'bg bg-warning-transparent';
+                
+                    }else if(checkProductStatus == 'مرتجع مبيعات'){
+                        rowClassProductStatus = 'bg bg-info-transparent';
+
+                    }else if(checkProductStatus == 'فاتورة ملغاة'){
+                        rowClassProductStatus = 'bg bg-dark text-white';
                     }
 
                     $('#showProductsModal #content tbody').append(`
-                        <tr class="${rowClass}">
+                        <tr class="${rowClassProductStatus}">
                             <td>${value2.product_id}</td>
                             <td>${value2.productNameAr}</td>
                             <td>

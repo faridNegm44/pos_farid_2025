@@ -216,14 +216,14 @@
                                         <span style="font-size: 18px; color:#e67e22; font-weight: bold;">0</span>
                                     </div>
                                     <div class="col-12 mb-2" style="font-size: 14px; color:#437a5a; font-weight: bold;">
-                                        <i class="fas fa-calculator text-secondary"></i> الإجمالي قبل:
-                                        <span style="font-size: 18px; color:#2980b9; font-weight: bold;" class="subtotal">1200.80</span>
+                                        <i class="fas fa-calculator text-secondary"></i> الإجمالي الأساسي:
+                                        <span style="font-size: 20px; color:#2980b9; font-weight: bold;" class="subtotal">0</span>
                                         <span style="font-size: 15px; color: #7a5a1a;">جنيه</span>
                                     </div>
                                     <div class="col-12">
                                         <div style="width: 98%;background: linear-gradient(90deg, #eaf7f0 60%, #eeb50a 100%);color: #3d2c13;padding: 14px 0 10px 0; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px #eeb50a40; border: 1.5px solid #eeb50a; margin: auto;">
                                             <span style="font-size: 15px; font-weight: bold; letter-spacing: 1px; color: #7a5a1a;">
-                                                 الإجمالي المستحق:
+                                                 صافي الفاتورة:
                                             </span>
                                             <span class="total_bill_after" style="font-size: 28px; font-weight: bold; color: #b94a00; margin: 0 10px; letter-spacing: 1px;">0.00</span>
                                             <span style="font-size: 15px; color: #7a5a1a;">جنيه</span>

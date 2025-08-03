@@ -70,7 +70,7 @@
             @php
                 $models = [
                     // start first add
-                        'financialYears', 'stores', 'financial_treasury', 'units', 'companies', 'productsCategories', 'products_sub_category', 'products', 'products_report', 'taswea_products', 'transfer_between_stores', 'clients', 'clients_report', 'clients_account_statement', 'suppliers', 'suppliers_report', 'suppliers_account_statement', 'taswea_client_supplier', 'partners', 'partners_report', 'partners_account_statement', 'taswea_partners', 'sales', 'sales_return', 'products_stock_alert', 'purchases', 'purchases_return', 'treasury_bills', 'treasury_bills_report', 'transfer_between_storages', 'expenses', 'expenses_report', 'users', 'settings', 'roles_permissions',
+                        'financialYears', 'stores', 'financial_treasury', 'units', 'companies', 'productsCategories', 'products_sub_category', 'products', 'products_report', 'taswea_products', 'transfer_between_stores', 'clients', 'clients_report', 'clients_account_statement', 'suppliers', 'suppliers_report', 'suppliers_account_statement', 'taswea_client_supplier', 'partners', 'partners_report', 'partners_account_statement', 'taswea_partners', 'sales', 'products_stock_alert', 'purchases', 'treasury_bills', 'treasury_bills_report', 'transfer_between_storages', 'expenses', 'expenses_report', 'users', 'settings', 'roles_permissions',
                     // end first add
                     
                     
@@ -80,9 +80,14 @@
                     
                     
                     // start third add
-                        'tax_bill', 'discount_bill', 'cost_price', 'sale_price', 'receipts'
+                        'tax_bill', 'discount_bill', 'cost_price', 'sale_price', 'receipts',
                     // end third add
                     
+
+                    // start fourth add
+                        'sales_bill_deleted', 'sales_bill_return', 'sales_bill_edited', 
+                        'purchase_bill_deleted', 'purchase_bill_return', 'purchase_bill_edited'
+                    // end fourth add
                 ];
                 $count = 1;
             @endphp
@@ -137,7 +142,6 @@
                                                     $model != 'partners_report' &&
                                                     $model != 'partners_account_statement' &&
                                                     $model != 'sales_create' &&
-                                                    $model != 'sales_return' &&
                                                     $model != 'products_stock_alert' &&
                                                     $model != 'products_report' &&
                                                     $model != 'purchases_create' &&
@@ -155,6 +159,13 @@
                                                     $model != 'discount_bill' &&
                                                     $model != 'cost_price' &&
                                                     $model != 'sale_price' &&
+                                                    
+                                                    $model != 'sales_bill_deleted' &&
+                                                    $model != 'sales_bill_return' &&
+                                                    $model != 'sales_bill_edited' &&
+                                                    $model != 'purchase_bill_deleted' &&
+                                                    $model != 'purchase_bill_return' &&
+                                                    $model != 'purchase_bill_edited' &&
                                                     
                                                     $model != 'expenses_report' 
                                                 )
@@ -177,7 +188,6 @@
                                                     $model != 'taswea_partners' &&
                                                     $model != 'sales' &&
                                                     $model != 'sales_create' &&
-                                                    $model != 'sales_return' &&
                                                     $model != 'products_stock_alert' &&
                                                     $model != 'products_report' &&
                                                     $model != 'purchases' &&
@@ -199,6 +209,13 @@
                                                     $model != 'cost_price' &&
                                                     $model != 'sale_price' &&
                                                     
+                                                    $model != 'sales_bill_deleted' &&
+                                                    $model != 'sales_bill_return' &&
+                                                    $model != 'sales_bill_edited' &&
+                                                    $model != 'purchase_bill_deleted' &&
+                                                    $model != 'purchase_bill_return' &&
+                                                    $model != 'purchase_bill_edited' &&
+
                                                     $model != 'expenses_report' 
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_update_div">
@@ -221,12 +238,10 @@
                                                     $model != 'taswea_partners' &&
                                                     $model != 'sales' &&
                                                     $model != 'sales_create' &&
-                                                    $model != 'sales_return' &&
                                                     $model != 'products_stock_alert' &&
                                                     $model != 'products_report' &&
                                                     $model != 'purchases' &&
                                                     $model != 'purchases_create' &&
-                                                    $model != 'purchases_return' &&
                                                     $model != 'treasury_bills' &&
                                                     $model != 'treasury_bills_create' &&
                                                     $model != 'treasury_bills_report' &&
@@ -242,6 +257,14 @@
                                                     $model != 'discount_bill' &&
                                                     $model != 'cost_price' &&
                                                     $model != 'sale_price' &&
+
+                                                    $model != 'sales_bill_deleted' &&
+                                                    $model != 'sales_bill_return' &&
+                                                    $model != 'sales_bill_edited' &&
+                                                    $model != 'purchase_bill_deleted' &&
+                                                    $model != 'purchase_bill_return' &&
+                                                    $model != 'purchase_bill_edited' &&
+
                                                     $model != 'settings'
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_delete_div">

@@ -121,6 +121,11 @@
             
             font-size: 10px;
         }
+        @media only screen and (max-width: 991px) {
+            .horizontalMenu>.horizontalMenu-list>li>.horizontalMenu-click>i {
+                color: #ffffff;
+            }
+        }
     </style>
 </head>
 

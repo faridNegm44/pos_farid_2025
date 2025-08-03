@@ -54,36 +54,26 @@
         }*/
     </style>
 </head>
-<body style="padding: 5px 10px;">
-    <div style="padding: 5px 10px;border: 1px solid #000;">
-        <div class="">
-            <div class="invoice-title">
-                <h4 class="text-center" style="">
-                    {{ $pageNameAr }}
-                </h4>
-            </div>
-            <hr>
+<body style=" background-color: #f9f9f9;">
+    <div style="padding: 20px; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <div style="border: 2px solid #dee2e6; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+            <h4 class="text-center" style="font-weight: bold; color: #343a40; margin: 0;">
+                🧾 {{ $pageNameAr }}
+            </h4>
+        </div>
 
             @include('back.layouts.header_report')
         </div>
 
-        @if ($treasury_id || $treasury_type || $from || $to)
-            <hr style="margin: 0 0 10px !important;"> 
-            <div style="margin-bottom: 10px;">
-                <div>
-                    @if ($treasury_id)
-                        <span class="itemsSearch">خزينة الحركة: {{ $results[0]->treasury_name }}</span>
-                    @endif
-                    @if ($treasury_type)
-                        <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
-                    @endif
-                    @if ($from)
-                        <span class="itemsSearch">تاريخ من: <span>{{ $from }}</span></span>
-                    @endif
-                    @if ($to)
-                        <span class="itemsSearch">تاريخ الي: <span>{{ $to }}</span></span>
-                    @endif
-                </div>
+
+
+        @if($treasury_id || $treasury_type || $from || $to)
+            <div style="border: 1px solid #2196f3; background: #e3f2fd; border-radius: 6px; padding: 8px 15px; margin-bottom: 15px;">
+                <strong>عناصر البحث:</strong>
+                <span style="margin: 0 5px;">@if($treasury_id) خزينة الحركة: {{ $results[0]->treasury_name }} @endif</span>
+                <span style="margin: 0 5px;">@if($treasury_type) نوع الحركة: {{ $results[0]->treasury_type }} @endif</span>
+                <span style="margin: 0 5px;">@if($from) من: {{ $from }} @endif</span>
+                <span style="margin: 0 5px;">@if($to) إلى: {{ $to }} @endif</span>
             </div>
         @endif
 
@@ -110,15 +100,15 @@
                             <td>{{ $result->id }}</td>
                             <td>
                                 {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
+                                <span>{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
                             </td>
                             <td>
                                 @if(Carbon\Carbon::parse($result->created_at)->format('d-m-Y') != Carbon\Carbon::parse($result->date)->format('d-m-Y'))
-                                    <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->date)->format('d-m-Y') }}</span>
+                                    <span>{{ Carbon\Carbon::parse($result->date)->format('d-m-Y') }}</span>
                                 @endif                                        
                             </td>
                             <td>{{ $result->treasury_name }}</td>
-                            <td>
+                            <td  style="font-weight: bold;">
                                 @if ($result->treasury_type === 'مصروف')
                                     {{ $result->treasury_type }}
                                     <p>- {{ $result->expensesTitle }}</p>
@@ -127,7 +117,7 @@
                                 @endif
                             </td>
                             <td>{{ display_number($result->amount_money) }}</td>
-                            <td>
+                            <td style="font-weight: bold;">
                                 @if ($result->treasury_type === 'رصيد اول خزنة' || $result->treasury_type === 'مصروف' || $result->treasury_type === 'تحويل بين خزنتين')
                                     لاتوجد جهة
                                 @else
@@ -136,7 +126,7 @@
                             </td>
                             <td>{{ display_number($result->treasury_money_after) }}</td>
                             <td>{{ $result->user_name }}</td>
-                            <td>{{ $result->notes }}</td>
+                            <td style="font-size: 10px;">{{ $result->notes }}</td>
                         </tr>
                     @endforeach
                 </tbody>

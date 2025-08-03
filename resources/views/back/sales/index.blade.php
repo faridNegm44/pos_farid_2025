@@ -60,6 +60,13 @@
                 e.preventDefault();  
             }
         });
+
+        // flatpickr
+        flatpickr(".datePicker", {
+            enableTime: true,
+            dateFormat: "Y-m-d h:i:S K", 
+            time_24hr: false
+        });
         
         $(document).ready(function () {
             $('#example1').DataTable({
@@ -94,6 +101,60 @@
                 lengthMenu: [[50, 100, 200, -1], [50, 100, 200, "الكل"]]
             });
         });
+
+        ///////////////////// start get data to datatable when click btn search
+            $("#search").on('click', function(e){
+                e.preventDefault();
+                const from = $("#from").val();
+                const to = $("#to").val();
+                const financial_year = $("#financial_year").val();
+
+                $("#overlay_page").show();
+                            
+                $('#example1').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: `{{ url($pageNameEn.'/datatable') }}`,
+                        type: 'GET',
+                        data: function (d) {
+                            d.from = from;
+                            d.to = to;
+                            d.financial_year = financial_year;
+                        }
+                    },
+                    dataType: 'json',
+                    columns: [
+                        {data: 'id', name: 'id'},
+                        {data: 'action', name: 'action', orderable: false},
+                        {data: 'date', name: 'date'},
+                        {data: 'clientName', name: 'clientName'},
+                        {data: 'clientPhone', name: 'clientPhone'},
+                        {data: 'treasuryName', name: 'treasuryName'},
+                        {data: 'total_bill', name: 'total_bill'},
+                        {data: 'count_items', name: 'count_items'},
+                        {data: 'notes', name: 'notes'},
+                        {data: 'userName', name: 'userName'},
+                        {data: 'financialName', name: 'financialName'},
+                    ],
+                    dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    buttons: [
+                        { extend: 'excel', text: '📊 Excel', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'} },
+                        { extend: 'print', text: '🖨️ طباعة', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'}, customize: function (win) { $(win.document.body).css('direction', 'rtl'); } },
+                        { extend: 'colvis', text: '👁️ إظهار/إخفاء الأعمدة', className: 'btn btn-outline-dark' }
+                    ],
+                    "bDestroy": true,
+                    "order": [[ 0, "desc" ]],
+                    language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
+                    lengthMenu: [[50, 100, 200, -1], [50, 100, 200, "الكل"]],
+                    initComplete: function(settings, json) {
+                        $("#overlay_page").hide();
+                    }
+                });
+            });
+        ///////////////////// end get data to datatable when click btn search
     </script>
 
     {{-- add, edit, delete => script --}}
@@ -122,6 +183,43 @@
             </div>
         </div>
         <!-- breadcrumb -->
+
+
+        <div class="card bg" style="padding: 20px 0 !important;background-image: linear-gradient(to left, #dfe2e6, #4e9eb5) !important;" style="padding: 20px 0 !important;">
+            <div class="card-body">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-2" style="margin-bottom: 5px !important;">
+                        <div>
+                            <select name="financial_year" class="form-control" id="financial_year">
+                                <option value="" selected class="text-muted">اختر سنة مالية</option>                              
+                                @foreach (getAllFinancialYear() as $year)
+                                  <option value="{{ $year->id }}">( {{ $year->id }} ) - {{ $year->name }}</option>                              
+                                @endforeach
+                            </select>
+                        </div>
+                        <bold class="text-danger" id="errors-treasury" style="display: none;"></bold>
+                    </div> 
+                                    
+                    <div class="col-md-2" style="margin-bottom: 5px !important;">
+                        <div> <input type="text" class="form-control datePicker" placeholder="من" id="from" name="from"> </div>
+                        <bold class="text-danger" id="errors-from" style="display: none;"></bold>
+                    </div>    
+                    
+                    <div class="col-md-2" style="margin-bottom: 5px !important;">
+                        <div> <input type="text" class="form-control datePicker" placeholder="الي" id="to" name="to"> </div>
+                        <bold class="text-danger" id="errors-to" style="display: none;"></bold>
+                    </div>    
+
+                    <div class="col-md-1">
+                        <div> <button id="search" class="btn btn-warning-gradient btn-block" style="height: 36px;font-size: 12px;font-weight: bold;">بحث</button> </div>
+                        <bold class="text-danger" id="errors-to" style="display: none;"></bold>
+                    </div>    
+                    
+                </div>
+            </div>
+        </div>
+
 
         @include('back.sales.show_form')
 

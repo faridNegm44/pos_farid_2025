@@ -153,9 +153,15 @@
                         <div class="col-lg-6">
                             العميل: 
                             <span id="client_id">{{ $find[0]->clientName }}</span>
+                            @if ($userInfo >= 0)
+                                <span class="badge badge-success" style="font-size: 120%;margin: 0 10px;">علية: {{ display_number($userInfo) }} جنية</span>
+                                
+                            @else
+                                <span class="badge badge-danger" style="font-size: 120%;margin: 0 10px;">لة: {{ display_number($userInfo) }} جنية</span>                                
+                            @endif
                         </div>
                         
-                        <div class="col-lg-6"> 
+                        <div class="col-lg-6">
                             <span id="custom_bill_num">{{ $find[0]->custom_bill_num ? 'رقم مخصص: '.$find[0]->custom_bill_num : '' }}</span>
                         </div>
                         
@@ -211,29 +217,29 @@
                                         <p class="col-lg-6 col-12">
                                             <label for="">
                                                 ضريبة ق م (%)
-                                                <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
+                                                {{--<i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>--}}
                                             </label>
-                                            <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
+                                            <input autocomplete="off" readonly type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
                                         </p>
                                     @endif                                    
                                                                         
                                     <p class="col-lg-6 col-12">
                                         <label for="">
                                             خصم قيمة
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
+                                            {{--<i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>--}}
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" value="{{ display_number( $find[0]->bill_discount ) }}"/>
+                                        <input autocomplete="off" readonly type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" value="{{ display_number( $find[0]->bill_discount ) }}"/>
                                     </p>
                                     
                                     <div class="col-12">
                                         <label for="extra_money_type" class="form-label">
                                             مصاريف إضافية
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
+                                            {{--<i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>--}}
                                         </label>
                                     
                                         <div class="row">
                                             <div class="col-md-7 mb-2">
-                                                <select class="form-control" name="extra_money_type" id="extra_money_type">
+                                                <select class="form-control" disabled name="extra_money_type" id="extra_money_type">
                                                     <option value="" selected>اختر مصروف إضافي</option>
                                                     @foreach ($extra_expenses as $item)
                                                         <option value="{{ $item->id }}" 
@@ -249,38 +255,24 @@
                                             </div>
                                     
                                             <div class="col-md-5">
-                                                <input autocomplete="off" type="text" class="form-control text-center numValid focus_input" id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ display_number( $find[0]->extra_money ) }}"/>
+                                                <input autocomplete="off" readonly type="text" class="form-control text-center numValid focus_input" id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ display_number( $find[0]->extra_money ) }}"/>
                                             </div>
                                         </div>
                                     </div>
                                     
                                 
                                     <ul class="row" style="font-size: 11px;">
-                                        <li class="col-6 mb-2">
+                                        <li class="col-12 mb-2">
                                             العناصر:
                                             <strong style="font-size: 16px; color: #007bff;">
                                                 {{ display_number($find[0]->count_items) }}
                                             </strong>
                                         </li>
 
-                                        <li class="col-6 mb-2">
-                                            المبيعات:
-                                            <strong style="font-size: 16px; color: #28a745;">
+                                        <li class="col-12 mb-2">
+                                            الإجمالي الأساسي:
+                                            <strong style="font-size: 20px; color: #28a745;">
                                                 {{ display_number($find[0]->total_bill_before) }}
-                                            </strong>
-                                        </li>
-
-                                        <li class="col-6 mb-2">
-                                            المرتجعات:
-                                            <strong style="font-size: 16px; color: #dc3545;">
-                                                {{ display_number($find[0]->total_returns ?? 0) }}
-                                            </strong>
-                                        </li>
-
-                                        <li class="col-6 mb-2">
-                                            الصافي:
-                                            <strong style="font-size: 16px; color: #ffc107;">
-                                                {{ display_number(($find[0]->total_bill_before ?? 0) - ($find[0]->total_returns ?? 0)) }}
                                             </strong>
                                         </li>
                                     </ul>
@@ -289,7 +281,7 @@
 
                                     <p class="col-lg-12">
                                         <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
-                                            <span style="font-size: 12px;">الإجمالي المستحق: </span>
+                                            <span style="font-size: 12px;">صافي الفاتورة: </span>
                                             <span style="font-size: 24px;" class="total_bill_after">{{ display_number( $find[0]->total_bill_after ) }}</span>
                                         </div>
                                     </p>
@@ -314,7 +306,7 @@
                                         </th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
                                         <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">خصم%</th>                                                                                        
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">ضريبة%</th>
+                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;display: none;">ضريبة%</th>
                                         <th class="nowarp_thead" style="width: 150px !important;min-width: 150px !important;">الإجمالي</th>
                                     </tr>
                                 </thead>
@@ -327,9 +319,9 @@
                                                 <button type="button" class="btn btn-link p-0 delete-row-btn" data-row-id="{{ $item->store_det_id }}" title="حذف" style="color:#e74c3c;">
                                                     <i class="fas fa-trash-alt fa-lg"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-link p-0 edit-row-btn" data-row-id="{{ $item->store_det_id }}" title="تعديل" style="color:#2980b9;">
+                                                {{--<button type="button" class="btn btn-link p-0 edit-row-btn" data-row-id="{{ $item->store_det_id }}" title="تعديل" style="color:#2980b9;">
                                                     <i class="fas fa-edit fa-lg"></i>
-                                                </button>
+                                                </button>--}}
                                             </td>
                                             <td class="prod_name">
                                                 {{ $item->productNameAr }}
@@ -346,17 +338,17 @@
                                                 <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity" value="{{ display_number(round($item->product_bill_quantity)) }}" >
                                             </td>
                                             <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice" value="{{ 
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice" value="{{ 
                                                                     $item->current_sell_price_in_sale_bill != $item->sell_price_small_unit ? 
                                                                         display_number( $item->current_sell_price_in_sale_bill ) : 
                                                                         display_number( $item->sell_price_small_unit ) 
                                                                 }}">                                    
                                             </td>
                                             <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount" value="{{ display_number( $item->discount ) }}">
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount" value="{{ display_number( $item->discount ) }}">
                                             </td>
-                                            <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax" value="{{ display_number( $item->tax ) }}">
+                                            <td style="display: none;">
+                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax" value="{{ display_number( $item->tax ) }}">
                                             </td>
                                             <td>
                                                 <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total" value="{{ display_number( $item->total_after ) }}">
@@ -438,7 +430,7 @@
 
 
     {{--  start search products by selectize #products_selectize --}}
-        <script>
+        {{--<script>
             $(document).ready(function() {
                 // بدايه الجزء الخاص بالبحث وعرض العملاء في selectize
                 $('#products_selectize').selectize({
@@ -667,13 +659,13 @@
                 });
                 // نهاية اختيار سلعة/خدمة من selectize واضافته في في جدول العملاء
             });
-        </script>
+        </script>--}}
     {{--  end search products by selectize #products_selectize --}}
 
     
 
     {{-- start function calcTotal --}}
-        <script>
+        {{--<script>
             function calcTotal() {
                 let subTotal = 0;
                 let total = 0;
@@ -723,13 +715,13 @@
                 //    afterDiscountBill = total;
                 //}
             }
-        </script>
+        </script>--}}
     {{-- end function calcTotal --}}
 
     
 
     {{-- start when change tax_bill update prod_tax value --}}
-        <script>
+        {{--<script>
             $(document).on('input', '#tax_bill', function () {
                 const thisVal = $(this);
                 
@@ -743,13 +735,13 @@
                     calcTotal();
                 }
             });
-        </script>
+        </script>--}}
     {{-- end when change tax_bill update prod_tax value --}}
     
     
     
     {{-- start when change extra_money_type --}}
-        <script>
+        {{--<script>
             $(document).on('input', '#extra_money_type', function () {
                 const thisVal = $(this).val();
 
@@ -771,13 +763,13 @@
                     $('#extra_money').val('');
                 }
             });
-        </script>
+        </script>--}}
     {{-- end when change extra_money_type --}}
 
     
 
     {{-- start when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
-        <script>
+        {{--<script>
             $(document).ready(function () {
                 $(document).on('input', '.sellPrice, .sale_quantity, .prod_discount, .prod_tax, #bill_discount, #extra_money, #extra_money_type', function () {
                     calcTotal();
@@ -785,7 +777,7 @@
                     //$("#overlay_page").fadeOut();
                 });
             });
-        </script>
+        </script>--}}
     {{-- end when change sellPrice, .sale_quantity, .prod_discount, .tax --}}
 
 
@@ -793,83 +785,83 @@
     {{-- start general scripts --}}
         <script>
             ////////////////////////////// start when click edit-row-btn تعديل صف من جدول الأصناف ////////////////////////////
-            $(document).on('click', '.edit-row-btn', function() {
-                var rowId = $(this).data('row-id');
-                var rowSellPrice = $(this).closest('tr').find('.sellPrice').val();
-                var rowProdDiscount = $(this).closest('tr').find('.prod_discount').val();
-                var rowProdTax = $(this).closest('tr').find('.prod_tax').val();
+            //$(document).on('click', '.edit-row-btn', function() {
+            //    var rowId = $(this).data('row-id');
+            //    var rowSellPrice = $(this).closest('tr').find('.sellPrice').val();
+            //    var rowProdDiscount = $(this).closest('tr').find('.prod_discount').val();
+            //    var rowProdTax = $(this).closest('tr').find('.prod_tax').val();
 
-                alertify.confirm(
-                'تحذير هام <i class="fas fa-exclamation-triangle text-warning" style="margin:0 3px;"></i>',
-                `<div style='text-align:center;background-color:#cde6f3; padding:15px; border-radius:5px;'>
-                    <p class='text-danger' style='font-size:14px;'>
-                        هل أنت متأكد من تعديل بيانات هذا الصنف في الفاتورة الحالية؟ ✏️
-                    </p>
-                    <div style='margin-top: 10px !important;'>
-                        ⚠️ هذا الإجراء لا يمكن التراجع عنه، وسيؤثر على حساب العميل 💰 ومخزون الصنف 📦.
-                    </div>
-                </div>`,
-                function() {
-                    $.ajax({
-                        url: `{{ url('sales/update_product_from_bill') }}/${rowId}`,
-                        type: "GET",
-                        data: {
-                            rowId: rowId, 
-                            rowSellPrice: rowSellPrice,
-                            rowProdDiscount: rowProdDiscount,
-                            rowProdTax: rowProdTax,                        
-                        },
-                        success: function(res) {
-                            if(res.notAuth){
-                                alertify.dialog('alert')
-                                    .set({transition:'slide',message: `
-                                        <div style='text-align:center;'>
-                                            <p style='color:#e67e22;font-size:18px;margin-bottom:10px;'>صلاحية غير متوفرة 🔐⚠️</p>
-                                            <p>${res.notAuth}</p>
-                                        </div>
-                                    `, 'basic': true})
-                                    .show();
-                                $(".modal").modal('hide');
-                            }else{
-                                if(res.no_edits){
-                                    alertify.dialog('alert')
-                                    .set({transition:'slide',message: `
-                                        <div style='text-align:center;'>
-                                            <p>${res.no_edits}</p>
-                                        </div>
-                                    `, 'basic': true})
-                                    .show();
-                                }
+            //    alertify.confirm(
+            //    'تحذير هام <i class="fas fa-exclamation-triangle text-warning" style="margin:0 3px;"></i>',
+            //    `<div style='text-align:center;background-color:#cde6f3; padding:15px; border-radius:5px;'>
+            //        <p class='text-danger' style='font-size:14px;'>
+            //            هل أنت متأكد من تعديل بيانات هذا الصنف في الفاتورة الحالية؟ ✏️
+            //        </p>
+            //        <div style='margin-top: 10px !important;'>
+            //            ⚠️ هذا الإجراء لا يمكن التراجع عنه، وسيؤثر على حساب العميل 💰 ومخزون الصنف 📦.
+            //        </div>
+            //    </div>`,
+            //    function() {
+            //        $.ajax({
+            //            url: `{{ url('sales/update_product_from_bill') }}/${rowId}`,
+            //            type: "GET",
+            //            data: {
+            //                rowId: rowId, 
+            //                rowSellPrice: rowSellPrice,
+            //                rowProdDiscount: rowProdDiscount,
+            //                rowProdTax: rowProdTax,                        
+            //            },
+            //            success: function(res) {
+            //                if(res.notAuth){
+            //                    alertify.dialog('alert')
+            //                        .set({transition:'slide',message: `
+            //                            <div style='text-align:center;'>
+            //                                <p style='color:#e67e22;font-size:18px;margin-bottom:10px;'>صلاحية غير متوفرة 🔐⚠️</p>
+            //                                <p>${res.notAuth}</p>
+            //                            </div>
+            //                        `, 'basic': true})
+            //                        .show();
+            //                    $(".modal").modal('hide');
+            //                }else{
+            //                    if(res.no_edits){
+            //                        alertify.dialog('alert')
+            //                        .set({transition:'slide',message: `
+            //                            <div style='text-align:center;'>
+            //                                <p>${res.no_edits}</p>
+            //                            </div>
+            //                        `, 'basic': true})
+            //                        .show();
+            //                    }
 
-                                if(res.success_edit){
-                                    alert(
-                                        "تم تعديل بيانات الصنف بنجاح ✅.\n" +
-                                        "💰 تم تعديل حساب العميل بناءً على التعديلات الأخيرة."
-                                    );
+            //                    if(res.success_edit){
+            //                        alert(
+            //                            "تم تعديل بيانات الصنف بنجاح ✅.\n" +
+            //                            "💰 تم تعديل حساب العميل بناءً على التعديلات الأخيرة."
+            //                        );
 
-                                    location.reload();
-                                }
+            //                        location.reload();
+            //                    }
 
-                                if(res.cannot_delete){
-                                    alertify.set('notifier','position','top-center');
-                                    alertify.set('notifier','delay',6);
-                                    alertify.warning('خطأ: لا يمكن حذف الفاتورة لارتباطها بسجلات أخرى.');
-                                }
-                            }
-                        },
-                        error: function(){
-                            alertify.error('حدث خطأ أثناء محاولة حذف الفاتورة');
-                        }
-                    });
-                    },
-                    function(){}
-                ).set({
-                    labels:{
-                        ok:"نعم <i class='fas fa-check text-success' style='margin:0 3px;'></i>",
-                        cancel:"لا <i class='fa fa-times text-light' style='margin:0 3px;'></i>"
-                    }
-                });
-            });
+            //                    if(res.cannot_delete){
+            //                        alertify.set('notifier','position','top-center');
+            //                        alertify.set('notifier','delay',6);
+            //                        alertify.warning('خطأ: لا يمكن حذف الفاتورة لارتباطها بسجلات أخرى.');
+            //                    }
+            //                }
+            //            },
+            //            error: function(){
+            //                alertify.error('حدث خطأ أثناء محاولة حذف الفاتورة');
+            //            }
+            //        });
+            //        },
+            //        function(){}
+            //    ).set({
+            //        labels:{
+            //            ok:"نعم <i class='fas fa-check text-success' style='margin:0 3px;'></i>",
+            //            cancel:"لا <i class='fa fa-times text-light' style='margin:0 3px;'></i>"
+            //        }
+            //    });
+            //});
             ////////////////////////////// end when click edit-row-btn تعديل صف من جدول الأصناف ////////////////////////////
            
            
@@ -946,15 +938,6 @@
                 });
             });
             //////////////////////////// end when click delete-row-btn حذف صنف من جدول الأصناف  ////////////////////////////
-
-                
-
-
-
-
-
-
-
         </script>
     {{-- end general scripts --}}
     

@@ -47,24 +47,20 @@
         }
     </style>
 </head>
-<body style="padding: 5px 10px;">
-    <div style="padding: 5px 10px;border: 1px solid #000;">
-        <div class="">
-            <div class="invoice-title">
-                <h4 class="text-center" style="">
-                    {{ $pageNameAr }}
-                </h4>
-            </div>
-            <hr>
-
-            @include('back.layouts.header_report')
+<body style=" background-color: #f9f9f9;">
+    <div style="padding: 20px; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <div style="border: 2px solid #dee2e6; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+            <h4 class="text-center" style="font-weight: bold; color: #343a40; margin: 0;">
+                🧾 {{ $pageNameAr }}
+            </h4>
         </div>
 
+        @include('back.layouts.header_report')
+
         @if ($supplier_id || $treasury_type || $from || $to)
-            <hr style="margin: 0 0 10px !important;"> 
-            <div style="margin-bottom: 10px;">
+            <div style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px;">
                 @if ($supplier_id)
-                    <span class="itemsSearch">مورد: {{ $results[0]->supplierName }}</span>
+                    <span class="itemsSearch">عميل: {{ $results[0]->supplierName }}</span>
                 @endif
                 @if ($treasury_type)
                     <span class="itemsSearch">نوع الحركة: {{ $results[0]->treasury_type }}</span>
@@ -100,23 +96,45 @@
                     @foreach ($results as $result)    
                         <tr>
                             {{--<td>{{ $result->id }}</td>--}}
-                            <td>
-                                {{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}
-                                <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i:s a') }}</span>
+                            <td style="padding:2px 4px;">
+                                <span>{{ Carbon\Carbon::parse($result->created_at)->format('d-m-Y') }}</span>
+                                <small style="color:#888;">{{ Carbon\Carbon::parse($result->created_at)->format('h:i a') }}</small>
                             </td>
-                            <td>
+                            <td style="padding:2px 4px;">
                                 @if(Carbon\Carbon::parse($result->created_at)->format('d-m-Y') != Carbon\Carbon::parse($result->date)->format('d-m-Y'))
-                                    <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($result->date)->format('d-m-Y') }}</span>
-                                @endif                                        
+                                    <span>{{ Carbon\Carbon::parse($result->date)->format('d-m-Y') }}</span>
+                                @else
+                                    <span style="color:#bbb;">-</span>
+                                @endif
                             </td>
-                            <td>{{ $result->treasury_name }}</td>
-                            <td>{{ $result->treasury_type }}</td>
-                            <td>{{ $result->supplierName }}</td>
-                            <td>{{ display_number($result->amount_money) }}</td>
-                            <td>{{ display_number($result->remaining_money) }}</td>
-                            <td>{{ display_number($result->treasury_money_after) }}</td>
-                            <td>{{ $result->userName }}</td>
-                            <td>{{ $result->notes }}</td>
+                            <td style="padding:2px 4px;">{{ $result->treasury_name }}</td>
+                            <td style="padding:2px 4px;font-weight: bold;">
+                                {{ $result->treasury_type }}
+                            </td>                            
+                            <td style="padding:2px 4px;">{{ $result->supplierName }}</td>
+                            <td style="padding:2px 4px;">
+                                <span style="font-weight:bold; color:#007bff;">
+                                    {{ display_number($result->amount_money) }}
+                                </span>
+                            </td>
+
+
+                            
+                            
+                            <td style="padding:2px 4px;font-weight:bold;">
+                                <span style="color:{{ $result->remaining_money < 0 ? '#d9534f' : '#5cb85c' }};">
+                                    {{ display_number($result->remaining_money) }}
+                                </span>
+                            </td>
+                            <td style="padding:2px 4px;">
+                                <span style="font-weight:bold;">
+                                    {{ display_number($result->treasury_money_after) }}
+                                </span>
+                            </td>
+                            <td style="padding:2px 4px;">{{ $result->userName }}</td>
+                            <td style="padding:2px 4px;font-size: 10px;">
+                                <span style="white-space: pre-line;">{{ $result->notes }}</span>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

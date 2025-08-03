@@ -116,14 +116,10 @@ class RolesPermissionsController extends Controller
             'taswea_partners_create' => request('taswea_partners_create') ? 1 : 0, 
             'taswea_partners_view' => request('taswea_partners_view') ? 1 : 0, 
             'sales_create' => request('sales_create') ? 1 : 0, 
-            'sales_return' => request('sales_return') ? 1 : 0, 
             'sales_view' => request('sales_view') ? 1 : 0, 
-            'sales_return_view' => request('sales_return_view') ? 1 : 0, 
             'products_stock_alert_view' => request('products_stock_alert_view') ? 1 : 0, 
             'purchases_create' => request('purchases_create') ? 1 : 0, 
-            'purchases_return' => request('purchases_return') ? 1 : 0, 
             'purchases_view' => request('purchases_view') ? 1 : 0, 
-            'purchases_return_view' => request('purchases_return_view') ? 1 : 0, 
             'treasury_bills_create' => request('treasury_bills_create') ? 1 : 0, 
             'treasury_bills_view' => request('treasury_bills_view') ? 1 : 0, 
             'treasury_bills_report_view' => request('treasury_bills_report_view') ? 1 : 0, 
@@ -168,6 +164,15 @@ class RolesPermissionsController extends Controller
             'receipts_delete' => request('receipts_delete') ? 1 : 0,
             'receipts_take_money' => request('receipts_take_money') ? 1 : 0,
             // end third            
+            
+            // start fourth
+            'sales_bill_deleted_view' => request('sales_bill_deleted_view') ? 1 : 0,
+            'sales_bill_return_view' => request('sales_bill_return_view') ? 1 : 0,
+            'sales_bill_edited_view' => request('sales_bill_edited_view') ? 1 : 0,
+            'purchase_bill_deleted_view' => request('purchase_bill_deleted_view') ? 1 : 0,
+            'purchase_bill_return_view' => request('purchase_bill_return_view') ? 1 : 0,
+            'purchase_bill_edited_view' => request('purchase_bill_edited_view') ? 1 : 0,
+            // end fourth                  
         ]);
         
         return redirect()->back();
@@ -258,14 +263,10 @@ class RolesPermissionsController extends Controller
             'taswea_partners_create' => request('taswea_partners_create') ? 1 : 0, 
             'taswea_partners_view' => request('taswea_partners_view') ? 1 : 0, 
             'sales_create' => request('sales_create') ? 1 : 0, 
-            'sales_return' => request('sales_return') ? 1 : 0, 
             'sales_view' => request('sales_view') ? 1 : 0, 
-            'sales_return_view' => request('sales_return_view') ? 1 : 0, 
             'products_stock_alert_view' => request('products_stock_alert_view') ? 1 : 0, 
             'purchases_create' => request('purchases_create') ? 1 : 0, 
-            'purchases_return' => request('purchases_return') ? 1 : 0, 
             'purchases_view' => request('purchases_view') ? 1 : 0, 
-            'purchases_return_view' => request('purchases_return_view') ? 1 : 0, 
             'treasury_bills_create' => request('treasury_bills_create') ? 1 : 0, 
             'treasury_bills_view' => request('treasury_bills_view') ? 1 : 0, 
             'treasury_bills_report_view' => request('treasury_bills_report_view') ? 1 : 0, 
@@ -309,7 +310,16 @@ class RolesPermissionsController extends Controller
             'receipts_view' => request('receipts_view') ? 1 : 0,
             'receipts_delete' => request('receipts_delete') ? 1 : 0,
             'receipts_take_money' => request('receipts_take_money') ? 1 : 0,
-            // end third                 
+            // end third              
+            
+            // start fourth
+            'sales_bill_deleted_view' => request('sales_bill_deleted_view') ? 1 : 0,
+            'sales_bill_return_view' => request('sales_bill_return_view') ? 1 : 0,
+            'sales_bill_edited_view' => request('sales_bill_edited_view') ? 1 : 0,
+            'purchase_bill_deleted_view' => request('purchase_bill_deleted_view') ? 1 : 0,
+            'purchase_bill_return_view' => request('purchase_bill_return_view') ? 1 : 0,
+            'purchase_bill_edited_view' => request('purchase_bill_edited_view') ? 1 : 0,
+            // end fourth            
         ]);
         
         return redirect()->back();

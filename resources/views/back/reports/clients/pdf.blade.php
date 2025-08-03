@@ -75,7 +75,7 @@
         @endif
 
         <div>
-            <div class="table-responsive">
+            <div>
                 <table class="table table-bordered" style="width:100%; text-align:center; font-size:11px; background-color: #fff; border-collapse:collapse;">
                     <thead style="background-color: #e9ecef; font-weight: bold;">
                         <tr style="height:28px;">

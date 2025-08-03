@@ -217,7 +217,7 @@
                                                 ضريبة ق م (%)
                                                 <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
                                             </label>
-                                            <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
+                                            <input autocomplete="off" readonly type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
                                         </p>
                                     @endif                                    
                                                                         
@@ -226,7 +226,7 @@
                                             خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
                                         </label>
-                                        <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" value="{{ display_number( $find[0]->bill_discount ) }}"/>
+                                        <input autocomplete="off" readonly type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" readonly placeholder="خصم قيمة" style="font-size: 12px;" value="{{ display_number( $find[0]->bill_discount ) }}"/>
                                     </p>
                                     
                                     <div class="col-12">
@@ -237,7 +237,9 @@
                                     
                                         <div class="row">
                                             <div class="col-md-7 mb-2">
-                                                <select class="form-control" name="extra_money_type" id="extra_money_type">
+                                                {{--<input autocomplete="off" readonly type="text" class="form-control text-center numValid focus_input" id="extra_money_type" name="extra_money_type" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ $find[0]->extra_money_type }}"/>--}}
+
+                                                <select class="form-control" disabled name="extra_money_type" id="extra_money_type">
                                                     <option value="" selected>اختر مصروف إضافي</option>
                                                     @foreach ($extra_expenses as $item)
                                                         <option value="{{ $item->id }}" 
@@ -253,47 +255,32 @@
                                             </div>
                                     
                                             <div class="col-md-5">
-                                                <input autocomplete="off" type="text" class="form-control text-center numValid focus_input" id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ display_number( $find[0]->extra_money ) }}"/>
+                                                <input autocomplete="off" readonly type="text" class="form-control text-center numValid focus_input" id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ display_number( $find[0]->extra_money ) }}"/>
                                             </div>
                                         </div>
                                     </div>
                                     
                                 
                                     <ul class="row" style="font-size: 11px;">
-                                        <li class="col-6 mb-2">
-                                            العناصر:
+                                        <li class="col-12 mb-2">
+                                            عدد عناصر الفاتورة:
                                             <strong style="font-size: 16px; color: #007bff;">
-                                                {{ display_number($find[0]->count_items) }}
+                                                {{ round($find[0]->count_items) }}
                                             </strong>
                                         </li>
 
-                                        <li class="col-6 mb-2">
-                                            المبيعات:
+                                        <li class="col-12 mb-2">
+                                            الإجمالي الأساسي:
                                             <strong style="font-size: 16px; color: #28a745;">
                                                 {{ display_number($find[0]->total_bill_before) }}
-                                            </strong>
-                                        </li>
-
-                                        <li class="col-6 mb-2">
-                                            المرتجعات:
-                                            <strong style="font-size: 16px; color: #dc3545;">
-                                                {{ display_number($find[0]->total_returns ?? 0) }}
-                                            </strong>
-                                        </li>
-
-                                        <li class="col-6 mb-2">
-                                            الصافي:
-                                            <strong style="font-size: 16px; color: #ffc107;">
-                                                {{ display_number(($find[0]->total_bill_before ?? 0) - ($find[0]->total_returns ?? 0)) }}
                                             </strong>
                                         </li>
                                     </ul>
 
 
-
                                     <p class="col-lg-12">
                                         <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
-                                            <span style="font-size: 12px;">الإجمالي المستحق: </span>
+                                            <span style="font-size: 12px;">صافي الفاتورة: </span>
                                             <span style="font-size: 24px;" class="total_bill_after">{{ display_number( $find[0]->total_bill_after ) }}</span>
                                         </div>
                                     </p>
@@ -504,8 +491,8 @@
 
                                 if(res.success_edit){
                                     alert(
-                                        "تم تعديل بيانات الصنف بنجاح ✅.\n" +
-                                        "💰 تم تعديل حساب العميل بناءً على التعديلات الأخيرة."
+                                        "تم ارجاع كميات الصنف بنجاح ✅.\n" +
+                                        "💰 تم تعديل حساب العميل بناءً على المرتجعات الأخيرة."
                                     );
 
                                     location.reload();

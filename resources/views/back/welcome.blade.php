@@ -220,7 +220,7 @@
 									</span>
 									<h4 class="text-white mb-0">
 										<a class="text-white">
-											{{ display_number( totalProfitToday()['totalProductsSellPriceToday'] ?? 0 ) }}
+											{{ display_number( totalProfitToday()['totalSales'] ?? 0 ) }}
 										</a>
 									</h4>
 								</div>
@@ -343,7 +343,7 @@
 			@endif
 
 
-			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
+			{{--<div class="col-lg-6 col-xl-2 col-md-6 col-12">
 				<div class="card bg-warning-gradient text-white">
 					<div class="card-body">
 						<div class="row">
@@ -365,7 +365,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div>--}}
 
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
 				<div class="card bg-secondary text-white">
@@ -394,7 +394,7 @@
 			</div>
 
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
-				<div class="card bg-danger text-white">
+				<div class="card bg-warning-gradient text-white">
 					<div class="card-body">
 						<div class="row">
 							<div class="col-3">
@@ -404,8 +404,8 @@
 							</div>
 							<div class="col-9">
 								<div class="mt-0 text-center">
-									<span style="font-size: 11px;">
-										<a class="text-white" href="{{ url('products/report/stock_alert') }}" target="_blank">أصناف وصلت للحد الأدنى</a>
+									<span style="font-size: 12px;">
+										<a class="text-white" href="{{ url('products/report/stock_alert') }}" target="_blank">إنذار مخزون</a>
 									</span>
 									<h4 class="text-white mb-0">
 										<a class="text-white" href="{{ url('products/report/stock_alert') }}" target="_blank">

@@ -142,8 +142,8 @@
                             <li aria-haspopup="true"><a href="{{ url('/sales') }}" class="slide-item text-dark">فواتير المبيعات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/sales/create') }}" class="slide-item text-dark">فاتورة مبيعات جديدة</a></li>
 
-                            <hr class="navbar_hr"/>
-                            <li aria-haspopup="true"><a href="{{ url('sales_return') }}" class="slide-item text-dark">فواتير مرتجع المبيعات</a></li>
+                            {{--<hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('sales_return') }}" class="slide-item text-dark">فواتير مرتجع المبيعات</a></li>--}}
                             {{--<li aria-haspopup="true"><a href="#" class="slide-item text-dark">تصدير العملاء إلي ملف إكسيل</a></li>
                             <li aria-haspopup="true"><a href="#" class="slide-item text-dark">إستيراد العملاء من ملف إكسيل</a></li>
                             <li aria-haspopup="true"><a href="#" class="slide-item text-dark">تصدير ديون العملاء إلي ملف إكسيل</a></li>--}}

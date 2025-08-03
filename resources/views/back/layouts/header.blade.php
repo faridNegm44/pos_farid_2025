@@ -1,26 +1,28 @@
 <!-- main-header -->
 <div class="main-header nav nav-item hor-header">
     <div class="container-fluid" style="width: 100% !important;">
-        <div class="main-header-left ">
+        <div class="main-header-left">
             <a class="animated-arrow hor-toggle horizontal-navtoggle"><span></span></a>
             <a class="header-brand" href="{{ url('') }}">
                 <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-dark">
                 <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-logo">
                 <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-logo-1">
                 <img src="{{ asset('back/images/settings/'.GeneralSettingsInfo()->logo) }}" class="desktop-logo-dark">
-            </a>         
 
-            {{--<div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">--}}
+                {{--<span class="text-dark d-none d-md-inline d-lg-d-md-inline" style="margin: 0 5px;">{{ GeneralSettingsInfo()->app_name }}</span>--}}
+            </a>    
+            
+        </div>
+    
+
+        <div class="main-header-right">
             <div class="horizontal-main header-layout d-none d-md-flex d-lg-flex">
-
                 <div class="horizontal-mainwrapper container clearfix">
                     <nav class="horizontalMenu clearfix"><div class="horizontal-overlapbg"></div>
                         <ul class="horizontalMenu-list">
                             <li aria-haspopup="true"><span class="horizontalMenu-click"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span>
-                                <a class="sub-icon" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                                
-                                إختصارات <i class="fe fe-chevron-down horizontal-icon"></i></a>
+
+                                <a class="sub-icon" href="#">إختصارات <i class="fe fe-chevron-down horizontal-icon"></i></a>
                                 <ul class="sub-menu">
                                     
                                     <li aria-haspopup="true" class="sub-menu-sub"><span class="horizontalMenu-click02"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span><a href="">تعريفات</a>
@@ -128,16 +130,8 @@
                     </nav>                    
                 </div>
             </div>
-            
-            
-            {{-- <div class="main-header-center  mr-4">
-                <input class="form-control" placeholder="Search for anything..." type="search"><button class="btn"><i class="fe fe-search"></i></button>
-            </div> --}}
-        </div><!-- search -->
-    
 
-        <div class="main-header-right">
-            {{-- d-none d-md-flex d-lg-flex --}}
+
             <div>
                 {{--<p>{{ authUserInfo()->name }}</p>--}}
                 {{--<span>{{ authUserInfo()->role_name }}</span>--}}

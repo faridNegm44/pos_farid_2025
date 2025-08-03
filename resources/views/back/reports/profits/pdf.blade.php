@@ -37,12 +37,14 @@
         @media print { .summary-cards { flex-wrap: wrap; } }
     </style>
 </head>
-<body style="padding: 5px 10px;">
-    <div style="padding: 15px; border: 1px solid #000;">
+<body style=" background-color: #f9f9f9;">
+    <div style="padding: 20px; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);border: 2px solid #dee2e6; padding: 20px;">
 
         @include('back.layouts.header_report')
-        
-        <h3 class="text-center" style="margin: 10px 0 0 0; font-weight: bold; letter-spacing: 1px;">تقرير الربحية</h3>
+
+        <h3 class="text-center" style="font-weight: bold; color: #343a40; margin: 0;">
+            🧾 تقرير الربحية
+        </h3>
         <br>
         
         @if($from || $to)

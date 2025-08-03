@@ -35,6 +35,12 @@ use Illuminate\Support\Facades\DB;
     }
 // end get curren financial year where status 1 => السنوات المالية
 
+// start get all financial year where status 1 => السنوات المالية
+    function getAllFinancialYear(){
+        return FinancialYears::get();
+    }
+// end get all financial year where status 1 => السنوات المالية
+
 
 // start get GeneralSettingsInfo
     if (!function_exists('GeneralSettingsInfo')) {
@@ -235,26 +241,51 @@ function totalExpensesToday(){
 
 // start => حساب الربحيه اليوم - إجمالي المبيعات اليوم
 function totalProfitToday(){
-    $totalProductsSellPriceToday = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->whereDate('created_at', Carbon::today())->sum('total_after'); 
-    
-    $totalProductsCostPriceToday = DB::table('store_dets')
-                    ->where('type', 'اضافة فاتورة مبيعات')
-                    ->whereDate('created_at', Carbon::today())
+    $totalSales = DB::table('store_dets')
+                    ->join('sale_bills', 'sale_bills.id', '=', 'store_dets.bill_id')
+                    ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                    ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                    ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                    ->whereDate('store_dets.created_at', Carbon::today())
+                    ->select('sale_bills.total_bill_after')
+                    ->groupBy('store_dets.bill_id')
+                    ->get()
+                    ->sum('total_bill_after');
+
+    $totalCost = DB::table('store_dets')
+                    ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')
+                    ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                    ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                    ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                    ->whereDate('store_dets.created_at', Carbon::today())
+                    ->select('store_dets.last_cost_price_small_unit', 'store_dets.avg_cost_price_small_unit', 'store_dets.product_bill_quantity')
                     ->get()
                     ->sum(function ($row) {
-                        return ( ( getCostPrice()->cost_price == 1 ? $row->last_cost_price_small_unit : $row->avg_cost_price_small_unit ) * $row->product_bill_quantity)
-                            + $row->tax
-                            //+ $row->extra_money
-                            - $row->discount;
+                        return (
+                                    (   getCostPrice()->cost_price == 1 ? 
+                                            $row->last_cost_price_small_unit : 
+                                            $row->avg_cost_price_small_unit
+                                    ) * $row->product_bill_quantity
+
+                                );
                     });
-    
-    $profit = ($totalProductsSellPriceToday - $totalProductsCostPriceToday) - totalExpensesToday();
+                    
+    $profit = ($totalSales - $totalCost) - totalExpensesToday();
     $roundedProfit = floor($profit * 100) / 100;
 
 
+    //dd([
+    //    'totalSales' => $totalSales,
+    //    'totalCost' => $totalCost,
+    //    'profit' => $profit,
+    //    'roundedProfit' => $roundedProfit
+    //]);                    
+        
+
+
     return [
-        'totalProductsSellPriceToday' => $totalProductsSellPriceToday,
-        'totalProductsCostPriceToday' => $totalProductsCostPriceToday,
+        'totalSales' => $totalSales,
+        'totalCost' => $totalCost,
         'profit' => $profit,
         'roundedProfit' => $roundedProfit
     ];

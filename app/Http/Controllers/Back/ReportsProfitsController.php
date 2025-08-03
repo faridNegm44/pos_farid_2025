@@ -31,102 +31,143 @@ class ReportsProfitsController extends Controller
         $financial_year = request('financial_year');
         $from = $request->from ? date('Y-m-d H:i:s', strtotime($request->from)) : null;
         $to = $request->to ? date('Y-m-d H:i:s', strtotime($request->to)) : null;
-
-        //$totalProductsSellPrice = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات'); 
-        //$totalProductsCostPrice = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات');
-        //$totalExpenses = DB::table('expenses')->where('status', 'اضافة');
         
-        //if ($from && $to) {
-        //    $totalProductsSellPrice->whereBetween('store_dets.created_at', [$from, $to]);
-        //    $totalProductsCostPrice->whereBetween('store_dets.created_at', [$from, $to]);
-        //    $totalExpenses->whereBetween('created_at', [$from, $to]);
-            
-        //} elseif ($from) {
-        //    $totalProductsSellPrice->where('store_dets.created_at', '>=', $from);
-        //    $totalProductsCostPrice->where('store_dets.created_at', '>=', $from);
-        //    $totalExpenses->where('created_at', '>=', $from);
-            
-        //} elseif ($to) {
-        //    $totalProductsSellPrice->where('store_dets.created_at', '<=', $to);
-        //    $totalProductsCostPrice->where('store_dets.created_at', '<=', $to);
-        //    $totalExpenses->where('created_at', '<=', $to);
-        //}
+        $totalSales = DB::table('store_dets')
+                            ->join('sale_bills', 'sale_bills.id', '=', 'store_dets.bill_id')
+                            ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                            ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                            ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                            ->select('sale_bills.total_bill_after')
+                            ->groupBy('store_dets.bill_id')
+                            ->get()
+                            ->sum('total_bill_after');
 
-        //$resultTotalProductsSellPrice = $totalProductsSellPrice->sum('total_after');
-        //$resultTotalProductsCostPrice = $totalProductsCostPrice->get()
-        //                                                        ->sum(function ($row) {
-        //                                                            return (( getCostPrice()->cost_price == 1 ? $row->last_cost_price_small_unit : $row->avg_cost_price_small_unit ) * $row->product_bill_quantity)
-        //                                                                + $row->tax
-        //                                                                //+ $row->extra_money
-        //                                                                - $row->discount;
-        //                                                        });
-        //$resultTotalExpenses = $totalExpenses->sum('amount');
-        
-        //$profit = ($resultTotalProductsSellPrice - $resultTotalProductsCostPrice) - $resultTotalExpenses;
+            $totalCost = DB::table('store_dets')
+                            ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')
+                            ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                            ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                            ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                            ->select('store_dets.last_cost_price_small_unit', 'store_dets.avg_cost_price_small_unit', 'store_dets.product_bill_quantity')
+                            ->get()
+                            ->sum(function ($row) {
+                                return (
+                                            (   getCostPrice()->cost_price == 1 ? 
+                                                    $row->last_cost_price_small_unit : 
+                                                    $row->avg_cost_price_small_unit
+                                            ) * $row->product_bill_quantity
 
-        //dd($resultTotalProductsSellPrice);
-
-
-
-        $totalSales = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->sum('total_after');
-        $totalCost = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->get()
-                        ->sum(function ($row) {
-                            return (
-                                (getCostPrice()->cost_price == 1 ? $row->last_cost_price_small_unit : $row->avg_cost_price_small_unit) * $row->product_bill_quantity
-                            ) + $row->tax - $row->discount;
-                        });
+                                        );
+                            });
                         
         $totalExpenses = DB::table('expenses')->where('status', 'اضافة')->sum('amount');
         //$totalReturns = DB::table('store_dets')->where('type', 'مرتجع مبيعات')->sum('total_after');
 
         if ($from && $to) {
-            $totalSales = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->whereBetween('created_at', [$from, $to])->sum('total_after');
-            $totalCost = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->whereBetween('created_at', [$from, $to])->get()
+            $totalSales = DB::table('store_dets')
+                            ->join('sale_bills', 'sale_bills.id', '=', 'store_dets.bill_id')
+                            ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                            ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                            ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                            ->whereBetween('store_dets.created_at', [$from, $to])
+                            ->select('sale_bills.total_bill_after')
+                            ->groupBy('store_dets.bill_id')
+                            ->get()
+                            ->sum('total_bill_after');
+
+            $totalCost = DB::table('store_dets')
+                            ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')
+                            ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                            ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                            ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                            ->whereBetween('store_dets.created_at', [$from, $to])
+                            ->select('store_dets.last_cost_price_small_unit', 'store_dets.avg_cost_price_small_unit', 'store_dets.product_bill_quantity')
+                            ->get()
                             ->sum(function ($row) {
                                 return (
-                                    (getCostPrice()->cost_price == 1 ? $row->last_cost_price_small_unit : $row->avg_cost_price_small_unit) * $row->product_bill_quantity
-                                ) + $row->tax - $row->discount;
+                                            (   getCostPrice()->cost_price == 1 ? 
+                                                    $row->last_cost_price_small_unit : 
+                                                    $row->avg_cost_price_small_unit
+                                            ) * $row->product_bill_quantity
+
+                                        );
                             });
+
+            //return $totalSales - $totalCost;
                             
-            $totalExpenses = DB::table('expenses')->whereBetween('created_at', [$from, $to])->where('status', 'اضافة')->sum('amount');
-            //$totalReturns = DB::table('store_dets')->where('type', 'مرتجع مبيعات')->whereBetween('created_at', [$from, $to])->sum('total_after');
+            $totalExpenses = DB::table('expenses')
+                                ->whereBetween('created_at', [$from, $to])
+                                ->where('status', 'اضافة')
+                                ->sum('amount');
             
         } elseif ($from) {
-            $totalSales = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->where('store_dets.created_at', '>=', $from)->sum('total_after');
-            $totalCost = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->where('store_dets.created_at', '>=', $from)->get()
+            $totalSales = DB::table('store_dets')
+                            ->join('sale_bills', 'sale_bills.id', '=', 'store_dets.bill_id')
+                            ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                            ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                            ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                            ->where('store_dets.created_at', '>=', $from)
+                            ->select('sale_bills.total_bill_after')
+                            ->groupBy('store_dets.bill_id')
+                            ->get()
+                            ->sum('total_bill_after');
+
+            $totalCost = DB::table('store_dets')
+                            ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')
+                            ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                            ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                            ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                            ->where('store_dets.created_at', '>=', $from)
+                            ->select('store_dets.last_cost_price_small_unit', 'store_dets.avg_cost_price_small_unit', 'store_dets.product_bill_quantity')
+                            ->get()
                             ->sum(function ($row) {
                                 return (
-                                    (getCostPrice()->cost_price == 1 ? $row->last_cost_price_small_unit : $row->avg_cost_price_small_unit) * $row->product_bill_quantity
-                                ) + $row->tax - $row->discount;
+                                            (   getCostPrice()->cost_price == 1 ? 
+                                                    $row->last_cost_price_small_unit : 
+                                                    $row->avg_cost_price_small_unit
+                                            ) * $row->product_bill_quantity
+
+                                        );
                             });
-                            
-            $totalExpenses = DB::table('expenses')->where('store_dets.created_at', '>=', $from)->where('status', 'اضافة')->sum('amount');
-            //$totalReturns = DB::table('store_dets')->where('type', 'مرتجع مبيعات')->where('store_dets.created_at', '>=', $from)->sum('total_after');   
-            
+        
+            $totalExpenses = DB::table('expenses')->where('created_at', '>=', $from)->where('status', 'اضافة')->sum('amount');
+
         } elseif ($to) {
-            $totalSales = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->where('store_dets.created_at', '<=', $to)->sum('total_after');
-            $totalCost = DB::table('store_dets')->where('type', 'اضافة فاتورة مبيعات')->where('store_dets.created_at', '<=', $to)->get()
+            $totalSales = DB::table('store_dets')
+                            ->join('sale_bills', 'sale_bills.id', '=', 'store_dets.bill_id')
+                            ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                            ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                            ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                            ->where('store_dets.created_at', '<=', $to)
+                            ->select('sale_bills.total_bill_after')
+                            ->groupBy('store_dets.bill_id')
+                            ->get()
+                            ->sum('total_bill_after');
+
+            $totalCost = DB::table('store_dets')
+                            ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')
+                            ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                            ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
+                            ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
+                            ->where('store_dets.created_at', '<=', $to)
+                            ->select('store_dets.last_cost_price_small_unit', 'store_dets.avg_cost_price_small_unit', 'store_dets.product_bill_quantity')
+                            ->get()
                             ->sum(function ($row) {
                                 return (
-                                    (getCostPrice()->cost_price == 1 ? $row->last_cost_price_small_unit : $row->avg_cost_price_small_unit) * $row->product_bill_quantity
-                                ) + $row->tax - $row->discount;
+                                            (   getCostPrice()->cost_price == 1 ? 
+                                                    $row->last_cost_price_small_unit : 
+                                                    $row->avg_cost_price_small_unit
+                                            ) * $row->product_bill_quantity
+
+                                        );
                             });
                             
-            $totalExpenses = DB::table('expenses')->where('store_dets.created_at', '<=', $to)->where('status', 'اضافة')->sum('amount');
-            //$totalReturns = DB::table('store_dets')->where('type', 'مرتجع مبيعات')->where('store_dets.created_at', '<=', $to)->sum('total_after');   
-            
+            $totalExpenses = DB::table('expenses')->where('created_at', '<=', $to)->where('status', 'اضافة')->sum('amount');            
         }
 
         $netSales = $totalSales;
         $netProfit = ($netSales - $totalCost) - $totalExpenses;
         $profitPercent = $netSales > 0 ? round(($netProfit / $netSales) * 100, 2) : 0;
 
-
-
-
-
-
-        
         //return [
         //    'from' => $from,
         //    'to' => $to,
@@ -139,16 +180,6 @@ class ReportsProfitsController extends Controller
         //    'profitPercent' => $netSales > 0 ? round(($netProfit / $netSales) * 100, 2) : 0
         //];
 
-
-
-
-        //return $profit;
-
-        
-        //if(count($results) == 0){
-        //    return redirect()->back()->with('notFound', 'لايوجد حركات تمت بناءا علي بحثك');
-        //}else{
-        //}
         return view('back.reports.profits.pdf' , compact('pageNameAr', 'from', 'to', 'netSales', 'netProfit', 'profitPercent', 'totalSales', 'netSales', 'totalCost', 'totalExpenses'));
     }
 }
