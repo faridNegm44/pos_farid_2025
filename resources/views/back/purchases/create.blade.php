@@ -213,7 +213,7 @@
                                     </div>
 
                                     <!-- الإجمالي المستحق -->
-                                    <div class="flex-grow-1" style="min-width: 220px;">
+                                    <div class="flex-grow-1" style="width: 100%;">
                                         <div style="background: linear-gradient(90deg, #f3e5d3 60%, #e1ab09 100%); color: #3d2c13; padding: 14px 0 10px 0; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px #e1ab0940; border: 1.5px solid #e1ab09;">
                                             <span style="font-size: 16px; font-weight: bold; letter-spacing: 1px; color: #7a5a1a;">
                                                  الإجمالي المستحق:

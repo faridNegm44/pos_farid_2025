@@ -23,8 +23,6 @@
                      
                 `);
 
-                //console.log(display_number_js( res[0].total_bill_after ));
-
                 $.each(res[0] , function(index, value){                    
                     $(`#showProductsModal #header #${index}`).text(value);
                 });

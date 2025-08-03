@@ -321,11 +321,18 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/' , 'PurchaseBillController@index');
         Route::get('/create' , 'PurchaseBillController@create');
         Route::post('/store' , 'PurchaseBillController@store');
-        Route::get('/edit/{id}' , 'PurchaseBillController@edit');
         Route::get('/show/{id}' , 'PurchaseBillController@show');
-        Route::post('/update/{id}' , 'PurchaseBillController@update');
-        Route::get('/destroy/{id}' , 'PurchaseBillController@destroy');
         
+        Route::get('/edit/{id}' , 'PurchaseBillController@edit');   
+        Route::post('/update/{id}' , 'PurchaseBillController@update');
+        Route::get('/update_product_from_bill/{id}' , 'PurchaseBillController@update_product_from_bill'); // تعديل صنف من أصناف الفاتورة
+        
+        Route::get('/return/{id}' , 'PurchaseBillController@edit');
+        Route::get('/return_product_from_bill/{id}' , 'PurchaseBillController@return_product_from_bill'); // ارجاع صنف من أصناف الفاتورة
+
+        Route::get('/destroy_bill/{id}' , 'PurchaseBillController@destroy_bill'); //  حذف الفاتورة كاملة
+        Route::get('/destroy_product_from_bill/{id}' , 'PurchaseBillController@destroy_product_from_bill'); // حذف صنف من أصناف الفاتورة
+
         Route::get('datatable' , 'PurchaseBillController@datatable');
 
         //تقرير عن فواتير مشتريات  
@@ -334,28 +341,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
             Route::get('result' , 'ReportsPurchaseBillsController@result');
             Route::get('result/pdf' , 'ReportsPurchaseBillsController@result_pdf');
             Route::get('result/pdf/{id}' , 'ReportsPurchaseBillsController@result_pdf_internal');
-        });
-    });
-
-
-    // purchases_return Routes  مرتجع مشتريات
-    Route::group(['prefix' => 'purchases_return'] , function (){
-        Route::get('/' , 'PurchaseReturnBillController@index');
-        Route::get('/{id}' , 'PurchaseReturnBillController@create');
-        Route::post('/store/{id}' , 'PurchaseReturnBillController@store');
-
-        Route::get('/show/{id}' , 'PurchaseReturnBillController@show');
-        Route::post('/update/{id}' , 'PurchaseReturnBillController@update');
-        Route::get('/destroy/{id}' , 'PurchaseReturnBillController@destroy');
-        
-        Route::get('datatable' , 'PurchaseReturnBillController@datatable');
-
-        //تقرير عن فواتير مرتجع مشتريات  
-        Route::group(['prefix' => 'report'] , function (){
-            Route::get('/' , 'ReportsPurchaseReturnBillsController@index');
-            Route::get('result' , 'ReportsPurchaseReturnBillsController@result');
-            Route::get('result/pdf' , 'ReportsPurchaseReturnBillsController@result_pdf');
-            Route::get('result/pdf/{id}' , 'ReportsPurchaseReturnBillsController@result_pdf_internal');
         });
     });
 
@@ -393,27 +378,6 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::group(['prefix' => 'sales-summary/report'] , function (){
             Route::get('/' , 'ReportsSaleBillsController@index');
             Route::get('result/pdf' , 'ReportsSaleBillsController@sales_summary_result_pdf');
-        });
-    });
-
-    // sales_return Routes  مرتجع مبيعات
-    Route::group(['prefix' => 'sales_return'] , function (){
-        Route::get('/' , 'SalesReturnBillController@index');
-        Route::get('/{id}' , 'SalesReturnBillController@create');
-        Route::post('/store/{id}' , 'SalesReturnBillController@store');
-
-        Route::get('/show/{id}' , 'SalesReturnBillController@show');
-        Route::post('/update/{id}' , 'SalesReturnBillController@update');
-        Route::get('/destroy/{id}' , 'SalesReturnBillController@destroy');
-        
-        Route::get('datatable' , 'SalesReturnBillController@datatable');
-
-        //تقرير عن فواتير مرتجع مبيعات  
-        Route::group(['prefix' => 'report'] , function (){
-            Route::get('/' , 'ReportsPurchaseReturnBillsController@index');
-            Route::get('result' , 'ReportsPurchaseReturnBillsController@result');
-            Route::get('result/pdf' , 'ReportsPurchaseReturnBillsController@result_pdf');
-            Route::get('result/pdf/{id}' , 'ReportsPurchaseReturnBillsController@result_pdf_internal');
         });
     });
         

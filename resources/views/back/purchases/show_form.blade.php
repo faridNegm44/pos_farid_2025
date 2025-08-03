@@ -20,8 +20,7 @@
                       <li><span>عدد أصناف الفاتورة:</span> <span class='header_span' id="count_items"></span></li>
                       <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span></li>                      
                       <li><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before" style=""></span></li>
-                      <li><span>إجمالي فاتورة بعد:</span> <span class='header_span' id="total_bill_after" style="border: 1px solid;padding: 2px 5px;"></span></li>
-                      
+                      <li><span>إجمالي فاتورة بعد:</span> <span class='header_span badge badge-primary' id="total_bill_after" style="font-size: 22px;padding: 3px 20px !important;"></span></li>                      
                     </ul>
                   </div>
 
@@ -30,7 +29,7 @@
                       <li><span>المورد:</span> <span class='header_span' id="supplierName"></span></li>
                       <li><span>الخزينة:</span> <span class='header_span' id="treasuryName"></span></li>
                       <li><span>مبلغ مدفوع:</span> <span class='header_span' id="amount_money"></span></li>
-                      <li><span>رصيد المورد بعد:</span> <span class='header_span' id="remaining_money"></span></li>
+                      {{--<li><span>رصيد المورد بعد:</span> <span class='header_span' id="remaining_money"></span></li>--}}
                       <li><span>رصيد الخزينة بعد:</span> <span class='header_span' id="treasury_money_after"></span></li>
                       <li><span>تاريخ الإنشاء:</span> <span class='header_span' id="created_at"></span></li>
                       <li><span>تاريخ آخر:</span> <span class='header_span' id="custom_date"></span></li>

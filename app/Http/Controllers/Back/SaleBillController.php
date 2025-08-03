@@ -481,10 +481,12 @@ class SaleBillController extends Controller
                     ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
                     ->leftJoin('financial_years', 'financial_years.id', 'sale_bills.year_id')
                     ->leftJoin('users', 'users.id', 'sale_bills.user_id')
+                    
                     ->where('sale_bills.id', $id)
                     ->where('store_dets.type', 'اضافة فاتورة مبيعات')
                     ->whereIn('store_dets.status', ['فاتورة ملغاة', 'نشط', 'تم تعديله', 'تم حذفه', 'مرتجع مبيعات'])
                     ->whereIn('treasury_bill_dets.bill_type', ['اضافة فاتورة مبيعات', 'اذن توريد نقدية', 'اذن مرتجع نقدية لعميل'])
+                    
                     ->select(
                         'sale_bills.*',
                         
@@ -1031,6 +1033,7 @@ class SaleBillController extends Controller
                         'extra_money_type' => 0,
                         'total_bill_after' => 0,
                         'treasury_id' => null,
+                        'user_id' => auth()->user()->id
                     ]);     
     
                     foreach($rows as $row){

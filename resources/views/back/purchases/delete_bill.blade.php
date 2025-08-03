@@ -5,13 +5,13 @@
         
         alertify.confirm(
             'تحذير هام <i class="fas fa-exclamation-triangle text-warning" style="margin:0 3px;"></i>',
-            `<div style='text-align:center;background-color:#000; padding:15px; border-radius:5px;'>                
-                <span style='font-size:18px;color: red;'>هل أنت متأكد من حذف فاتورة البيع نهائياً؟</span><br>
+            `<div style='text-align:center;background-color:#000; padding:15px; border-radius:5px;'>
+                <span style='font-size:18px;color: red'>هل أنت متأكد من حذف فاتورة المشتريات نهائياً؟</span><br>
                 <span style='color:#888;font-size:15px;'>لن يمكنك استرجاع بيانات الفاتورة بعد الحذف!</span>
             </div>`,
             function() {
                 $.ajax({
-                    url: `{{ url('sales/destroy_bill') }}/${bill_id}`,
+                    url: `{{ url('purchases/destroy_bill') }}/${bill_id}`,
                     type: "get",
                     success: function(res) {
                         if(res.notAuth){
@@ -29,9 +29,11 @@
                                 alertify.dialog('alert')
                                 .set({transition:'slide',message: `
                                     <div style='text-align:center;background: #E7D3D3;padding: 25px 5px;border-radius: 5px;'>
-                                        <p class="p-1">تم حذف الفاتورة بنجاح ✅</p>
-                                        <p class="p-1">✨ تمت إعادة الكميات إلى المخزن 📦</p>
-                                        <p class="p-1">📊 تم تحديث متوسطات الأسعار تلقائيًا 🔄   </p>
+                                        <p class="p-1">🗑️ تم حذف فاتورة المشتريات بنجاح ✅</p>
+                                        <p class="p-1">📦 تم خصم الكميات المرتبطة من المخزون</p>
+                                        <p class="p-1">📊 تم تحديث متوسط تكلفة الأصناف تلقائيًا</p>
+                                        <p class="p-1">💾 تم تعديل الأرصدة المالية للمورد المرتبط</p>
+                                        <p class="p-1">🔄 تم تسجيل العملية في سجل الحركات للحفظ والمراجعة</p>
                                     </div>
                                 `, 'basic': true})
                                 .show();

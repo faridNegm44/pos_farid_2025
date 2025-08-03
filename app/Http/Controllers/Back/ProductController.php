@@ -544,8 +544,7 @@ class ProductController extends Controller
             ->addColumn('status', function($res){
                 if($res->status == 1){
                     return '<span class="badge badge-success" style="font-size:12px;"><i class="fas fa-check-circle"></i> نشط</span>';
-                }
-                else{
+                }else{
                     return '<span class="badge badge-danger" style="font-size:12px;"><i class="fas fa-times-circle"></i> معطل</span>';
                 }
             })

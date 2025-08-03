@@ -15,29 +15,34 @@
             success: function(res){
                 $('#showProductsModal .modal-body').slideDown();
 
+                $("#showProductsModal #exampleModalLongTitle").html(`
+                    عرض فاتورة مشتريات رقم 
+                    ( ${res[0].id} ) - 
+                    ( ${res[0].supplierName} ) - 
+                    ${res[0].status}
+                     
+                `);
+                
                 $.each(res[0] , function(index, value){                    
                     $(`#showProductsModal #header #${index}`).text(value);
                 });
                 
+                $(`#showProductsModal #header #count_items`).text( display_number_js(res[0].count_items) );
                 $(`#showProductsModal .print`).attr('res_id', res[0].id);
                 
-                $(`#showProductsModal #header #remaining_money`).text(  
-                    res[0].remaining_money > 0 ? 
-                    'علية ' + display_number_js(res[0].remaining_money) : 
-                    'لة ' + display_number_js(res[0].remaining_money) 
-                );
+                //$(`#showProductsModal #header #remaining_money`).text(  
+                //    res[0].remaining_money > 0 ? 
+                //    'علية ' + display_number_js(res[0].remaining_money) : 
+                //    'لة ' + display_number_js(res[0].remaining_money) 
+                //);
                 
                 $(`#showProductsModal #header #treasury_type`).text( res[0].treasury_type != res[0].bill_type ? res[0].treasury_type : 'لم يتم صرف مستحقات' );
                 $(`#showProductsModal #header #bill_type`).text( res[0].bill_type );
                 $(`#showProductsModal #header #bill_discount`).text( res[0].bill_discount ? display_number_js(res[0].bill_discount) : 0 );
-
                 $(`#showProductsModal #header #treasury_money_after`).text(display_number_js( res[0].treasury_money_after ));
-
                 $(`#showProductsModal #header #amount_money`).text( res[0].amount_money ?? 'لم يتم صرف مستحقات' );
                 $(`#showProductsModal #header #treasuryName`).text( res[0].treasuryName ?? 'لم يتم صرف مستحقات' );
-
                 $(`#showProductsModal #header #count_items`).text( display_number_js(res[0].count_items) );
-
                 $(`#showProductsModal #header #total_bill_before`).text( display_number_js(res[0].total_bill_before) );
                 $(`#showProductsModal #header #total_bill_after`).text( display_number_js(res[0].total_bill_after) );
 
@@ -52,12 +57,48 @@
                         var cost_price_permission  = '';
                     }
 
+                    let rowClass = '';
+                    let rowClassProductStatus = '';
+                    const checkBillStatus = value2.status;
+                    const checkProductStatus = value2.store_det_status;
+
+                    if(checkBillStatus == 'فاتورة ملغاة'){
+                        rowClass = '#F5CBCB';
+
+                    }else if(checkBillStatus == 'فاتورة نشطة'){                        
+                        rowClass = '#A3DC9A';
+
+                    }else if(checkBillStatus == 'فاتورة معدلة'){
+                        rowClass = '#DCD0A8';
+                
+                    }else{
+                        rowClass = '#63C8FF';
+                    }
+
+                    $('#showProductsModal .modal-header').css('background', `${rowClass}`);
+
+                    if(checkProductStatus == 'تم حذفه'){
+                        rowClassProductStatus = 'bg bg-danger-transparent';
+
+                    }else if(checkProductStatus == 'نشط'){                        
+                        rowClassProductStatus = 'bg bg-success-transparent';
+
+                    }else if(checkProductStatus == 'تم تعديله'){
+                        rowClassProductStatus = 'bg bg-warning-transparent';
+                
+                    }else if(checkProductStatus == 'مرتجع مشتريات'){
+                        rowClassProductStatus = 'bg bg-info-transparent';
+
+                    }else if(checkProductStatus == 'فاتورة ملغاة'){
+                        rowClassProductStatus = 'bg bg-dark text-white';
+                    }
+
                     $('#showProductsModal #content tbody').append(`
-                        <tr>
+                        <tr class="${rowClassProductStatus}">
                             <td>${value2.product_id}</td>
                             <td>${value2.productNameAr}</td>
                             <td>
-                                ${display_number_js( value2.bigUnitName ? value2.product_bill_quantity / value2.small_unit_numbers : value2.product_bill_quantity )} 
+                                ${display_number_js( value2.bigUnitName ? (value2.product_bill_quantity / value2.small_unit_numbers).toFixed(2) : value2.product_bill_quantity )} 
                                 ${value2.bigUnitName ? value2.bigUnitName : value2.smallUnitName}
                             </td>
                             <td>${display_number_js( value2.product_bill_quantity )} ${value2.smallUnitName}</td>
