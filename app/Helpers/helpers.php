@@ -247,10 +247,12 @@ function totalProfitToday(){
                     ->whereIn('store_dets.status', ['نشط', 'تم تعديله'])
                     ->whereIn('sale_bills.status', ['فاتورة نشطة', 'فاتورة معدلة'])
                     ->whereDate('store_dets.created_at', Carbon::today())
-                    ->select('sale_bills.total_bill_after')
+                    ->select('sale_bills.total_bill_after', 'sale_bills.extra_money')
                     ->groupBy('store_dets.bill_id')
                     ->get()
-                    ->sum('total_bill_after');
+                    ->sum(function ($row) {
+                        return $row->total_bill_after + $row->extra_money;
+                    });
 
     $totalCost = DB::table('store_dets')
                     ->join('sale_bills', 'sale_bills.id', 'store_dets.bill_id')

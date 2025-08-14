@@ -43,7 +43,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover text-center text-md-nowrap" id="example1">
-                        <thead class="bg bg-black-5">
+                        <thead class="thead-light">
                             <tr>
                                 <th class="border-bottom-0">كود السلعة/الخدمة</th>
                                 <th class="border-bottom-0">اسم السلعة/الخدمة</th>

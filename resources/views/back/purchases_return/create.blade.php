@@ -199,7 +199,7 @@
     
                         <div class="col-lg-8" style="height: 70vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat;">
                             <table class="table table-hover table-bordered" id="products_table">
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                     <tr>
                                         <th>#</th>
                                         <th style="width: 25%;">السلعة/الخدمة</th>

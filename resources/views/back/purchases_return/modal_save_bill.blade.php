@@ -37,7 +37,7 @@
                                     بيانات المورد: 
                                     <span style="margin: 0 3px;display: inline;font-size: 15px;" class="text-danger" id="supplier_name"></span>
                                 </p>
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                     <tr>
                                         <th>دائن (له)</th>
                                         <th>مدين (علية)</th>

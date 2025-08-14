@@ -351,6 +351,9 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/create' , 'SaleBillController@create');
         Route::post('/store' , 'SaleBillController@store');
         Route::get('/show/{id}' , 'SaleBillController@show');
+
+        Route::get('/get_extra_money/{id}' , 'SaleBillController@get_extra_money'); 
+        Route::post('/update_extra_money/{id}' , 'SaleBillController@update_extra_money'); 
         
         Route::get('/edit/{id}' , 'SaleBillController@edit');   
         Route::post('/update/{id}' , 'SaleBillController@update');
@@ -427,6 +430,10 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/destroy/{id}' , 'InventoriesController@destroy');
         
         Route::get('datatable' , 'InventoriesController@datatable');
+
+        // start print اصناف الجرد 
+        Route::get('/print-count-only/{id}' , 'InventoriesController@print_count_only'); // ورقة العد (بدون أرصدة)
+        Route::get('/print-count-with-balance/{id}' , 'InventoriesController@print_count_with_balance'); // ورقة العد (بالأرصدة الدفترية)
     });
     
     // 🧾 إدارة الجرد

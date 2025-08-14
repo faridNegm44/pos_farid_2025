@@ -51,7 +51,7 @@
                                 <span style="margin: 0 3px;display: inline;font-size: 15px;" class="text-danger" id="client_name"></span>
                             </div>
                             <table class="table table-bordered table-striped text-center mb-0" id="client_table_info" style="background: #f6fbf8;">
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                   <tr>
                                     <th>نوع الحساب</th>
                                     <th>عليه</th>

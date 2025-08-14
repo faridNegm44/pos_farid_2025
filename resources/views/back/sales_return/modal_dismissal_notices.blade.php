@@ -8,7 +8,7 @@
             <div class="modal-body text-center">
                 <table class="table table-responsive table-bordered">
 
-                    <thead class="bg bg-black-5">
+                    <thead class="thead-light">
                     <tr>
                         <th>مصروف الإذن</th>
                         <th>تكلفة المصروف</th>

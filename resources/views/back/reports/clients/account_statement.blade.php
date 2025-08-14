@@ -39,7 +39,7 @@
     <script>
         flatpickr(".datePicker", {
             enableTime: true,
-            dateFormat: "Y-m-d h:i:S K", 
+            dateFormat: "d-m-Y       h:i K", 
             time_24hr: false
         });
     </script>

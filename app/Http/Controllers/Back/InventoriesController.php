@@ -166,41 +166,124 @@ class InventoriesController extends Controller
             })
             ->addColumn('status', function($res){
                 if($res->status == 'جاري الجرد'){
-                    return '<span class="badge badge-primary text-white" style="font-size: 90%;">جاري الجرد</span>';
+                    return '<span class="badge badge-primary text-white" style="font-size: 110%;">جاري الجرد</span>';
 
                 }else if($res->status == 'تم الاعتماد'){
-                    return '<span class="badge badge-success text-white" style="font-size: 90%;">تم الاعتماد</span>';
+                    return '<span class="badge badge-success text-white" style="font-size: 110%;">تم الاعتماد</span>';
                     
                 }else if($res->status == 'ملغي'){
-                    return '<span class="badge badge-danger text-white" style="font-size: 90%;">ملغي</span>';
+                    return '<span class="badge badge-danger text-white" style="font-size: 110%;">ملغي</span>';
                 }
             })
             ->addColumn('action', function($res){
                 $checkButtons = '';
                 if($res->status == 'جاري الجرد'){
                     $checkButtons .= '                                    
-                                    <button class="btn btn-sm btn-danger delete" data-placement="top" data-toggle="tooltip" title="إلغاء الجرد" res_id="'.$res->id.'" >
-                                        <i class="fas fa-ban"></i>
-                                    </button>                                    
-                                    
-                                    <button type="button" class="btn btn-sm btn-success show take_money" data-effect="effect-scale" data-toggle="modal" href="#takeMoneyModal" data-placement="top" data-toggle="tooltip" title="اعتماد الجرد وإغلاقه" res_id="'.$res->id.'">
-                                        <i class="fas fa-lock"></i>
-                                    </button>
-                                    
-                                    <button type="button" class="btn btn-sm btn-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter"     data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
-                                        <i class="fas fa-marker"></i>
-                                    </button>       
+                                        <button class="btn btn-sm btn-danger delete" data-placement="top" data-toggle="tooltip" title="إلغاء الجرد" res_id="'.$res->id.'" >
+                                            <i class="fas fa-ban"></i>
+                                        </button>                                    
+                                        
+                                        <button type="button" class="btn btn-sm btn-success show take_money" data-effect="effect-scale" data-toggle="modal" href="#takeMoneyModal" data-placement="top" data-toggle="tooltip" title="اعتماد الجرد وإغلاقه" res_id="'.$res->id.'">
+                                            <i class="fas fa-lock"></i>
+                                        </button>
+                                        
+                                        <button type="button" class="btn btn-sm btn-primary edit" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter"     data-placement="top" data-toggle="tooltip" title="تعديل" res_id="'.$res->id.'">
+                                            <i class="fas fa-marker"></i>
+                                        </button>       
                                     ';
                 }
 
                 $checkButtons .= '
-                                    <button type="button" class="btn btn-sm btn-secondary print" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="طباعة أصناف الجرد" res_id="'.$res->id.'">
-                                        <i class="fas fa-print"></i>
-                                    </button>';
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-purple dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 10px !important;">
+                                            <i class="fas fa-print"></i> طباعة / تقارير
+                                        </button>
+                                        <div class="dropdown-menu" style="background: #e7e4e4ff;">
+                                            <a href="'.url('inventories/print-count-only/'.$res->id).'" class="dropdown-item print" style="padding: 4px 6px !important;font-size: 10px;" res_id="'.$res->id.'">
+                                                <i class="fas fa-print text-secondary"></i> ورقة العد (بدون أرصدة)
+                                            </a>
+
+                                            <a href="'.url('inventories/print-count-with-balance/'.$res->id).'" class="dropdown-item print" style="padding: 4px 6px !important;font-size: 10px;" res_id="'.$res->id.'">
+                                                <i class="fas fa-file-alt text-purple"></i> ورقة العد (بالأرصدة الدفترية)
+                                            </a>
+
+                                            <div class="dropdown-divider"></div>
+                                            <a href="'.url('inventories/final-differences/'.$res->id).'" class="dropdown-item print" style="padding: 4px 6px !important;font-size: 10px;" res_id="'.$res->id.'">
+                                                <i class="fas fa-chart-bar text-dark"></i> تقرير الفروقات النهائي
+                                            </a>
+                                        </div>
+                                    </div>
+                                ';
                 
                 return $checkButtons;
             })
             ->rawColumns(['status', 'action', 'notes', 'created_at', 'date', 'supervisor_1Name', 'supervisor_2Name', 'supervisor_3Name'])
             ->toJson();
     }
+
+
+
+    //#################### start طباعه اصناف الجرد ####################
+    public function print_count_only($id)
+    {                   
+
+        $inventory_info = DB::table('inventories')
+                            ->where('inventories.id', $id)
+                            ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
+                            ->leftJoin('users', 'users.id', 'inventories.user_id')
+                            ->select(
+                                'inventories.*', 
+                                'financial_years.name as financialName',
+                                'users.name as userName',
+                            )
+                            ->first();
+
+        if(!$inventory_info){
+            return redirect('/');
+
+        }else{
+            $pageNameAr = 'كشف جرد الأصناف – ورقة العد الفعلية ( بدون أرصدة دفترية )';      
+    
+             $results = DB::table('products')
+                            ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
+                            ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
+                            ->leftJoin('store_dets', function($join) {
+                                $join->on('store_dets.product_id', '=', 'products.id')
+                                    ->whereRaw('store_dets.id = (
+                                        SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
+                                    )');
+                            })
+                            ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
+                            ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
+                            ->leftJoin('stores', 'stores.id', 'products.store')
+                            ->select(
+                                'store_dets.sell_price_small_unit',
+                                'store_dets.last_cost_price_small_unit',
+                                'store_dets.avg_cost_price_small_unit',
+                                'store_dets.quantity_small_unit',
+                                
+                                'products.id as productId',
+                                'products.nameAr as productNameAr',
+                                'products.status as productStatus',
+    
+                                'big_units.name as big_unit_name',
+                                'small_units.name as small_unit_name',
+                                
+                                'product_categoys.name as category_name',                    
+                                'product_sub_categories.name_sub_category',
+                                
+                                'stores.name as store_name'
+                            )
+                            ->where('products.status', 1)
+                            ->orderBy('products.id', 'asc')
+                            ->get();
+
+                //dd($inventory_info);
+    
+            
+            return view('back.inventories.print_count_only' , compact('pageNameAr', 'results', 'inventory_info'));
+        }
+
+    }
+    //#################### end طباعه اصناف الجرد ####################
 }

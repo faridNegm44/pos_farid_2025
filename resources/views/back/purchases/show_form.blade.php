@@ -15,8 +15,8 @@
                     <ul class="invoice-info">
                       <li><span>رقم فاتورة:</span> <span class='header_span' id="id"></span></li>
                       <li><span>رقم مخصص:</span> <span class='header_span' id="custom_bill_num"></span></li>
-                      <li><span>اذن الخزينة:</span> <span class='header_span' id="treasury_type"></span></li>
-                      <li><span>اذن الفاتورة:</span> <span class='header_span' id="bill_type"></span></li>
+                      {{--<li><span>اذن الخزينة:</span> <span class='header_span' id="treasury_type"></span></li>--}}
+                      {{--<li><span>اذن الفاتورة:</span> <span class='header_span' id="bill_type"></span></li>--}}
                       <li><span>عدد أصناف الفاتورة:</span> <span class='header_span' id="count_items"></span></li>
                       <li><span>خصم الفاتورة:</span> <span class='header_span' id="bill_discount"></span></li>                      
                       <li><span>إجمالي فاتورة قبل:</span> <span class='header_span' id="total_bill_before" style=""></span></li>
@@ -28,9 +28,9 @@
                     <ul class="invoice-info">
                       <li><span>المورد:</span> <span class='header_span' id="supplierName"></span></li>
                       <li><span>الخزينة:</span> <span class='header_span' id="treasuryName"></span></li>
-                      <li><span>مبلغ مدفوع:</span> <span class='header_span' id="amount_money"></span></li>
+                      {{--<li><span>مبلغ مدفوع:</span> <span class='header_span' id="amount_money"></span></li>--}}
                       {{--<li><span>رصيد المورد بعد:</span> <span class='header_span' id="remaining_money"></span></li>--}}
-                      <li><span>رصيد الخزينة بعد:</span> <span class='header_span' id="treasury_money_after"></span></li>
+                      {{--<li><span>رصيد الخزينة بعد:</span> <span class='header_span' id="treasury_money_after"></span></li>--}}
                       <li><span>تاريخ الإنشاء:</span> <span class='header_span' id="created_at"></span></li>
                       <li><span>تاريخ آخر:</span> <span class='header_span' id="custom_date"></span></li>
                       <li><span>مستخدم الإضافة:</span> <span class='header_span' id="userName"></span></li>
@@ -44,7 +44,7 @@
 
               <div id="content">
                 <table class="table table-bordered table-striped text-center">
-                  <thead class="bg bg-black-5">
+                  <thead class="thead-light">
                     <tr>
                       <th>رقم المنتج</th>
                       <th>اسم المنتج</th>

@@ -172,6 +172,56 @@
                 <div class="pr-1 mb-xl-0">
                     <button type="button" class="btn btn-danger btn-icon ml-2 add" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter"><i class="mdi mdi-plus"></i></button>
                 </div>
+
+
+                {{--@if ($products == 0)--}}
+
+                    <div class="pr-1 mb-xl-0">
+                        <button type="button" class="btn btn-primary btn-icon attach" data-toggle="modal" data-target="#excelModal" data-toggle="tooltip" title="إرفاق ملف Excel">
+                            <i class="mdi mdi-file-excel"></i>
+                        </button>
+                    </div>
+
+                    {{-- start modal attach file excel --}}
+                    <div class="modal fade" id="excelModal" tabindex="-1" role="dialog" aria-labelledby="excelModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">تنزيل وإرفاق ملف Excel</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="إغلاق">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <form action="{{ url('excel.attach') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="modal-body pd-30 pd-sm-40 bg-gray-100">
+                                        <div class="mb-3 text-center">
+                                            <p>اضغط على الزر أدناه لتنزيل نموذج Excel.</p>
+                                            <a href="{{ url('path/to/template.xlsx') }}" class="btn btn-success" download>
+                                                <i class="mdi mdi-download"></i> تنزيل نموذج Excel
+                                            </a>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="excel_file">أرفق الملف بعد تعبئة النموذج:</label>
+                                            <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xlsx,.xls" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">إرفاق الملف</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    {{-- end modal attach file excel --}}
+                    
+                {{--@endif--}}
             </div>
         </div>
         <!-- breadcrumb -->
@@ -193,7 +243,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover text-center nowrap" id="example1">
-                        <thead class="bg bg-black-5">
+                        <thead class="thead-light">
                             <tr>
                                 <th class="border-bottom-0 nowrap_thead">كود</th>
                                 <th class="border-bottom-0 nowrap_thead">التحكم</th>

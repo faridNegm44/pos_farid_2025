@@ -268,6 +268,7 @@
 
     <!-- Switcher js -->
     <script src="{{ asset('back') }}/assets/switcher/js/switcher-rtl.js"></script>
+    
 </body>
 
 

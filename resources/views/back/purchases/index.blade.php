@@ -62,7 +62,7 @@
         // flatpickr
         flatpickr(".datePicker", {
             enableTime: true,
-            dateFormat: "Y-m-d h:i:S K", 
+            dateFormat: "d-m-Y       h:i K", 
             time_24hr: false
         });
 
@@ -193,7 +193,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
-                        <thead class="bg bg-black-5">
+                        <thead class="thead-light">
                             <tr>
                                 <th class="border-bottom-0 nowrap_thead">#</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 200px !important;min-width: 200px !important;">التحكم</th>
@@ -204,8 +204,8 @@
                                 <th class="border-bottom-0 nowrap_thead" style="width: 60px !important;min-width: 60px !important;">ع العناصر</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">خصم فاتورة</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">ملاحظات</th>
-                                <th class="border-bottom-0" >مستخدم</th>
-                                <th class="border-bottom-0" >السنة</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">مستخدم</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">السنة</th>
                             </tr>
                         </thead>                                
                     </table>

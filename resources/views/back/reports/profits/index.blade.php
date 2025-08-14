@@ -52,23 +52,36 @@
     <script>
         flatpickr(".datePicker", {
             enableTime: true,
-            dateFormat: "Y-m-d h:i:S K", 
-            time_24hr: false
+            //enableSeconds: true,
+            time_24hr: false,
+            dateFormat: "d-m-Y       h:i K"
         });
     </script>
 
     
     {{-- start when click to button #print_report --}}
     <script>
-        $(document).on('click', '#print_report', function(e) {
-            e.preventDefault();
-            let formData = $("form").serialize();
-            let printUrl = "{{ url('report/profits/result/pdf') }}?" + formData;
+        $('#print_report').on('click', function (e) {
+            const from = $('#from').val();
+            const to = $('#to').val();
 
-            window.open(printUrl);
+            if(!from || !to){
+                alertify.set('notifier','position', 'top-center');
+                alertify.set('notifier','delay', 4);
+                alertify.error('⚠️ حدد تاريخ البداية 📅 والنهاية قبل عرض التقرير 📄');
+
+                return false;
+            }else{
+                e.preventDefault();
+                let formData = $("form").serialize();
+                let printUrl = "{{ url('report/profits/result/pdf') }}?" + formData;
+
+                window.open(printUrl);
+            }
         });
     </script>
     {{-- end when click to button #print_report --}}
+
 @endsection
 
 
@@ -94,20 +107,7 @@
             <div class="card-body">
                 <form method="get" action="">
                     @csrf
-                    <div class="row justify-content-center">
-                        <div class="col-md-2">
-                            <label for="financial_year">الفترات المالية</label>
-                            <div>
-                                <select  name="financial_year" class="financial_year selectize" id="financial_year">
-                                    <option value="" selected>الفترات المالية</option>                              
-                                    @foreach ($financial_years as $financial_year)
-                                      <option value="{{ $financial_year->id }}">{{ $financial_year->name }}</option>                              
-                                    @endforeach
-                                  </select>
-                            </div>
-                            <bold class="text-danger" id="errors-financial_year" style="display: none;"></bold>
-                        </div>    
-                        
+                    <div class="row justify-content-center">                        
                         <div class="col-md-2">
                             <label for="from">من</label>
                             <div>

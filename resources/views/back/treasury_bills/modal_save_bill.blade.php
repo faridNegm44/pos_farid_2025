@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <table id="treasury_tbl" class="table table-bordered text-center">
-                                    <thead class="bg bg-black-5">
+                                    <thead class="thead-light">
                                         <tr>
                                             <th style="width: 10%;">#</th>
                                             <th style="width: 30%;">اسم الخزينة</th>

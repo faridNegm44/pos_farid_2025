@@ -98,7 +98,7 @@
 
     @include('back.bills_css_js.css_js.main_css')
 
-<body style="height: 100vh !important;overflow: auto;background: #b0ddc4 !important;">
+<body style="height: 100vh !important;overflow: auto;background: #A7C1A8 !important;">
 
     <div id="overlay_page"></div>
 
@@ -164,8 +164,8 @@
                 <div class="" id="main_content" style="padding: 18px;margin-bottom: 60px;">
                     <div class="row"> 
     
-                        <div class="col-lg-4 product-selection p-3 total_info" style="background: #70a584;">
-                            <div class="text-center mb-2" style="text-decoration: underline;background: #315c3a;color: #FFF;padding: 7px 10px;border-radius: 5px;margin: 0 auto;">
+                        <div class="col-lg-4 product-selection p-3 total_info" style="background: #416849;">
+                            <div class="text-center mb-2" style="text-decoration: underline;background: #213b26;color: #FFF;padding: 7px 10px;border-radius: 5px;margin: 0 auto;">
                                 {{ $pageNameAr }}
                                 <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ ($lastBillNum+1) }}</span>
                             </div>
@@ -177,7 +177,7 @@
                             <div class="total-bar p-2" style="border: 2px solid #b0ddc4; background: #f6fbf8; border-radius: 8px;">
                                 <div class="row g-2 align-items-center">
                                     @if (userPermissions()->tax_bill_view)
-                                        <div class="col-lg-6 col-12 mb-2">
+                                        <div class="col-lg-6 col-12 mb-2 d-none">
                                             <label for="tax_bill" style="font-size:13px; color:#437a5a; font-weight: bold;">
                                                 <i class="fas fa-percent text-success"></i> ضريبة ق م
                                                 <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
@@ -185,14 +185,15 @@
                                             <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 13px; background: #fff; border: 1.5px solid #669f7c; color: #437a5a; font-weight: bold;" />
                                         </div>
                                     @endif
-                                    <div class="col-lg-6 col-12 mb-2">
+                                    <div class="col-12 mb-2">
                                         <label for="bill_discount" style="font-size:13px; color:#437a5a; font-weight: bold;">
                                             <i class="fas fa-tags text-warning"></i> خصم قيمة
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
                                         </label>
                                         <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 13px; background: #fff; border: 1.5px solid #eeb50a; color: #b94a00; font-weight: bold;" />
                                     </div>
-                                    <div class="col-12 mb-2">
+
+                                    <div class="col-12 mb-2" style="display: none;">
                                         <label for="extra_money_type" class="form-label" style="color:#437a5a; font-weight: bold;">
                                             <i class="fas fa-wallet text-info"></i> مصاريف إضافية
                                             <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
@@ -237,7 +238,7 @@
     
                         <div class="col-lg-8" style="height: 70vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center center;">
                             <table class="table table-hover table-bordered" id="products_table">
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                     <tr>
                                         <th class="nowarp_thead">#</th>
                                         <th class="nowarp_thead">حذف</th>
@@ -276,7 +277,7 @@
     
                 {{-------------------------------------------------- start footer --------------------------------------------------}}
                 {{-------------------------------------------------- start footer --------------------------------------------------}}
-                <div class="row footer-btn-group justify-content-center">
+                <div class="row footer-btn-group justify-content-center" style="background: #416849;">
                     {{--<button class="col-lg-2 col-12 btn btn-warning-gradient btn-rounded mb-2" data-placement="top" data-toggle="tooltip" title="تعليق الفاتورة">
                         <i class="fas fa-pause"></i> 
                         <span class="d-none d-lg-inline">تعليق الفاتورة</span>

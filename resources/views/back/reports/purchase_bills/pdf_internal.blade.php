@@ -40,20 +40,17 @@
         }   
     </style>
 </head>
-<body style="padding: 5px 10px;">
-    <div style="padding: 5px 10px;border: 1px solid #000;">
-        <div>
-            <div class="invoice-title">
-                <h4 class="text-center" style="">
-                    {{ $pageNameAr }} {{ $find[0]->id }}
-                </h4>
-            </div>
-            <hr>
-
-            @include('back.layouts.header_report')
+<body style=" background-color: #f9f9f9;">
+    <div style="padding: 20px; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <div style="border: 2px solid #dee2e6; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+            <h4 class="text-center" style="font-weight: bold; color: #343a40; margin: 0;">
+                🧾 {{ $pageNameAr }} {{ $find[0]->id }}
+            </h4>
         </div>
 
-        <div style="display: flex; flex-wrap: wrap;border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;padding-top: 3px;">
+        @include('back.layouts.header_report')
+
+        <div style="display: flex; flex-wrap: wrap;padding-top: 3px;">
             <ul class="invoice-info" style="flex: 1 1 33.33%; max-width: 33.33%;">
                 <li><span>رقم فاتورة:</span> <span class='header_span' id="id"></span>{{ $find[0]->id }}</li>
                 <li><span>رقم مخصص:</span> <span class='header_span' id="custom_bill_num"></span>{{ $find[0]->custom_bill_num }}</li>
@@ -86,7 +83,7 @@
         <br>
         <div>
             <table class="table-bordered" style="width: 100%;text-align: center;">
-                <thead class="bg bg-black-5">
+                <thead class="thead-light">
                     <tr>
                       <th>رقم المنتج</th>
                       <th>اسم المنتج</th>

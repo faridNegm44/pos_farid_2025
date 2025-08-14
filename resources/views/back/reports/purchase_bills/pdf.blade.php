@@ -47,22 +47,18 @@
         }
     </style>
 </head>
-<body style="padding: 5px 10px;">
-    <div style="padding: 5px 10px;border: 1px solid #000;">
-        <div class="">
-            <div class="invoice-title">
-                <h4 class="text-center" style="">
-                    {{ $pageNameAr }}
-                </h4>
-            </div>
-            <hr>
-
-            @include('back.layouts.header_report')
+<body style=" background-color: #f9f9f9;">
+    <div style="padding: 20px; background-color: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <div style="border: 2px solid #dee2e6; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+            <h4 class="text-center" style="font-weight: bold; color: #343a40; margin: 0;">
+                🧾 {{ $pageNameAr }}
+            </h4>
         </div>
 
+            @include('back.layouts.header_report')
+
         @if ($treasury || $from || $to)
-            <hr style="margin: 0 0 10px !important;"> 
-            <div style="margin-bottom: 10px;">
+           <div style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px;">
                 @if ($treasury)
                     <span class="itemsSearch">الخزينة: {{ $results[0]->treasury_name }}</span>
                 @endif
@@ -77,7 +73,7 @@
 
         <div>
             <table class="table-bordered" style="width: 100%;text-align: center;">
-                <thead class="bg bg-black-5">
+                <thead class="thead-light">
                     <tr>
                         <th>تاريخ المصروف</th>
                         <th >الخزينة</th>

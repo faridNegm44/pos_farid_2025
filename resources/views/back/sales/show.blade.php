@@ -38,16 +38,17 @@
 
 
 
-                $(`#showProductsModal #header #treasury_type`).text( res[0].treasury_type != res[0].bill_type ? res[0].treasury_type : 'لم يتم صرف مستحقات' );
-                $(`#showProductsModal #header #bill_type`).text( res[0].bill_type );
+                //$(`#showProductsModal #header #treasury_type`).text( res[0].treasury_type != res[0].bill_type ? res[0].treasury_type : 'لم يتم صرف مستحقات' );
+                //$(`#showProductsModal #header #bill_type`).text( res[0].bill_type );
                 $(`#showProductsModal #header #bill_discount`).text( res[0].bill_discount ? display_number_js(res[0].bill_discount) : 0 );
                 $(`#showProductsModal #header #extra_money`).text( res[0].extra_money ? display_number_js(res[0].extra_money) : 0 );
-                $(`#showProductsModal #header #treasury_money_after`).text(display_number_js( res[0].treasury_money_after ));
-                $(`#showProductsModal #header #amount_money`).text( res[0].amount_money ? display_number_js(res[0].amount_money) : 'لم يتم صرف مستحقات' );
+                //$(`#showProductsModal #header #treasury_money_after`).text(display_number_js( res[0].treasury_money_after ));
+                //$(`#showProductsModal #header #amount_money`).text( res[0].amount_money ? display_number_js(res[0].amount_money) : 'لم يتم صرف مستحقات' );
                 $(`#showProductsModal #header #treasuryName`).text( res[0].treasuryName ?? 'لم يتم صرف مستحقات' );
                 $(`#showProductsModal #header #count_items`).text( display_number_js(res[0].count_items) );
                 $(`#showProductsModal #header #total_bill_before`).text( display_number_js(res[0].total_bill_before) );
-                $(`#showProductsModal #header #total_bill_after`).text( display_number_js(res[0].total_bill_after) );
+                const totalBillAfter = Number( res[0].total_bill_after ) + Number( res[0].extra_money );
+                $(`#showProductsModal #header #total_bill_after`).text( display_number_js(totalBillAfter) );
 
                 
                 // start loop to bill products

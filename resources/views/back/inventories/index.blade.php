@@ -139,19 +139,19 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                     <tr>
-                                        <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">التحكم</th>
+                                        <th class="border-bottom-0 nowrap_thead">#</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 200px !important;min-width: 200px !important;">التحكم</th>
                                         <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ الجرد الفعلي</th>
                                         <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">تاريخ اخر للجرد</th>
                                         <th class="border-bottom-0 nowrap_thead" style="width: 70px !important;min-width: 70px !important;">حالة الجرد</th>
-                                        <th class="border-bottom-0">مشرف أول</th>
-                                        <th class="border-bottom-0">مشرف تاني</th>
-                                        <th class="border-bottom-0">مشرف ثالث</th>
-                                        <th class="border-bottom-0 nowrap_thead" >ملاحظات</th>
-                                        <th class="border-bottom-0 nowrap_thead" >مستخدم</th>
-                                        <th class="border-bottom-0 nowrap_thead" >السنة</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">مشرف أول</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">مشرف تاني</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">مشرف ثالث</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">ملاحظات</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 90px !important;min-width: 90px !important;">مستخدم</th>
+                                        <th class="border-bottom-0 nowrap_thead" style="width: 90px !important;min-width: 90px !important;">السنة</th>
                                     </tr>
                                 </thead>                                
                             </table>

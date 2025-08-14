@@ -135,7 +135,7 @@ div.dataTables_wrapper div.dataTables_info{
 .modal-footer{
     padding: 5px 0px !important;
 }
-.right-content .add{
+.right-content .add, .right-content .attach{
     padding: 0 !important;
     width: 30px !important;
     height: 25px !important;
@@ -167,7 +167,7 @@ div.dataTables_wrapper div.dataTables_info{
     margin-left: 10px;
 }
 
-table .edit, table .delete, table .show, table .crm_info, table .print, table .view, table .return_bill, table .print_bill, table .upload{
+table .edit, table .delete, table .show, table .crm_info, table .print, table .view, table .return_bill, table .print_bill, table .upload, table .delete_bill, table .add_extra_money{
     padding: 1px 6px;
 }
 

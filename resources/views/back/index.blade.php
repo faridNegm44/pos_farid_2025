@@ -442,7 +442,7 @@
                     <div class="widget-content">
                         <div class="table-responsive">
                             <table class="table">
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                     <tr>
                                         <th><div class="th-content">Customer</div></th>
                                         <th><div class="th-content">Product</div></th>
@@ -518,7 +518,7 @@
                     <div class="widget-content">
                         <div class="table-responsive">
                             <table class="table">
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                     <tr>
                                         <th><div class="th-content">Product</div></th>
                                         <th><div class="th-content th-heading">Price</div></th>

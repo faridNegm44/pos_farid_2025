@@ -20,6 +20,9 @@
             min-width: 150px;
             margin-bottom: 10px;
         }
+        tbody td{
+            padding: 2px !important;
+        }
         .card .icon { font-size: 28px; margin-bottom: 5px; display: block; }
         .card.sales { border-top: 4px solid #4caf50; }
         .card.purchases { border-top: 4px solid #2196f3; }
@@ -34,7 +37,15 @@
         .summary-table th, .summary-table td { text-align: center; font-size: 14px; }
         .summary-table { margin-top: 20px; }
         .notes-box { background: #f1f8e9; border: 1px solid #cddc39; border-radius: 6px; padding: 10px 15px; margin: 20px 0; font-size: 15px; }
-        @media print { .summary-cards { flex-wrap: wrap; } }
+        @media print { 
+            .summary-cards { flex-wrap: wrap; }  
+            .summary-table thead tr {
+                background: #d0d0d0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        
+        }
     </style>
 </head>
 <body style=" background-color: #f9f9f9;">
@@ -63,19 +74,19 @@
                 <span class="icon">💰</span>
                 <div>إجمالي المبيعات</div>
                 {{--<div style="font-size: 18px; font-weight: bold;">10.0000</div>--}}
-                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalSales) }}</div>
+                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalSales) }} جنية</div>
             </div>
             <div class="card purchases">
                 <span class="icon">🛒</span>
                 <div>إجمالي تكلفة السلع / الخدمات</div>
-                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalCost) }}</div>
+                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalCost) }} جنية</div>
                 {{--<div style="font-size: 18px; font-weight: bold;">{{ display_number($total_purchases ?? 0) }}</div>--}}
             </div>
             <div class="card expenses">
                 <span class="icon">💸</span>
                 <div>إجمالي المصروفات</div>
                 {{--<div style="font-size: 18px; font-weight: bold;">10.0000</div>--}}
-                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalExpenses) }}</div>
+                <div style="font-size: 18px; font-weight: bold;">{{ display_number($totalExpenses) }} جنية</div>
             </div>
             {{--<div class="card returns">
                 <span class="icon">↩️</span>
@@ -88,7 +99,7 @@
                 <div>صافي الربح</div>
                 {{--<div style="font-size: 18px; font-weight: bold;">10.0000</div>--}}
                 <div style="font-size: 20px; font-weight: bold; color: {{ $netProfit >= 0 ? '#388e3c' : '#c62828' }};">
-                    {{ display_number($netProfit) }}
+                    {{ display_number($netProfit) }} جنية
                 </div>
             </div>
             <div class="card profit-margin">
@@ -112,31 +123,24 @@
             <tbody>
                 <tr>
                     <td>إجمالي المبيعات</td>
-                    <td>10.0000</td>
-                    <td>{{ display_number($total_sales) }}</td>
+                    <td style="font-weight: bold;">{{ display_number($totalSales) }} جنية</td>
                     <td>كل الفواتير المباعة خلال الفترة</td>
                 </tr>
                 <tr>
-                    <td>إجمالي المشتريات</td>
-                    <td>10.0000</td>
-                    <td>{{ display_number($total_purchases ?? 0) }}</td>
-                    <td>كل فواتير الشراء خلال الفترة</td>
+                    <td>إجمالي تكلفة السلع / الخدمات</td>
+                    <td style="font-weight: bold;">{{ display_number($totalCost) }} جنية</td>
+                    <td>كل الفواتير المباعة خلال الفترة</td>
                 </tr>
                 <tr>
                     <td>إجمالي المصروفات</td>
-                    <td>10.0000</td>   
-                    <td>{{ display_number($total_expenses) }}</td>
-                    <td>جميع المصروفات المسجلة</td>
+                    <td>{{ display_number($totalExpenses) }}</td>
                 </tr>
                 <tr>
                     <td>إجمالي المرتجعات</td>
-                    <td>10.0000</td>
                     <td>{{ display_number($total_returns) }}</td>
-                    <td>مرتجعات المبيعات والمشتريات</td>
                 </tr>
                 <tr style="background: #f3e5f5; font-weight: bold;">
                     <td>صافي الربح</td>
-                    <td>10.0000</td>
                     <td style="color: {{ $net_profit >= 0 ? '#388e3c' : '#c62828' }};">{{ display_number($net_profit) }}</td>
                     <td>{{ $net_profit >= 0 ? 'ربح' : 'خسارة' }}</td>
                 </tr>

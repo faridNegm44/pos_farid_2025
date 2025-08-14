@@ -29,8 +29,9 @@ class ProductController extends Controller
             $units = Units::all();
             $companys = Company::all();
             $productCategoys = ProductCategoy::all();
+            $products = Db::table('products')->count();
     
-            return view('back.products.index' , compact('pageNameAr' , 'pageNameEn', 'stores', 'units', 'companys', 'productCategoys'));	
+            return view('back.products.index' , compact('pageNameAr' , 'pageNameEn', 'stores', 'units', 'companys', 'productCategoys', 'products'));	
         }else{
             return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }  
@@ -139,7 +140,7 @@ class ProductController extends Controller
                         'nameEn' => request('nameEn'),
                         'type' => request('type'),
                         'type_tax' => request('type_tax'),
-                        'status' => request('status') ?? 1,
+                        'status' => request('status'),
                         'store' => request('store'),
                         'category' => request('category'),
                         'sub_category' => request('sub_category'),
@@ -190,10 +191,12 @@ class ProductController extends Controller
                 $product = Product::where('products.id', $id)
                                 ->leftJoin('store_dets', 'store_dets.product_id', 'products.id')
                                 ->select(
+                                    'store_dets.*', 
+                                    'store_dets.id as storeDetsId',
+
                                     'products.*',
                                     'products.type as productType',
-                                    'store_dets.*', 
-                                    'store_dets.id as storeDetsId'
+                                    'products.status as productStatus'
                                 )
                                 ->orderBy('store_dets.id', 'desc')
                                 ->first();
@@ -346,7 +349,7 @@ class ProductController extends Controller
                             'prod_tax' => request('tax'),
                             'prod_discount' => request('discountPercentage'),
                             'max_sale_quantity' => request('max_sale_quantity') ?? 0 ,
-                            'status' => request('status') ?? 1,
+                            'status' => request('status'),
                             'image' => $name,
                             'desc' => request('desc'),
                             'offerDiscountStatus' => 0,
@@ -389,7 +392,7 @@ class ProductController extends Controller
                             'prod_tax' => request('tax'),
                             'prod_discount' => request('discountPercentage'),
                             'max_sale_quantity' => request('max_sale_quantity') ?? 0 ,
-                            'status' => request('status') ?? 1,
+                            'status' => request('status'),
                             'image' => $name,
                             'desc' => request('desc'),
                             'offerDiscountStatus' => 0,
@@ -419,7 +422,7 @@ class ProductController extends Controller
                         'prod_tax' => request('tax'),
                         'prod_discount' => request('discountPercentage'),
                         'max_sale_quantity' => request('max_sale_quantity') ?? 0,
-                        'status' => request('status') ?? 1,
+                        'status' => request('status'),
                         'image' => $name,
                         'desc' => request('desc'),
                         'offerDiscountStatus' => 0,
@@ -488,14 +491,19 @@ class ProductController extends Controller
                 ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
                 ->leftJoin('stores', 'stores.id', 'products.store')
                 ->select(
-                    'products.*', 
-                    'products.id as productId',
                     'store_dets.*', 
                     'store_dets.id as storeDetsId',
+                    
+                    'products.*', 
+                    'products.id as productId',
+                    'products.status as productStatus',
+
                     'big_units.name as big_unit_name',
                     'small_units.name as small_unit_name',
+                    
                     'product_categoys.name as category_name',                    
                     'product_sub_categories.name_sub_category',
+                    
                     'stores.name as store_name'
                 )
                 ->get();
@@ -542,7 +550,7 @@ class ProductController extends Controller
                     </a>';
             })
             ->addColumn('status', function($res){
-                if($res->status == 1){
+                if($res->productStatus == 1){
                     return '<span class="badge badge-success" style="font-size:12px;"><i class="fas fa-check-circle"></i> نشط</span>';
                 }else{
                     return '<span class="badge badge-danger" style="font-size:12px;"><i class="fas fa-times-circle"></i> معطل</span>';

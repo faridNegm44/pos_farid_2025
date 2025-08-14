@@ -64,7 +64,7 @@
     
     <div class="table_info">
         <table style="width: 100%;text-align: center;">
-            <thead class="bg bg-black-5">
+            <thead class="thead-light">
                 <tr>
                     <td style="width: 50%;">السلعة/الخدمة</td>
                     <td style="width: 20%;">الوحدة</td>

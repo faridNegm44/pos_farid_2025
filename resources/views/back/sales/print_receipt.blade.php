@@ -32,12 +32,6 @@
         th, td{
             padding: 2px 0 !important;
         }
-        .company_info {
-            margin-top: 15px;
-            text-align: left;
-            font-size: 7px;
-            padding: 4px 0 0 !important;
-        }
         th, td {
             padding: 0 !important;
         }
@@ -158,7 +152,7 @@
 
         {{-- start table bill products  --}}
         <table class="table table-bordered table-striped text-center" style="font-size: 12px;">
-            <thead class="bg bg-black-5">
+            <thead class="thead-light">
                 <tr>
                     <th class="text-center" style="width: 35% !important;">اسم المنتج</th>
                     <th class="text-center">وحدة المنتج</th>
@@ -220,7 +214,7 @@
                         <th class="text-right" style="padding-right: 10px !important;">قيمة خصم الأصناف</th>
                         <td class="text-right" style="padding-right: 10px !important;"> - 
 
-                            {{ display_number( $saleBill[0]->total_bill_before - (  $saleBill[0]->total_bill_after - $saleBill[0]->extra_money ?? 0 ) - $saleBill[0]->bill_discount ) }} جنية
+                            {{ display_number( ($saleBill[0]->total_bill_before) - ( $saleBill[0]->total_bill_after) - ($saleBill[0]->bill_discount) ) }} جنية
                         </td>
                     </tr>
                     @if ($saleBill[0]->bill_discount)
@@ -237,15 +231,17 @@
                     @php
                         $checkExtraMoney = $saleBill[0]->extraExpensesName ? ' ( ' .$saleBill[0]->extraExpensesName . ' )' : '';
                     @endphp
-                    <tr>
-                        <th class="text-right" style="padding-right: 10px !important;">مصاريف أخري {{ $checkExtraMoney }}</th>
-                        <td class="text-right" style="padding-right: 10px !important;">{{ display_number( $saleBill[0]->extra_money ) }} جنيه</td>
-                    </tr>
+                    @if ($saleBill[0]->extra_money > 0)
+                        <tr>
+                            <th class="text-right" style="padding-right: 10px !important;">مصاريف أخري {{ $checkExtraMoney }}</th>
+                            <td class="text-right" style="padding-right: 10px !important;">{{ display_number( $saleBill[0]->extra_money ) }} جنيه</td>
+                        </tr>
+                    @endif
                 @endif
                 <tr id="total_tr">
                     <th class="text-right" style="padding-right: 10px !important;">إجمالي الفاتورة بعد</th>
                     <td class="text-right" style="padding-right: 10px !important;font-weight: bold;">
-                        {{ display_number( $saleBill[0]->total_bill_after ) }} جنيه
+                        {{ display_number( $saleBill[0]->total_bill_after + $saleBill[0]->extra_money ) }} جنيه
                     </td>
                 </tr>
             </tbody>
@@ -273,7 +269,7 @@
         </div>
         
         <!-- Company Info -->
-        <div class="company_info">
+        <div class="company_info" style="margin-top: 15px;text-align: left;font-size: 7px;padding: 4px 0 0 !important;">
             <span>كيوبكس تك للبرمجيات</span>
             <span>01117903055 - 01012775704</span>
         </div>

@@ -18,8 +18,9 @@ class SaleBillController extends Controller
     {             
         $pageNameAr = 'فواتير المبيعات';
         $pageNameEn = 'sales';
+        $extra_expenses = DB::table('extra_expenses')->orderBy('expense_type', 'asc')->get();   
 
-        return view('back.sales.index' , compact('pageNameAr' , 'pageNameEn'));
+        return view('back.sales.index' , compact('pageNameAr' , 'pageNameEn', 'extra_expenses'));
     }
 
     
@@ -473,7 +474,7 @@ class SaleBillController extends Controller
     public function show($id){
         $find = DB::table('sale_bills')
                     ->leftJoin('store_dets', 'store_dets.bill_id', 'sale_bills.id')
-                    ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'sale_bills.id')
+                    //->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'sale_bills.id')
                     ->leftJoin('products', 'products.id', 'store_dets.product_id')
                     ->leftJoin('units as small_unit', 'small_unit.id', 'products.smallUnit')
                     ->leftJoin('units as big_unit', 'big_unit.id', 'products.bigUnit')
@@ -485,7 +486,7 @@ class SaleBillController extends Controller
                     ->where('sale_bills.id', $id)
                     ->where('store_dets.type', 'اضافة فاتورة مبيعات')
                     ->whereIn('store_dets.status', ['فاتورة ملغاة', 'نشط', 'تم تعديله', 'تم حذفه', 'مرتجع مبيعات'])
-                    ->whereIn('treasury_bill_dets.bill_type', ['اضافة فاتورة مبيعات', 'اذن توريد نقدية', 'اذن مرتجع نقدية لعميل'])
+                    //->whereIn('treasury_bill_dets.bill_type', ['اضافة فاتورة مبيعات', 'اذن توريد نقدية', 'اذن مرتجع نقدية لعميل'])
                     
                     ->select(
                         'sale_bills.*',
@@ -503,11 +504,11 @@ class SaleBillController extends Controller
                         'store_dets.total_before',
                         'store_dets.total_after',
 
-                        'treasury_bill_dets.treasury_type',
-                        'treasury_bill_dets.bill_type',
-                        'treasury_bill_dets.treasury_money_after',
-                        'treasury_bill_dets.amount_money',
-                        'treasury_bill_dets.remaining_money',
+                        //'treasury_bill_dets.treasury_type',
+                        //'treasury_bill_dets.bill_type',
+                        //'treasury_bill_dets.treasury_money_after',
+                        //'treasury_bill_dets.amount_money',
+                        //'treasury_bill_dets.remaining_money',
                         
                         'products.nameAr as productNameAr',
                         'products.small_unit_numbers',
@@ -524,6 +525,46 @@ class SaleBillController extends Controller
                             
         return response()->json($find);
     }
+
+
+    //////////////////////////////////////////////  استدعاء المصاريف الاضافية للفاتورة  //////////////////////////////////////////////
+    public function get_extra_money($id)
+    {
+        $extra_expense = DB::table('sale_bills')->where('id', $id)->first();
+        return response()->json(['extra_expense' => $extra_expense]);
+    }
+    //////////////////////////////////////////////  استدعاء المصاريف الاضافية للفاتورة  //////////////////////////////////////////////
+    
+    
+    
+    //////////////////////////////////////////////  تحديث المصروف الاضافي ف الفاتورة  //////////////////////////////////////////////
+    public function update_extra_money($id)
+    {
+        if (request()->ajax()){
+            $this->validate(request(), [
+                    'extra_money' => 'required|numeric|min:0',
+                    'extra_money_type' => 'nullable|integer|exists:extra_expenses,id',            
+                ], [
+                    'required' => 'يجب تعبئة حقل :attribute، لا يمكن تركه فارغًا.',
+                    'string' => 'يجب أن يكون حقل :attribute عبارة عن نص.',
+                    'integer' => 'يجب أن يكون حقل :attribute رقمًا صحيحًا (بدون كسور).',
+                    'numeric' => 'يجب أن يحتوي حقل :attribute على رقم صحيح أو عشري.',
+                    'min' => 'يجب ألا تكون قيمة :attribute أقل من :min.',
+                    'exists' => 'القيمة المحددة في حقل :attribute غير موجودة في السجلات.',
+                ], [
+                    'extra_money' => 'مصاريف إضافية',
+                    'extra_money_type' => 'نوع المصروف الإضافي',
+            ]); 
+        
+            DB::table('sale_bills')->where('id', $id)->update([
+                'extra_money' => request('extra_money'),
+                'extra_money_type' => request('extra_money_type'),
+                'updated_at' => now()
+            ]);
+        }
+    }
+    //////////////////////////////////////////////  تحديث المصروف الاضافي ف الفاتورة  //////////////////////////////////////////////
+
 
     
     public function edit($id)
@@ -835,10 +876,11 @@ class SaleBillController extends Controller
             $originalProductBillQuantity = (float) $row->product_bill_quantity; 
             $originalTotalProductBefore = (float) $row->total_before; 
             $originalTotalProductAfter = (float) $row->total_after; 
+            $originalBillDiscount = (float) $row->bill_discount; 
             $requestProductBillQuantity = (float) request('rowProductBillQuantity'); 
 
 
-            if($requestProductBillQuantity > $originalProductBillQuantity){
+            if($requestProductBillQuantity > $originalProductBillQuantity || $originalBillDiscount < (float) request('bill_discount')){
                 return response()->json(['error_quantity' => 'ℹ️ الكمية المرتجعة أكبر من الكمية المباعة في الفاتورة.']);
             
             }elseif($requestProductBillQuantity <= 0){
@@ -850,13 +892,15 @@ class SaleBillController extends Controller
                     $priceOneUnitBefore = ( $originalTotalProductBefore / $originalProductBillQuantity ); // الاجمالي قبل للصنف علي عدد القطع المباعه
                     $priceOneUnitAfter = ( $originalTotalProductAfter / $originalProductBillQuantity ); // الاجمالي بعد للصنف علي عدد القطع المباعه
                     $diffOriginalAndRequestQuantity = ( $originalProductBillQuantity - $requestProductBillQuantity );                
+                    $bill_discount = (float) request('bill_discount');                
+
 
                     ////////////////////////////////////////////////////////// بدايه العمل علي جدول store_dets
                         DB::table('store_dets')->where('id', $id)->update([
+                            'status' => 'مرتجع مبيعات',
+                            'product_bill_quantity' => $diffOriginalAndRequestQuantity,
                             'total_before' => ( $priceOneUnitBefore * $diffOriginalAndRequestQuantity ),
                             'total_after' => ( $priceOneUnitAfter * $diffOriginalAndRequestQuantity ),
-                            'product_bill_quantity' => $diffOriginalAndRequestQuantity,
-                            'status' => 'مرتجع مبيعات',
                             'updated_at' => now()
                         ]);
                         
@@ -872,18 +916,40 @@ class SaleBillController extends Controller
                             $quantity_small_unit = $lastRowInfoToProduct->quantity_small_unit;
                             $totalRemainingQuantity = ($last_cost_price_small_unit * $quantity_small_unit);             
 
-                            // تفاصيل الكميه المباعه
+                            // تفاصيل الكميه المرتجعه من الفاتوره
                             $last_cost_price_small_unit_returned = $row->last_cost_price_small_unit;
                             $product_bill_quantity = $requestProductBillQuantity;
                             $totalReturnedQuantity = ($last_cost_price_small_unit_returned * $product_bill_quantity);             
                             
                             $avg_cost_price_small_unit = ($totalRemainingQuantity + $totalReturnedQuantity) / ($quantity_small_unit + $product_bill_quantity);
                         // إعادة حساب متوسط التكلفة وآخر سعر تكلفة للمنتج بعد الحذف
+
+
                         
                         // إضافة صف جديد بنفس البيانات مع إعادة الكمية للمخزن وحالة "نشط"
+
+                            if ($row->count_items == 1) {
+                                if ($requestProductBillQuantity == $originalProductBillQuantity) {
+                                    // حذف كلي
+                                    $type = 'حذف كلي فاتورة مبيعات';
+                                    $status = 'ناتج عن حذف مبيعات';
+                                } else {
+                                    // مرتجع جزئي
+                                    $type = 'مرتجع جزئي فاتورة مبيعات';
+                                    $status = 'ناتج عن مرتجع مبيعات';
+                                }
+                            } else if ($row->count_items > 1) {
+                                // مرتجع جزئي عند وجود أكثر من صنف في الفاتورة
+                                $type = 'مرتجع جزئي فاتورة مبيعات';
+                                $status = 'ناتج عن مرتجع مبيعات';
+                            }
+
+
+                            $lastNumId = DB::table('store_dets')->where('type', $type)->max('num_order') ?? 0;
+
                             DB::table('store_dets')->insert([
-                                'num_order' => $row->num_order,
-                                'type' => $row->type,
+                                'num_order' => $lastNumId + 1,
+                                'type' => $type,
                                 'year_id' => $row->year_id,
                                 'bill_id' => $row->bill_id,
                                 'product_id' => $row->product_id,
@@ -899,7 +965,7 @@ class SaleBillController extends Controller
                                 'bonus' => $row->bonus,
                                 'total_before' => ($priceOneUnitBefore * $requestProductBillQuantity),
                                 'total_after' => ($priceOneUnitAfter * $requestProductBillQuantity),
-                                'status' => 'ناتج عن مرتجع مبيعات',
+                                'status' => $status,
                                 'transfer_from' => $row->transfer_from,
                                 'transfer_to' => $row->transfer_to,
                                 'transfer_quantity' => $row->transfer_quantity,
@@ -910,50 +976,52 @@ class SaleBillController extends Controller
                     ////////////////////////////////////////////////////////// نهايه العمل علي جدول store_dets
 
 
-                    ////////////////////////////////////////////////////////// بدايه توزيع خصم الفاتوره ع الاصناف => تخصم من اجمالي الصنف بعد 
-                        // يكون عباره عن مجموع سعر الصنف بعد / مجموع الفاتوره بعد * الخصم
-                        //$calcDiffDiscountRatio = ( ($priceOneUnitAfter * $requestProductBillQuantity) / $row->total_bill_after ) * $row->bill_discount; // نسبه الخصم التي تخصم من الصنف عند حذفه موزعه بالتساوي علي اجمالي الفاتوره
 
 
-
-                        $getRowInfo = DB::table('store_dets')->where('id', $id)->first();
-
-                        dd($row->total_after, $getRowInfo->total_after, $priceOneUnitAfter);
-
-
-
-                        $calcDiffDiscountRatio = ($row->total_after / $row->total_bill_after) * $row->bill_discount; // نسبه الخصم التي تخصم من الصنف عند حذفه موزعه بالتساوي علي اجمالي الفاتوره
-                        dd( $calcDiffDiscountRatio );
-
-                        
-                    ////////////////////////////////////////////////////////// نهاية توزيع خصم الفاتوره ع الاصناف => تخصم من اجمالي الصنف بعد 
 
 
                     ////////////////////////////////////////////////////////// بدايه العمل علي جدول sale_bills
-                    $checkCountProducts = ($row->product_bill_quantity - $requestProductBillQuantity) == 0 ;
+                        $new_status       = 'فاتورة معدلة';
+                        $new_count_items  = $row->count_items;
+                        $new_extra_money  = $row->extra_money;
+                        $new_extra_money_type  = $row->extra_money_type;
+                        $new_total_before = $row->total_bill_before - ($priceOneUnitBefore * $requestProductBillQuantity);
+                        
+                        if( $bill_discount > 0){
+                            $new_total_after  = ($row->total_bill_after - ($priceOneUnitAfter * $requestProductBillQuantity) + $bill_discount);
+                            $new_discount     = $row->bill_discount - $bill_discount; 
                             
-                    DB::table('sale_bills')->where('id', $row->bill_id)->update([
-                        'status' => 'فاتورة معدلة',
-                        'bill_discount' => ($row->bill_discount - $calcDiffDiscountRatio),
-                        'extra_money' => $row->extra_money,
-                        'extra_money_type' => $row->extra_money_type,
-                        'count_items' => $checkCountProducts ? ($row->count_items -1) : $row->count_items,
-                        'total_bill_before' => ( $row->total_bill_before - ($priceOneUnitBefore * $requestProductBillQuantity) ),
-                        'total_bill_after' => ( ($row->total_bill_after - ($priceOneUnitAfter * $requestProductBillQuantity)) - $calcDiffDiscountRatio ),                    
-                    ]);
+                        }else{
+                            $new_total_after  = ($row->total_bill_after - ($priceOneUnitAfter * $requestProductBillQuantity));
+                            $new_discount     = $row->bill_discount; 
+                        }
 
-                    $getRowInfo = DB::table('sale_bills')->where('id', $row->bill_id)->first();
-                    if($getRowInfo->count_items == 0){
+
+                        // تحديد حالة الفاتورة إذا كانت ملغاة (منتج واحد وكل الكمية مرتجعة)
+                        if ($row->count_items == 1 && $row->total_after == ($requestProductBillQuantity * $priceOneUnitAfter)) {
+                            $new_status      = 'فاتورة ملغاة';
+                            $new_count_items  = 0;
+                            $new_extra_money  = 0;
+                            $new_extra_money_type  = null;
+                            $new_discount    = 0;
+                            $new_total_before = 0;
+                            $new_total_after  = 0;
+                        } 
+                        // إذا تم إرجاع كل كمية صنف واحد من بين عدة أصناف
+                        else if ($row->count_items > 1 && $row->total_after == ($requestProductBillQuantity * $priceOneUnitAfter)) {
+                            $new_count_items -= 1;
+                        }
+
+                        // تنفيذ التحديث في جميع الحالات
                         DB::table('sale_bills')->where('id', $row->bill_id)->update([
-                            'status' => 'فاتورة ملغاة',
-                            'bill_discount' => 0,
-                            'extra_money' => 0,
-                            'extra_money_type' =>null,
-                            'count_items' => 0,
-                            'total_bill_before' => 0,
-                            'total_bill_after' => 0,                    
+                            'status' => $new_status,
+                            'bill_discount' => $new_discount,
+                            'count_items' => $new_count_items,
+                            'extra_money' => $new_extra_money,
+                            'extra_money_type' => $new_extra_money_type,
+                            'total_bill_before' => $new_total_before,
+                            'total_bill_after' => $new_total_after,
                         ]);
-                    }
                     ////////////////////////////////////////////////////////// نهاية العمل علي جدول sale_bills
 
                         
@@ -962,6 +1030,18 @@ class SaleBillController extends Controller
                     ////////////////////////////////////////////////////////// بدايه العمل علي جدول treasury_bill_dets
                         $lastRecordClient = DB::table('treasury_bill_dets')->where('client_supplier_id', $row->client_id)->orderBy('id', 'desc')->first();
                         $lastNumId = DB::table('treasury_bill_dets')->where('treasury_type', 'اذن مرتجع نقدية لعميل')->max('num_order');
+
+                        
+                        $amount_money = ($priceOneUnitAfter * $requestProductBillQuantity) - $bill_discount;
+                        $remaining_money = ( $lastRecordClient->remaining_money - $amount_money );
+
+                        if( ( ($requestProductBillQuantity * $priceOneUnitAfter) - $row->bill_discount ) == $row->total_bill_after ) {
+                            $remaining_money = ( $lastRecordClient->remaining_money - ( ($requestProductBillQuantity * $priceOneUnitAfter) - $row->bill_discount ) );
+                            
+                        } else {
+                            $remaining_money = $remaining_money;
+                        }
+                        
 
                         DB::table('treasury_bill_dets')->insert([
                             'num_order' => ($lastNumId+1), 
@@ -973,12 +1053,12 @@ class SaleBillController extends Controller
                             'client_supplier_id' => $row->client_id,
                             'partner_id' => null, 
                             'treasury_money_after' => 0, 
-                            'amount_money' => ($priceOneUnitAfter * $requestProductBillQuantity), 
-                            'remaining_money' => ( $lastRecordClient->remaining_money - ($priceOneUnitAfter * $requestProductBillQuantity) ),
+                            'amount_money' => $amount_money, 
+                            'remaining_money' => $remaining_money,
                             'commission_percentage' => 0, 
                             'transaction_from' => null, 
                             'transaction_to' => null, 
-                            'notes' => 'تم تعديل سعر أو خصم أو ضريبة أحد الأصناف في فاتورة العميل ' . $row->client_name . '، وتم احتساب الفارق على حسابه.',
+                            'notes' => 'تم إرجاع منتج من العميل ' . $row->client_name . '، وتم خصم قيمة المرتجع واحتساب الفارق على حسابه.',
                             'user_id' => auth()->user()->id, 
                             'year_id' => $this->currentFinancialYear(),
                             'created_at' => now()
@@ -1056,12 +1136,12 @@ class SaleBillController extends Controller
                         $totalSaledQuantity = ($last_cost_price_small_unit_saled * $product_bill_quantity);             
                         
                         $avg_cost_price_small_unit = ($totalRemainingQuantity + $totalSaledQuantity) / ($quantity_small_unit + $product_bill_quantity);
-    
+                        $lastNumId = DB::table('store_dets')->where('type', 'حذف كلي فاتورة مبيعات')->max('num_order');
     
                         // إضافة صف جديد بنفس البيانات مع إعادة الكمية للمخزن وحالة "نشط"
                         DB::table('store_dets')->insert([
-                            'num_order' => $row->num_order,
-                            'type' => $row->type,
+                            'num_order' => ($lastNumId+1),
+                            'type' => 'حذف كلي فاتورة مبيعات',
                             'year_id' => $row->year_id,
                             'bill_id' => $row->bill_id,
                             'product_id' => $row->product_id,
@@ -1287,6 +1367,7 @@ class SaleBillController extends Controller
         $to = request('to') ? date('Y-m-d H:i:s', strtotime(request('to'))) : null;
 
         $query = DB::table('sale_bills')
+                ->leftJoin('extra_expenses', 'extra_expenses.id', 'sale_bills.extra_money_type')
                 ->leftJoin('treasury_bill_dets', 'treasury_bill_dets.bill_id', 'sale_bills.id')
                 ->leftJoin('financial_treasuries', 'financial_treasuries.id', 'sale_bills.treasury_id')
                 ->leftJoin('clients_and_suppliers', 'clients_and_suppliers.id', 'sale_bills.client_id')
@@ -1295,6 +1376,7 @@ class SaleBillController extends Controller
                 ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
                 ->select(
                     'sale_bills.*',
+                    'extra_expenses.expense_type',
                     'clients_and_suppliers.name as clientName',
                     'clients_and_suppliers.phone as clientPhone',
                     'financial_treasuries.name as treasuryName',
@@ -1335,16 +1417,19 @@ class SaleBillController extends Controller
             ->addColumn('treasuryName', function($res){
                 return '<span class="badge badge-light"><i class="fas fa-university"></i></span> <span style="color:#007bff;font-weight:bold;">'.$res->treasuryName.'</span>';
             })
+            ->addColumn('extra_money', function($res){
+                return $res->extra_money != 0 ? display_number($res->extra_money) . ' <span class="text-danger">' . $res->expense_type . '</span>' : 'لايوجد';
+            })
             ->addColumn('total_bill', function($res){
                 $total_bill = '';
                 if($res->total_bill_before != $res->total_bill_after){
                     $total_bill .= '<div style="display:flex;align-items:center;gap:7px;justify-content:center;">';
                     $total_bill .= '<span class="badge badge-danger text-white" style="font-size: 110% !important;padding:7px 12px;"><i class="fas fa-arrow-down"></i> قبل: '.display_number($res->total_bill_before).'</span>';
                     $total_bill .= '<span style="font-size:18px;color:#888;">→</span>';
-                    $total_bill .= '<span class="badge badge-success text-white" style="font-size: 110% !important;padding:7px 12px;"><i class="fas fa-arrow-up"></i> بعد: '.display_number($res->total_bill_after).'</span>';
+                    $total_bill .= '<span class="badge badge-success text-white" style="font-size: 110% !important;padding:7px 12px;"><i class="fas fa-arrow-up"></i> بعد: '.display_number($res->total_bill_after + $res->extra_money).'</span>';
                     $total_bill .= '</div>';
                 }else{
-                    $total_bill .= '<span class="badge badge-success text-white" style="font-size: 110% !important;padding:7px 12px;"><i class="fas fa-receipt"></i> '.display_number($res->total_bill_after).'</span>';
+                    $total_bill .= '<span class="badge badge-success text-white" style="font-size: 110% !important;padding:7px 12px;"><i class="fas fa-receipt"></i> '.display_number($res->total_bill_after + $res->extra_money).'</span>';
                 }
                 // شريط حالة للمبلغ المدفوع مقابل الإجمالي (لو متاح)
                 if(isset($res->amount_paid) && $res->total_bill_after > 0){
@@ -1393,30 +1478,42 @@ class SaleBillController extends Controller
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>';
+                }else{
+                    $returnButtons = '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;align-items:center;">';
+                    if($res->status == 'فاتورة معدلة'){
+                        $returnButtons .= '<button type="button" class="btn btn-sm btn-secondary text-white" disabled style="opacity:0.7;cursor:not-allowed;">معدلة</button>';
+                    }
+                    $returnButtons .= 
+                                '<a type="button" href="'.url('sales/return/'.$res->id).'" class="btn btn-sm btn-warning return_bill" data-effect="effect-scale"  data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-reply"></i>
+                                </a>'
+    
+                                .'<button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-print"></i>
+                                </button>'
+    
+                                .'<button type="button" class="btn btn-sm btn-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-eye"></i>
+                                </button>'
+    
+                                .'<button type="button" class="btn btn-sm btn-danger delete delete_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="حذف الفاتورة نهائياً" res_id="'.$res->id.'">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>'
+                               
+                                .'<button type="button" class="btn btn-sm btn-secondary add_extra_money" data-toggle="modal" href="#addExtraMoney" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="اضافة مصاريف للفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-money-bill-alt"></i>
+                                </button>'
+    
+                                //.'<a type="button" href="'.url('sales/edit/'.$res->id).'" class="btn btn-sm btn-dark edit" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="تعديل الفاتورة" res_id="'.$res->id.'">
+                                //    <i class="fas fa-pen"></i>
+                                //</a>'
+                            .'</div>';
+                    $returnButtons .= '</div>';
+
+                    return $returnButtons;
                 }
-                return '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;align-items:center;">'
-                            .'<a type="button" href="'.url('sales/return/'.$res->id).'" class="btn btn-sm btn-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
-                                <i class="fas fa-reply"></i>
-                            </a>'
-
-                            .'<button type="button" class="btn btn-sm btn-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
-                                <i class="fas fa-print"></i>
-                            </button>'
-
-                            .'<button type="button" class="btn btn-sm btn-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
-                                <i class="fas fa-eye"></i>
-                            </button>'
-
-                            .'<button type="button" class="btn btn-sm btn-outline-danger delete delete_bill" data-effect="effect-scale" data-toggle="tooltip" title="حذف الفاتورة نهائياً" res_id="'.$res->id.'">
-                                <i class="fas fa-trash-alt"></i> <span style="font-size:90%;font-weight:bold;">حذف</span>
-                            </button>'
-
-                            .'<a type="button" href="'.url('sales/edit/'.$res->id).'" class="btn btn-sm btn-outline-dark edit" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="تعديل الفاتورة" res_id="'.$res->id.'">
-                                <i class="fas fa-edit"></i> <span style="font-size:90%;font-weight:bold;">تعديل</span>
-                            </a>'
-                        .'</div>';
             })
-            ->rawColumns(['id', 'clientName', 'clientPhone', 'treasuryName', 'count_items', 'total_bill', 'date', 'notes', 'userName', 'financialName', 'action'])
+            ->rawColumns(['id', 'clientName', 'clientPhone', 'extra_money', 'treasuryName', 'count_items', 'total_bill', 'date', 'notes', 'userName', 'financialName', 'action'])
             ->toJson();
     }
 
@@ -1477,12 +1574,13 @@ class SaleBillController extends Controller
                         'users.name as userName',
                     )
                     ->where('store_dets.type', 'اضافة فاتورة مبيعات')
+                    ->orWhere('store_dets.type', 'حذف كلي فاتورة مبيعات')
                     ->where('store_dets.status', 'نشط')
                     ->where('treasury_bill_dets.bill_type', 'اضافة فاتورة مبيعات')
                     ->orWhere('treasury_bill_dets.bill_type', 'اذن توريد نقدية')
                     ->get();
 
-                    // return count($saleBill);
+                    //return $saleBill;
 
         if(count($saleBill) > 0){
             return view('back.sales.print_receipt', compact('pageNameAr', 'pageNameEn', 'saleBill'));

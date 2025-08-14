@@ -107,7 +107,7 @@
 
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover nowrap;">
-                            <thead class="bg bg-black-5">
+                            <thead class="thead-light">
                                 <tr>
                                     <td style="color: #fff !important;padding: 10px;">#</td>
                                     <td style="color: #fff !important;padding: 10px;">الأسم</td>

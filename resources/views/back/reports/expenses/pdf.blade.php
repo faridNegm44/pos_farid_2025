@@ -77,7 +77,7 @@
 
         <div>
             <table class="table-bordered" style="width: 100%;text-align: center;">
-                <thead class="bg bg-black-5">
+                <thead class="thead-light">
                     <tr>
                         <th>تاريخ المصروف</th>
                         <th >الخزينة</th>

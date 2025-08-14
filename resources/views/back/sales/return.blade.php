@@ -61,6 +61,25 @@
               flex-grow: 1; 
               height: 100%;
             }
+
+            .returned {
+                background-color: #fff3cd; 
+                color: #856404; 
+                font-weight: bold;
+                border: 2px solid #ffeeba;
+                animation: blink 1s infinite alternate;
+                opacity: .4;
+            }
+            
+            .returned:hover {
+                opacity: .6;
+            }
+            
+            @keyframes blink {
+                from { background-color: #fff3cd; }
+                to { background-color: #ffeeba; }
+            }
+
          
             .selectize-dropdown .active {
                 background-color: #ead298 !important;
@@ -136,231 +155,236 @@
     <div class="page" id="page_sales">        
         @include('back.layouts.header')
 
-        @include('back.layouts.calc')
-    
-        {{--@include('back.sales_return.modal_search_product')--}}
-        {{--@include('back.sales_return.modal_dismissal_notices')--}}
-    
+        @include('back.layouts.calc')    
         
-        
-        <form>
-            @csrf
-            @include('back.sales_return.modal_save_bill')
+        <div class="container-fluid">
+
+            {{-------------------------------------------------- start top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
+            {{-------------------------------------------------- start top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
+            <div id="top_section" style="padding: 7px 10px 0;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        العميل: 
+                        <span id="client_id">{{ $find[0]->clientName }}</span>
+                        @if ($userInfo >= 0)
+                            <span class="badge badge-success" style="font-size: 120%;margin: 0 10px;">علية: {{ display_number($userInfo) }} جنية</span>
+                            
+                        @else
+                            <span class="badge badge-danger" style="font-size: 120%;margin: 0 10px;">لة: {{ display_number($userInfo) }} جنية</span>                                
+                        @endif
+                    </div>
+                    
+                    <div class="col-lg-6"> 
+                        <span id="custom_bill_num">{{ $find[0]->custom_bill_num ? 'رقم مخصص: '.$find[0]->custom_bill_num : '' }}</span>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+            {{-------------------------------------------------- end top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
+            {{-------------------------------------------------- end top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
             
 
-            <div class="container-fluid">
-    
-                {{-------------------------------------------------- start top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
-                {{-------------------------------------------------- start top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
-                <div id="top_section" style="padding: 7px 10px 0;">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            العميل: 
-                            <span id="client_id">{{ $find[0]->clientName }}</span>
-                        </div>
-                        
-                        <div class="col-lg-6"> 
-                            <span id="custom_bill_num">{{ $find[0]->custom_bill_num ? 'رقم مخصص: '.$find[0]->custom_bill_num : '' }}</span>
-                        </div>
-                        
-                        
+
+
+            {{-------------------------------------------------- start top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
+            {{-------------------------------------------------- start top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
+            {{--<div id="top_section" style="padding: 7px 10px 0;">
+                <div class="row">                        
+                    <div class="col-12" style="margin-bottom: 8px;">
+                        <select class="" id="products_selectize" style="border: 1px solid #5c5c5c !important;">
+                            <option value="" selected>إبحث عن سلعة/خدمة</option>         
+                        </select>
                     </div>
                 </div>
-                {{-------------------------------------------------- end top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
-                {{-------------------------------------------------- end top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
-                
+            </div>--}}
+            {{-------------------------------------------------- end top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
+            {{-------------------------------------------------- end top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
 
 
 
-                {{-------------------------------------------------- start top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
-                {{-------------------------------------------------- start top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
-                {{--<div id="top_section" style="padding: 7px 10px 0;">
-                    <div class="row">                        
-                        <div class="col-12" style="margin-bottom: 8px;">
-                            <select class="" id="products_selectize" style="border: 1px solid #5c5c5c !important;">
-                                <option value="" selected>إبحث عن سلعة/خدمة</option>         
-                            </select>
+
+
+
+            {{-------------------------------------------------- start content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
+            {{-------------------------------------------------- start content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
+            <div class="" id="main_content" style="padding: 18px;margin-bottom: 60px;">
+                <div class="row"> 
+
+                    <div class="col-lg-4 product-selection p-3 total_info" style="background: #416849;">
+                        <div class="text-center" style="text-decoration: underline;background: #213b26;color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
+                            {{ $pageNameAr }}
+                            <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ $find[0]->id }}</span>
                         </div>
-                    </div>
-                </div>--}}
-                {{-------------------------------------------------- end top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
-                {{-------------------------------------------------- end top العملاء وبحث عن سلعة/خدمة --------------------------------------------------}}
-
-
+                        
+                        <div class="text-center" id="date_time" style="font-size: 25px !important;margin-top: 10px;">
+                            <span class="badge badge-light" id="date"></span>
+                            <span class="badge badge-danger mx-2" id="time"></span>
+                        </div>
     
+                        <br>
     
-    
-    
-                {{-------------------------------------------------- start content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
-                {{-------------------------------------------------- start content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
-                <div class="" id="main_content" style="padding: 18px;margin-bottom: 60px;">
-                    <div class="row"> 
-    
-                        <div class="col-lg-4 product-selection p-3 total_info" style="background: #416849;">
-                            <div class="text-center" style="text-decoration: underline;background: #213b26;color: #fff;padding: 6px 10px;border-radius: 3px;margin: 0 auto;">
-                                {{ $pageNameAr }}
-                                <span style="font-size: 18px;margin: 0px 5px;" id="nextBillNum">{{ $find[0]->id }}</span>
-                            </div>
-                            
-                            <div class="text-center" id="date_time" style="font-size: 25px !important;margin-top: 10px;">
-                                <span class="badge badge-light" id="date"></span>
-                                <span class="badge badge-danger mx-2" id="time"></span>
-                            </div>
-        
-                            <br>
-        
-                            <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #cccccc;background-color: #ededed;">
-                                <div class="row">
-                                    @if (userPermissions()->tax_bill_view)                                        
-                                        <p class="col-lg-6 col-12">
-                                            <label for="">
-                                                ضريبة ق م (%)
-                                                <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
-                                            </label>
-                                            <input autocomplete="off" readonly type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
-                                        </p>
-                                    @endif                                    
-                                                                        
-                                    <p class="col-lg-6 col-12">
+                        <div class="total-bar d-flex align-items-center justify-content-between" style="padding: 10px;border: 2px solid #cccccc;background-color: #ededed;">
+                            <div class="row">
+                                @if (userPermissions()->tax_bill_view)                                        
+                                    <p class="col-lg-6 col-12 d-none">
                                         <label for="">
-                                            خصم قيمة
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 100 جنية او 50 جنية وهكذا."></i>
+                                            ضريبة ق م (%)
+                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="⚠️ مثل: 10% او 5% وهكذا سيتم تطبيقها علي جميع الأصناف."></i>
                                         </label>
-                                        <input autocomplete="off" readonly type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" readonly placeholder="خصم قيمة" style="font-size: 12px;" value="{{ display_number( $find[0]->bill_discount ) }}"/>
+                                        <input autocomplete="off" readonly type="text" class="form-control focus_input numValid text-center" id="tax_bill" placeholder="ضريبة ق م (%)" style="font-size: 12px;" />
                                     </p>
-                                    
-                                    <div class="col-12">
-                                        <label for="extra_money_type" class="form-label">
-                                            مصاريف إضافية
-                                            <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
-                                        </label>
-                                    
-                                        <div class="row">
-                                            <div class="col-md-7 mb-2">
-                                                {{--<input autocomplete="off" readonly type="text" class="form-control text-center numValid focus_input" id="extra_money_type" name="extra_money_type" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ $find[0]->extra_money_type }}"/>--}}
+                                @endif                                    
+                                                                    
+                                <p class="col-6">
+                                    <label for="">
+                                        خصم الفاتورة
+                                    </label>
+                                    <input autocomplete="off" readonly type="text" class="form-control focus_input numValid text-center" id="bill_discount_no_edit" placeholder="خصم قيمة" style="font-size: 12px;" value="{{ display_number( $find[0]->bill_discount ) }}"/>
+                                </p>
+                                
+                                <p class="col-6">
+                                    <label for="">
+                                        هتقلل الخصم كام؟
+                                    </label>
+                                    <input autocomplete="off" type="text" class="form-control focus_input numValid text-center" id="bill_discount" name="bill_discount" placeholder="خصم قيمة" style="font-size: 12px;" value=""/>
+                                </p>
+                                
+                                <div class="col-12 d-none">
+                                    <label for="extra_money_type" class="form-label">
+                                        مصاريف إضافية
+                                        <i class="fas fa-info-circle text-dark" data-bs-toggle="tooltip" title="💡 أدخل مبلغ المصاريف الإضافية إن وجد"></i>
+                                    </label>
+                                
+                                    <div class="row">
+                                        <div class="col-md-7 mb-2">
+                                            {{--<input autocomplete="off" readonly type="text" class="form-control text-center numValid focus_input" id="extra_money_type" name="extra_money_type" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ $find[0]->extra_money_type }}"/>--}}
 
-                                                <select class="form-control" disabled name="extra_money_type" id="extra_money_type">
-                                                    <option value="" selected>اختر مصروف إضافي</option>
-                                                    @foreach ($extra_expenses as $item)
-                                                        <option value="{{ $item->id }}" 
-                                                            {{ $find[0]->extra_money_type ? 
-                                                                    $find[0]->extra_money_type ==  $item->id ? 'selected' : ''  
-                                                                :  ''
-                                                            }} 
-                                                        >
-                                                        {{ $item->expense_type }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                    
-                                            <div class="col-md-5">
-                                                <input autocomplete="off" readonly type="text" class="form-control text-center numValid focus_input" id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ display_number( $find[0]->extra_money ) }}"/>
-                                            </div>
+                                            <select class="form-control" disabled name="extra_money_type" id="extra_money_type">
+                                                <option value="" selected>اختر مصروف إضافي</option>
+                                                @foreach ($extra_expenses as $item)
+                                                    <option value="{{ $item->id }}" 
+                                                        {{ $find[0]->extra_money_type ? 
+                                                                $find[0]->extra_money_type ==  $item->id ? 'selected' : ''  
+                                                            :  ''
+                                                        }} 
+                                                    >
+                                                    {{ $item->expense_type }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                
+                                        <div class="col-md-5">
+                                            <input autocomplete="off" readonly type="text" class="form-control text-center numValid focus_input" id="extra_money" name="extra_money" placeholder="مبلغ المصاريف" style="font-size: 12px;" value="{{ display_number( $find[0]->extra_money ) }}"/>
                                         </div>
                                     </div>
-                                    
-                                
-                                    <ul class="row" style="font-size: 11px;">
-                                        <li class="col-12 mb-2">
-                                            عدد عناصر الفاتورة:
-                                            <strong style="font-size: 16px; color: #007bff;">
-                                                {{ round($find[0]->count_items) }}
-                                            </strong>
-                                        </li>
-
-                                        <li class="col-12 mb-2">
-                                            الإجمالي الأساسي:
-                                            <strong style="font-size: 16px; color: #28a745;">
-                                                {{ display_number($find[0]->total_bill_before) }}
-                                            </strong>
-                                        </li>
-                                    </ul>
-
-
-                                    <p class="col-lg-12">
-                                        <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
-                                            <span style="font-size: 12px;">صافي الفاتورة: </span>
-                                            <span style="font-size: 24px;" class="total_bill_after">{{ display_number( $find[0]->total_bill_after ) }}</span>
-                                        </div>
-                                    </p>
                                 </div>
+                                
+                            
+                                <ul class="row" style="font-size: 11px;">
+                                    <li class="col-12 mb-2">
+                                        عدد عناصر الفاتورة:
+                                        <strong style="font-size: 16px; color: #007bff;">
+                                            {{ round($find[0]->count_items) }}
+                                        </strong>
+                                    </li>
+
+                                    <li class="col-12 mb-2">
+                                        الإجمالي الأساسي:
+                                        <strong style="font-size: 16px; color: #28a745;">
+                                            {{ display_number($find[0]->total_bill_before) }}
+                                        </strong>
+                                    </li>
+                                </ul>
+
+
+                                <p class="col-lg-12">
+                                    <div style="width: 97%;background: #eeb50a;color: black;padding: 7px;text-align: center;margin: auto;">
+                                        <span style="font-size: 12px;">صافي الفاتورة: </span>
+                                        <span style="font-size: 24px;" class="total_bill_after">{{ display_number( $find[0]->total_bill_after ) }}</span>
+                                    </div>
+                                </p>
                             </div>
                         </div>
-    
-    
-    
-                        <div class="col-lg-8" style="height: 77vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat;">
-                            <table class="table table-hover table-bordered" id="products_table">                                
-                                <thead class="bg bg-black-5">
-                                    <tr>
-                                        <th style="width: 20px !important;min-width: 20px !important;">#</th>
-                                        <th class="nowarp_thead" style="width: 30px !important;min-width: 30px !important;">التحكم</th>
-                                        <th class="nowarp_thead" style="width: 220px !important;min-width: 220px !important;">السلعة/الخدمة</th>
-                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">الوحدة</th>
-                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك المخزن</th>
-                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك مباعة</th>
-                                        <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك مرتجعة</th>
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">خصم%</th>                                                                                        
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;display: none;">ضريبة%</th>
-                                        <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الإجمالي</th>
-                                    </tr>
-                                </thead>
+                    </div>
 
-                                <tbody class="text-center">
-                                    @foreach ($find as $item)
-                                        <tr id="tr_{{ $item->product_id }}">
-                                            <th>{{ $item->product_id }}</th>
+
+
+                    <div class="col-lg-8" style="height: 77vh; overflow: auto; padding: 10px 10px 30px; background-image: url('{{ url('back/images/settings/farid logo bg pos white.png') }}'); background-size: cover; background-repeat: no-repeat;">
+                        <table class="table table-hover table-bordered" id="products_table">                                
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style="width: 20px !important;min-width: 20px !important;">#</th>
+                                    <th class="nowarp_thead" style="width: 30px !important;min-width: 30px !important;">التحكم</th>
+                                    <th class="nowarp_thead" style="width: 220px !important;min-width: 220px !important;">السلعة/الخدمة</th>
+                                    <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">الوحدة</th>
+                                    <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك المخزن</th>
+                                    <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك مباعة</th>
+                                    <th class="nowarp_thead" style="width: 80px !important;min-width: 80px !important;">ك مرتجعة</th>
+                                    <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">س بيع</th>
+                                    <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">خصم%</th>                                                                                        
+                                    <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;display: none;">ضريبة%</th>
+                                    <th class="nowarp_thead" style="width: 100px !important;min-width: 100px !important;">الإجمالي</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="text-center">
+                                @foreach ($find as $item)
+                                    <tr id="tr_{{ $item->product_id }}" class="{{ $item->product_bill_quantity == 0 ? 'returned' : '' }}">
+                                        <th>{{ $item->product_id }}</th>
+                                        @if($item->product_bill_quantity == 0)
+                                            <td></td>
+                                        @else
                                             <td>
                                                 <button type="button" class="btn btn-link p-0 return-row-btn" data-row-id="{{ $item->store_det_id }}" title="إرجاع" style="color:#d84458;">
                                                     <i class="fas fa-reply fa-lg"></i>
                                                 </button>
                                             </td>
-                                            <td class="prod_name">
-                                                {{ $item->productNameAr }}
-                                                <input autocomplete="off" type='hidden' name="prod_name" value="{{ $item->product_id }}" />
-                                            </td>
-                                            <td class="">
-                                                <span>{{ $item->smallUnitName }}</span>
-                                                <input autocomplete="off" type='hidden' class='small_unit_numbers' value='{{ display_number( $item->small_unit_numbers ) }}' />      
-                                            </td>
-                                            <td>
-                                                <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="{{ display_number( round($item->quantity_small_unit) ) }}">                    
-                                            </td>
-                                            <td>
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput" value="{{ display_number(round($item->product_bill_quantity)) }}" >
-                                            </td>
-                                            <td>
-                                                <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity" value="0" >
-                                            </td>
-                                            <td>
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice" value="{{ 
-                                                                    $item->current_sell_price_in_sale_bill != $item->sell_price_small_unit ? 
-                                                                        display_number( $item->current_sell_price_in_sale_bill ) : 
-                                                                        display_number( $item->sell_price_small_unit ) 
-                                                                }}">                                    
-                                            </td>
-                                            <td>
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount" value="{{ display_number( $item->discount ) }}">
-                                            </td>
-                                            <td style="display: none;">
-                                                <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax" value="{{ display_number( $item->tax ) }}">
-                                            </td>
-                                            <td>
-                                                <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total" value="{{ display_number( $item->total_after ) }}">
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                     </div> 
-                </div>
-                {{-------------------------------------------------- end content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
-                {{-------------------------------------------------- end content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}   
+                                        @endif
+                                        <td class="prod_name">
+                                            {{ $item->productNameAr }}
+                                            <input autocomplete="off" type='hidden' name="prod_name" value="{{ $item->product_id }}" />
+                                        </td>
+                                        <td class="">
+                                            <span>{{ $item->smallUnitName }}</span>
+                                            <input autocomplete="off" type='hidden' class='small_unit_numbers' value='{{ display_number( $item->small_unit_numbers ) }}' />      
+                                        </td>
+                                        <td>
+                                            <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center quantity_all" value="{{ display_number( round($item->quantity_small_unit) ) }}">                    
+                                        </td>
+                                        <td>
+                                            <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput" value="{{ display_number(round($item->product_bill_quantity)) }}" >
+                                        </td>
+                                        <td>
+                                            <input autocomplete="off" type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sale_quantity" name="sale_quantity" value="0"  {{ $item->product_bill_quantity == 0 ? 'readonly' : '' }} />
+                                        </td>
+                                        <td>
+                                            <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input reqInput sellPrice" name="sellPrice" value="{{ 
+                                                                $item->current_sell_price_in_sale_bill != $item->sell_price_small_unit ? 
+                                                                    display_number( $item->current_sell_price_in_sale_bill ) : 
+                                                                    display_number( $item->sell_price_small_unit ) 
+                                                            }}">                                    
+                                        </td>
+                                        <td>
+                                            <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_discount" name="prod_discount" value="{{ display_number( $item->discount ) }}">
+                                        </td>
+                                        <td style="display: none;">
+                                            <input autocomplete="off" readonly type="text" class="form-control form-control-sm inputs_table numValid text-center focus_input prod_tax" name="prod_tax" value="{{ display_number( $item->tax ) }}">
+                                        </td>
+                                        <td>
+                                            <input autocomplete="off" type="text" readonly class="form-control form-control-sm inputs_table numValid text-center focus_input prod_total" name="prod_total" value="{{ display_number( $item->total_after ) }}">
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                 </div> 
             </div>
-        </form>
+            {{-------------------------------------------------- end content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}
+            {{-------------------------------------------------- end content تفاصيل الفاتورة و اجمالي السعر والضريبة و ... --------------------------------------------------}}   
+        </div>
         
         @include('back.layouts.notification_sidebar')
     </div>
@@ -426,11 +450,30 @@
     @include('back.bills_css_js.css_js.main_js')
 
     {{-- start general scripts --}}
+
+        {{--  بدايه مقارنه الخصم الي هقلله بالخصم الي اتعمل ف الفاتورة --}}
+        <script>
+            $("#bill_discount").on('input', function() {
+                var billDiscount = parseFloat($(this).val()) || 0;
+                var billDiscountNoEdit = parseFloat($("#bill_discount_no_edit").val()) || 0;
+                
+                if( billDiscountNoEdit < billDiscount ) {
+                    alertify.set('notifier','position','top-center');
+                    alertify.set('notifier','delay',6);
+                    alertify.error('⚠️ الخصم اللي هتقللة من الفاتورة لازم يكون مساوي أو أقل من الخصم الأصلي 💰');
+                    $(this).val(billDiscountNoEdit);
+                }
+            });
+        </script>
+        {{--  نهاية مقارنه الخصم الي هقلله بالخصم الي اتعمل ف الفاتورة --}}
+
+
         <script>
             ////////////////////////////// start when click return-row-btn تعديل صف من جدول الأصناف ////////////////////////////
             $(document).on('click', '.return-row-btn', function() {
                 var rowId = $(this).data('row-id');
                 var rowProductBillQuantity = $(this).closest('tr').find('.sale_quantity').val();
+                var bill_discount = $('#bill_discount').val();
 
                 alertify.confirm(
                 'تحذير هام <i class="fas fa-exclamation-triangle text-warning" style="margin:0 3px;"></i>',
@@ -449,12 +492,13 @@
                         data: {
                             rowId: rowId, 
                             rowProductBillQuantity: rowProductBillQuantity,
+                            bill_discount: bill_discount
                         },
                         success: function(res) {
                             if(res.notAuth){
                                 alertify.dialog('alert')
                                     .set({transition:'slide',message: `
-                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ccacba;'>
+                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ffded8;'>
                                             <p style='color:#e67e22;font-size:18px;margin-bottom:10px;'>صلاحية غير متوفرة 🔐⚠️</p>
                                             <p>${res.notAuth}</p>
                                         </div>
@@ -465,7 +509,7 @@
                                 if(res.no_edits){
                                     alertify.dialog('alert')
                                     .set({transition:'slide',message: `
-                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ccacba;'>
+                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ffded8;'>
                                             <p>${res.no_edits}</p>
                                         </div>
                                     `, 'basic': true})
@@ -475,7 +519,7 @@
                                 if(res.error_quantity){
                                     alertify.dialog('alert')
                                     .set({transition:'slide',message: `
-                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ccacba;'>
+                                        <div style='text-align:center;padding:15px; border-radius:5px;background: #ffded8;'>
                                             <p class="p-1">⚠️ لا يمكن إتمام المرتجع!</p>
                                             <p class="p-1">الكمية المرتجعة أكبر من الكمية المباعة في الفاتورة. 🧾📦</p>
                                         </div>

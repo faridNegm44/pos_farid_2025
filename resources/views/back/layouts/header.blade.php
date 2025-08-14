@@ -140,8 +140,12 @@
                     {{ authUserInfo()->name }} - <span>{{ authUserInfo()->role_name }}</span>
                 </a>
                 
-                <a type="button" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="الالة الحاسبة" data-effect="effect-scale" data-toggle="modal" href=".calc">
+                <a type="button" class="d-none d-lg-inline" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="الالة الحاسبة" data-effect="effect-scale" data-toggle="modal" href=".calc">
                     <i class="mdi mdi-calculator bg-dark text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
+                </a>
+                
+                <a href="{{ url('sales') }}" target="_blank" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="فواتير المبيعات">
+                    <i class="mdi mdi-file-document bg-warning-gradient text-white product-icon" style="padding: 0 5px;border-radius: 50%;"></i>
                 </a>
                 
                 <a href="{{ url('sales/create') }}" style="font-size: 18px;margin: 5px;" data-bs-toggle="tooltip" title="فاتورة بيع جديدة">
@@ -161,29 +165,9 @@
                 </a>--}}
                 
             </div>
-
-
-            {{--<div class="nav-item d-none d-md-flex">
-                <nav class="horizontalMenu clearfix"><div class="horizontal-overlapbg"></div>
-                    <ul class="horizontalMenu-list">
-                        <li aria-haspopup="true"><span class="horizontalMenu-click"><i class="horizontalMenu-arrow fe fe-chevron-down"></i></span>
-                            <a class="sub-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                            
-                            إختصارات <i class="fe fe-chevron-down horizontal-icon"></i></a>
-                            <ul class="sub-menu">
-                                <li aria-haspopup="true"><a href="http://localhost/edustage_system_2024/public/time_table" class="slide-item">جدول الحصص</a></li>
-                                <li aria-haspopup="true"><a href="http://localhost/edustage_system_2024/public/time_table" class="slide-item">تقيمات الطلاب</a></li>
-
-                               
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-            </div>--}}
             
-            <div class="nav-item dark_theme">
-                <a class="new nav-link full-screen-link"style="font-size: 25px;cursor: pointer;">
+            <div class="nav-item dark_theme d-none">
+                <a class="new nav-link full-screen-link d-none d-lg-inline"style="font-size: 25px;cursor: pointer;">
                     <i class="mdi mdi-lightbulb-on"></i>    
                 </a>
             </div>
@@ -384,9 +368,9 @@
                     </div>
                 </div>--}}
 
-                <div class="nav-item full-screen fullscreen-button">
+                {{--<div class="nav-item full-screen fullscreen-button">
                     <a class="new nav-link full-screen-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
-                </div>
+                </div>--}}
 
                 <div class="dropdown main-profile-menu nav nav-item nav-link">
                     <a class="profile-user d-flex" href="#"><img alt="" src="{{ asset('back/images/users/'.authUserInfo()->image) }}"></a>

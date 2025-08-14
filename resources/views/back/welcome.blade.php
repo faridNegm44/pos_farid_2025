@@ -437,7 +437,7 @@
 
 					@if (count(topProductsInSales()) > 0 )
 						<table class="table table-bordered table-hover text-center">
-							<thead class="bg bg-black-5">
+							<thead class="thead-light">
 								<tr>
 									<th scope="col">#</th>
 									<th scope="col">اسم العميل</th>
@@ -486,7 +486,7 @@
 
 					@if (count(topProductsInSales()) > 0 )
 						<table class="table table-bordered table-hover text-center">
-							<thead class="bg bg-black-5">
+							<thead class="thead-light">
 								<tr>
 									<th scope="col">#</th>
 									<th scope="col">اسم السلعة/الخدمة</th>
@@ -535,7 +535,7 @@
 					@if (count(getLastSaleBills()) > 0 )
 						<div class="table-responsive country-table">
 							<table class="table table-bordered table-hover text-center">
-								<thead class="bg bg-black-5">
+								<thead class="thead-light">
 									<tr>
 										<th>#</th>
 										<th>ت الفاتورة</th>

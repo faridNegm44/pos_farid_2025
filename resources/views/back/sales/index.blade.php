@@ -37,6 +37,15 @@
         #showProductsModal .table-bordered td, .table-bordered th{
             font-size: 12px !important;
         }
+        #example1 {
+            position: relative;
+        }
+
+        #example1 thead th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
     </style>
 @endsection
 
@@ -64,7 +73,7 @@
         // flatpickr
         flatpickr(".datePicker", {
             enableTime: true,
-            dateFormat: "Y-m-d h:i:S K", 
+            dateFormat: "d-m-Y       h:i K", 
             time_24hr: false
         });
 
@@ -94,6 +103,7 @@
                         {data: 'clientPhone', name: 'clientPhone'},
                         {data: 'treasuryName', name: 'treasuryName'},
                         {data: 'total_bill', name: 'total_bill'},
+                        {data: 'extra_money', name: 'extra_money'},
                         {data: 'count_items', name: 'count_items'},
                         {data: 'notes', name: 'notes'},
                         {data: 'userName', name: 'userName'},
@@ -124,12 +134,38 @@
             });
         });
         // end DataTable
-        
     </script>
+
+    {{-- start when change extra_money_type --}}
+    <script>
+        $(document).on('input', '#extra_money_type', function () {
+            const thisVal = $(this).val();
+
+            if(thisVal){
+                $.ajax({
+                    type: "GET",
+                    url: `{{ url('get_info/extra_expenses') }}/${thisVal}`,
+                    success: function(res){
+                        alertify.set('notifier','position', 'top-center');
+                        alertify.set('notifier','delay', 3);
+                        alertify.success("تم استدعاء سعر هذا المصروف الإضافي بنجاح 💰");
+                        
+                        $('#addExtraMoney #extra_money').val( res.amount ? display_number_js(res.amount) : 0 );
+
+                        calcTotal();
+                    }
+                });       
+            }else{
+                $('#extra_money').val('');
+            }
+        });
+    </script>
+    {{-- end when change extra_money_type --}}
 
     {{-- add, edit, delete => script --}}
     @include('back.sales.show')
     @include('back.sales.delete_bill')
+    @include('back.sales.edit_or_add_extra_money_js')
 @endsection
 
 
@@ -192,20 +228,22 @@
 
 
         @include('back.sales.show_form')
+        @include('back.sales.add_extra_money_form')
 
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
-                        <thead class="bg bg-black-5">
+                    <table class="table table-responsive table-bordered table-striped table-hover text-center text-md-nowrap" id="example1" style="max-height: 70vh; overflow: auto;">
+                        <thead class="thead-light">
                             <tr>
                                 <th class="border-bottom-0 nowrap_thead">#</th>
-                                <th class="border-bottom-0 nowrap_thead" style="width: 200px !important;min-width: 200px !important;">التحكم</th>
+                                <th class="border-bottom-0 nowrap_thead" style="width: 230px !important;min-width: 230px !important;">التحكم</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 90px !important;min-width: 90px !important;">تاريخ</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">عميل</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">تليفون</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">خزينة</th>
                                 <th class="border-bottom-0 nowrap_thead" >اجمالي الفاتورة</th>
+                                <th class="border-bottom-0 nowrap_thead" >مصاريف اضافيه</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 60px !important;min-width: 60px !important;">ع العناصر</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">ملاحظات</th>
                                 <th class="border-bottom-0 nowrap_thead" style="width: 100px !important;min-width: 100px !important;">مستخدم</th>

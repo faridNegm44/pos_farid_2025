@@ -12,7 +12,7 @@
           <div class="pd-30 pd-sm-40">
             
             <table class="table table-bordered table-striped text-center" style="margin-bottom: 25px;">
-              <thead class="bg bg-black-5">
+              <thead class="thead-light">
                 <tr>
                   <th>رقم التحويل</th>
                   <th>تاريخ التحويل</th>

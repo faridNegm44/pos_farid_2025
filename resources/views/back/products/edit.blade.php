@@ -70,7 +70,7 @@
                     $('.modal form #sell_price_small_unit').val( res.product.sell_price_small_unit ? display_number_js(res.product.sell_price_small_unit) : '');
                     $('.modal form #last_cost_price_small_unit').val( res.product.last_cost_price_small_unit ? display_number_js(res.product.last_cost_price_small_unit) : '');
                     $('.modal form #max_sale_quantity').val( res.product.max_sale_quantity ? display_number_js(res.product.max_sale_quantity) : '');
-                    $('.modal form #status').val(res.product.status);
+                    $('.modal form #status').val(res.product.productStatus);
                     $('.modal form #desc').val(res.product.desc);
                     $('.modal form #offerDiscountStatus').val(res.product.offerDiscountStatus);
                     $('.modal form #offerDiscountPercentage').val( res.product.offerDiscountPercentage ? display_number_js(res.product.offerDiscountPercentage) : '');

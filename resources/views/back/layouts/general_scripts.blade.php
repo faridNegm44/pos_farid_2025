@@ -12,6 +12,14 @@
 
 
 
+	// start when tr in datatable clicked
+        $(document).on('click', '#example1 tbody tr', function () {
+            $('#example1 tbody tr').removeClass('selected').css('background-color', '');
+            $(this).addClass('selected').css('background-color', 'yellow');
+        });
+	// end when tr in datatable clicked
+
+
 	// Focus Search input when click ctrl+/
 	$(document).bind('keydown', function(event) {
 		if( event.which === 191 && event.ctrlKey ) {

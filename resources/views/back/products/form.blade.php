@@ -63,7 +63,7 @@
                     <div class="col-lg-1 col-md-6 col-12">
                       <label for="status">الحالة</label>
                         <div>    
-                            <select  name="status" class="status form-control" id="status">
+                            <select name="status" class="status form-control" id="status">
                                 <option value="1">نشط</option>
                                 <option value="0">معطل</option>
                             </select>

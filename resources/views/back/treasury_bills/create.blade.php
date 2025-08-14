@@ -250,7 +250,7 @@
                                 <caption style="text-align: center;caption-side: top;font-weight: inherit;font-size: 10pt;background: #383a3e;color: white;">
                                     الموقف المالي للخزينة
                                 </caption>
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                 <tr>
                                     <th>قبل</th>
                                     <th>بعد</th>
@@ -274,7 +274,7 @@
                                     الموقف المالي للجهة
                                     <span id="userStatus" style="margin: 0 5px;color: #deea17;display: none;"></span>
                                 </caption>
-                                <thead class="bg bg-black-5">
+                                <thead class="thead-light">
                                 <tr>
                                     <th>قبل</th>
                                     <th>متبقي/لة</th>
