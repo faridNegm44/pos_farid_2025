@@ -434,6 +434,12 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         // start print اصناف الجرد 
         Route::get('/print-count-only/{id}' , 'InventoriesController@print_count_only'); // ورقة العد (بدون أرصدة)
         Route::get('/print-count-with-balance/{id}' , 'InventoriesController@print_count_with_balance'); // ورقة العد (بالأرصدة الدفترية)
+        // start print بدء الجرد 
+        Route::get('/open/{id}' , 'InventoriesController@open'); 
+        // start print تحديث الجرد 
+        Route::get('/update/{id}' , 'InventoriesController@update');
+        // start print اغلاق الجرد واعتماده نهائيا الجرد 
+        Route::get('/close/{id}' , 'InventoriesController@close');
     });
     
     // 🧾 إدارة الجرد

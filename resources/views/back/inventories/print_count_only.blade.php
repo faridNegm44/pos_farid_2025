@@ -86,8 +86,8 @@
                         <td>{{ \Carbon\Carbon::parse($inventory_info->date)->format('d-m-Y') }}</td>
                         <td>{{ $inventory_info->userName }}</td>
                         <td>{{ $inventory_info->financialName }}</td>
-                        <td>جاري الجرد</td>
-                        <td>ملاحظه اول جرد</td>
+                        <td>{{ $inventory_info->status }}</td>
+                        <td>{{ $inventory_info->notes }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -125,7 +125,7 @@
         </div>
 
         @include('back.layouts.footer_report')
-        {{--<script> window.print(); </script>--}}
+        <script> window.print(); </script>
     </div>
 </body>
 </html>
