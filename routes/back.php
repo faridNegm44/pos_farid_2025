@@ -426,18 +426,19 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::get('/' , 'InventoriesController@index');
         Route::post('/store' , 'InventoriesController@store');
         Route::get('/edit/{id}' , 'InventoriesController@edit');
-        Route::post('/update/{id}' , 'InventoriesController@update');
+        Route::post('/update_inventory/{id}' , 'InventoriesController@update_inventory');
         Route::get('/destroy/{id}' , 'InventoriesController@destroy');
-        
         Route::get('datatable' , 'InventoriesController@datatable');
 
+        
         // start print اصناف الجرد 
         Route::get('/print-count-only/{id}' , 'InventoriesController@print_count_only'); // ورقة العد (بدون أرصدة)
         Route::get('/print-count-with-balance/{id}' , 'InventoriesController@print_count_with_balance'); // ورقة العد (بالأرصدة الدفترية)
+        Route::get('/final-differences-report/{id}' , 'InventoriesController@final_differences_report'); // تقرير الفروقات النهائي
         // start print بدء الجرد 
         Route::get('/open/{id}' , 'InventoriesController@open'); 
         // start print تحديث الجرد 
-        Route::get('/update/{id}' , 'InventoriesController@update');
+        Route::post('/update/{id}' , 'InventoriesController@update');
         // start print اغلاق الجرد واعتماده نهائيا الجرد 
         Route::get('/close/{id}' , 'InventoriesController@close');
     });

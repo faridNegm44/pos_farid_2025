@@ -17,47 +17,138 @@
         $(document).keypress(function (e) {
             if(e.which == 13){
                 e.preventDefault();  
+            }    
+        });
+
+        
+        // datatable
+        $(document).ready(function () {
+            $('#example1').DataTable().destroy();
+            
+            $('#example1').DataTable({
+                "pageLength": 50, 
+                "lengthMenu": [ [10, 50, 100, 300, 500, -1], [10, 50, 100, 300, 500, "الكل"] ], 
+                "ordering": true,      
+                "searching": true,
+                "info": true,     
+                "paging": true,
+                "language": {
+                    "lengthMenu": "عرض _MENU_ صف في الصفحة",
+                    "zeroRecords": "لا توجد بيانات",
+                    "info": "عرض _START_ إلى _END_ من أصل _TOTAL_ سجل",
+                    "infoEmpty": "لا توجد سجلات متاحة",
+                    "infoFiltered": "(تمت التصفية من إجمالي _MAX_ سجل)",
+                    "search": "بحث:",
+                    "paginate": {
+                        "first": "الأول",
+                        "last": "الأخير",
+                        "next": "التالي",
+                        "previous": "السابق"
+                    }
+                }
+            });
+        });
+
+
+
+        // start when change current_quantity
+        $(".current_quantity").on('input', function() {
+            let rawVal = $(this).val();  
+            const stockQuantity = parseFloat($(this).closest('tr').find('.stockQuantity').text()) || 0;
+            const diffElement = $(this).closest('tr').find('.diff');
+
+            diffElement.removeClass('bg bg-primary bg-danger bg-success bg-light text-white text-dark');
+
+            if (rawVal === '' || rawVal === null) {
+                diffElement.text('0');
+                return;
+
+            }else if(rawVal < 0){
+                $(this).val('');
+                return;
+            }
+
+            const thisval = parseFloat(rawVal);
+            const diff = thisval - stockQuantity;
+
+            if (thisval > stockQuantity) {
+                diffElement.addClass('bg bg-primary text-white').text(`زيادة ( ${diff} )`);
+            } else if (thisval < stockQuantity) {
+                diffElement.addClass('bg bg-danger text-white').text(`عجز ( ${diff} )`);
+            } else {
+                diffElement.addClass('bg bg-success text-white').text(`متساوي ( ${diff} )`);
             }
         });
-        
-        //$(document).ready(function () {
-        //    $('#example1').DataTable({
-        //        processing: true,
-        //        serverSide: true,
-        //        ajax: `{{ url($pageNameEn.'/datatable') }}`,
-        //        dataType: 'json',
-        //        columns: [
-        //            {data: 'id', name: 'id'},
-        //            {data: 'action', name: 'action', orderable: false},
-        //            {data: 'created_at', name: 'created_at'},
-        //            {data: 'date', name: 'date'},
-        //            {data: 'status', name: 'status'},
-        //            {data: 'supervisor_1Name', name: 'supervisor_1'},
-        //            {data: 'supervisor_2Name', name: 'supervisor_2'},
-        //            {data: 'supervisor_3Name', name: 'supervisor_3'},
-        //            {data: 'notes', name: 'notes'},
-        //            {data: 'userName', name: 'userName'},
-        //            {data: 'financialName', name: 'financialName'},
-        //        ],
-        //        dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
-        //            "<'row'<'col-sm-12'tr>>" +
-        //            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        //        buttons: [
-        //            { extend: 'excel', text: '📊 Excel', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'} },
-        //            { extend: 'print', text: '🖨️ طباعة', className: 'btn btn-outline-dark', exportOptions: { columns: ':visible'}, customize: function (win) { $(win.document.body).css('direction', 'rtl'); } },
-        //            { extend: 'colvis', text: '👁️ إظهار/إخفاء الأعمدة', className: 'btn btn-outline-dark' }
-        //        ],
-        //        "bDestroy": true,
-        //        order: [[0, 'desc']],
-        //        language: {sUrl: '{{ asset("back/assets/js/ar_dt.json") }}'},
-        //        lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "الكل"]]
-        //    });
-        //});
+        // end when change current_quantity
+
+
+        // start when click submit form
+        $(document).ready(function () {
+            const inventoryId = @json($inventory_info->id);
+
+            $('#form').on('submit', function(e) {
+                e.preventDefault();
+
+                alertify.confirm(
+                    'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
+                    `<div style="text-align: center;">
+                        <p style="">
+                            هل تريد حفظ بيانات الجرد الحالية؟ 📝  
+                            <br />
+                            <span class="text-danger">⚠️ تأكد من مطابقة العد الفعلي قبل الحفظ.</span>
+                        </p>
+                    </div>`,
+                function(){
+                    $.ajax({
+                        url: `{{ url('inventories/update') }}/${inventoryId}`,
+                        type: 'post',
+                        processData: false,
+                        contentType: false,
+                        data: new FormData($('form')[0]),
+                        beforeSend:function () {
+                            $("#overlay_page").fadeIn();    
+                        },
+                        error: function(res){
+                            $("#overlay_page").fadeOut();
+                        },
+                        success: function(res){
+                            
+                            $("#overlay_page").fadeOut();
+
+                            alertify.confirm(
+                                'رائع <i class="fas fa-check-double text-success" style="margin: 0px 3px;"></i>', 
+                                `<span class="text-center">
+                                    <p class="text-success">✅ تم حفظ بيانات الجرد بنجاح</p>  
+                                    <p class="text-primary">🔒 إذا انتهيت، يمكنك التوجه لإغلاق الجرد واعتماده.</p>                                
+                                </span>`, 
+                            function(){                                
+                                window.location.href = "{{ url('inventories') }}";
+                                
+                            }, function(){ 
+                                location.reload();
+                            }).set({
+                                labels:{
+                                    ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                                    cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                                }
+                            });
+                        }
+                    });
+    
+    
+                }, function(){
+    
+                }).set({
+                    labels:{
+                        ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                        cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                    }
+                });                
+            });
+        });
+        // end when click submit form
     </script>
 @endsection
-
-
-
 
 
 
@@ -79,55 +170,88 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="border-bottom-0 nowrap_thead">#</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 200px !important;min-width: 200px !important;">التحكم</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">كود الصنف</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">اسم الصنف</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 70px !important;min-width: 70px !important;">الكمية بالمخزن</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">الكمية الفعلية (عدّ يدوي)</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">لفارق (إن وجد)</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">تاريخ آخر تحديث</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 90px !important;min-width: 90px !important;">المستخدم المسؤول</th>
-                                        <th class="border-bottom-0 nowrap_thead" style="width: 120px !important;min-width: 120px !important;">ملاحظات</th>
-                                    </tr>
-                                </thead>                                
+                            <form action="" id="form">
+                                @csrf
+                                <table class="table table-bordered table-striped table-hover text-center text-md-nowrap" id="example1">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 15px !important;min-width: 15px !important;">#</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 40px !important;min-width: 40px !important;">كود</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 200px !important;min-width:200px !important;">اسم السلعة/الخدمة</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 70px !important;min-width: 70px !important;">الوحدة ص</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">س تكلفة</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">س بيع</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">ك دفترية</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">ك معدودة</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 70px !important;min-width: 70px !important;">الفارق</th>
+                                            <th class="border-bottom-0 nowrap_thead" style="width: 130px !important;min-width: 130px !important;">ملاحظات</th>
+                                        </tr>
+                                    </thead>                                
 
-                                <tbody>
-                                    @forelse($results as $index => $res)
-                                        <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>
-                                                {{--<a href="{{ url('inventories/start/'.$res->id) }}" class="btn btn-sm btn-success">
-                                                    <i class="fas fa-play"></i> بدء الجرد
-                                                </a>--}}
-                                            </td>
-                                            <td>{{ $res->actual_inventory_date ?? '-' }}</td>
-                                            <td>{{ $res->last_inventory_date ?? '-' }}</td>
-                                            <td>
-                                                {{--@if($res->status == 'open')
-                                                    <span class="badge bg-warning">مفتوح</span>
-                                                @elseif($res->status == 'closed')
-                                                    <span class="badge bg-success">مغلق</span>
-                                                @else
-                                                    <span class="badge bg-secondary">غير محدد</span>
-                                                @endif--}}
-                                            </td>
-                                            <td>{{ $res->supervisor_one ?? '-' }}</td>
-                                            <td>{{ $res->supervisor_two ?? '-' }}</td>
-                                            <td>{{ $res->supervisor_three ?? '-' }}</td>
-                                            <td>{{ $res->notes ?? '-' }}</td>
-                                            <td>{{ $res->user->name ?? '-' }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="11">🚫 لا توجد بيانات جرد متاحة</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                                   <tbody>
+                                        @forelse($results as $index => $result)
+                                            @php
+                                                $isExist = collect($checkInventorybefore)->contains(fn($r) => $r->product_id == $result->productId);
+                                            @endphp
+
+                                            <tr class="{{ $isExist ? 'bg bg-info text-dark' : '' }}">
+                                                <td>{{ $index+1 }}</td>
+                                                <td>
+                                                    {{ $result->productId }}
+                                                    <input type="hidden" name="product_id[]" value="{{ $result->productId }}" />
+                                                </td>
+                                                <td style="font-size: 10px !important;">{{ $result->productNameAr }}</td> 
+                                                <td>{{ $result->small_unit_name }}</td>
+                                                <td>{{ display_number($result->last_cost_price_small_unit) }}</td> 
+                                                <td>{{ display_number($result->sell_price_small_unit) }}</td> 
+                                                <td style="font-size: 15px;font-weight: bold;" class="stockQuantity">{{ (int) $result->quantity_small_unit }}</td>
+                                                <td>
+                                                    <input type="number" class="form-control text-center focused current_quantity" 
+                                                        name="current_quantity[]" 
+                                                        style="height: 20px !important;border: 1px solid #ccc;width: 60%;margin: auto;" 
+                                                        min="0" />
+                                                </td>
+
+                                                <td>
+                                                    @if ($isExist)
+                                                        @if ((int) $result->quantity_small_unit > (int) $result->product_bill_quantity)
+                                                            <span class="diff bg bg-primary text-white" style="display: block;padding: 1px 3px;">
+                                                                زيادة ( {{ (int) $result->quantity_small_unit - (int) $result->product_bill_quantity  }} )
+                                                            </span>
+                                                            
+                                                        @elseif ((int) $result->quantity_small_unit < (int) $result->product_bill_quantity)
+                                                            <span class="diff bg bg-danger text-white" style="display: block;padding: 1px 3px;">
+                                                                عجز ( {{ (int) $result->quantity_small_unit - (int) $result->product_bill_quantity  }} )
+                                                            </span>
+
+                                                        @elseif ((int) $result->quantity_small_unit == (int) $result->product_bill_quantity)
+                                                            <span class="diff bg bg-success text-white" style="display: block;padding: 1px 3px;">
+                                                                متساوي ( {{ (int) $result->quantity_small_unit - (int) $result->product_bill_quantity  }} )
+                                                            </span>
+                                                        @endif                        
+                                                    @else
+                                                        <span class="diff" style="display: block;padding: 1px 3px;">0</span>
+                                                    @endif
+                                                </td>
+                                                
+                                                <td>
+                                                    <input type="text" class="form-control text-center focused" 
+                                                        name="notes[]" 
+                                                        style="height: 20px !important;border: 1px solid #ccc;font-size: 9px !important;" 
+                                                        placeholder="ملاحظة (إن وجدت)" />
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="11">🚫 لا توجد بيانات جرد متاحة</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+
+                                </table>
+
+                                <input type="submit" class="btn btn-success" style="display: block; width: 100%;border-radius: 50px;margin: 20px 0;" value="حفظ الجرد">
+                            </form>
                         </div>
                     </div>
                 </div>

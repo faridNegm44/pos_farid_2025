@@ -50,10 +50,10 @@
         document.querySelector('.modal #update').disabled = true;        
         document.querySelector('.spinner_request2').setAttribute("style", "display: inline-block;");
 
-
         const res_id = $(".modal form #res_id").val();
+        
         $.ajax({
-            url: `{{ url($pageNameEn) }}/update/${res_id}`,
+            url: `{{ url($pageNameEn) }}/update_inventory/${res_id}`,
             type: 'POST',
             processData: false,
             contentType: false,

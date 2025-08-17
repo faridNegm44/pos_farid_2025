@@ -167,7 +167,7 @@ div.dataTables_wrapper div.dataTables_info{
     margin-left: 10px;
 }
 
-table .edit, table .delete, table .show, table .crm_info, table .print, table .view, table .return_bill, table .print_bill, table .upload, table .delete_bill, table .add_extra_money{
+table .edit, table .delete, table .show, table .crm_info, table .print, table .view, table .return_bill, table .print_bill, table .upload, table .delete_bill, table .add_extra_money, table .close_inventory{
     padding: 1px 6px;
 }
 

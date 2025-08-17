@@ -12,46 +12,6 @@
 @endsection
 
 @section('footer') 
-    <script>
-        flatpickr(".datePicker", {
-            enableTime: false,
-            dateFormat: "Y-m-d",
-        });
-    </script>
-
-    <script>
-        // open modal when click button (insert)
-        document.addEventListener('keydown', function(event){
-            if( event.which === 45 ){
-                $('.modal').modal('show');
-                document.querySelector('.modal .modal-header .modal-title').innerText = 'إضافة';
-                document.querySelector('.modal .modal-footer #save').setAttribute('style', 'display: inline;');
-                document.querySelector('.modal .modal-footer #update').setAttribute('style', 'display: none;');
-                $('.dataInput').val('');
-            }
-        });
-
-        $(document).ready(function(){
-            // $('.datetimepicker').datetimepicker({ dropdownParent: $('.modal') });
-
-
-            // jQuery.datetimepicker.setLocale('en');
-            // jQuery('.datetimepicker').datetimepicker({
-            //     dropdownParent: $('.modal'),
-            //     timepicker:false,
-            //     format:'d-m-Y',
-            //     // theme:'dark'
-            // });
-
-
-
-            $(document).on('click', '.modal-body .datetimepicker', function() {
-                $(this).datetimepicker('show');
-            });
-
-        });
-
-    </script>
 
     <script>       
         // remove all errors when close modal
@@ -66,6 +26,52 @@
                 e.preventDefault();  
             }
         });
+
+
+        // start when click to close_inventory
+        $(document).on('click', '.close_inventory', function(){
+            const res_id = $(this).attr('res_id');
+
+            alertify.confirm(
+                'انتبة !! <i class="fas fa-exclamation-triangle text-warning" style="margin: 0px 3px;"></i>',
+                `<div style="text-align: center;">
+                    <p style="">
+                        اعتماد الجرد 📦
+                        هل أنت متأكد من اعتماد هذا الجرد وإغلاقه؟ 📝<br/><span class="text-danger">لن تتمكن من تعديله بعد الإغلاق.</span>
+                    </p>
+                </div>`,
+            function(){
+                $.ajax({
+                    url: `{{ url('inventories/close') }}/${res_id}`,
+                    type: 'get',
+                    beforeSend:function () {
+                        $("#overlay_page").fadeIn();    
+                    },
+                    error: function(res){
+                        $("#overlay_page").fadeOut();
+                    },
+                    success: function(res){
+                        $("#overlay_page").fadeOut();
+                        $('#example1').DataTable().ajax.reload( null, false );
+
+                        alertify.set('notifier','position', 'top-center');
+                        alertify.set('notifier','delay', 3);
+                        alertify.success("✅ تم اعتماد هذا الجرد وإغلاقه بنجاح");
+                    }
+                });
+
+
+            }, function(){
+
+            }).set({
+                labels:{
+                    ok:"نعم <i class='fas fa-check text-success' style='margin: 0px 3px;'></i>",
+                    cancel: "لاء <i class='fa fa-times text-light' style='margin: 0px 3px;'></i>"
+                }
+            });  
+        });
+        // end when click to close_inventory
+
         
         $(document).ready(function () {
             $('#example1').DataTable({
