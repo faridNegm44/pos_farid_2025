@@ -12,9 +12,14 @@ use Illuminate\Support\Str;
 class ReportsSaleBillsController extends Controller
 {
     public function index()
-    {                   
-        $pageNameAr = 'تقرير إجمالي المبيعات خلال فترة';        
-        return view('back.reports.sales.index' , compact('pageNameAr'));
+    {           
+        if((userPermissions()->sales_summary_report_view)){
+            $pageNameAr = 'تقرير إجمالي المبيعات خلال فترة';        
+            return view('back.reports.sales.index' , compact('pageNameAr'));
+        
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }         
     }
 
     public function result(Request $request)

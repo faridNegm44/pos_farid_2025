@@ -17,11 +17,7 @@ class RolesPermissionsController extends Controller
             $pageNameAr = 'الأذونات والتراخيص';
             $pageNameEn = 'roles_permissions';
     
-            if((userPermissions()->roles_permissions_view)){
-                return view('back.roles_permissions.index', compact('pageNameAr' , 'pageNameEn'));
-            }else{
-                return redirect('/')->with('notAuth', 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك');
-            }
+            return view('back.roles_permissions.index', compact('pageNameAr' , 'pageNameEn'));
         }else{
             return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }  
@@ -34,11 +30,7 @@ class RolesPermissionsController extends Controller
             $pageNameAr = 'الأذونات والتراخيص';
             $pageNameEn = 'roles_permissions';
     
-            if((userPermissions()->roles_permissions_create)){
-                return view('back.roles_permissions.add', compact('pageNameAr' , 'pageNameEn'));
-            }else{
-                return redirect('/')->with('notAuth', 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك');
-            }
+            return view('back.roles_permissions.add', compact('pageNameAr' , 'pageNameEn'));
         }else{
             return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }  
@@ -173,6 +165,16 @@ class RolesPermissionsController extends Controller
             'purchase_bill_return_view' => request('purchase_bill_return_view') ? 1 : 0,
             'purchase_bill_edited_view' => request('purchase_bill_edited_view') ? 1 : 0,
             // end fourth                  
+            
+            // start fivth
+            'inventories_create' => request('inventories_create') ? 1 : 0,
+            'inventories_update' => request('inventories_update') ? 1 : 0,
+            'inventories_view' => request('inventories_view') ? 1 : 0,
+            'inventories_delete' => request('inventories_delete') ? 1 : 0,
+            'inventories_print' => request('inventories_print') ? 1 : 0,
+            'inventories_start' => request('inventories_start') ? 1 : 0,
+            'sales_summary_report_view' => request('sales_summary_report_view') ? 1 : 0,
+            // end fivth                  
         ]);
         
         return redirect()->back();
@@ -320,6 +322,16 @@ class RolesPermissionsController extends Controller
             'purchase_bill_return_view' => request('purchase_bill_return_view') ? 1 : 0,
             'purchase_bill_edited_view' => request('purchase_bill_edited_view') ? 1 : 0,
             // end fourth            
+
+            // start fivth
+            'inventories_create' => request('inventories_create') ? 1 : 0,
+            'inventories_update' => request('inventories_update') ? 1 : 0,
+            'inventories_view' => request('inventories_view') ? 1 : 0,
+            'inventories_delete' => request('inventories_delete') ? 1 : 0,
+            'inventories_print' => request('inventories_print') ? 1 : 0,
+            'inventories_start' => request('inventories_start') ? 1 : 0,
+            'sales_summary_report_view' => request('sales_summary_report_view') ? 1 : 0,
+            // end fivth    
         ]);
         
         return redirect()->back();

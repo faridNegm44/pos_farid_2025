@@ -12,13 +12,25 @@ use App\Models\Back\Store;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Str;
-use App\Helpers\GetFinancialYearHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
 
 class ProductController extends Controller
 {
+    //################################### start import file excel
+    public function import(Request $request)
+    {
+        if ($request->hasFile('excel_file') && $request->file('excel_file')->extension() === 'xlsx'){
+            Excel::import(new ProductsImport, $request->file('excel_file'));
+            return redirect()->back()->with('success_import', 'All good!');
+        }
+
+        return redirect()->back()->with('error_import', 'there are some problems!');
+    }
+    //################################### end import file excel
+
     public function index()
     {                  
         if((userPermissions()->products_view)){
@@ -567,4 +579,30 @@ class ProductController extends Controller
             ->rawColumns(['id', 'name', 'sell_price_small_unit', 'last_cost_price_small_unit', 'prod_discount', 'prod_tax', 'units', 'category', 'quantity_small_unit', 'image', 'status', 'action'])
             ->toJson();
     }
+
+
+
+
+    public function barcode($id){
+        $product = Product::leftJoin('store_dets', 'store_dets.product_id', 'products.id')
+                        ->select(
+                            'products.shortCode', 
+                            'products.natCode', 
+                            'products.nameAr', 
+                            'products.nameEn', 
+                            'store_dets.sell_price_small_unit'
+                        )
+                        ->where('products.id', $id)
+                        ->first();
+                        
+        return view('back.products.barcode', compact( 'product'));
+
+        return response()->json([
+            'error' => 'Not Found'
+        ]);
+
+    }
+
+
+    
 }

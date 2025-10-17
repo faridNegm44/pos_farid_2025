@@ -179,7 +179,9 @@
                                             <th class="border-bottom-0 nowrap_thead" style="width: 40px !important;min-width: 40px !important;">كود</th>
                                             <th class="border-bottom-0 nowrap_thead" style="width: 200px !important;min-width:200px !important;">اسم السلعة/الخدمة</th>
                                             <th class="border-bottom-0 nowrap_thead" style="width: 70px !important;min-width: 70px !important;">الوحدة ص</th>
-                                            <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">س تكلفة</th>
+                                            @if((userPermissions()->cost_price_view))
+                                                <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">س تكلفة</th>
+                                            @endif
                                             <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">س بيع</th>
                                             <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">ك دفترية</th>
                                             <th class="border-bottom-0 nowrap_thead" style="width: 80px !important;min-width: 80px !important;">ك معدودة</th>
@@ -202,7 +204,9 @@
                                                 </td>
                                                 <td style="font-size: 10px !important;">{{ $result->productNameAr }}</td> 
                                                 <td>{{ $result->small_unit_name }}</td>
-                                                <td>{{ display_number($result->last_cost_price_small_unit) }}</td> 
+                                                @if((userPermissions()->cost_price_view))                                                
+                                                    <td>{{ display_number($result->last_cost_price_small_unit) }}</td> 
+                                                @endif
                                                 <td>{{ display_number($result->sell_price_small_unit) }}</td> 
                                                 <td style="font-size: 15px;font-weight: bold;" class="stockQuantity">{{ (int) $result->quantity_small_unit }}</td>
                                                 <td>

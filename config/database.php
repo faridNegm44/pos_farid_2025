@@ -63,7 +63,9 @@ return [
             ]) : [],
 
             'dump' => [
-                'dump_binary_path' => 'F:/xampp8212/mysql/bin',
+                'dump_binary_path' => 'E:\xampp8212\mysql\bin', // only the path, so without 'mysqldump.exe'
+                'use_single_transaction',
+                'timeout' => 60 * 5, // 5 minute timeout
             ],
         ],
 

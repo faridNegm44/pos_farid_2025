@@ -22,6 +22,66 @@
         //        e.preventDefault();  
         //    }
         //});
+
+
+
+
+
+        $(document).on("click", "#checkAllBtn", function() {
+            let allChecked = $(".table-checkbox:checked").length === $(".table-checkbox").length;
+
+            if (allChecked) {
+                // إلغاء تحديد الكل
+                $(".table-checkbox").prop("checked", false);
+                $(this).text("تحديد الكل");
+            } else {
+                // تحديد الكل
+                $(".table-checkbox").prop("checked", true);
+                $(this).text("إلغاء الكل");
+            }
+        });
+
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $(document).on("click", "#clearBtn", function() {
+            let password = prompt("ادخل الرقم السري");
+
+            if (password !== "@@##01012775704") {
+                alert("الرقم السري غير صحيح");
+                return;
+            }
+
+            let formData = $("#clearForm").serialize();
+
+            $.ajax({
+                url: `{{ url('/'.$pageNameEn) }}/clearTables`,
+                method: "POST",
+                data: formData,
+                success: function(res) {
+                    if (res.status === "success") {
+                        alert(`${res.message}`);
+                        location.reload(); 
+                    } else {
+                        $("#result").html('<span class="text-danger">'+res.message+'</span>');
+                    }
+                },
+                error: function() {
+                    $("#result").html('<span class="text-danger">حدث خطأ أثناء العملية</span>');
+                }
+            });
+        });
+
+
+
+
+
+
+
         
         $(document).ready(function () {
             $('#example1').DataTable({
@@ -60,6 +120,70 @@
         </div>
 
         @include('back.settings.form')
+
+
+        @if ( auth()->user()->email === 'farid@gmail.com' )
+            <div class="panel-group1" id="accordion11">
+                <div class="panel panel-default  mb-4">
+                    <div class="panel-heading1 bg-dark ">
+                        <h4 class="panel-title1">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion11" href="#collapseFour1" aria-expanded="false">
+                                تفريغ قواعد البيانات
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour1" class="panel-collapse collapse" role="tabpanel" aria-expanded="false" style="">
+                        <div class="panel-body border">
+                            <form id="clearForm">
+                                @csrf
+                                <button type="button" id="checkAllBtn" class="btn btn-sm btn-primary mb-3">تحديد الكل</button>
+
+                                <div class="row">
+                                    @php $tables = [
+                                        'products', 
+                                        'store_dets', 
+                                        'clients_and_suppliers', 
+                                        'partners', 
+                                        'treasury_bill_dets', 
+                                        'financial_treasuries', 
+                                        'expenses', 
+
+                                        'sale_bills',
+                                        'purchase_bills', 
+                                        
+                                        'inventories', 
+                                        'product_categoys', 
+                                        'product_sub_categories', 
+                                        'receipts', 
+                                        'stores', 
+                                        'companies', 
+                                        'extra_expenses', 
+                                        'taswea_client_supplier', 
+                                        'taswea_partners', 
+                                        'taswea_products', 
+                                        'units'
+                                    ]; 
+                                    @endphp
+
+                                    @foreach($tables as $table)
+                                        <div class="col-lg-3 col-6">
+                                            <label style="font-size: 14px !important; font-weight: 500;">
+                                                <input type="checkbox" name="tables[]" value="{{ $table }}" class="table-checkbox" style="width: 20px; height: 20px; margin-right: 8px;">
+                                                {{ $table }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <button type="button" id="clearBtn" class="btn btn-dark mt-3" style="width: 100%;">تفريغ البيانات</button>
+                            </form>
+                            <div id="result" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
 
         <div class="row row-sm">
             <div class="col-xl-12">

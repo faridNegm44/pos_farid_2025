@@ -52,11 +52,27 @@
                     },
                     success: function(res){
                         $("#overlay_page").fadeOut();
-                        $('#example1').DataTable().ajax.reload( null, false );
+                        
+                        if(res.notAuth){
+                            alertify.dialog('alert')
+                                .set({transition:'slide',message: `
+                                    <div style="text-align: center;">
+                                        <p style="color: #e67e22; font-size: 18px; margin-bottom: 10px;">
+                                            صلاحية غير متوفرة 🔐⚠️
+                                        </p>
+                                        <p>${res.notAuth}</p>
+                                    </div>
+                                `, 'basic': true})
+                                .show();  
+                            $(".modal").modal('hide');  
 
-                        alertify.set('notifier','position', 'top-center');
-                        alertify.set('notifier','delay', 3);
-                        alertify.success("✅ تم اعتماد هذا الجرد وإغلاقه بنجاح");
+                        }else{                            
+                            $('#example1').DataTable().ajax.reload( null, false );
+    
+                            alertify.set('notifier','position', 'top-center');
+                            alertify.set('notifier','delay', 3);
+                            alertify.success("✅ تم اعتماد هذا الجرد وإغلاقه بنجاح");
+                        }
                     }
                 });
 

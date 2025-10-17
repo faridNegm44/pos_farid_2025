@@ -41,11 +41,11 @@
             position: relative;
         }
 
-        #example1 thead th {
+        /*#example1 thead th {
             position: sticky;
             top: 0;
             z-index: 10;
-        }
+        }*/
     </style>
 @endsection
 

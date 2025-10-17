@@ -49,7 +49,21 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+            $('#example1').DataTable().destroy();
+            
+            $('#example1').DataTable({
+                "ordering": false,      
+                "searching": true,
+                "info": false,     
+                "lengthChange": false, 
+                "paging": false,
+            });
+        });
+
     </script>
+    
 @endsection
 
 
@@ -70,24 +84,76 @@
             @php
                 $models = [
                     // start first add
-                        'financialYears', 'stores', 'financial_treasury', 'units', 'companies', 'productsCategories', 'products_sub_category', 'products', 'products_report', 'taswea_products', 'transfer_between_stores', 'clients', 'clients_report', 'clients_account_statement', 'suppliers', 'suppliers_report', 'suppliers_account_statement', 'taswea_client_supplier', 'partners', 'partners_report', 'partners_account_statement', 'taswea_partners', 'sales', 'products_stock_alert', 'purchases', 'treasury_bills', 'treasury_bills_report', 'transfer_between_storages', 'expenses', 'expenses_report', 'users', 'settings', 'roles_permissions',
+                        'financialYears', 
+                        'stores', 
+                        'financial_treasury', 
+                        'units', 
+                        'companies', 
+                        'productsCategories', 
+                        'products_sub_category', 
+                        'products', 
+                        'products_report', 
+                        'taswea_products', 
+                        'transfer_between_stores', 
+                        'clients', 
+                        'clients_report', 
+                        'clients_account_statement', 
+                        'suppliers', 
+                        'suppliers_report', 
+                        'suppliers_account_statement', 
+                        'taswea_client_supplier', 
+                        'partners', 
+                        'partners_report', 
+                        'partners_account_statement', 
+                        'taswea_partners', 
+                        'sales', 
+                        'products_stock_alert', 
+                        'purchases', 
+                        'treasury_bills', 
+                        'treasury_bills_report', 
+                        'transfer_between_storages', 
+                        'expenses', 
+                        'expenses_report', 
+                        'users', 
+                        'settings', 
+                        'roles_permissions',
                     // end first add
                     
                     
                     // start second add
-                        'total_sell_bill_today', 'total_profit_today', 'total_money_on_financial_treasury', 'top_products', 'top_clients', 'profit',
+                        'total_sell_bill_today', 
+                        'total_profit_today', 
+                        'total_money_on_financial_treasury', 
+                        'top_products', 
+                        'top_clients', 
+                        'profit',
                     // end second add
                     
                     
                     // start third add
-                        'tax_bill', 'discount_bill', 'cost_price', 'sale_price', 'receipts',
+                        'tax_bill', 
+                        'discount_bill', 
+                        'cost_price', 
+                        'sale_price', 
+                        'receipts',
                     // end third add
-                    
 
+                    
                     // start fourth add
-                        'sales_bill_deleted', 'sales_bill_return', 'sales_bill_edited', 
-                        'purchase_bill_deleted', 'purchase_bill_return', 'purchase_bill_edited'
+                        'sales_bill_deleted', 
+                        'sales_bill_return', 
+                        'sales_bill_edited', 
+
+                        'purchase_bill_deleted', 
+                        'purchase_bill_return', 
+                        'purchase_bill_edited',
                     // end fourth add
+
+                    // start fivth add
+                        'inventories', 
+                        'sales_summary_report'
+                    // end fivth add
+                    
                 ];
                 $count = 1;
             @endphp
@@ -106,7 +172,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover nowrap;">
+                        <table class="table table-bordered table-striped table-hover nowrap;" id="example1">
                             <thead class="thead-light">
                                 <tr>
                                     <td style="color: #fff !important;padding: 10px;">#</td>
@@ -166,6 +232,8 @@
                                                     $model != 'purchase_bill_deleted' &&
                                                     $model != 'purchase_bill_return' &&
                                                     $model != 'purchase_bill_edited' &&
+
+                                                    $model != 'sales_summary_report' &&
                                                     
                                                     $model != 'expenses_report' 
                                                 )
@@ -216,6 +284,8 @@
                                                     $model != 'purchase_bill_return' &&
                                                     $model != 'purchase_bill_edited' &&
 
+                                                    $model != 'sales_summary_report' &&
+
                                                     $model != 'expenses_report' 
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_update_div">
@@ -265,6 +335,8 @@
                                                     $model != 'purchase_bill_return' &&
                                                     $model != 'purchase_bill_edited' &&
 
+                                                    $model != 'sales_summary_report' &&
+
                                                     $model != 'settings'
                                                 )
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_delete_div">
@@ -277,6 +349,18 @@
                                                     <div class="form-check me-3 me-lg-5" id="{{ $model }}_take_money_div" style="width: 170px !important;">
                                                         <input class="form-check-input" type="checkbox" name="{{ $model }}_take_money" {{ old(''.$model.'_take_money') ? 'checked' : '' }} id="{{ $model }}_take_money"/>
                                                         <label class="form-check-label badge badge-primary-transparent rounded-pill" for="{{ $model }}_take_money">تحصيل الايصال</label>
+                                                    </div>
+                                                @endif
+                                                
+                                                @if($model == 'inventories')
+                                                    <div class="form-check me-3 me-lg-5" id="{{ $model }}_start_div" style="width: 140px !important;">
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_start" {{ old(''.$model.'_start') ? 'checked' : '' }} id="{{ $model }}_start"/>
+                                                        <label class="form-check-label badge badge-primary-transparent rounded-pill" for="{{ $model }}_start">بدء الجرد</label>
+                                                    </div>
+                                                    
+                                                    <div class="form-check me-3 me-lg-5" id="{{ $model }}_print_div" style="width: 200px !important;">
+                                                        <input class="form-check-input" type="checkbox" name="{{ $model }}_print" {{ old(''.$model.'_print') ? 'checked' : '' }} id="{{ $model }}_print"/>
+                                                        <label class="form-check-label badge badge-success-transparent rounded-pill text-dark" for="{{ $model }}_print">طباعة أصناف الجرد</label>
                                                     </div>
                                                 @endif
                                             </div>

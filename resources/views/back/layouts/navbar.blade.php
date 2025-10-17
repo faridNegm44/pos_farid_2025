@@ -118,8 +118,8 @@
                             <li aria-haspopup="true"><a href="{{ url('/purchases') }}" class="slide-item text-dark">فواتير المشتريات</a></li>
                             <li aria-haspopup="true"><a href="{{ url('/purchases/create') }}" class="slide-item text-dark">فاتورة مشتريات جديدة</a></li>
                             
-                            <hr class="navbar_hr"/>
-                            <li aria-haspopup="true"><a href="{{ url('purchases_return') }}" class="slide-item text-dark">فواتير مرتجع المشتريات</a></li>
+                            {{--<hr class="navbar_hr"/>
+                            <li aria-haspopup="true"><a href="{{ url('purchases_return') }}" class="slide-item text-dark">فواتير مرتجع المشتريات</a></li>--}}
 
                             {{--<li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">تعديل فاتورة مشتريات</a></li>
                             <li aria-haspopup="true"><a href="product-cart.html" class="slide-item text-dark">مرتجع / تعديل فاتورة مشتريات</a></li>
@@ -224,7 +224,7 @@
                             
                             <hr class="navbar_hr"/>
                             <li aria-haspopup="true"><a href="{{ url('/roles_permissions') }}" class="slide-item text-dark">الأذونات والتراخيص</a></li>
-                            <li aria-haspopup="true"><a href="{{ url('/roles_permissions/create') }}" class="slide-item text-dark">اضافة تراخيص جديدة</a></li>
+                            {{--<li aria-haspopup="true"><a href="{{ url('/roles_permissions/create') }}" class="slide-item text-dark">اضافة تراخيص جديدة</a></li>--}}
                         </ul>
                     </li>
                 </ul>

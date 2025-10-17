@@ -953,24 +953,33 @@ class PurchaseBillController extends Controller
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>';
+                }else{
+                    $returnButtons = '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;align-items:center;">';
+                    if($res->status == 'فاتورة معدلة'){
+                        $returnButtons .= '<button type="button" class="btn btn-sm btn-secondary text-white" disabled style="opacity:0.7;cursor:not-allowed;">معدلة</button>';
+                    }
+                    
+                    $returnButtons .= '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;align-items:center;">'
+                                .'<a type="button" href="'.url('purchases/return/'.$res->id).'" class="btn btn-sm btn-outline-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-reply"></i>
+                                </a>'
+    
+                                .'<button type="button" class="btn btn-sm btn-outline-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-print"></i>
+                                </button>'
+    
+                                .'<button type="button" class="btn btn-sm btn-outline-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
+                                    <i class="fas fa-eye"></i>
+                                </button>'
+    
+                                .'<button type="button" class="btn btn-sm btn-outline-danger delete delete_bill" data-effect="effect-scale" data-toggle="tooltip" title="حذف الفاتورة نهائياً" res_id="'.$res->id.'">
+                                    <i class="fas fa-trash-alt"></i> <span style="font-size:90%;font-weight:bold;"></span>
+                                </button>'
+                            .'</div>';
+                    $returnButtons .= '</div>';
+                    
+                    return $returnButtons;
                 }
-                return '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;align-items:center;">'
-                            .'<a type="button" href="'.url('purchases/return/'.$res->id).'" class="btn btn-sm btn-outline-danger return_bill" data-effect="effect-scale" data-placement="top" data-toggle="tooltip" title="إرجاع الفاتورة" res_id="'.$res->id.'">
-                                <i class="fas fa-reply"></i>
-                            </a>'
-
-                            .'<button type="button" class="btn btn-sm btn-outline-primary print" data-effect="effect-scale" data-toggle="modal" href="#exampleModalCenter" data-placement="top" data-toggle="tooltip" title="طباعة الفاتورة" res_id="'.$res->id.'">
-                                <i class="fas fa-print"></i>
-                            </button>'
-
-                            .'<button type="button" class="btn btn-sm btn-outline-success show" data-effect="effect-scale" data-toggle="modal" href="#showProductsModal" data-placement="top" data-toggle="tooltip" title="عرض الفاتورة" res_id="'.$res->id.'">
-                                <i class="fas fa-eye"></i>
-                            </button>'
-
-                            .'<button type="button" class="btn btn-sm btn-outline-danger delete delete_bill" data-effect="effect-scale" data-toggle="tooltip" title="حذف الفاتورة نهائياً" res_id="'.$res->id.'">
-                                <i class="fas fa-trash-alt"></i> <span style="font-size:90%;font-weight:bold;"></span>
-                            </button>'
-                        .'</div>';
             })
             ->rawColumns(['id', 'supplierName', 'treasuryName', 'total_bill', 'bill_discount', 'count_items', 'date', 'notes', 'userName', 'financialName', 'action'])
             ->toJson();

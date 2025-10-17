@@ -243,7 +243,15 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
         Route::post('/update/{id}' , 'ProductController@update');
         Route::get('/destroy/{id}' , 'ProductController@destroy');
         Route::get('datatable' , 'ProductController@datatable');
-        
+
+
+        // barcode product
+        Route::get('/barcode/{id}', 'ProductController@barcode');
+
+
+        // import file from excel
+        Route::post('/import' , 'ProductController@import');
+
         Route::get('/getProductsByStore/{store}' , 'ReportsProductsController@getProductsByStore');
 
         //تقرير عن حركة سلعة/خدمة
@@ -530,6 +538,7 @@ Route::group(['prefix' => '/', 'namespace' => 'App\Http\Controllers\Back', 'midd
     Route::group(['prefix' => 'settings'] , function (){
         Route::get('/' , 'SettingController@index');
         Route::post('/update' , 'SettingController@update');
+        Route::post('/clearTables' , 'SettingController@clearTables');
 
         Route::get('datatable' , 'SettingController@datatable');
     });

@@ -103,7 +103,9 @@
                         <th>كود</th>
                         <th style="width: 25% !important;">اسم السلعة/الخدمة</th>
                         <th>الوحدة ص</th>
-                        <th>س تكلفة</th>
+                        @if((userPermissions()->cost_price_view))                                                                                 
+                            <th>س تكلفة</th>
+                        @endif
                         <th>س بيع</th>
                         <th>ك دفترية</th>
                         <th>ك معدودة</th>
@@ -119,7 +121,9 @@
                             <td>{{ $result->productId }}</td>
                             <td style="font-weight: bold; font-size: 11px;">{{ $result->productNameAr }}</td> 
                             <td>{{ $result->small_unit_name }}</td>
-                            <td>{{ display_number( $result->last_cost_price_small_unit ) }}</td> 
+                            @if((userPermissions()->cost_price_view))                                                
+                                <td>{{ display_number( $result->last_cost_price_small_unit ) }}</td> 
+                            @endif
                             <td>{{ display_number( $result->sell_price_small_unit ) }}</td> 
                             <td style="font-size: 15px;font-weight: bold;">{{ (int) $result->quantity_small_unit }}</td>
                             <td></td>

@@ -13,21 +13,21 @@ class InventoriesController extends Controller
 {
     public function index()
     {         
-        //if((userPermissions()->inventories_view)){
+        if((userPermissions()->inventories_view)){
             $pageNameAr = 'إدارة الجرد';
             $pageNameEn = 'inventories';
             $users = DB::table('users')->where('status', 1)->orderBy('name', 'asc')->get();
 
             return view('back.inventories.index' , compact('pageNameAr' , 'pageNameEn', 'users'));
-        //}else{
-        //    return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
-        //}  
+        }else{
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
                            
     }
 
     public function store(Request $request)
     {
-        //if((userPermissions()->inventories_create)){
+        if((userPermissions()->inventories_create)){
             if (request()->ajax()){
                 $this->validate($request, [
                     'date' => 'nullable|date',
@@ -64,23 +64,23 @@ class InventoriesController extends Controller
                 ]);
             }
 
-        //}else{
-        //    return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
-        //}  
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function edit($id)
     {
-        //if((userPermissions()->inventories_update)){
+        if((userPermissions()->inventories_update)){
             if(request()->ajax()){
                 $find = DB::table('inventories')->where('id', $id)->first();
                 return response()->json($find);
             }
             return view('back.welcome');
 
-        //}else{
-        //    return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
-        //}  
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
     public function update_inventory(Request $request, $id)
@@ -178,21 +178,21 @@ class InventoriesController extends Controller
 
      
     public function close($id){
-        //if((userPermissions()->inventories_delete)){
+        if((userPermissions()->inventories_delete)){
            
             DB::table('inventories')->where('id', $id)->update([
                 'status' => 'تم الاعتماد',
                 'close_date' => Carbon::now(),
             ]);
 
-        //}else{
-        //    return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
-        //}  
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
    
    
     public function destroy($id){
-        //if((userPermissions()->inventories_delete)){
+        if((userPermissions()->inventories_delete)){
             
             $inventoryInStoreDets = DB::table('store_dets')->where('type' , 'تسوية جردية')->where('bill_id', $id)->first();
     
@@ -205,9 +205,9 @@ class InventoriesController extends Controller
                 return response()->json(['success_delete' => 'success_delete']);
             }
 
-        //}else{
-        //    return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
-        //}  
+        }else{
+            return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
 
 
@@ -317,191 +317,202 @@ class InventoriesController extends Controller
     //#################### start طباعه اصناف الجرد + تقرير الفروقات النهائي ####################
     public function print_count_only($id)
     {                   
+        if((userPermissions()->inventories_print)){
+            $inventory_info = DB::table('inventories')
+                                ->where('inventories.id', $id)
+                                ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
+                                ->leftJoin('users', 'users.id', 'inventories.user_id')
+                                ->select(
+                                    'inventories.*', 
+                                    'financial_years.name as financialName',
+                                    'users.name as userName',
+                                )
+                                ->first();
 
-        $inventory_info = DB::table('inventories')
-                            ->where('inventories.id', $id)
-                            ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
-                            ->leftJoin('users', 'users.id', 'inventories.user_id')
-                            ->select(
-                                'inventories.*', 
-                                'financial_years.name as financialName',
-                                'users.name as userName',
-                            )
-                            ->first();
+            if(!$inventory_info){
+                return redirect('/');
 
-        if(!$inventory_info){
-            return redirect('/');
+            }else{
+                $pageNameAr = 'كشف جرد الأصناف – كشف العد الفعلي ( بدون أرصدة دفترية )';      
+        
+                $results = DB::table('products')
+                                ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
+                                ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
+                                ->leftJoin('store_dets', function($join) {
+                                    $join->on('store_dets.product_id', '=', 'products.id')
+                                        ->whereRaw('store_dets.id = (
+                                            SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
+                                        )');
+                                })
+                                ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
+                                ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
+                                ->leftJoin('stores', 'stores.id', 'products.store')
+                                ->select(
+                                    'store_dets.sell_price_small_unit',
+                                    'store_dets.last_cost_price_small_unit',
+                                    'store_dets.avg_cost_price_small_unit',
+                                    'store_dets.quantity_small_unit',
+                                    
+                                    'products.id as productId',
+                                    'products.nameAr as productNameAr',
+                                    'products.status as productStatus',
+        
+                                    'big_units.name as big_unit_name',
+                                    'small_units.name as small_unit_name',
+                                    
+                                    'product_categoys.name as category_name',                    
+                                    'product_sub_categories.name_sub_category',
+                                    
+                                    'stores.name as store_name'
+                                )
+                                ->where('products.status', 1)
+                                ->orderBy('products.id', 'asc')
+                                ->get();
 
+                    //dd($inventory_info);
+        
+                
+                return view('back.inventories.print_count_only' , compact('pageNameAr', 'results', 'inventory_info'));
+            }
         }else{
-            $pageNameAr = 'كشف جرد الأصناف – كشف العد الفعلي ( بدون أرصدة دفترية )';      
-    
-             $results = DB::table('products')
-                            ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
-                            ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
-                            ->leftJoin('store_dets', function($join) {
-                                $join->on('store_dets.product_id', '=', 'products.id')
-                                    ->whereRaw('store_dets.id = (
-                                        SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
-                                    )');
-                            })
-                            ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
-                            ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
-                            ->leftJoin('stores', 'stores.id', 'products.store')
-                            ->select(
-                                'store_dets.sell_price_small_unit',
-                                'store_dets.last_cost_price_small_unit',
-                                'store_dets.avg_cost_price_small_unit',
-                                'store_dets.quantity_small_unit',
-                                
-                                'products.id as productId',
-                                'products.nameAr as productNameAr',
-                                'products.status as productStatus',
-    
-                                'big_units.name as big_unit_name',
-                                'small_units.name as small_unit_name',
-                                
-                                'product_categoys.name as category_name',                    
-                                'product_sub_categories.name_sub_category',
-                                
-                                'stores.name as store_name'
-                            )
-                            ->where('products.status', 1)
-                            ->orderBy('products.id', 'asc')
-                            ->get();
-
-                //dd($inventory_info);
-    
-            
-            return view('back.inventories.print_count_only' , compact('pageNameAr', 'results', 'inventory_info'));
-        }
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
     
     
     public function print_count_with_balance($id)
-    {                   
-        $inventory_info = DB::table('inventories')
-                            ->where('inventories.id', $id)
-                            ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
-                            ->leftJoin('users', 'users.id', 'inventories.user_id')
-                            ->select(
-                                'inventories.*', 
-                                'financial_years.name as financialName',
-                                'users.name as userName',
-                            )
-                            ->first();
+    {              
+        if((userPermissions()->inventories_print)){ 
 
-        if(!$inventory_info){
-            return redirect('/');
+            $inventory_info = DB::table('inventories')
+                                ->where('inventories.id', $id)
+                                ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
+                                ->leftJoin('users', 'users.id', 'inventories.user_id')
+                                ->select(
+                                    'inventories.*', 
+                                    'financial_years.name as financialName',
+                                    'users.name as userName',
+                                )
+                                ->first();
 
+            if(!$inventory_info){
+                return redirect('/');
+
+            }else{
+                $pageNameAr = 'كشف جرد الأصناف – كشف العد الفعلي ( بالأرصدة الدفترية )';      
+        
+                $results = DB::table('products')
+                                ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
+                                ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
+                                ->leftJoin('store_dets', function($join) {
+                                    $join->on('store_dets.product_id', '=', 'products.id')
+                                        ->whereRaw('store_dets.id = (
+                                            SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
+                                        )');
+                                })
+                                ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
+                                ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
+                                ->leftJoin('stores', 'stores.id', 'products.store')
+                                ->select(
+                                    'store_dets.sell_price_small_unit',
+                                    'store_dets.last_cost_price_small_unit',
+                                    'store_dets.avg_cost_price_small_unit',
+                                    'store_dets.quantity_small_unit',
+                                    
+                                    'products.id as productId',
+                                    'products.nameAr as productNameAr',
+                                    'products.status as productStatus',
+        
+                                    'big_units.name as big_unit_name',
+                                    'small_units.name as small_unit_name',
+                                    
+                                    'product_categoys.name as category_name',                    
+                                    'product_sub_categories.name_sub_category',
+                                    
+                                    'stores.name as store_name'
+                                )
+                                ->where('products.status', 1)
+                                ->orderBy('products.id', 'asc')
+                                ->get();
+
+                    //return $results;
+        
+                
+                return view('back.inventories.print_count_with_balance' , compact('pageNameAr', 'results', 'inventory_info'));
+            }
         }else{
-            $pageNameAr = 'كشف جرد الأصناف – كشف العد الفعلي ( بالأرصدة الدفترية )';      
-    
-             $results = DB::table('products')
-                            ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
-                            ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
-                            ->leftJoin('store_dets', function($join) {
-                                $join->on('store_dets.product_id', '=', 'products.id')
-                                    ->whereRaw('store_dets.id = (
-                                        SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
-                                    )');
-                            })
-                            ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
-                            ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
-                            ->leftJoin('stores', 'stores.id', 'products.store')
-                            ->select(
-                                'store_dets.sell_price_small_unit',
-                                'store_dets.last_cost_price_small_unit',
-                                'store_dets.avg_cost_price_small_unit',
-                                'store_dets.quantity_small_unit',
-                                
-                                'products.id as productId',
-                                'products.nameAr as productNameAr',
-                                'products.status as productStatus',
-    
-                                'big_units.name as big_unit_name',
-                                'small_units.name as small_unit_name',
-                                
-                                'product_categoys.name as category_name',                    
-                                'product_sub_categories.name_sub_category',
-                                
-                                'stores.name as store_name'
-                            )
-                            ->where('products.status', 1)
-                            ->orderBy('products.id', 'asc')
-                            ->get();
-
-                //return $results;
-    
-            
-            return view('back.inventories.print_count_with_balance' , compact('pageNameAr', 'results', 'inventory_info'));
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         }
-
     }
     
     
     public function final_differences_report($id)
-    {               
-        $inventory_info = DB::table('inventories')
-                            ->where('inventories.id', $id)
-                            ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
-                            ->leftJoin('users', 'users.id', 'inventories.user_id')
-                            ->select(
-                                'inventories.*', 
-                                'financial_years.name as financialName',
-                                'users.name as userName',
-                            )
-                            ->first();
+    {          
+        if((userPermissions()->inventories_view)){ 
+       
+            $inventory_info = DB::table('inventories')
+                                ->where('inventories.id', $id)
+                                ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
+                                ->leftJoin('users', 'users.id', 'inventories.user_id')
+                                ->select(
+                                    'inventories.*', 
+                                    'financial_years.name as financialName',
+                                    'users.name as userName',
+                                )
+                                ->first();
 
-        if(!$inventory_info){
-            return redirect('/');
+            if(!$inventory_info){
+                return redirect('/');
 
+            }else{
+                $pageNameAr = 'تقرير الفروقات النهائي للجرد رقم';      
+        
+                $results = DB::table('products')
+                                ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
+                                ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
+                                ->leftJoin('store_dets', function($join) {
+                                    $join->on('store_dets.product_id', '=', 'products.id')
+                                        ->whereRaw('store_dets.id = (
+                                            SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
+                                        )');
+                                })
+                                ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
+                                ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
+                                ->leftJoin('stores', 'stores.id', 'products.store')
+                                ->leftJoin('users', 'users.id', 'store_dets.user_id')
+                                ->select(
+                                    'store_dets.sell_price_small_unit',
+                                    'store_dets.last_cost_price_small_unit',
+                                    'store_dets.avg_cost_price_small_unit',
+                                    'store_dets.quantity_small_unit',
+                                    'store_dets.product_bill_quantity',
+                                    'store_dets.notes',
+                                    
+                                    'products.id as productId',
+                                    'products.nameAr as productNameAr',
+                                    'products.status as productStatus',
+        
+                                    'big_units.name as big_unit_name',
+                                    'small_units.name as small_unit_name',
+                                    
+                                    'product_categoys.name as category_name',                    
+                                    'product_sub_categories.name_sub_category',
+                                    
+                                    'stores.name as store_name',
+                                    'users.name as userName',
+                                )
+                                ->where('products.status', 1)
+                                ->orderBy('products.id', 'asc')
+                                ->get();
+
+                    //return $results;
+        
+                
+                return view('back.inventories.final_differences_report' , compact('pageNameAr', 'results', 'inventory_info'));
+            }
         }else{
-            $pageNameAr = 'تقرير الفروقات النهائي للجرد رقم';      
-    
-             $results = DB::table('products')
-                            ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
-                            ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
-                            ->leftJoin('store_dets', function($join) {
-                                $join->on('store_dets.product_id', '=', 'products.id')
-                                    ->whereRaw('store_dets.id = (
-                                        SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
-                                    )');
-                            })
-                            ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
-                            ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
-                            ->leftJoin('stores', 'stores.id', 'products.store')
-                            ->leftJoin('users', 'users.id', 'store_dets.user_id')
-                            ->select(
-                                'store_dets.sell_price_small_unit',
-                                'store_dets.last_cost_price_small_unit',
-                                'store_dets.avg_cost_price_small_unit',
-                                'store_dets.quantity_small_unit',
-                                'store_dets.product_bill_quantity',
-                                'store_dets.notes',
-                                
-                                'products.id as productId',
-                                'products.nameAr as productNameAr',
-                                'products.status as productStatus',
-    
-                                'big_units.name as big_unit_name',
-                                'small_units.name as small_unit_name',
-                                
-                                'product_categoys.name as category_name',                    
-                                'product_sub_categories.name_sub_category',
-                                
-                                'stores.name as store_name',
-                                'users.name as userName',
-                            )
-                            ->where('products.status', 1)
-                            ->orderBy('products.id', 'asc')
-                            ->get();
-
-                //return $results;
-    
-            
-            return view('back.inventories.final_differences_report' , compact('pageNameAr', 'results', 'inventory_info'));
-        }
-
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }  
     }
     //#################### end طباعه اصناف الجرد + تقرير الفروقات النهائي ####################
     
@@ -511,76 +522,79 @@ class InventoriesController extends Controller
     //#################### start بدء الجرد ####################
     public function open($id)
     {         
-        $inventory_info = DB::table('inventories')
-                            ->where('inventories.id', $id)
-                            ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
-                            ->leftJoin('users', 'users.id', 'inventories.user_id')
-                            ->select(
-                                'inventories.*', 
-                                'financial_years.name as financialName',
-                                'users.name as userName',
-                            )
-                            ->first();
+        if((userPermissions()->inventories_start)){
+          
+            $inventory_info = DB::table('inventories')
+                                ->where('inventories.id', $id)
+                                ->leftJoin('financial_years', 'financial_years.id', 'inventories.year_id')
+                                ->leftJoin('users', 'users.id', 'inventories.user_id')
+                                ->select(
+                                    'inventories.*', 
+                                    'financial_years.name as financialName',
+                                    'users.name as userName',
+                                )
+                                ->first();
 
-        if(!$inventory_info){
-            return redirect('/');
-            
+            if(!$inventory_info){
+                return redirect('/');
+                
+            }else{
+                
+                $pageNameAr = '🗂️ بداية عملية الجرد';      
+                $pageNameEn = 'inventories/open';      
+        
+                $results = DB::table('products')
+                                ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
+                                ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
+                                ->leftJoin('store_dets', function($join) {
+                                    $join->on('store_dets.product_id', '=', 'products.id')
+                                        ->whereRaw('store_dets.id = (
+                                            SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
+                                        )');
+                                })
+                                ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
+                                ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
+                                ->leftJoin('stores', 'stores.id', 'products.store')
+                                ->select(
+                                    'store_dets.sell_price_small_unit',
+                                    'store_dets.last_cost_price_small_unit',
+                                    'store_dets.avg_cost_price_small_unit',
+                                    'store_dets.product_bill_quantity',
+                                    'store_dets.quantity_small_unit',
+                                    
+                                    'products.id as productId',
+                                    'products.nameAr as productNameAr',
+                                    'products.status as productStatus',
+        
+                                    'big_units.name as big_unit_name',
+                                    'small_units.name as small_unit_name',
+                                    
+                                    'product_categoys.name as category_name',                    
+                                    'product_sub_categories.name_sub_category',
+                                    
+                                    'stores.name as store_name'
+                                )
+                                ->where('products.status', 1)
+                                ->orderBy('products.nameAr', 'asc')
+                                ->get();
+
+
+
+                $checkInventorybefore = DB::table('store_dets')
+                                            ->where('type', 'تسوية جردية')
+                                            ->where('bill_id', $id)
+                                            ->select('product_id')
+                                            ->get();
+
+                                //return $checkInventorybefore;
+
+
+                return view('back.inventories.open' , compact('pageNameAr' , 'pageNameEn', 'results', 'inventory_info', 'checkInventorybefore'));
+
+            }
         }else{
-            
-            $pageNameAr = '🗂️ بداية عملية الجرد';      
-            $pageNameEn = 'inventories/open';      
-    
-             $results = DB::table('products')
-                            ->leftJoin('units as big_units', 'big_units.id', 'products.bigUnit')
-                            ->leftJoin('units as small_units', 'small_units.id', 'products.smallUnit')
-                            ->leftJoin('store_dets', function($join) {
-                                $join->on('store_dets.product_id', '=', 'products.id')
-                                    ->whereRaw('store_dets.id = (
-                                        SELECT MAX(id) FROM store_dets WHERE store_dets.product_id = products.id
-                                    )');
-                            })
-                            ->leftJoin('product_categoys', 'product_categoys.id', 'products.category')
-                            ->leftJoin('product_sub_categories', 'product_sub_categories.id', 'products.sub_category')
-                            ->leftJoin('stores', 'stores.id', 'products.store')
-                            ->select(
-                                'store_dets.sell_price_small_unit',
-                                'store_dets.last_cost_price_small_unit',
-                                'store_dets.avg_cost_price_small_unit',
-                                'store_dets.product_bill_quantity',
-                                'store_dets.quantity_small_unit',
-                                
-                                'products.id as productId',
-                                'products.nameAr as productNameAr',
-                                'products.status as productStatus',
-    
-                                'big_units.name as big_unit_name',
-                                'small_units.name as small_unit_name',
-                                
-                                'product_categoys.name as category_name',                    
-                                'product_sub_categories.name_sub_category',
-                                
-                                'stores.name as store_name'
-                            )
-                            ->where('products.status', 1)
-                            ->orderBy('products.nameAr', 'asc')
-                            ->get();
-
-
-
-            $checkInventorybefore = DB::table('store_dets')
-                                        ->where('type', 'تسوية جردية')
-                                        ->where('bill_id', $id)
-                                        ->select('product_id')
-                                        ->get();
-
-                            //return $checkInventorybefore;
-
-
-            return view('back.inventories.open' , compact('pageNameAr' , 'pageNameEn', 'results', 'inventory_info', 'checkInventorybefore'));
-
-        }
-
-                           
+            return redirect('/')->with(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
+        }                  
     }
     //#################### end بدء الجرد ####################
 }

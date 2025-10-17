@@ -29,6 +29,19 @@
     <script src="{{ asset('back/assets/spotlight.bundle.js') }}"></script>
     <script src="{{ asset('back/assets/spotlight.min.js') }}"></script>
 
+
+    {{-- start if imported excel file success --}}
+        @if (session()->has('success_import'))
+            <script>
+                $(document).ready(function () {
+                    alertify.set('notifier','position', 'top-center');
+                    alertify.set('notifier','delay', 4);
+                    alertify.success("✅ تم تصدير الأصناف بنجاح 🎉📦✨");
+                });
+            </script>
+        @endif
+    {{-- end if imported excel file success --}}
+
     <script>
         flatpickr(".datePicker", {
             yearSelectorType: 'dropdown',
@@ -70,6 +83,22 @@
                 e.preventDefault();  
             }
         });
+
+
+
+        // start when click submit form upload file excel
+         $(function(){
+            $('#excelModal #form').on('submit', function(){
+                $("#overlay_page").fadeIn();
+            });
+
+            //  overlay if modal closed (in case of error)
+            $('#excelModal').on('hidden.bs.modal', function(){
+                $("#overlay_page").fadeOut();
+            });
+        });
+        // end when click submit form upload file excel
+
         
         $(document).ready(function () {
             // selectize
@@ -174,8 +203,7 @@
                 </div>
 
 
-                {{--@if ($products == 0)--}}
-
+                @if ($products == 0)
                     <div class="pr-1 mb-xl-0">
                         <button type="button" class="btn btn-primary btn-icon attach" data-toggle="modal" data-target="#excelModal" data-toggle="tooltip" title="إرفاق ملف Excel">
                             <i class="mdi mdi-file-excel"></i>
@@ -194,12 +222,12 @@
                                     </button>
                                 </div>
 
-                                <form action="{{ url('excel.attach') }}" method="POST" enctype="multipart/form-data">
+                                <form method="POST" action="{{ url('products/import') }}" id="form" enctype="multipart/form-data">
                                     @csrf
                                     <div class="modal-body pd-30 pd-sm-40 bg-gray-100">
                                         <div class="mb-3 text-center">
                                             <p>اضغط على الزر أدناه لتنزيل نموذج Excel.</p>
-                                            <a href="{{ url('path/to/template.xlsx') }}" class="btn btn-success" download>
+                                            <a href="{{ asset('back/assets/products_sample.xlsx') }}" class="btn btn-success" download>
                                                 <i class="mdi mdi-download"></i> تنزيل نموذج Excel
                                             </a>
                                         </div>
@@ -211,17 +239,16 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">إرفاق الملف</button>
+                                        <button type="submit" class="btn btn-primary" id="excel-upload-btn">إرفاق الملف</button>
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
                                     </div>
-                                </form>
-
+                                </form>                               
                             </div>
                         </div>
                     </div>
                     {{-- end modal attach file excel --}}
                     
-                {{--@endif--}}
+                @endif
             </div>
         </div>
         <!-- breadcrumb -->

@@ -57,5 +57,8 @@ return [
     'sales_bill_edited' => 'تعديل فاتورة مبيعات', 
     'purchase_bill_deleted' => 'حذف فاتورة مشتريات', 
     'purchase_bill_return' => 'مرتجع فاتورة مشتريات', 
-    'purchase_bill_edited' => 'تعديل فاتورة مشتريات'
+    'purchase_bill_edited' => 'تعديل فاتورة مشتريات',
+
+    'inventories' => 'الجرد', 
+    'sales_summary_report' => 'تقرير إجمالي المبيعات خلال فترة'
 ];

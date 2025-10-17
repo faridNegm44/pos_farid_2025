@@ -100,6 +100,32 @@ class SettingController extends Controller
             return response()->json(['notAuth' => 'عذرًا، ليس لديك صلاحية لتنفيذ طلبك']);
         } 
     }
+    
+    
+    public function clearTables(Request $request)
+    {
+
+        //dd(request()->all());
+
+        $tables = $request->tables ?? [];
+
+        if (empty($tables)) {
+            return response()->json(['status' => 'error', 'message' => 'لم يتم اختيار أي جدول']);
+        }
+
+        foreach ($tables as $table) {
+            if (in_array($table, $this->allowedTables())) {
+                DB::table($table)->truncate();
+            }
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'تم التفريغ بنجاح']);
+    }
+
+    private function allowedTables()
+    {
+        return ['clients_and_suppliers', 'companies', 'expenses', 'extra_expenses', 'financial_treasuries', 'inventories', 'partners', 'products', 'product_categoys', 'product_sub_categories', 'purchase_bills', 'receipts', 'sale_bills', 'stores', 'store_dets', 'taswea_client_supplier', 'taswea_partners', 'taswea_products', 'treasury_bill_dets', 'units']; 
+    }
 
 
     ///////////////////////////////////////////////  datatable  /////////////////////////////////////////////////////////

@@ -96,7 +96,6 @@
 		</h1>--}}
 
 
-
 		<div class="row g-3 justify-content-center">
 	  
 		  <div class="col-md-1 col-12" data-placement="bottom" data-toggle="tooltip" title="فواتير المبيعات">
@@ -204,58 +203,65 @@
 
 		{{-- start first section --}}
 		<div class="row row-sm" id="first_section">
-			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
-				<div class="card bg-primary-gradient text-white ">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-3">
-								<div class="icon1 mt-2 text-center">
-									<i class="fas fa-coins tx-40"></i>
+			@if( userPermissions()->total_profit_today_view )	
+				<div class="col-lg-6 col-xl-2 col-md-6 col-12">
+					<div class="card bg-primary-gradient text-white ">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-3">
+									<div class="icon1 mt-2 text-center">
+										<i class="fas fa-coins tx-40"></i>
+									</div>
 								</div>
-							</div>
-							<div class="col-9">
-								<div class="mt-0 text-center">
-									<span class="text-white" style="font-size: 11px;">
-										<a class="text-white">إجمالي المبيعات اليوم</a>
-									</span>
-									<h4 class="text-white mb-0">
-										<a class="text-white">
-											{{ display_number( totalProfitToday()['totalSales'] ?? 0 ) }}
-										</a>
-									</h4>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
-				<div class="card text-white {{ totalProfitToday()['roundedProfit'] > 0 ? 'bg-success-gradient' : 'bg-dark' }} ">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-3">
-								<div class="icon1 mt-2 text-center">
-									<i class="fe fe-shopping-cart tx-40"></i>
-								</div>
-							</div>
-							<div class="col-9">
-								<div class="mt-0 text-center">
-									<span class="text-white" style="font-size: 11px;">
-										<a class="text-white" href="{{ url('report/profits') }}" target="_blank">إجمالي الربح اليوم</a>
-									</span>
-									<h4 class="text-white mb-0">
-										<a class="text-white" href="{{ url('report/profits') }}" target="_blank">
-											{{--{{  totalProfitToday()['profit'] ? floor( display_number( totalProfitToday()['profit'] ) * 100 ) / 100 : 0 }}--}}
-											{{ display_number( totalProfitToday()['roundedProfit'] ) }}
-										</a>
-										
-									</h4>
+								<div class="col-9">
+									<div class="mt-0 text-center">
+										<span class="text-white" style="font-size: 11px;">
+											<a class="text-white">إجمالي المبيعات اليوم</a>
+										</span>
+										<h4 class="text-white mb-0">
+											<a class="text-white">
+												{{ display_number( totalProfitToday()['totalSales'] ?? 0 ) }}
+											</a>
+										</h4>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			@endif
+
+			@if( userPermissions()->total_profit_today_view )			
+				<div class="col-lg-6 col-xl-2 col-md-6 col-12">
+					<div class="card text-white {{ totalProfitToday()['roundedProfit'] > 0 ? 'bg-success-gradient' : 'bg-dark' }} ">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-3">
+									<div class="icon1 mt-2 text-center">
+										<i class="fe fe-shopping-cart tx-40"></i>
+									</div>
+								</div>
+								<div class="col-9">
+									<div class="mt-0 text-center">
+										<span class="text-white" style="font-size: 11px;">
+											<a class="text-white" href="{{ url('report/profits') }}" target="_blank">إجمالي الربح اليوم</a>
+										</span>
+										<h4 class="text-white mb-0">
+											<a class="text-white" href="{{ url('report/profits') }}" target="_blank">
+												{{--{{  totalProfitToday()['profit'] ? floor( display_number( totalProfitToday()['profit'] ) * 100 ) / 100 : 0 }}--}}
+												{{ display_number( totalProfitToday()['roundedProfit'] ) }}
+											</a>
+											
+										</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			@endif
+
+
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
 				<div class="card bg-purple-gradient text-white">
 					<div class="card-body">
@@ -367,31 +373,33 @@
 				</div>
 			</div>--}}
 
-			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
-				<div class="card bg-secondary text-white">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-3">
-								<div class="icon1 mt-2 text-center">
-									<i class="fas fa-cash-register tx-40"></i>
+			@if( userPermissions()->total_money_on_financial_treasury_view )
+				<div class="col-lg-6 col-xl-2 col-md-6 col-12">
+					<div class="card bg-secondary text-white">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-3">
+									<div class="icon1 mt-2 text-center">
+										<i class="fas fa-cash-register tx-40"></i>
+									</div>
 								</div>
-							</div>
-							<div class="col-9">
-								<div class="mt-0 text-center">
-									<span class="text-white" style="font-size: 11px;">
-										<a class="text-white">رصيد الخزن</a>									
-									</span>
-									<h4 class="text-white mb-0">
-										<a class="text-white">
-											{{ display_number( totalFinancialTreasury() ) }}
-										</a>
-									</h4>
+								<div class="col-9">
+									<div class="mt-0 text-center">
+										<span class="text-white" style="font-size: 11px;">
+											<a class="text-white">رصيد الخزن</a>									
+										</span>
+										<h4 class="text-white mb-0">
+											<a class="text-white">
+												{{ display_number( totalFinancialTreasury() ) }}
+											</a>
+										</h4>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			@endif
 
 			<div class="col-lg-6 col-xl-2 col-md-6 col-12">
 				<div class="card bg-warning-gradient text-white">
@@ -428,100 +436,103 @@
 		<div class="row row-sm row-deck">
 			
 			{{-- العملاء الأكثر شراءً --}}
-			<div class="col-md-12 col-lg-3 col-xl-3">
-				<div class="card card-dashboard-eight pb-2">
-					<span class="d-block mg-b-10 tx-10 text-danger">
-						🛍️ العملاء الأكثر شراءً
-						<a href="{{ url('analytics/top_clients') }}" target="_blank" class="btn btn-sm btn-outline-info">تفاصيل أكثر 🔍</a>
-					</span>
+			@if( userPermissions()->top_clients_view )
+				<div class="col-md-12 col-lg-3 col-xl-3">
+					<div class="card card-dashboard-eight pb-2">
+						<span class="d-block mg-b-10 tx-10 text-danger">
+							🛍️ العملاء الأكثر شراءً
+							<a href="{{ url('analytics/top_clients') }}" target="_blank" class="btn btn-sm btn-outline-info">تفاصيل أكثر 🔍</a>
+						</span>
 
-					@if (count(topProductsInSales()) > 0 )
-						<table class="table table-bordered table-hover text-center">
-							<thead class="thead-light">
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">اسم العميل</th>
-									<th scope="col">إجمالي المشتريات</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach (topClientsPurchases() as $k => $client)
-									<tr @if($k==0) style="background:#e3f7e3;font-weight:bold;" @endif>
-										<th scope="row">
-											<span class="badge badge-info" style="font-size:110% !important;">{{ $client->client_id }}</span>
-										</th>
-										<td>
-											<span class="badge badge-secondary"></span> {{ $client->name }}
-										</td>
-										<td>
-											<span class="badge badge-success" style="font-size:110% !important;">
-												<i class="fas fa-shopping-basket"></i> {{ display_number($client->client_total) }}
-											</span>
-										</td>
+						@if (count(topProductsInSales()) > 0 )
+							<table class="table table-bordered table-hover text-center">
+								<thead class="thead-light">
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">اسم العميل</th>
+										<th scope="col">إجمالي المشتريات</th>
 									</tr>
-								@endforeach                           
-							</tbody>
-						</table>	
+								</thead>
+								<tbody>
+									@foreach (topClientsPurchases() as $k => $client)
+										<tr @if($k==0) style="background:#e3f7e3;font-weight:bold;" @endif>
+											<th scope="row">
+												<span class="badge badge-info" style="font-size:110% !important;">{{ $client->client_id }}</span>
+											</th>
+											<td>
+												<span class="badge badge-secondary"></span> {{ $client->name }}
+											</td>
+											<td>
+												<span class="badge badge-success" style="font-size:110% !important;">
+													<i class="fas fa-shopping-basket"></i> {{ display_number($client->client_total) }}
+												</span>
+											</td>
+										</tr>
+									@endforeach                           
+								</tbody>
+							</table>	
 
-					@else
-						<h6 class="text-center">
-							<p>
-								لا توجد فواتير بيع حتى الآن 🧾، يمكنك البدء الآن بأول عملية بيع 💼✨
-							</p>
-							<a href="{{ url('sales/create') }}" class="btn btn-sm btn-primary-gradient ms-2">إضافة فاتورة جديدة ➕</a>
-						</h6>
-					@endif	
+						@else
+							<h6 class="text-center">
+								<p>
+									لا توجد فواتير بيع حتى الآن 🧾، يمكنك البدء الآن بأول عملية بيع 💼✨
+								</p>
+								<a href="{{ url('sales/create') }}" class="btn btn-sm btn-primary-gradient ms-2">إضافة فاتورة جديدة ➕</a>
+							</h6>
+						@endif	
+					</div>
 				</div>
-			</div>
-			
+			@endif
 			
 			
 			{{-- السلعة/الخدمات الأكثر مبيعاً --}}
-			<div class="col-md-12 col-lg-3 col-xl-3">
-				<div class="card card-dashboard-eight pb-2">
-					<span class="d-block mg-b-10 tx-10 text-danger">
-						🛒 السلع/الخدمات الأكثر مبيعاً
-						<a href="{{ url('analytics/top_products') }}" target="_blank" class="btn btn-sm btn-outline-info ">تفاصيل أكثر 🔍</a>
-					</span>
+			@if( userPermissions()->top_products_view )
+				<div class="col-md-12 col-lg-3 col-xl-3">
+					<div class="card card-dashboard-eight pb-2">
+						<span class="d-block mg-b-10 tx-10 text-danger">
+							🛒 السلع/الخدمات الأكثر مبيعاً
+							<a href="{{ url('analytics/top_products') }}" target="_blank" class="btn btn-sm btn-outline-info ">تفاصيل أكثر 🔍</a>
+						</span>
 
-					@if (count(topProductsInSales()) > 0 )
-						<table class="table table-bordered table-hover text-center">
-							<thead class="thead-light">
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">اسم السلعة/الخدمة</th>
-									<th scope="col">ع المبيعات</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach (topProductsInSales() as $k => $product)
-									<tr @if($k==0) style="background:#e3f7e3;font-weight:bold;" @endif>
-										<th scope="row">
-											<span class="badge badge-info" style="font-size:110% !important;">{{ $product->productId }}</span>
-										</th>
-										<td>
-											<span class="badge badge-secondary"></span> {{ $product->productNameAr }}
-										</td>
-										<td>
-											<span class="badge badge-success" style="font-size:110% !important;">
-												<i class="fas fa-chart-line"></i> {{ display_number($product->total_product) }}
-											</span>
-										</td>
+						@if (count(topProductsInSales()) > 0 )
+							<table class="table table-bordered table-hover text-center">
+								<thead class="thead-light">
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">اسم السلعة/الخدمة</th>
+										<th scope="col">ع المبيعات</th>
 									</tr>
-								@endforeach                           
-							</tbody>
-						</table>	
+								</thead>
+								<tbody>
+									@foreach (topProductsInSales() as $k => $product)
+										<tr @if($k==0) style="background:#e3f7e3;font-weight:bold;" @endif>
+											<th scope="row">
+												<span class="badge badge-info" style="font-size:110% !important;">{{ $product->productId }}</span>
+											</th>
+											<td>
+												<span class="badge badge-secondary"></span> {{ $product->productNameAr }}
+											</td>
+											<td>
+												<span class="badge badge-success" style="font-size:110% !important;">
+													<i class="fas fa-chart-line"></i> {{ display_number($product->total_product) }}
+												</span>
+											</td>
+										</tr>
+									@endforeach                           
+								</tbody>
+							</table>	
 
-					@else
-						<h6 class="text-center">
-							<p>
-								لا توجد فواتير بيع حتى الآن 🧾، يمكنك البدء الآن بأول عملية بيع 💼✨
-							</p>
-							<a href="{{ url('sales/create') }}" class="btn btn-sm btn-primary-gradient ms-2">إضافة فاتورة جديدة ➕</a>
-						</h6>
-					@endif	
+						@else
+							<h6 class="text-center">
+								<p>
+									لا توجد فواتير بيع حتى الآن 🧾، يمكنك البدء الآن بأول عملية بيع 💼✨
+								</p>
+								<a href="{{ url('sales/create') }}" class="btn btn-sm btn-primary-gradient ms-2">إضافة فاتورة جديدة ➕</a>
+							</h6>
+						@endif	
+					</div>
 				</div>
-			</div>
+			@endif
 
 
 			{{-- أخر فواتير بيع تمت --}}

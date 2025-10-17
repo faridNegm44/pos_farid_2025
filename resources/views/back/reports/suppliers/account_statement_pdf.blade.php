@@ -126,6 +126,7 @@
                         </span>
                         <span style="margin: 3px 10px;"><strong>المبلغ:</strong> {{ display_number($bill->remaining_money) }}</span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <br />
                         <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end رصيد اول مورد  ------------------------------------}}
@@ -153,6 +154,7 @@
                             <strong>المبلغ المدفوع</strong>: {{ display_number($bill->amount_money) }}
                         </span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <br />
                         <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end اذن توريد نقدية  ------------------------------------}}
@@ -181,6 +183,7 @@
                             <strong>المبلغ المصروف</strong>: {{ display_number($bill->amount_money) }}
                         </span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <br />
                         <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end اذن صرف نقدية  ------------------------------------}}
@@ -207,11 +210,42 @@
                             <strong>الرصيد بعد التسوية</strong>: {{ display_number($bill->remaining_money) }}
                         </span>
                         <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <br />
                         <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
                     </div>
                 {{----------------------------- end تسوية رصيد للجهة  ------------------------------------}}
                 {{----------------------------------------------------------------------------------------}}          
 
+
+
+
+                {{----------------------------- start اذن مرتجع نقدية لمورد  ------------------------------------}}
+                {{----------------------------------------------------------------------------------------}}                
+                @elseif ($bill->treasury_type === 'اذن مرتجع نقدية لمورد')
+                    <div class="bill-container" style="padding: 10px;">
+                        <p style="font-size: 15px;">
+                            رقم الحركة: {{ $bill->id }}
+                            - ( {{ $bill->treasury_type }} )
+                        </p>
+                        <span style="margin: 3px 10px;"><strong>تاريخ المرتجع:</strong>
+                            {{ Carbon\Carbon::parse($bill->created_at)->format('d-m-Y') }}
+                            <span style="margin: 0 5px;">{{ Carbon\Carbon::parse($bill->created_at)->format('h:i:s a') }}</span>
+                        </span>
+                        
+
+                        {{--<span style="margin: 3px 10px;">
+                            <strong>رقم الفاتورة المرتجع منها</strong>: {{ $bill->amount_money }}
+                        </span>--}}
+
+                        <span style="margin: 3px 10px;">
+                            <strong>المبلغ المرتجع</strong>: {{ display_number($bill->amount_money) }}
+                        </span>
+                        <span style="margin: 3px 10px;"><strong>المستخدم:</strong> {{ $bill->userName }}</span>
+                        <br />
+                        <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
+                    </div>
+                {{----------------------------- end اذن مرتجع نقدية لمورد  ------------------------------------}}
+                {{----------------------------------------------------------------------------------------}}          
 
 
 
@@ -235,6 +269,7 @@
                         <span style="margin: 3px 10px;"><strong>خصم الفاتورة:</strong> {{ $bill->bill_discount ?? 'لايوجد' }}</span>
                         <span style="margin: 3px 10px;"><strong>مستخدم الإضافة:</strong> {{ $bill->userName }}</span>
                         <span style="margin: 3px 10px;"><strong>السنة المالية:</strong> {{ $bill->financialYearName }}</span>
+                        <br />
                         <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
 
                         <table border="1" width="100%" style="border-collapse: collapse;margin-top: 10px;">
@@ -298,6 +333,7 @@
                         <span style="margin: 3px 10px;"><strong>خصم الفاتورة:</strong> {{ $bill->bill_discount ?? 'لايوجد' }}</span>
                         <span style="margin: 3px 10px;"><strong>مستخدم الإضافة:</strong> {{ $bill->userName }}</span>
                         <span style="margin: 3px 10px;"><strong>السنة المالية:</strong> {{ $bill->financialYearName }}</span>
+                        <br />
                         <span style="margin: 3px 10px;"><strong>ملاحظات:</strong> {{ $bill->notes ?? 'لايوجد' }}</span>
 
                         <table border="1" width="100%" style="border-collapse: collapse;margin-top: 10px;">
