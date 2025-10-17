@@ -16,17 +16,17 @@
 </head>
 <body>
 <div class="main">
-    <div style="position: relative;top: 5px;">
-        <span style="font-size: 7pt;position: relative;bottom: 8px;font-weight: bold;direction: ltr">
+    <div style="position: relative;top: 5px;text-align: center;">
+        <span style="font-size: 7pt;position: relative;bottom: 8px;font-weight: bold;">
             ( {{ display_number( $product->sell_price_small_unit ) }}  ) - {{ $product->nameAr }}
         </span>
     </div>
 
-    <div class="text-center" id="barcode">
+    <div class="text-center" style="text-align: center;" id="barcode">
         {!! DNS1D::getBarcodeHTML((string) $product->natCode, "C128", 1, 40) !!}
     </div>
 
-    <div style="position: relative;top: 3px;">
+    <div style="position: relative;top: 3px; text-align: center;">
             <span style="font-size: 7pt;position: relative;bottom: 8px;font-weight: bold;">
                 {{ GeneralSettingsInfo()->app_name }} -
             </span>
@@ -54,11 +54,14 @@
 
 <script src="{{ asset('back/assets/libs/jquery/jquery.min.js') }}"></script>
 <script>
-    //$(document).ready(function () {
-    //    $("div.main div:nth-child(2)").css('margin', '200px auto !important');
-    //    $("#barcode div").css('margin', '2px auto 0');
-    //});
-
+    $(document).ready(function () {
+        //$("div.main div:nth-child(2)").css('margin', '0 auto !important');
+        //$("#barcode div").css({
+        //    'margin': '0px auto !important',
+        //    'width': '101px',
+        //    'display': 'block'
+        //});
+    });
     // window.print();
 </script>
 
